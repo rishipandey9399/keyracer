@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Typing Speed Test</title>
+    <title>Key Racer</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="racing-car sports-car">
+        <div class="headlights"></div>
+        <div class="headlights right"></div>
+    </div>
+    <div class="racing-car formula" style="animation-delay: 2s; bottom: 120px;"></div>
+    <div class="racing-car" style="animation-delay: 4s; bottom: 80px;">
+        <div class="headlights"></div>
+        <div class="headlights right"></div>
+    </div>
+    
     <div class="container">
         <header>
-            <h1>AI Typing Speed Test</h1>
+            <h1><i class="fas fa-keyboard"></i> Key Racer <i class="fas fa-flag-checkered"></i></h1>
             <div class="level-selector">
                 <button id="beginner" class="level-btn active">Beginner</button>
                 <button id="intermediate" class="level-btn">Intermediate</button>
@@ -27,11 +38,16 @@
         <main>
             <div class="test-container">
                 <div class="timer">
+                    <i class="fas fa-stopwatch timer-icon"></i>
                     <span id="minutes">1</span>:<span id="seconds">00</span>
                 </div>
                 <div class="metrics">
-                    <div class="metric">
-                        <span id="wpm">0</span>
+                    <div class="metric wpm-metric">
+                        <div class="speedometer">
+                            <div class="speedometer-dial"></div>
+                            <div class="speedometer-center"></div>
+                            <div class="speedometer-value" id="wpm">0</div>
+                        </div>
                         <p>WPM</p>
                     </div>
                     <div class="metric">
@@ -57,8 +73,10 @@
                     <textarea id="custom-text-input" placeholder="Enter your own text to practice with..."></textarea>
                     <button id="use-custom-text" class="accent-btn">Use This Text</button>
                 </div>
-                <button id="start-btn" class="start-btn">Start Test</button>
-                <button id="reset-btn" class="reset-btn" disabled>Reset</button>
+                <div class="action-buttons">
+                    <button id="start-btn" class="start-btn">Start Test</button>
+                    <button id="reset-btn" class="reset-btn" disabled>Reset</button>
+                </div>
             </div>
 
             <div class="progress-chart" id="progress-chart">
@@ -77,7 +95,12 @@
                     <div class="results-metrics">
                         <div class="result-metric">
                             <h3>Speed</h3>
-                            <p><span id="result-wpm">0</span> WPM</p>
+                            <div class="speedometer result-speedometer">
+                                <div class="speedometer-dial"></div>
+                                <div class="speedometer-center"></div>
+                                <div class="speedometer-value" id="result-wpm">0</div>
+                            </div>
+                            <p><span>WPM</span></p>
                         </div>
                         <div class="result-metric">
                             <h3>Accuracy</h3>
@@ -124,13 +147,57 @@
         </main>
 
         <footer>
-            <p>&copy; 2023 AI Typing Speed Test</p>
+            <p>&copy; 2023 Key Racer</p>
         </footer>
     </div>
 
+    <script>
+        // Set up speedometer animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update speedometer dial based on WPM value
+            function updateSpeedometer(wpmValue) {
+                const wpm = parseInt(wpmValue) || 0;
+                const maxWPM = 150; // Maximum WPM for full rotation
+                const rotationPercentage = Math.min(wpm / maxWPM, 1);
+                const rotationDegrees = -90 + (rotationPercentage * 180);
+                
+                const speedometerDials = document.querySelectorAll('.speedometer-dial');
+                speedometerDials.forEach(dial => {
+                    dial.style.transform = `rotate(${rotationDegrees}deg)`;
+                });
+            }
+            
+            // Initial setup
+            updateSpeedometer(0);
+            
+            // Monitor changes to the WPM values
+            const wpmObserver = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                        const wpmValue = mutation.target.textContent;
+                        updateSpeedometer(wpmValue);
+                    }
+                });
+            });
+            
+            // Observe both WPM displays
+            const wpmElement = document.getElementById('wpm');
+            const resultWpmElement = document.getElementById('result-wpm');
+            
+            if (wpmElement) {
+                wpmObserver.observe(wpmElement, { childList: true, characterData: true, subtree: true });
+            }
+            
+            if (resultWpmElement) {
+                wpmObserver.observe(resultWpmElement, { childList: true, characterData: true, subtree: true });
+            }
+        });
+    </script>
+    
     <script src="scripts/keyboard.js"></script>
     <script src="scripts/texts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="scripts/database.js"></script>
     <script src="scripts/charts.js"></script>
     <script src="scripts/modes.js"></script>
     <script src="scripts/main.js"></script>

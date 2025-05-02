@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Setup for historical progress chart
     setupHistoryChart();
+
+    // Load user history when page loads
+    setTimeout(() => {
+        if (window.typingDB) {
+            loadUserHistory();
+        }
+    }, 1000); // Delay to ensure DB is ready
 });
 
 // Function to setup real-time WPM chart
@@ -141,6 +148,44 @@ function updateHistoryChart() {
     window.historyChart.data.labels = historyData.map((_, index) => `Test ${index + 1}`);
     window.historyChart.data.datasets[0].data = historyData.map(item => item.wpm);
     window.historyChart.data.datasets[1].data = historyData.map(item => item.accuracy);
+    
+    window.historyChart.update();
+}
+
+// Function to load user history for charts
+async function loadUserHistory() {
+    const currentUser = localStorage.getItem('typingTestUser');
+    if (currentUser && window.typingDB) {
+        try {
+            const records = await window.typingDB.getTypingRecords(currentUser);
+            if (records.length > 0) {
+                // Reverse records to show oldest to newest for progress chart
+                const chartRecords = [...records].reverse().slice(0, 10);
+                
+                // Update history chart with actual data
+                updateHistoryChartWithData(chartRecords);
+                
+                // Show progress chart if we have enough data
+                if (records.length > 1) {
+                    document.getElementById('progress-chart').style.display = 'block';
+                }
+            }
+        } catch (error) {
+            console.error('Error loading user history:', error);
+        }
+    }
+}
+
+// Function to update history chart with specific data
+function updateHistoryChartWithData(records) {
+    if (!window.historyChart) return;
+    
+    window.historyChart.data.labels = records.map((record, index) => 
+        `Test ${index + 1}`
+    );
+    
+    window.historyChart.data.datasets[0].data = records.map(record => record.wpm);
+    window.historyChart.data.datasets[1].data = records.map(record => record.accuracy);
     
     window.historyChart.update();
 }

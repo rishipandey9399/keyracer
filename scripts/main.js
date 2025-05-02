@@ -17,6 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeResultsButton = document.getElementById('close-results');
     const aiFeedbackElement = document.getElementById('ai-feedback').querySelector('.feedback-content');
     
+    // Check for race intro flag
+    const shouldShowRaceIntro = localStorage.getItem('showRaceIntro') === 'true';
+    if (shouldShowRaceIntro) {
+        // Clear the flag so it only shows once
+        localStorage.removeItem('showRaceIntro');
+        // Show the race intro with a slight delay to ensure page is loaded
+        setTimeout(() => {
+            showRaceIntro();
+        }, 500);
+    }
+    
     // Level selector elements
     const beginnerButton = document.getElementById('beginner');
     const intermediateButton = document.getElementById('intermediate');
@@ -31,6 +42,39 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeLeft = 60; // Default 1 minute
     let keyTimestamps = [];
     let isTestActive = false;
+    
+    // User authentication check
+    const currentUser = localStorage.getItem('typingTestUser');
+    const userType = localStorage.getItem('typingTestUserType') || 'guest';
+    
+    if (!currentUser) {
+        // Redirect to login if no user
+        window.location.href = 'login.html';
+        return;
+    } else {
+        // Create user header
+        let userHeader = document.createElement('div');
+        userHeader.className = 'user-header';
+        
+        // Display user info and logout button
+        userHeader.innerHTML = `
+            <div class="user-info">
+                <span class="user-name">${userType === 'guest' ? 'Guest User' : currentUser}</span>
+                <span class="user-badge ${userType}">${userType}</span>
+            </div>
+            <button id="logout-btn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        `;
+        document.querySelector('header').appendChild(userHeader);
+        
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('typingTestUser');
+            localStorage.removeItem('typingTestUserType');
+            window.location.href = 'login.html';
+        });
+    }
     
     // Setup level buttons
     [beginnerButton, intermediateButton, advancedButton].forEach(button => {
@@ -108,6 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const wpm = Math.round(inputWords / elapsedTime || 0);
         wpmDisplay.textContent = wpm;
         
+        // Update speedometer dial based on WPM
+        updateSpeedometerDial(wpm);
+        
         // Calculate accuracy
         let correctChars = 0;
         const inputLength = Math.min(userInput.length, currentText.length);
@@ -125,12 +172,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const errors = inputLength - correctChars;
         errorsDisplay.textContent = errors;
         
+        // Update charts if live statistics is enabled
+        if (document.getElementById('live-stats-toggle').checked && window.chartFunctions) {
+            window.chartFunctions.updateWPMChart(wpm, currentTime - startTime);
+        }
+        
         // Highlight keys on the virtual keyboard
         if (userInput.length > 0) {
             const lastChar = userInput[userInput.length - 1];
             if (window.keyboardFunctions) {
                 window.keyboardFunctions.highlightKey(lastChar);
             }
+        }
+    }
+    
+    // Function to update speedometer dial
+    function updateSpeedometerDial(wpm) {
+        const maxWPM = 150; // Maximum WPM for full rotation
+        const rotationPercentage = Math.min(wpm / maxWPM, 1);
+        const rotationDegrees = -90 + (rotationPercentage * 180);
+        
+        const speedometerDial = document.querySelector('.speedometer-dial');
+        if (speedometerDial) {
+            speedometerDial.style.transform = `rotate(${rotationDegrees}deg)`;
+        }
+    }
+    
+    // Function to update result speedometer
+    function updateResultSpeedometer(wpm) {
+        const maxWPM = 150; // Maximum WPM for full rotation
+        const rotationPercentage = Math.min(wpm / maxWPM, 1);
+        const rotationDegrees = -90 + (rotationPercentage * 180);
+        
+        const resultSpeedometerDial = document.querySelector('.result-speedometer .speedometer-dial');
+        if (resultSpeedometerDial) {
+            resultSpeedometerDial.style.transform = `rotate(${rotationDegrees}deg)`;
         }
     }
     
@@ -172,36 +248,170 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMetrics();
     }
     
+    // Function to create and display race start lights
+    function showRaceStartLights() {
+        return new Promise((resolve) => {
+            // Create the race start lights if they don't exist
+            if (!document.querySelector('.race-start-lights')) {
+                const raceStartLights = document.createElement('div');
+                raceStartLights.className = 'race-start-lights';
+                
+                const lightsContainer = document.createElement('div');
+                lightsContainer.className = 'lights-container';
+                
+                // Create three lights
+                for (let i = 0; i < 3; i++) {
+                    const light = document.createElement('div');
+                    light.className = 'light';
+                    lightsContainer.appendChild(light);
+                }
+                
+                const countdownNumber = document.createElement('div');
+                countdownNumber.className = 'countdown-number';
+                
+                raceStartLights.appendChild(lightsContainer);
+                raceStartLights.appendChild(countdownNumber);
+                document.body.appendChild(raceStartLights);
+            }
+            
+            const raceStartLights = document.querySelector('.race-start-lights');
+            const lights = raceStartLights.querySelectorAll('.light');
+            const countdownNumber = raceStartLights.querySelector('.countdown-number');
+            
+            // Show the lights container
+            raceStartLights.classList.add('active');
+            
+            // Countdown sequence
+            let count = 3;
+            
+            // Function to update countdown
+            function updateCountdown() {
+                // Clear previous state
+                lights.forEach(light => light.classList.remove('active', 'green'));
+                countdownNumber.textContent = count;
+                countdownNumber.classList.add('visible');
+                
+                if (count > 0) {
+                    // Light up the appropriate number of red lights
+                    for (let i = 0; i < count; i++) {
+                        lights[i].classList.add('active');
+                    }
+                    
+                    count--;
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    // Show GO!
+                    countdownNumber.textContent = 'GO!';
+                    countdownNumber.style.color = '#00FF00';
+                    countdownNumber.classList.add('go-text');
+                    
+                    // Turn all lights green
+                    lights.forEach(light => {
+                        light.classList.remove('active');
+                        light.classList.add('green');
+                    });
+                    
+                    // Hide after a delay
+                    setTimeout(() => {
+                        raceStartLights.classList.remove('active');
+                        countdownNumber.classList.remove('visible', 'go-text');
+                        countdownNumber.style.color = '';
+                        lights.forEach(light => light.classList.remove('green'));
+                        resolve();
+                    }, 1000);
+                }
+            }
+            
+            // Start the countdown
+            updateCountdown();
+        });
+    }
+    
+    // Function to show race intro animation
+    function showRaceIntro() {
+        return new Promise((resolve) => {
+            // Create the race intro elements if they don't exist
+            if (!document.querySelector('.race-intro')) {
+                const raceIntro = document.createElement('div');
+                raceIntro.className = 'race-intro';
+                
+                const track = document.createElement('div');
+                track.className = 'race-intro-track';
+                
+                // Add track lines
+                for (let i = 0; i < 10; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'track-line';
+                    line.style.top = `${i * 30}px`;
+                    track.appendChild(line);
+                }
+                
+                // Add cars
+                const car1 = document.createElement('div');
+                car1.className = 'race-intro-car';
+                
+                const car2 = document.createElement('div');
+                car2.className = 'race-intro-car player';
+                
+                const text = document.createElement('div');
+                text.className = 'race-intro-text';
+                text.textContent = 'KEY RACER';
+                
+                raceIntro.appendChild(track);
+                raceIntro.appendChild(car1);
+                raceIntro.appendChild(car2);
+                raceIntro.appendChild(text);
+                
+                document.body.appendChild(raceIntro);
+            }
+            
+            const raceIntro = document.querySelector('.race-intro');
+            raceIntro.classList.add('active');
+            
+            // Hide intro after animation completes
+            setTimeout(() => {
+                raceIntro.classList.remove('active');
+                resolve();
+            }, 4000);
+        });
+    }
+    
     // Function to start the test
     function startTest() {
-        // Reset previous state
-        resetTest();
-        
-        // Set up the new test
-        currentText = getRandomText();
-        displayText(currentText);
-        
-        // Enable textarea
-        textInput.disabled = false;
-        textInput.value = '';
-        textInput.focus();
-        
-        // Start timer
-        startTime = Date.now();
-        keyTimestamps = [startTime];
-        timer = setInterval(updateTimer, 1000);
-        
-        // Update buttons
-        startButton.disabled = true;
-        resetButton.disabled = false;
-        
-        // Set test as active
-        isTestActive = true;
-        
-        // Disable level selection during test
-        [beginnerButton, intermediateButton, advancedButton].forEach(button => {
-            button.style.pointerEvents = 'none';
-            button.style.opacity = '0.6';
+        // Show countdown first
+        showRaceStartLights().then(() => {
+            // Reset previous state
+            resetTest();
+            
+            // Set up the new test
+            currentText = getRandomText();
+            displayText(currentText);
+            
+            // Enable textarea
+            textInput.disabled = false;
+            textInput.value = '';
+            textInput.focus();
+            
+            // Start timer
+            startTime = Date.now();
+            keyTimestamps = [startTime];
+            timer = setInterval(updateTimer, 1000);
+            
+            // Update buttons
+            startButton.disabled = true;
+            resetButton.disabled = false;
+            
+            // Set test as active
+            isTestActive = true;
+            
+            // Pause background animation
+            document.body.classList.add('race-active');
+            
+            // Disable level selection during test
+            [beginnerButton, intermediateButton, advancedButton].forEach(button => {
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.6';
+            });
         });
     }
     
@@ -217,6 +427,9 @@ document.addEventListener('DOMContentLoaded', () => {
         startButton.disabled = false;
         resetButton.disabled = false;
         
+        // Resume background animation
+        document.body.classList.remove('race-active');
+        
         // Calculate final metrics
         endTime = Date.now();
         const totalTime = endTime - startTime;
@@ -228,21 +441,54 @@ document.addEventListener('DOMContentLoaded', () => {
             keyTimings: keyTimestamps
         };
         
-        // Generate stats and AI feedback
+        // Generate stats and display results
         if (window.aiFeedback) {
             const testStats = window.aiFeedback.analyzeTypingData(typingData, totalTime);
             
-            // Display results
-            resultWpm.textContent = testStats.wpm;
-            resultAccuracy.textContent = testStats.accuracy;
-            resultErrors.textContent = testStats.errors;
-            
-            // Generate AI feedback
-            const feedback = window.aiFeedback.generateAIFeedback(testStats);
-            aiFeedbackElement.innerHTML = feedback;
-            
-            // Show results modal
-            resultsSection.style.display = 'flex';
+            // Save to database if available
+            const currentUser = localStorage.getItem('typingTestUser');
+            if (currentUser && window.typingDB) {
+                // Get previous record for comparison
+                window.typingDB.getLastRecord(currentUser).then(lastRecord => {
+                    // Save current record
+                    const record = {
+                        username: currentUser,
+                        wpm: testStats.wpm,
+                        accuracy: testStats.accuracy,
+                        errors: testStats.errors,
+                        difficulty: currentDifficulty,
+                        mode: window.modesFunctions ? window.modesFunctions.getCurrentMode() : 'standard',
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    window.typingDB.saveTypingRecord(record).then(() => {
+                        // Update the progress comparison
+                        if (lastRecord) {
+                            updateProgressComparison(record, lastRecord);
+                        }
+                        
+                        // Display results
+                        displayResults(testStats);
+                        
+                        // Add to history chart
+                        if (window.chartFunctions) {
+                            window.chartFunctions.addTestToHistory(testStats);
+                        }
+                    });
+                }).catch(error => {
+                    console.error('Error accessing database:', error);
+                    // Fallback - show results without comparison
+                    displayResults(testStats);
+                });
+            } else {
+                // Fallback if no user or DB not available
+                displayResults(testStats);
+            }
+        } else {
+            // Minimal fallback if AI feedback not available
+            const wpm = Math.round((textInput.value.length / 5) / (totalTime / 60000));
+            const testStats = { wpm, accuracy: 100, errors: 0 };
+            displayResults(testStats);
         }
         
         // Set test as inactive
@@ -305,4 +551,109 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize
     resetTest();
-}); 
+});
+
+// Function to update progress comparison
+function updateProgressComparison(currentRecord, previousRecord) {
+    // Create comparison element if it doesn't exist
+    if (!document.getElementById('progress-comparison')) {
+        const progressHistory = document.querySelector('.progress-history');
+        const comparisonDiv = document.createElement('div');
+        comparisonDiv.id = 'progress-comparison';
+        comparisonDiv.className = 'progress-comparison';
+        progressHistory.insertBefore(comparisonDiv, document.getElementById('history-chart'));
+    }
+
+    // Calculate improvements
+    const wpmDiff = currentRecord.wpm - previousRecord.wpm;
+    const accuracyDiff = currentRecord.accuracy - previousRecord.accuracy;
+    const errorsDiff = previousRecord.errors - currentRecord.errors;
+
+    // Display comparison
+    document.getElementById('progress-comparison').innerHTML = `
+        <h4>Progress Since Last Test</h4>
+        <div class="comparison-grid">
+            <div class="comparison-item ${wpmDiff >= 0 ? 'positive' : 'negative'}">
+                <span class="comparison-label">WPM</span>
+                <span class="comparison-value">${wpmDiff >= 0 ? '+' : ''}${wpmDiff}</span>
+            </div>
+            <div class="comparison-item ${accuracyDiff >= 0 ? 'positive' : 'negative'}">
+                <span class="comparison-label">Accuracy</span>
+                <span class="comparison-value">${accuracyDiff >= 0 ? '+' : ''}${accuracyDiff}%</span>
+            </div>
+            <div class="comparison-item ${errorsDiff >= 0 ? 'positive' : 'negative'}">
+                <span class="comparison-label">Errors</span>
+                <span class="comparison-value">${errorsDiff >= 0 ? '-' : '+'}${Math.abs(errorsDiff)}</span>
+            </div>
+        </div>
+    `;
+}
+
+// Function to display the test results
+function displayResults(testStats) {
+    // Update result metrics
+    resultWpm.textContent = testStats.wpm;
+    resultAccuracy.textContent = testStats.accuracy;
+    resultErrors.textContent = testStats.errors;
+    
+    // Update result speedometer
+    updateResultSpeedometer(testStats.wpm);
+    
+    // Generate AI feedback if available
+    if (window.aiFeedback) {
+        const feedback = window.aiFeedback.generateAIFeedback(testStats);
+        aiFeedbackElement.innerHTML = feedback;
+    }
+    
+    // Check achievements if available
+    if (window.achievementFunctions) {
+        const achievements = window.achievementFunctions.checkAchievements(testStats);
+        if (achievements.length > 0) {
+            // Create a celebratory effect
+            createCelebration(achievements);
+        }
+    }
+    
+    // Show results modal
+    resultsSection.style.display = 'flex';
+}
+
+// Function to create celebration effects for achievements
+function createCelebration(achievements) {
+    // Add confetti effect
+    if (window.confetti) {
+        window.confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    } else {
+        // Simple alternative confetti
+        const colors = ['#FF4A4A', '#00FFDD', '#FFD700'];
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = `${Math.random() * 100}vw`;
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.appendChild(confetti);
+            
+            // Remove after animation
+            setTimeout(() => confetti.remove(), 4000);
+        }
+    }
+    
+    // Add achievement notification
+    const achievementNames = {
+        'speed': 'Speed Demon',
+        'accuracy': 'Perfect Precision',
+        'marathon': 'Marathon Runner'
+    };
+    
+    let achievementHTML = '<div class="achievement-unlocked"><h4>🏆 Achievements Unlocked!</h4><ul>';
+    achievements.forEach(achievement => {
+        achievementHTML += `<li>${achievementNames[achievement] || achievement}</li>`;
+    });
+    achievementHTML += '</ul></div>';
+    
+    aiFeedbackElement.innerHTML += achievementHTML;
+} 

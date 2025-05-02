@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Racer - Login</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #111827;
+            background-image: 
+                linear-gradient(90deg, transparent 0%, transparent 49%, #FFD700 49%, #FFD700 51%, transparent 51%, transparent 100%),
+                repeating-linear-gradient(0deg, #111827 0px, #111827 50px, rgba(50, 50, 50, 0.5) 50px, rgba(50, 50, 50, 0.5) 51px);
+            background-size: 100px 100%, 100% 100px;
+            background-position: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            perspective: 1000px;
+            animation: moveRoad 2s linear infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: repeating-linear-gradient(
+                90deg,
+                #FF4A4A 0px,
+                #FF4A4A 20px,
+                #1E2761 20px,
+                #1E2761 40px
+            );
+            z-index: 1000;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: repeating-linear-gradient(
+                90deg,
+                #FF4A4A 0px,
+                #FF4A4A 20px,
+                #1E2761 20px,
+                #1E2761 40px
+            );
+            z-index: 1000;
+        }
+        
+        @keyframes moveRoad {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100px; }
+        }
+        
+        .container {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            z-index: 1;
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: floatAnimation 4s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+        
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0) rotateX(0deg); }
+            50% { transform: translateY(-10px) rotateX(5deg); }
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #00FFDD;
+            text-shadow: 0 5px 15px rgba(0, 255, 221, 0.5), 0 0 20px rgba(0, 255, 221, 0.5);
+            transition: all 0.5s ease;
+            display: inline-block;
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+        }
+        
+        .logo i {
+            filter: drop-shadow(0 5px 15px rgba(0, 255, 221, 0.6));
+            transition: all 0.5s ease;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+        
+        .logo .race-flag {
+            position: absolute;
+            top: -10px;
+            right: -15px;
+            font-size: 1.5rem;
+            transform: rotate(15deg);
+            animation: waveFlag 2s ease-in-out infinite;
+        }
+        
+        .logo .race-car {
+            position: absolute;
+            bottom: -5px;
+            left: -30px;
+            font-size: 1.2rem;
+            animation: raceCar 3s linear infinite;
+        }
+        
+        @keyframes raceCar {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(120px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .logo:hover i {
+            transform: scale(1.1) rotate(10deg);
+            color: #FF4A4A;
+        }
+        
+        .app-version {
+            display: inline-block;
+            padding: 5px 12px;
+            background-color: rgba(0, 255, 221, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #00FFDD;
+            margin-top: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 255, 221, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .app-version:hover {
+            background-color: rgba(0, 255, 221, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 221, 0.3);
+        }
+        
+        .footer-text {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            animation: fadeIn 1s ease-out;
+            animation-delay: 0.5s;
+            animation-fill-mode: both;
+            position: relative;
+        }
+        
+        .footer-text p {
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-text p:hover {
+            color: #00FFDD;
+            transform: translateY(-2px);
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: rgba(0, 255, 221, 0.3);
+            border-radius: 50%;
+            animation: particleFloat 15s infinite linear;
+        }
+        
+        @keyframes particleFloat {
+            0% { transform: translate(0, 0); opacity: 0; }
+            20% { opacity: 0.5; }
+            80% { opacity: 0.5; }
+            100% { transform: translate(100px, -100px); opacity: 0; }
+        }
+        
+        /* Button ripple effect */
+        .btn-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple-animation {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+        
+        .racing-car {
+            position: fixed;
+            width: 60px;
+            height: 30px;
+            background-color: #FF4A4A;
+            border-radius: 5px;
+            bottom: 50px;
+            right: -60px;
+            z-index: 5;
+            animation: raceCarAcross 8s linear infinite;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .racing-car::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            width: 40px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .racing-car::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10px;
+            width: 10px;
+            height: 10px;
+            background-color: #333;
+            border-radius: 50%;
+            box-shadow: 30px 0 0 #333;
+        }
+        
+        @keyframes raceCarAcross {
+            0% { 
+                right: -60px;
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% { 
+                right: calc(100% + 60px);
+                transform: translateY(0);
+            }
+        }
+        
+        /* Speedometer for login */
+        .speedometer {
+            width: 100px;
+            height: 100px;
+            background: #1E2761;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 
+                        inset 0 0 20px rgba(0, 0, 0, 0.3);
+            border: 4px solid #3A4662;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .speedometer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: conic-gradient(
+                #FF4A4A 0%, 
+                #00FFDD 40%, 
+                #4CAF50 70%,
+                #00FFDD 100%
+            );
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%);
+            opacity: 0.8;
+            transform: rotate(-90deg);
+            z-index: 1;
+        }
+
+        .speedometer::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 50%;
+            background: #1E2761;
+            z-index: 2;
+        }
+
+        .speedometer-dial {
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(to top, #FF4A4A, #00FFDD);
+            position: absolute;
+            bottom: 50%;
+            left: calc(50% - 2px);
+            transform-origin: bottom center;
+            z-index: 3;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 74, 74, 0.5);
+            animation: rotateDial 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
+        }
+
+        .speedometer-center {
+            width: 12px;
+            height: 12px;
+            background: #00FFDD;
+            border-radius: 50%;
+            position: absolute;
+            top: calc(50% - 6px);
+            left: calc(50% - 6px);
+            z-index: 4;
+            box-shadow: 0 0 10px rgba(0, 255, 221, 0.5);
+        }
+
+        @keyframes rotateDial {
+            0% { transform: rotate(-90deg); }
+            100% { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="racing-car"></div>
+    
+    <div class="container">
+        <div class="logo-section">
+            <div class="logo">
+                <i class="fas fa-keyboard"></i> KEY RACER
+                <i class="fas fa-flag-checkered race-flag"></i>
+                <i class="fas fa-car race-car"></i>
+            </div>
+            <div class="speedometer">
+                <div class="speedometer-dial"></div>
+                <div class="speedometer-center"></div>
+            </div>
+            <span class="app-version">Version 1.0</span>
+        </div>
+        
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Key Racer</h1>
+                <p>Race to improve your typing skills</p>
+            </div>
+            
+            <div class="login-form">
+                <h2>Sign In</h2>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button id="login-btn" class="primary-btn btn-ripple">Sign In</button>
+                
+                <div class="separator">
+                    <span>OR</span>
+                </div>
+                
+                <button id="register-btn" class="secondary-btn btn-ripple">Create Account</button>
+                <button id="guest-btn" class="accent-btn btn-ripple">Continue as Guest</button>
+                
+                <div id="login-message" class="message"></div>
+                
+                <div class="speedometer-container"></div>
+            </div>
+        </div>
+        
+        <div class="footer-text">
+            <p>Challenge yourself and race to the top of the leaderboard</p>
+        </div>
+    </div>
+    
+    <!-- Add console log to check script loading -->
+    <script>
+        console.log('Login page loaded');
+        
+        // Create floating particles
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 20;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random positions
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                
+                // Random sizes
+                const size = Math.random() * 4 + 2;
+                
+                // Random opacity
+                const opacity = Math.random() * 0.3 + 0.1;
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 10 + 10;
+                const delay = Math.random() * 5;
+                
+                // Set styles
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.opacity = opacity;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                // Randomize colors between accent and primary
+                if (Math.random() > 0.5) {
+                    particle.style.backgroundColor = 'rgba(0, 255, 221, 0.3)';
+                } else {
+                    particle.style.backgroundColor = 'rgba(255, 74, 74, 0.3)';
+                }
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Add ripple effect to buttons
+            const rippleButtons = document.querySelectorAll('.btn-ripple');
+            
+            rippleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const rect = button.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    
+                    button.appendChild(ripple);
+                    
+                    // Remove ripple after animation completes
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // 3D tilt effect for login container
+            const loginContainer = document.querySelector('.login-container');
+            const maxRotate = 5; // Max rotation in degrees
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!loginContainer) return;
+                
+                const rect = loginContainer.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                const percentX = (e.clientX - centerX) / (window.innerWidth / 2);
+                const percentY = (e.clientY - centerY) / (window.innerHeight / 2);
+                
+                const rotateY = -maxRotate * percentX;
+                const rotateX = maxRotate * percentY;
+                
+                loginContainer.style.transform = `translateY(-5px) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            // Reset transform when mouse leaves
+            document.addEventListener('mouseleave', function() {
+                if (!loginContainer) return;
+                loginContainer.style.transform = `translateY(-5px) perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            });
+            
+            // Add racing cars
+            const numberOfCars = 3;
+            
+            for (let i = 0; i < numberOfCars; i++) {
+                const car = document.createElement('div');
+                car.classList.add('racing-car');
+                
+                // Random positions and delays
+                const bottom = 30 + Math.random() * 50;
+                const delay = Math.random() * 5;
+                const duration = 8 + Math.random() * 7;
+                
+                // Set styles
+                car.style.bottom = `${bottom}px`;
+                car.style.animationDelay = `${delay}s`;
+                car.style.animationDuration = `${duration}s`;
+                
+                // Randomize colors
+                if (Math.random() > 0.5) {
+                    car.style.backgroundColor = '#FF4A4A';
+                } else {
+                    car.style.backgroundColor = '#00FFDD';
+                }
+                
+                document.body.appendChild(car);
+            }
+        });
+    </script>
+    
+    <script src="scripts/database.js"></script>
+    <script>
+        // Check if database script loaded
+        console.log('Database script loaded', window.typingDB ? 'Successfully' : 'Failed');
+    </script>
+    <script src="scripts/login.js"></script>
+    <script>
+        // Check if login script loaded
+        console.log('Login script loaded');
+    </script>
+    <script>
+        // Fallback for guest mode if the main login doesn't work
+        document.getElementById('guest-btn').addEventListener('click', function() {
+            console.log('Guest fallback triggered');
+            const guestId = 'guest_' + Date.now();
+            localStorage.setItem('typingTestUser', guestId);
+            localStorage.setItem('typingTestUserType', 'guest');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
