@@ -458,22 +458,28 @@ document.addEventListener('DOMContentLoaded', () => {
                         errors: testStats.errors,
                         difficulty: currentDifficulty,
                         mode: window.modesFunctions ? window.modesFunctions.getCurrentMode() : 'standard',
-                        timestamp: new Date().toISOString()
+                        timestamp: new Date().toISOString(),
+                        completionTime: Math.round((totalTime / 1000) * 10) / 10 // Add completion time in seconds with 1 decimal place
                     };
                     
-                    window.typingDB.saveTypingRecord(record).then(() => {
-                        // Update the progress comparison
-                        if (lastRecord) {
-                            updateProgressComparison(record, lastRecord);
+                    // Show completion modal
+                    showTestCompleteModal(record);
+                    
+                    window.typingDB.saveTypingRecord(record).then(async () => {
+                        // Display last record for comparison
+                        const lastRecord = await window.typingDB.getLastRecord(currentUser);
+                        if(lastRecord && lastRecord.id !== record.id) {
+                            const improvement = record.wpm - lastRecord.wpm;
+                            if(improvement > 0) {
+                                // Show improvement message
+                                showMessage(`Great job! You improved by ${improvement.toFixed(1)} WPM compared to your last test.`, 'success');
+                            }
                         }
                         
-                        // Display results
-                        displayResults(testStats);
-                        
-                        // Add to history chart
-                        if (window.chartFunctions) {
-                            window.chartFunctions.addTestToHistory(testStats);
-                        }
+                        // Update charts
+                        updateCharts();
+                    }).catch(error => {
+                        console.error('Error saving record:', error);
                     });
                 }).catch(error => {
                     console.error('Error accessing database:', error);
@@ -656,4 +662,95 @@ function createCelebration(achievements) {
     achievementHTML += '</ul></div>';
     
     aiFeedbackElement.innerHTML += achievementHTML;
-} 
+}
+
+// Function to show test complete modal
+function showTestCompleteModal(record) {
+    const modal = document.querySelector('.test-complete-container');
+    const resultDetails = document.getElementById('result-details');
+    
+    // Create result details
+    let detailsHTML = `
+        <div class="result-stat"><span>Speed:</span> <strong>${record.wpm.toFixed(1)} WPM</strong></div>
+        <div class="result-stat"><span>Accuracy:</span> <strong>${record.accuracy.toFixed(1)}%</strong></div>
+        <div class="result-stat"><span>Errors:</span> <strong>${record.errors}</strong></div>
+        <div class="result-stat"><span>Time:</span> <strong>${record.completionTime}s</strong></div>
+        <div class="result-stat"><span>Mode:</span> <strong>${record.mode.charAt(0).toUpperCase() + record.mode.slice(1)}</strong></div>
+    `;
+    
+    // Add feedback based on performance
+    let feedback = '';
+    if (record.wpm > 80) {
+        feedback = '<div class="feedback excellent">Excellent! Your typing speed is outstanding!</div>';
+    } else if (record.wpm > 60) {
+        feedback = '<div class="feedback great">Great job! Your typing speed is well above average.</div>';
+    } else if (record.wpm > 40) {
+        feedback = '<div class="feedback good">Good work! Your typing speed is above average.</div>';
+    } else {
+        feedback = '<div class="feedback keep-practicing">Keep practicing! Regular practice will improve your speed.</div>';
+    }
+    
+    resultDetails.innerHTML = detailsHTML + feedback;
+    
+    // Show modal
+    modal.style.display = 'flex';
+    
+    // Add event listener to retry button
+    document.getElementById('retry-button').addEventListener('click', function() {
+        modal.style.display = 'none';
+        resetTest();
+    });
+    
+    // Also close when clicking outside the modal
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+// Initialize FAQ functionality
+function initFAQ() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+            // Toggle active class on the question
+            this.classList.toggle('active');
+            
+            // Toggle the visibility of the answer
+            const answer = this.nextElementSibling;
+            if (this.classList.contains('active')) {
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                this.style.borderBottomLeftRadius = '0';
+                // Change the + to - icon
+                this.classList.add('open');
+            } else {
+                answer.style.maxHeight = '0px';
+                this.style.borderBottomLeftRadius = '10px';
+                // Change the - to + icon
+                this.classList.remove('open');
+            }
+        });
+    });
+}
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if user is logged in
+    checkLoginStatus();
+    
+    // Initialize typing test
+    initTypingTest();
+    
+    // Initialize charts
+    if (window.chartFunctions) {
+        window.chartFunctions.initCharts();
+    }
+    
+    // Initialize FAQ
+    initFAQ();
+    
+    // Get test difficulty
+    updateSelectedDifficulty();
+}); 

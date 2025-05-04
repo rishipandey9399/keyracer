@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Racer - Leaderboard</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .leaderboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--secondary-color);
+            border-radius: 16px;
+            color: var(--text-color);
+            box-shadow: var(--card-shadow);
+            animation: fadeIn 0.6s ease-out;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--racing-stripe-light);
+            border-right: 5px solid var(--racing-stripe-light);
+        }
+        
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            position: relative;
+        }
+        
+        .leaderboard-header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .leaderboard-header p {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+        
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .tab-button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, rgba(30, 39, 97, 0.8), rgba(17, 24, 39, 0.8));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, var(--accent-color), var(--racing-stripe-dark));
+            border-bottom: 3px solid var(--racing-stripe-light);
+            box-shadow: 0 10px 25px rgba(0, 255, 221, 0.2);
+        }
+        
+        .difficulty-filter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .difficulty-button {
+            padding: 8px 16px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .difficulty-button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .difficulty-button.active {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .leaderboard-table th, 
+        .leaderboard-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .leaderboard-table th {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .leaderboard-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .leaderboard-table tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .leaderboard-table tr:nth-child(1) td {
+            background-color: rgba(255, 215, 0, 0.15); /* Gold for 1st place */
+            border-left: 3px solid #FFD700;
+        }
+        
+        .leaderboard-table tr:nth-child(2) td {
+            background-color: rgba(192, 192, 192, 0.15); /* Silver for 2nd place */
+            border-left: 3px solid #C0C0C0;
+        }
+        
+        .leaderboard-table tr:nth-child(3) td {
+            background-color: rgba(205, 127, 50, 0.15); /* Bronze for 3rd place */
+            border-left: 3px solid #CD7F32;
+        }
+        
+        .rank {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .rank-1 {
+            color: #FFD700; /* Gold */
+        }
+        
+        .rank-2 {
+            color: #C0C0C0; /* Silver */
+        }
+        
+        .rank-3 {
+            color: #CD7F32; /* Bronze */
+        }
+        
+        .username {
+            font-weight: 600;
+        }
+        
+        .highlight {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+            background-color: var(--racing-stripe-light);
+            color: white;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--racing-stripe-light), var(--racing-stripe-dark));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 74, 74, 0.4);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .time-period-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .time-button {
+            padding: 8px 16px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .time-button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .time-button.active {
+            background-color: var(--racing-stripe-light);
+            color: white;
+            font-weight: 600;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Trophy icon for top positions */
+        .trophy-icon {
+            margin-right: 8px;
+            color: #FFD700;
+        }
+        
+        /* For responsive design */
+        @media (max-width: 768px) {
+            .leaderboard-table {
+                font-size: 0.85rem;
+            }
+            
+            .leaderboard-table th, 
+            .leaderboard-table td {
+                padding: 10px;
+            }
+            
+            .tab-container {
+                flex-wrap: wrap;
+            }
+            
+            .difficulty-filter {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Leaderboard info section styling */
+        .leaderboard-info {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .info-card {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .info-card h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-card h3 i {
+            color: var(--accent-color);
+        }
+        
+        .info-content {
+            color: var(--text-color);
+        }
+        
+        .info-content h4 {
+            color: var(--accent-color);
+            margin: 20px 0 10px;
+            font-size: 1.1rem;
+        }
+        
+        .info-content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .metric-breakdown {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .metric-level {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .level-name {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .leaderboard-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="racing-car sports-car">
+        <div class="headlights"></div>
+        <div class="headlights right"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-keyboard"></i> Key Racer <i class="fas fa-flag-checkered"></i></h1>
+        </header>
+        
+        <main>
+            <div class="leaderboard-container">
+                <div class="leaderboard-header">
+                    <h1>Leaderboard</h1>
+                    <p>Race to the top and claim your position among the fastest typists</p>
+                </div>
+                
+                <div class="tab-container">
+                    <button class="tab-button active" data-tab="wpm">Speed (WPM)</button>
+                    <button class="tab-button" data-tab="accuracy">Accuracy</button>
+                    <button class="tab-button" data-tab="time">Fastest Times</button>
+                </div>
+                
+                <div class="difficulty-filter">
+                    <button class="difficulty-button active" data-difficulty="all">All Levels</button>
+                    <button class="difficulty-button" data-difficulty="beginner">Beginner</button>
+                    <button class="difficulty-button" data-difficulty="intermediate">Intermediate</button>
+                    <button class="difficulty-button" data-difficulty="advanced">Advanced</button>
+                </div>
+                
+                <div class="time-period-selector">
+                    <button class="time-button active" data-time="all-time">All Time</button>
+                    <button class="time-button" data-time="monthly">This Month</button>
+                    <button class="time-button" data-time="weekly">This Week</button>
+                    <button class="time-button" data-time="daily">Today</button>
+                </div>
+                
+                <!-- WPM Leaderboard -->
+                <div class="tab-content active" id="wpm-tab">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th class="rank">Rank</th>
+                                <th>User</th>
+                                <th>WPM</th>
+                                <th>Accuracy</th>
+                                <th>Difficulty</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px;">
+                                    Loading leaderboard data...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Accuracy Leaderboard -->
+                <div class="tab-content" id="accuracy-tab">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th class="rank">Rank</th>
+                                <th>User</th>
+                                <th>Accuracy</th>
+                                <th>WPM</th>
+                                <th>Difficulty</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px;">
+                                    Loading leaderboard data...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Time Leaderboard -->
+                <div class="tab-content" id="time-tab">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th class="rank">Rank</th>
+                                <th>User</th>
+                                <th>Completion Time</th>
+                                <th>WPM</th>
+                                <th>Accuracy</th>
+                                <th>Difficulty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px;">
+                                    Loading leaderboard data...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="leaderboard-info">
+                    <div class="info-card">
+                        <h3><i class="fas fa-info-circle"></i> Understanding the Metrics</h3>
+                        <div class="info-content">
+                            <p>The leaderboard tracks three key performance metrics that are vital for measuring typing proficiency:</p>
+                            
+                            <h4>Words Per Minute (WPM)</h4>
+                            <p>WPM measures how many words you can type in a minute. A "word" is standardized as 5 characters, including spaces. The average typing speed is 40-50 WPM, while professional typists often exceed 80-100 WPM. Elite typists can reach 120+ WPM.</p>
+                            <div class="metric-breakdown">
+                                <div class="metric-level">
+                                    <span class="level-name">Beginner:</span> 10-25 WPM
+                                </div>
+                                <div class="metric-level">
+                                    <span class="level-name">Intermediate:</span> 26-45 WPM
+                                </div>
+                                <div class="metric-level">
+                                    <span class="level-name">Advanced:</span> 46-65 WPM
+                                </div>
+                                <div class="metric-level">
+                                    <span class="level-name">Expert:</span> 66-80 WPM
+                                </div>
+                                <div class="metric-level">
+                                    <span class="level-name">Professional:</span> 80+ WPM
+                                </div>
+                            </div>
+                            
+                            <h4>Accuracy</h4>
+                            <p>Accuracy is the percentage of correctly typed characters relative to the total. High accuracy is crucial for professional typing, as errors require correction time that reduces overall productivity. Most professional typists maintain 95%+ accuracy.</p>
+                            <div class="metric-breakdown">
+                                <div class="metric-level">
+                                    <span class="level-name">Needs Improvement:</span> Below 92%
+                                </div>
+                                <div class="metric-level">
+                                    <span class="level-name">Good:</span> 92-95%
+                                </div>
+                                <div class="metric-level">
+                                    <span class="level-name">Very Good:</span> 96-98%
+                                </div>
+                                <div class="metric-level">
+                                    <span class="level-name">Excellent:</span> 99-100%
+                                </div>
+                            </div>
+                            
+                            <h4>Completion Time</h4>
+                            <p>The time taken to complete a typing test is critical for tasks with deadlines. Lower completion time indicates higher productivity, especially for longer documents. This metric becomes increasingly important as the length of the text increases.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-lightbulb"></i> Tips to Improve Your Ranking</h3>
+                        <div class="info-content">
+                            <h4>Proper Finger Positioning</h4>
+                            <p>Rest your fingers on the home row (ASDF for left hand, JKL; for right hand). Each finger is responsible for specific keys, minimizing movement and maximizing efficiency.</p>
+                            
+                            <h4>Practice Touch Typing</h4>
+                            <p>Touch typing means typing without looking at the keyboard. This skill dramatically increases speed and accuracy once mastered. Key Racer's visual keyboard helps reinforce correct finger placement.</p>
+                            
+                            <h4>Regular Practice</h4>
+                            <p>Consistency is crucial. Even 15 minutes of daily practice can lead to significant improvement over weeks. The brain builds muscle memory through regular, focused practice sessions.</p>
+                            
+                            <h4>Focus on Accuracy First</h4>
+                            <p>Begin by typing slowly and accurately. Speed naturally increases as your muscle memory develops, but errors become habits if not corrected early.</p>
+                            
+                            <h4>Progressive Challenges</h4>
+                            <p>As you improve, gradually increase text difficulty and length. Key Racer's different difficulty modes help you find the right challenge level for your current skills.</p>
+                            
+                            <h4>Analyze Your Mistakes</h4>
+                            <p>Pay attention to patterns in your errors. Many typists consistently mistype certain letters or letter combinations that can be specifically targeted for improvement.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-chart-line"></i> Benefits of Improving Your Typing</h3>
+                        <div class="info-content">
+                            <h4>Professional Advantage</h4>
+                            <p>Fast, accurate typing is a valuable skill in most professions. Employers often list typing proficiency as a requirement, with some positions requiring 60+ WPM.</p>
+                            
+                            <h4>Time Efficiency</h4>
+                            <p>Improving from 30 WPM to 60 WPM can save approximately 35 working days per year for professionals who type regularly.</p>
+                            
+                            <h4>Reduced Physical Strain</h4>
+                            <p>Proper typing technique reduces the risk of repetitive strain injuries (RSI) like carpal tunnel syndrome that can develop from improper keyboard use.</p>
+                            
+                            <h4>Enhanced Focus on Content</h4>
+                            <p>When typing becomes automatic, your brain can focus on the content rather than the mechanical process of typing, improving the quality of your work.</p>
+                            
+                            <h4>Competitive Edge</h4>
+                            <p>In competitive environments like programming contests, fast typing can give you a significant advantage by allowing you to implement solutions quicker.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="index.html" class="back-button">Back to Key Racer</a>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2023 Key Racer</p>
+            <div class="footer-links">
+                <a href="about.html">About Us</a> | 
+                <a href="privacy-policy.html">Privacy Policy</a> | 
+                <a href="terms-conditions.html">Terms & Conditions</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Database and leaderboard scripts -->
+    <script src="scripts/database.js"></script>
+    <script src="scripts/leaderboard.js"></script>
+</body>
+</html> 

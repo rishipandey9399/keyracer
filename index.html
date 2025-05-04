@@ -34,6 +34,7 @@
                 <button class="tab" data-mode="timed">Timed Challenge</button>
                 <button class="tab" data-mode="marathon">Marathon</button>
                 <button class="tab" data-mode="custom">Custom Text</button>
+                <a href="leaderboard.html" class="tab leaderboard-tab"><i class="fas fa-trophy"></i> Leaderboard</a>
             </div>
         </header>
 
@@ -146,14 +147,84 @@
                     <button id="close-results" class="close-results-btn">Close</button>
                 </div>
             </div>
+
+            <div class="test-complete-container">
+                <div id="test-complete">
+                    <h2>Test Complete!</h2>
+                    <div id="result-details"></div>
+                    <button id="retry-button">Try Again</button>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2>Improve Your Typing Skills with Key Racer</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <h3>Why Typing Speed Matters</h3>
+                        <p>In today's digital world, typing is a fundamental skill. Improving your typing speed from 30 WPM to 60+ WPM can save you hundreds of hours annually. Fast typing allows you to focus on your ideas rather than the keyboard, enhancing productivity in work, education, and communication.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-keyboard"></i></div>
+                        <h3>How Key Racer Helps</h3>
+                        <p>Our application combines scientifically-backed practice methodology with gamification. The real-time feedback, progress tracking, and varied difficulty levels create an optimal learning environment. Regular practice with Key Racer can dramatically improve both your typing speed and accuracy.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-trophy"></i></div>
+                        <h3>Different Test Modes</h3>
+                        <p><strong>Standard Mode:</strong> Practice with paragraphs of varying difficulty.<br>
+                        <strong>Timed Challenge:</strong> Type as much as possible within a time limit.<br>
+                        <strong>Marathon Mode:</strong> Test your endurance with longer texts.<br>
+                        <strong>Custom Text:</strong> Practice with your own content.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-lightbulb"></i></div>
+                        <h3>Typing Tips</h3>
+                        <p>• Use all fingers with proper home row positioning (ASDF-JKL;)<br>
+                        • Focus on accuracy before speed<br>
+                        • Practice regularly, even just 15 minutes daily<br>
+                        • Look at the screen, not your hands<br>
+                        • Take short breaks to prevent fatigue and strain</p>
+                    </div>
+                </div>
+                
+                <div class="faq-section">
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="faq-item">
+                        <div class="faq-question">What is a good typing speed?</div>
+                        <div class="faq-answer">The average typing speed is 40-50 WPM. Professional typists typically type at 65-75 WPM, while advanced typists can reach 90+ WPM. Even improving to 50-60 WPM can significantly boost your productivity.</div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">How is accuracy calculated?</div>
+                        <div class="faq-answer">Accuracy is the percentage of correctly typed characters relative to the total. We consider each correctly typed character and calculate: (correct characters / total characters) × 100%.</div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">How often should I practice?</div>
+                        <div class="faq-answer">Consistent practice is more effective than occasional long sessions. Try to practice 15-30 minutes daily rather than several hours once a week. Most users see noticeable improvement within 2-4 weeks of regular practice.</div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">How does the AI feedback work?</div>
+                        <div class="faq-answer">Our AI analyzes your typing patterns, identifying recurring errors and speed variations. It then provides personalized recommendations to address your specific challenges, helping you improve more efficiently than generic practice.</div>
+                    </div>
+                </div>
+            </div>
+
         </main>
 
         <footer>
             <p>&copy; 2023 Key Racer</p>
-            <div class="footer-links">
-                <a href="about.html">About Us</a> | 
-                <a href="privacy-policy.html">Privacy Policy</a> | 
-                <a href="terms-conditions.html">Terms & Conditions</a>
+            <div class="footer-links-container">
+                <div class="keyboard-links">
+                    <a href="about.html" class="keyboard-key">About Us</a>
+                    <a href="privacy-policy.html" class="keyboard-key">Privacy Policy</a>
+                    <a href="terms-conditions.html" class="keyboard-key">Terms & Conditions</a>
+                </div>
             </div>
         </footer>
     </div>
@@ -209,5 +280,46 @@
     <script src="scripts/modes.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/ai-feedback.js"></script>
+    
+    <!-- Additional script to ensure FAQ functionality works -->
+    <script>
+        // Directly initialize FAQ functionality on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    // Toggle active class on the question
+                    this.classList.toggle('active');
+                    
+                    // Toggle the visibility of the answer
+                    const answer = this.nextElementSibling;
+                    if (this.classList.contains('active')) {
+                        // Set a very large max-height value to ensure the content is fully visible
+                        answer.style.maxHeight = '1000px';
+                        this.style.borderBottomLeftRadius = '0';
+                        this.style.borderBottomRightRadius = '0';
+                        // Change the + to - icon
+                        this.classList.add('open');
+                    } else {
+                        answer.style.maxHeight = '0px';
+                        this.style.borderBottomLeftRadius = '10px';
+                        this.style.borderBottomRightRadius = '10px';
+                        // Change the - to + icon
+                        this.classList.remove('open');
+                    }
+                });
+                
+                // If the question is already active (e.g., on page reload), 
+                // ensure its answer is properly displayed
+                if (question.classList.contains('active')) {
+                    const answer = question.nextElementSibling;
+                    answer.style.maxHeight = '1000px';
+                    question.style.borderBottomLeftRadius = '0';
+                    question.style.borderBottomRightRadius = '0';
+                }
+            });
+        });
+    </script>
 </body>
 </html> 

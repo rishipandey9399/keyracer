@@ -1,0 +1,633 @@
+/* Footer keyboard links */
+.footer-links-container {
+    text-align: center;
+    margin: 30px auto;
+    max-width: 800px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.challenge-text {
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(0, 255, 221, 0.5);
+}
+
+.keyboard-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.keyboard-key {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(to bottom, #3A4662, #2A3548);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #111827, 0 6px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #4A5675;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+}
+
+.keyboard-key:hover {
+    background: linear-gradient(to bottom, #4A5675, #3A4662);
+    color: #00FFDD;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #111827, 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.keyboard-key:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #111827, 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.keyboard-key::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+}
+
+.keyboard-key:hover::after {
+    left: 100%;
+}
+
+/* Ensure content isn't cut off by yellow line */
+body {
+    padding-bottom: 80px !important; /* Use !important to override any existing styles */
+    position: relative;
+}
+
+/* Adjust the login info section to ensure it's not cut off and remove 3D effects */
+.login-info-section {
+    margin-bottom: 80px;
+    position: relative;
+    z-index: 10;
+    transform: none !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.login-info-section h2,
+.login-info-section h3,
+.login-info-section p,
+.login-info-section .info-box,
+.login-info-section .typing-facts {
+    transform: none !important;
+    transition: none !important;
+}
+
+.login-info-section .info-box:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.info-box .icon i {
+    transform: none !important;
+}
+
+/* Fix positioning for the footer line */
+body::after {
+    bottom: 0 !important;
+    z-index: 999 !important;
+}
+
+@media (max-width: 768px) {
+    .keyboard-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .keyboard-key {
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* More padding on mobile */
+    body {
+        padding-bottom: 100px !important;
+    }
+    
+    .login-info-section {
+        margin-bottom: 100px;
+    }
+}
+
+/* Extra container styling for proper positioning */
+.container {
+    position: relative;
+    z-index: 5;
+    margin-bottom: 100px;
+}
+
+/* Remove all 3D effects from the account info section */
+.login-info-section,
+.login-info-section *,
+.info-boxes,
+.info-box,
+.typing-facts {
+    transform-style: flat !important;
+    perspective: none !important;
+    -webkit-transform-style: flat !important;
+    backface-visibility: visible !important;
+}
+
+/* Make the icon section flatter */
+.info-box .icon {
+    transform: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+/* Standard hover effect instead of 3D */
+.login-info-section .info-box:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Clear and comprehensive styling for non-3D elements */
+.non-3d,
+.non-3d * {
+    /* Remove all 3D transforms and effects */
+    transform-style: flat !important;
+    perspective: none !important;
+    -webkit-transform-style: flat !important;
+    transform: none !important;
+    backface-visibility: visible !important;
+    
+    /* Remove 3D shadows */
+    text-shadow: none !important;
+    filter: none !important;
+    
+    /* Remove 3D animations */
+    animation: none !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Override any specific 3D effects that might be applied to these elements */
+.login-info-section.non-3d {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    margin-top: 30px;
+}
+
+.login-info-section.non-3d h2 {
+    text-shadow: none !important;
+    color: #fff;
+    position: relative;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-info-section.non-3d .info-box {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 15px;
+    transition: all 0.2s ease !important;
+}
+
+/* Allow a flat hover effect on info boxes */
+.login-info-section.non-3d .info-box:hover {
+    transform: translateY(-5px) !important;
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.login-info-section.non-3d .icon {
+    font-size: 2rem;
+    color: #00FFDD;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.login-info-section.non-3d .typing-facts {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+}
+
+/* Footer links container should also be flat */
+.footer-links-container.non-3d {
+    margin-top: 40px;
+}
+
+/* Flatten keyboard keys in non-3D sections but keep them visually appealing */
+.non-3d .keyboard-key {
+    box-shadow: 0 2px 0 #111827, 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.2s ease !important;
+    background: #2A3548 !important;
+    border: 1px solid #4A5675 !important;
+}
+
+.non-3d .keyboard-key:hover {
+    background: #3A4662 !important;
+    color: #00FFDD !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 0 #111827, 0 6px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.non-3d .keyboard-key:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 1px 0 #111827, 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Create strong visual separation between login box and content */
+.section-divider {
+    height: 60px;
+    width: 100%;
+    margin: 30px 0;
+    position: relative;
+    z-index: 5;
+}
+
+/* More aggressive flat styling for the content areas */
+.non-3d,
+.non-3d *,
+.login-info-section,
+.login-info-section * {
+    /* Complete removal of all 3D transforms and effects */
+    transform: none !important;
+    transform-style: flat !important;
+    perspective: none !important;
+    -webkit-transform-style: flat !important;
+    backface-visibility: visible !important;
+    text-shadow: none !important;
+    filter: none !important;
+    
+    /* Remove 3D animations */
+    animation: none !important;
+}
+
+/* Make content completely separate visually from the login box */
+.login-info-section.non-3d {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 40px;
+    margin-top: 30px;
+    border: 1px solid rgba(58, 70, 98, 0.4);
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Make headings completely flat but still readable */
+.login-info-section.non-3d h2 {
+    text-shadow: none !important;
+    color: #fff;
+    position: relative;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-weight: normal;
+    border-bottom: 2px solid #00FFDD;
+    padding-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+/* Create clearly distinct boxes for info sections */
+.login-info-section.non-3d .info-box {
+    background-color: rgba(30, 39, 97, 0.2);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(58, 70, 98, 0.4);
+    transition: background-color 0.2s ease !important;
+}
+
+/* Simpler hover effect - just color change, no movement */
+.login-info-section.non-3d .info-box:hover {
+    background-color: rgba(30, 39, 97, 0.3);
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Flat styling for icons */
+.login-info-section.non-3d .icon {
+    font-size: 2.2rem;
+    color: #00FFDD;
+    margin-bottom: 15px;
+    text-align: center;
+    opacity: 0.9;
+}
+
+/* Improve "Did You Know" section readability */
+.login-info-section.non-3d .typing-facts {
+    background-color: rgba(30, 39, 97, 0.2);
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 30px;
+    border: 1px solid rgba(58, 70, 98, 0.4);
+}
+
+.login-info-section.non-3d .typing-facts h3 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: normal;
+    border-bottom: 1px solid #00FFDD;
+    padding-bottom: 10px;
+}
+
+.login-info-section.non-3d .typing-facts ul {
+    padding-left: 15px;
+}
+
+.login-info-section.non-3d .typing-facts li {
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Flatten highlighted text */
+.login-info-section.non-3d .fact-highlight {
+    color: #00FFDD;
+    font-weight: normal;
+    text-shadow: none !important;
+}
+
+/* Ensure the keyboard links container is separated from other content */
+.footer-links-container.non-3d {
+    margin: 40px auto;
+    padding: 20px;
+    max-width: 800px;
+}
+
+/* Further enhance separation between the login and content areas */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container for the login box only - keep 3D effects contained */
+.login-container {
+    margin-bottom: 50px;
+    position: relative;
+    max-width: 500px;
+}
+
+/* Extra spacing around the content sections */
+.footer-links-container.non-3d,
+.login-info-section.non-3d {
+    width: 100%;
+    margin-top: 30px;
+}
+
+/* Improve info boxes layout - ensure they're in a grid */
+.info-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+/* Make the text more readable with better spacing and font weight */
+.login-info-section.non-3d p,
+.login-info-section.non-3d li {
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    font-weight: 300;
+}
+
+.login-info-section.non-3d h3 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    font-weight: normal;
+    color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .info-boxes {
+        grid-template-columns: 1fr;
+    }
+    
+    .login-info-section.non-3d {
+        padding: 25px;
+    }
+}
+
+/* Keyboard quote styling */
+.keyboard-quote {
+    display: block;
+    padding: 15px 25px;
+    margin: 0 auto 20px;
+    background: linear-gradient(to bottom, #3A4662, #2A3548);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #111827, 0 6px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #4A5675;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    max-width: 80%;
+    font-size: 1.1rem;
+}
+
+.keyboard-quote:hover {
+    background: linear-gradient(to bottom, #4A5675, #3A4662);
+    color: #00FFDD;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #111827, 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.keyboard-quote::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+}
+
+.keyboard-quote:hover::after {
+    left: 100%;
+}
+
+/* Style for info boxes to look like keyboard keys */
+.keyboard-box {
+    background: linear-gradient(to bottom, #3A4662, #2A3548) !important;
+    border-radius: 10px !important;
+    border: 1px solid #4A5675 !important;
+    box-shadow: 0 4px 0 #111827, 0 6px 10px rgba(0, 0, 0, 0.3) !important;
+    padding: 25px !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.keyboard-box::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 1s ease;
+}
+
+.keyboard-box:hover::after {
+    left: 100%;
+}
+
+/* Keyboard-style heading */
+.keyboard-heading {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 0 auto 40px;
+    background: linear-gradient(to bottom, #3A4662, #2A3548);
+    color: white !important;
+    border-radius: 10px;
+    box-shadow: 0 4px 0 #111827, 0 6px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #4A5675;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 1.8rem !important;
+    width: auto;
+    max-width: 80%;
+}
+
+/* Center the keyboard heading */
+.login-info-section.non-3d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Ensure info boxes display correctly in the grid */
+.info-boxes {
+    width: 100%;
+}
+
+/* Make text in keyboard boxes more readable */
+.keyboard-box h3 {
+    color: #00FFDD !important;
+    margin-bottom: 15px !important;
+    font-size: 1.5rem !important;
+    text-align: center !important;
+}
+
+.keyboard-box p,
+.keyboard-box li {
+    color: white !important;
+    font-weight: 400 !important;
+    line-height: 1.6 !important;
+}
+
+/* Icon styling in the keyboard boxes */
+.keyboard-box .icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.keyboard-box .icon i {
+    font-size: 2.5rem;
+    color: #00FFDD;
+}
+
+/* Add subtle hover effect for keyboard boxes */
+.keyboard-box:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 0 #111827, 0 8px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Set a consistent width for keyboard-quote */
+.keyboard-quote {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Adjust keyboard-heading on mobile */
+@media (max-width: 768px) {
+    .keyboard-heading {
+        font-size: 1.5rem !important;
+        padding: 12px 20px;
+        max-width: 100%;
+    }
+    
+    .keyboard-quote {
+        font-size: 1.1rem;
+        padding: 12px 20px;
+    }
+}
+
+/* Add animation effect for the keyboard-quote */
+.keyboard-quote:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 #111827, 0 8px 15px rgba(0, 0, 0, 0.4);
+    color: #00FFDD;
+}
+
+.keyboard-quote:hover::after {
+    left: 100%;
+}
+
+/* FAQ Section Styles */
+.faq-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.faq-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.faq-item h3 {
+    position: relative;
+}
+
+.faq-item h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: rgba(0, 255, 221, 0.5);
+}
+
+/* Animation effects for FAQ items */
+.faq-item:hover {
+    transform: translateY(-5px) !important;
+}
+
+/* Responsive adjustments for FAQ */
+@media (max-width: 768px) {
+    .faq-container {
+        grid-template-columns: 1fr;
+    }
+} 

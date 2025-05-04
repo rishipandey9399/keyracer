@@ -1387,6 +1387,24 @@ body.race-active .racing-car {
     width: 100%;
 }
 
+.tab.leaderboard-tab {
+    background-color: var(--racing-stripe-light);
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tab.leaderboard-tab:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255, 74, 74, 0.3);
+}
+
+.tab.leaderboard-tab i {
+    font-size: 0.9rem;
+}
+
 /* Progress chart styles */
 .progress-chart {
     height: 200px;
@@ -2002,4 +2020,363 @@ input:checked + .slider:before {
 .footer-links a:hover {
     color: var(--primary-color);
     text-decoration: underline;
+}
+
+/* Footer links with keyboard styling */
+.footer-links-container {
+    text-align: center;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.keyboard-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.keyboard-key {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(to bottom, #3A4662, #2A3548);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #111827, 0 6px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #4A5675;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+}
+
+.keyboard-key:hover {
+    background: linear-gradient(to bottom, #4A5675, #3A4662);
+    color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #111827, 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.keyboard-key:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #111827, 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.keyboard-key::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+}
+
+.keyboard-key:hover::after {
+    left: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .keyboard-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .keyboard-key {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Information Section Styles */
+.info-section {
+    margin: 60px 0 30px;
+    padding: 30px;
+    background-color: var(--secondary-color);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    animation: fadeIn 0.8s ease-out;
+    border-top: 5px solid var(--racing-stripe-light);
+}
+
+.info-section h2 {
+    text-align: center;
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.info-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--accent-color);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.info-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--racing-stripe-light), var(--accent-color));
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.info-icon {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.info-card h3 {
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.info-card p {
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* FAQ Section */
+.faq-section {
+    margin-top: 40px;
+}
+
+.faq-section h3 {
+    text-align: center;
+    color: white;
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.faq-question {
+    padding: 15px 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    border-left: 4px solid var(--accent-color);
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.faq-question::after {
+    content: '+';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.faq-question.open::after {
+    content: '-';
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.faq-question:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.faq-answer {
+    padding: 0 20px;
+    color: var(--text-color);
+    line-height: 1.6;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.8s ease-in-out, padding 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-size: 1rem;
+}
+
+.faq-question.active {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.faq-question.active + .faq-answer {
+    padding: 20px;
+    max-height: 1000px; /* Significantly increased to ensure no content is cut off */
+    overflow: visible; /* Ensure content is not hidden */
+}
+
+/* Test complete container */
+.test-complete-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#test-complete {
+    background-color: var(--secondary-color);
+    padding: 30px;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-left: 5px solid var(--accent-color);
+    border-right: 5px solid var(--accent-color);
+    text-align: center;
+}
+
+#test-complete h2 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+#result-details {
+    margin-bottom: 25px;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.result-stat {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.result-stat span {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.result-stat strong {
+    color: white;
+}
+
+.feedback {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.feedback.excellent {
+    background-color: rgba(50, 205, 50, 0.2);
+    color: #32cd32;
+    border-left: 4px solid #32cd32;
+}
+
+.feedback.great {
+    background-color: rgba(30, 144, 255, 0.2);
+    color: #1e90ff;
+    border-left: 4px solid #1e90ff;
+}
+
+.feedback.good {
+    background-color: rgba(255, 165, 0, 0.2);
+    color: #ffa500;
+    border-left: 4px solid #ffa500;
+}
+
+.feedback.keep-practicing {
+    background-color: rgba(255, 99, 71, 0.2);
+    color: #ff6347;
+    border-left: 4px solid #ff6347;
+}
+
+#retry-button {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, var(--racing-stripe-light), var(--racing-stripe-dark));
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+#retry-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 74, 74, 0.4);
+}
+
+/* Responsive adjustments for info section */
+@media (max-width: 768px) {
+    .info-section {
+        padding: 20px;
+        margin: 40px 0 20px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .info-card {
+        padding: 20px;
+    }
 } 

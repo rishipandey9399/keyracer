@@ -8,6 +8,7 @@
      crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="styles/keyboard-links.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -61,7 +62,7 @@
                 #1E2761 20px,
                 #1E2761 40px
             );
-            z-index: 1000;
+            z-index: 990;
         }
         
         @keyframes moveRoad {
@@ -90,47 +91,112 @@
         .logo {
             font-size: 3.5rem;
             margin-bottom: 15px;
-            color: #00FFDD;
-            text-shadow: 0 5px 15px rgba(0, 255, 221, 0.5), 0 0 20px rgba(0, 255, 221, 0.5);
+            background: linear-gradient(to right, #FF4A4A, #00FFDD, #FF4A4A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(0, 255, 221, 0.5);
             transition: all 0.5s ease;
             display: inline-block;
             position: relative;
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 2px;
+            font-weight: 800;
+            transform-style: preserve-3d;
+            padding: 10px 25px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #FF4A4A, #00FFDD, #FF4A4A, #00FFDD);
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0.7;
+            animation: glowingBorder 10s linear infinite;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg, 
+                rgba(255, 255, 255, 0) 20%, 
+                rgba(255, 255, 255, 0.3) 40%, 
+                rgba(255, 255, 255, 0) 60%
+            );
+            transform: translateY(100%) rotate(45deg);
+            animation: shineEffect 6s infinite;
+        }
+        
+        @keyframes glowingBorder {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+        
+        @keyframes shineEffect {
+            0% { transform: translateY(100%) rotate(45deg); }
+            15% { transform: translateY(-100%) rotate(45deg); }
+            100% { transform: translateY(-100%) rotate(45deg); }
         }
         
         .logo i {
-            filter: drop-shadow(0 5px 15px rgba(0, 255, 221, 0.6));
+            filter: drop-shadow(0 0 15px rgba(0, 255, 221, 0.8));
             transition: all 0.5s ease;
             margin-right: 15px;
             vertical-align: middle;
+            transform: translateZ(30px);
         }
         
         .logo .race-flag {
             position: absolute;
-            top: -10px;
-            right: -15px;
-            font-size: 1.5rem;
-            transform: rotate(15deg);
+            top: -15px;
+            right: -25px;
+            font-size: 1.8rem;
+            transform: rotate(15deg) translateZ(40px);
             animation: waveFlag 2s ease-in-out infinite;
+            color: #FFD700;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
         }
         
         .logo .race-car {
             position: absolute;
-            bottom: -5px;
+            bottom: -10px;
             left: -30px;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             animation: raceCar 3s linear infinite;
+            color: #FF4A4A;
+            filter: drop-shadow(0 0 10px rgba(255, 74, 74, 0.7));
+            transform: translateZ(20px);
+        }
+        
+        @keyframes waveFlag {
+            0%, 100% { transform: rotate(15deg) translateZ(40px); }
+            50% { transform: rotate(30deg) scale(1.2) translateZ(40px); }
         }
         
         @keyframes raceCar {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(120px); }
-            100% { transform: translateX(0); }
+            0% { transform: translateX(0) translateZ(20px); }
+            50% { transform: translateX(150px) translateZ(20px); }
+            100% { transform: translateX(0) translateZ(20px); }
+        }
+        
+        .logo:hover {
+            transform: translateY(-5px) rotateX(10deg);
+            text-shadow: 0 10px 25px rgba(0, 255, 221, 0.8);
         }
         
         .logo:hover i {
-            transform: scale(1.1) rotate(10deg);
+            transform: scale(1.2) rotate(10deg) translateZ(50px);
             color: #FF4A4A;
         }
         
@@ -358,7 +424,8 @@
     <div class="particles" id="particles"></div>
     <div class="racing-car"></div>
     
-    <div class="container">
+    <div class="container main-wrapper">
+        <!-- 3D elements -->
         <div class="logo-section">
             <div class="logo">
                 <i class="fas fa-keyboard"></i> KEY RACER
@@ -372,6 +439,7 @@
             <span class="app-version">Version 1.0</span>
         </div>
         
+        <!-- Login section (3D) -->
         <div class="login-container">
             <div class="login-header">
                 <h1>Key Racer</h1>
@@ -403,12 +471,83 @@
             </div>
         </div>
         
-        <div class="footer-text">
-            <p>Challenge yourself and race to the top of the leaderboard</p>
-            <div class="footer-links">
-                <a href="about.html">About Us</a> | 
-                <a href="privacy-policy.html">Privacy Policy</a> | 
-                <a href="terms-conditions.html">Terms & Conditions</a>
+        <!-- Complete visual separation between login and content -->
+        <div class="section-divider"></div>
+        
+        <!-- Non-3D elements start here -->
+        <div class="login-info-section non-3d" style="margin-bottom: 100px; transform-style: flat; perspective: none;">
+            <h2 class="keyboard-heading">Why Create an Account?</h2>
+            
+            <div class="info-boxes">
+                <div class="info-box keyboard-box">
+                    <div class="icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Track Your Progress</h3>
+                    <p>With a Key Racer account, every practice session is recorded. View detailed charts and statistics showing your improvement over time. Identify patterns in your typing and focus on areas that need improvement.</p>
+                </div>
+                
+                <div class="info-box keyboard-box">
+                    <div class="icon"><i class="fas fa-trophy"></i></div>
+                    <h3>Compete on Leaderboards</h3>
+                    <p>Join the global community of typists and see where you rank. Compete with others based on speed, accuracy, and completion time. Set personal goals to climb the rankings and challenge yourself.</p>
+                </div>
+                
+                <div class="info-box keyboard-box">
+                    <div class="icon"><i class="fas fa-brain"></i></div>
+                    <h3>Personalized AI Feedback</h3>
+                    <p>Receive tailored recommendations based on your typing patterns. Our advanced AI analyzes your performance to provide specific tips that address your unique challenges and help you improve faster.</p>
+                </div>
+                
+                <div class="info-box keyboard-box">
+                    <div class="icon"><i class="fas fa-save"></i></div>
+                    <h3>Save Your Preferences</h3>
+                    <p>Your account remembers your preferred settings, themes, and difficulty levels. Pick up exactly where you left off each time you return to Key Racer, with all your customizations intact.</p>
+                </div>
+            </div>
+            
+            <div class="typing-facts keyboard-box">
+                <h3>Did You Know?</h3>
+                <ul>
+                    <li><span class="fact-highlight">The average typing speed</span> worldwide is approximately 40 words per minute (WPM).</li>
+                    <li>The <span class="fact-highlight">world record</span> for typing speed is over 200 WPM, achieved by professional typists after years of practice.</li>
+                    <li>Just <span class="fact-highlight">15 minutes of daily practice</span> can increase your typing speed by 15-20 WPM within a month.</li>
+                    <li>Improving from 30 WPM to 60 WPM can <span class="fact-highlight">save up to 35 working days</span> per year for professionals who type regularly.</li>
+                    <li>The QWERTY keyboard layout was originally designed to <span class="fact-highlight">prevent typewriter jams</span>, not to optimize typing speed.</li>
+                </ul>
+            </div>
+            
+            <!-- FAQ Section -->
+            <h2 class="keyboard-heading">Frequently Asked Questions</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item keyboard-box">
+                    <h3>How do I reset my password?</h3>
+                    <p>If you've forgotten your password, click on the "Forgot Password" link on the login screen. Enter your registered email address, and we'll send you instructions to reset your password. For security reasons, password reset links expire after 24 hours.</p>
+                </div>
+                
+                <div class="faq-item keyboard-box">
+                    <h3>Can I use Key Racer on mobile devices?</h3>
+                    <p>Yes! Key Racer is optimized for both desktop and mobile devices. However, for the best typing experience and accuracy, we recommend using a physical keyboard when possible. Mobile users can still access all features, though the interface is adjusted for touch input.</p>
+                </div>
+                
+                <div class="faq-item keyboard-box">
+                    <h3>Is my typing data saved when I use guest mode?</h3>
+                    <p>When using guest mode, your typing statistics are only stored temporarily in your browser's local storage. They will be lost if you clear your browser data or switch to a different device. For permanent data storage and access to your progress history, we recommend creating a free account.</p>
+                </div>
+                
+                <div class="faq-item keyboard-box">
+                    <h3>How is my Words Per Minute (WPM) calculated?</h3>
+                    <p>Your WPM is calculated by dividing the total number of characters typed (including spaces) by 5 (the average word length), then dividing by the time taken in minutes. For example, if you type 1000 characters in 5 minutes, your WPM would be 1000 ÷ 5 ÷ 5 = 40 WPM.</p>
+                </div>
+            </div>
+            
+            <!-- Footer keyboard links at the bottom of the page -->
+            <div class="footer-links-container non-3d">
+                <div class="keyboard-quote">Challenge yourself and race to the top of the leaderboard</div>
+                <div class="keyboard-links">
+                    <a href="about.html" class="keyboard-key">About Us</a>
+                    <a href="privacy-policy.html" class="keyboard-key">Privacy Policy</a>
+                    <a href="terms-conditions.html" class="keyboard-key">Terms & Conditions</a>
+                </div>
             </div>
         </div>
     </div>

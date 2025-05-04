@@ -233,6 +233,87 @@ class TypingDatabase {
             throw error;
         }
     }
+    
+    // Get leaderboard data with sorting and filtering
+    async getLeaderboardData(options = {}) {
+        try {
+            await this.ensureDbReady();
+            
+            const {
+                sortBy = 'wpm', // 'wpm', 'accuracy', or 'completionTime'
+                difficulty = null,
+                limit = 10,
+                timeRange = null // 'day', 'week', 'month' or null for all time
+            } = options;
+            
+            // Get all records first
+            const allRecords = await this.getTypingRecords();
+            
+            // Apply difficulty filter if specified
+            let filteredRecords = allRecords;
+            if (difficulty) {
+                filteredRecords = filteredRecords.filter(record => 
+                    record.difficulty && record.difficulty.toLowerCase() === difficulty.toLowerCase()
+                );
+            }
+            
+            // Apply time range filter if specified
+            if (timeRange) {
+                const now = new Date();
+                let cutoffDate;
+                
+                switch (timeRange) {
+                    case 'day':
+                        cutoffDate = new Date(now);
+                        cutoffDate.setHours(0, 0, 0, 0);
+                        break;
+                    case 'week':
+                        cutoffDate = new Date(now);
+                        cutoffDate.setDate(now.getDate() - now.getDay());
+                        cutoffDate.setHours(0, 0, 0, 0);
+                        break;
+                    case 'month':
+                        cutoffDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                        break;
+                    default:
+                        cutoffDate = null;
+                }
+                
+                if (cutoffDate) {
+                    filteredRecords = filteredRecords.filter(record => {
+                        const recordDate = new Date(record.timestamp);
+                        return recordDate >= cutoffDate;
+                    });
+                }
+            }
+            
+            // Sort records based on the specified field
+            switch (sortBy) {
+                case 'wpm':
+                    filteredRecords.sort((a, b) => b.wpm - a.wpm);
+                    break;
+                case 'accuracy':
+                    filteredRecords.sort((a, b) => b.accuracy - a.accuracy);
+                    break;
+                case 'completionTime':
+                    // Sort by completion time (ascending - faster times first)
+                    filteredRecords.sort((a, b) => {
+                        // Handle records without completionTime
+                        if (!a.completionTime) return 1;
+                        if (!b.completionTime) return -1;
+                        return a.completionTime - b.completionTime;
+                    });
+                    break;
+            }
+            
+            // Return limited number of records
+            return filteredRecords.slice(0, limit);
+            
+        } catch (error) {
+            console.error('Get leaderboard data error:', error);
+            throw error;
+        }
+    }
 }
 
 // Create a global instance of the database
