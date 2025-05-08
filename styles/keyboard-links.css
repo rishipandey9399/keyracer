@@ -13,6 +13,9 @@
     color: white;
     margin-bottom: 20px;
     text-shadow: 0 0 10px rgba(0, 255, 221, 0.5);
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif);
+    line-height: 1.5;
+    letter-spacing: 0.3px;
 }
 
 .keyboard-links {
@@ -35,8 +38,9 @@
     position: relative;
     overflow: hidden;
     border: 1px solid #4A5675;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif);
     font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .keyboard-key:hover {
@@ -439,11 +443,13 @@ body::after {
     position: relative;
     overflow: hidden;
     border: 1px solid #4A5675;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif);
     font-weight: 600;
     text-align: center;
     max-width: 80%;
     font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
 }
 
 .keyboard-quote:hover {
@@ -506,13 +512,14 @@ body::after {
     position: relative;
     overflow: hidden;
     border: 1px solid #4A5675;
-    font-family: 'Orbitron', sans-serif;
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif);
     letter-spacing: 2px;
     text-transform: uppercase;
     text-align: center;
     font-size: 1.8rem !important;
     width: auto;
     max-width: 80%;
+    line-height: 1.3;
 }
 
 /* Center the keyboard heading */
@@ -533,13 +540,18 @@ body::after {
     margin-bottom: 15px !important;
     font-size: 1.5rem !important;
     text-align: center !important;
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif) !important;
+    letter-spacing: 0.5px !important;
 }
 
 .keyboard-box p,
 .keyboard-box li {
     color: white !important;
     font-weight: 400 !important;
-    line-height: 1.6 !important;
+    line-height: 1.7 !important;
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif) !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.2px !important;
 }
 
 /* Icon styling in the keyboard boxes */
@@ -607,17 +619,202 @@ body::after {
 
 .faq-item h3 {
     position: relative;
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif);
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    line-height: 1.3;
 }
 
-.faq-item h3::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 2px;
-    background: rgba(0, 255, 221, 0.5);
+.faq-item p {
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.2px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Animation effects for FAQ items */
+.faq-item:hover {
+    transform: translateY(-5px) !important;
+}
+
+/* Responsive adjustments for FAQ */
+@media (max-width: 768px) {
+    .faq-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Login info section text improvements */
+.login-info-section h2,
+.login-info-section .keyboard-heading {
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif);
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.login-info-section p,
+.login-info-section li {
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif);
+    line-height: 1.7;
+    font-size: 1.05rem;
+    letter-spacing: 0.2px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Keyboard box content */
+.keyboard-box h3 {
+    color: #00FFDD !important;
+    margin-bottom: 15px !important;
+    font-size: 1.5rem !important;
+    text-align: center !important;
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif) !important;
+    letter-spacing: 0.5px !important;
+}
+
+.keyboard-box p,
+.keyboard-box li {
+    color: white !important;
+    font-weight: 400 !important;
+    line-height: 1.7 !important;
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif) !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.2px !important;
+}
+
+/* Keyboard-style heading */
+.keyboard-heading {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 0 auto 40px;
+    background: linear-gradient(to bottom, #3A4662, #2A3548);
+    color: white !important;
+    border-radius: 10px;
+    box-shadow: 0 4px 0 #111827, 0 6px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #4A5675;
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 1.8rem !important;
+    width: auto;
+    max-width: 80%;
+    line-height: 1.3;
+}
+
+/* Center the keyboard heading */
+.login-info-section.non-3d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Ensure info boxes display correctly in the grid */
+.info-boxes {
+    width: 100%;
+}
+
+/* Make text in keyboard boxes more readable */
+.keyboard-box h3 {
+    color: #00FFDD !important;
+    margin-bottom: 15px !important;
+    font-size: 1.5rem !important;
+    text-align: center !important;
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif) !important;
+    letter-spacing: 0.5px !important;
+}
+
+.keyboard-box p,
+.keyboard-box li {
+    color: white !important;
+    font-weight: 400 !important;
+    line-height: 1.7 !important;
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif) !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.2px !important;
+}
+
+/* Icon styling in the keyboard boxes */
+.keyboard-box .icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.keyboard-box .icon i {
+    font-size: 2.5rem;
+    color: #00FFDD;
+}
+
+/* Add subtle hover effect for keyboard boxes */
+.keyboard-box:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 0 #111827, 0 8px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Set a consistent width for keyboard-quote */
+.keyboard-quote {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Adjust keyboard-heading on mobile */
+@media (max-width: 768px) {
+    .keyboard-heading {
+        font-size: 1.5rem !important;
+        padding: 12px 20px;
+        max-width: 100%;
+    }
+    
+    .keyboard-quote {
+        font-size: 1.1rem;
+        padding: 12px 20px;
+    }
+}
+
+/* Add animation effect for the keyboard-quote */
+.keyboard-quote:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 #111827, 0 8px 15px rgba(0, 0, 0, 0.4);
+    color: #00FFDD;
+}
+
+.keyboard-quote:hover::after {
+    left: 100%;
+}
+
+/* FAQ Section Styles */
+.faq-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.faq-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.faq-item h3 {
+    position: relative;
+    font-family: var(--heading-font, 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif);
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+.faq-item p {
+    font-family: var(--body-font, 'Rajdhani', 'Segoe UI', sans-serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.2px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 /* Animation effects for FAQ items */

@@ -1,71 +1,110 @@
-# Key Racer 🏁
+# Email Authentication System with Resend API
 
-A racing-themed interactive typing speed test application with AI feedback, speedometer display, and dynamic racing elements.
+A complete solution for implementing secure email verification and password reset in web applications using the [Resend](https://resend.com) API.
 
 ## Features
 
-- Racing-themed UI with dynamic animations and visual effects
-- Speedometer for real-time WPM tracking
-- Three difficulty levels: Beginner, Intermediate, and Advanced
-- Real-time WPM (Words Per Minute), accuracy, and error tracking
-- Interactive 3D keyboard with racing highlights and particle effects
-- Racing car animations and checkered flag elements
-- Timer with countdown and racing-themed display
-- Detailed test results with AI-powered performance analysis
-- Personalized feedback and tips to improve typing skills
-- User accounts with progress tracking
-- Achievements system with special effects
-- Responsive design for desktop and mobile
+- **Email Verification**: Securely verify user email addresses with time-limited verification codes
+- **Password Reset**: Allow users to reset their passwords via email links
+- **Security**: Built with modern security practices including rate limiting, brute force protection
+- **Cross-Platform**: Works with any frontend (React, Vue, Angular, or vanilla JavaScript)
+- **Well-Documented**: Comprehensive documentation and examples
 
-## How to Use
+## Project Structure
 
-1. Create an account or continue as guest from the login screen
-2. Select your difficulty level (Beginner, Intermediate, or Advanced)
-3. Click the "Start Test" button to begin your race
-4. Type the displayed text as quickly and accurately as possible
-5. Watch your speed on the WPM speedometer
-6. View your results and AI feedback when you cross the finish line
-7. Track your progress and earn achievements as you improve
+- `/server` - Node.js backend with Resend integration
+  - `/utils` - Helper utilities (token management, email sending)
+  - `/routes` - API endpoints
+- `/client` - Frontend examples and components
+  - `/components` - React components
+  - `/examples` - Vanilla JavaScript examples
+  - `/styles` - CSS styles for the components
 
-## Game Modes
+## Backend Setup
 
-- **Standard**: Classic 1-minute typing test
-- **Timed Challenge**: 30-second sprint mode
-- **Marathon**: 5-minute endurance test
-- **Custom Text**: Practice with your own text
+### Prerequisites
 
-## Technical Details
+- Node.js v14+
+- [Resend API key](https://resend.com/api-keys)
 
-This application is built with:
-- HTML5
-- CSS3 (with CSS variables for theming)
-- Vanilla JavaScript (no frameworks or libraries)
-- Dynamic animations and interactive visual effects
-- Local storage for user data and statistics
-- AI analysis for personalized performance feedback
+### Installation
 
-The AI feedback system analyzes:
-- Typing speed (WPM)
-- Accuracy percentage
-- Problem characters and patterns
-- Typing rhythm and consistency
-- Key-specific timing data
+1. Set up environment variables:
 
-## Getting Started
+```
+cd server
+```
 
-To run this application locally:
+Create a `.env` file with the following:
 
-1. Clone the repository
-2. Open the index.html file in your web browser
-3. No build process or installation required!
+```
+# Resend API Configuration
+RESEND_API_KEY=re_your_api_key_here
+EMAIL_FROM=noreply@yourdomain.com
+EMAIL_FROM_NAME=Your App Name
 
-## Future Enhancements
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+```
 
-Planned future enhancements:
-- Multiplayer racing mode for competition
-- More advanced racing elements and animations
-- Additional vehicle customization based on achievements
-- Global leaderboard for typing speeds
-- Advanced performance statistics and visualizations
-- Light/dark theme toggle
-- Additional language support
+2. Install dependencies and start the server:
+
+```bash
+npm install
+npm start
+```
+
+## API Endpoints
+
+### Email Verification
+
+- `POST /api/send-verification-code` - Send a verification code to email
+- `POST /api/verify-code` - Verify a code
+
+### Password Reset
+
+- `POST /api/send-forgot-password-email` - Request a password reset link
+- `POST /api/reset-password` - Reset password with token
+
+## Frontend Integration
+
+### React Components
+
+The `/client/components` directory contains reusable React components:
+
+- `EmailVerificationForm` - For verifying email addresses
+- `ForgotPasswordForm` - For requesting password resets
+- `ResetPasswordForm` - For setting a new password
+- `SignupForm` - Complete signup flow with email verification
+
+### Vanilla JavaScript
+
+See the `/client/examples` directory for vanilla JavaScript implementations:
+
+- `email-verification.html` - Example of email verification
+- `forgot-password.html` - Example of requesting a password reset
+- `reset-password.html` - Example of resetting a password
+- `vanilla-js-example.js` - JavaScript code for all examples
+
+## Security Considerations
+
+- All tokens and codes expire after a short period (10-15 minutes)
+- Rate limiting prevents abuse
+- Brute force protection with attempt limits
+- Securely generated tokens using cryptographic functions
+- Timing-safe code comparisons to prevent timing attacks
+
+## Production Deployment
+
+For production deployment:
+
+1. Set `NODE_ENV=production` in your environment
+2. Use a proper domain for your emails
+3. Store credentials securely
+4. Set up proper CORS configuration
+5. Use HTTPS
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

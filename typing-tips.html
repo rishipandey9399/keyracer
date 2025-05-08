@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Racer - Typing Tips</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/typing-tips.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Typing Tips & Techniques <i class="fas fa-keyboard"></i></h1>
+        </header>
+
+        <div class="feature-tabs">
+            <a href="index.html" class="tab"><i class="fas fa-home"></i> Home</a>
+            <a href="lessons.html" class="tab"><i class="fas fa-graduation-cap"></i> Lessons</a>
+            <a href="typing-tips.html" class="tab active"><i class="fas fa-lightbulb"></i> Tips</a>
+            <a href="leaderboard.html" class="tab leaderboard-tab"><i class="fas fa-trophy"></i> Leaderboard</a>
+        </div>
+
+        <div class="tips-container">
+            <section class="finger-positioning">
+                <h2>Proper Finger Positioning</h2>
+                <div class="keyboard-animation">
+                    <div class="keyboard" id="finger-positioning-keyboard">
+                        <!-- Keyboard layout will be added via JavaScript -->
+                    </div>
+                    <div class="finger-guide">
+                        <div class="finger left-pinky" data-finger="Left Pinky">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Left Pinky</div>
+                        </div>
+                        <div class="finger left-ring" data-finger="Left Ring">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Left Ring</div>
+                        </div>
+                        <div class="finger left-middle" data-finger="Left Middle">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Left Middle</div>
+                        </div>
+                        <div class="finger left-index" data-finger="Left Index">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Left Index</div>
+                        </div>
+                        <div class="finger right-index" data-finger="Right Index">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Right Index</div>
+                        </div>
+                        <div class="finger right-middle" data-finger="Right Middle">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Right Middle</div>
+                        </div>
+                        <div class="finger right-ring" data-finger="Right Ring">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Right Ring</div>
+                        </div>
+                        <div class="finger right-pinky" data-finger="Right Pinky">
+                            <div class="finger-tip"></div>
+                            <div class="finger-label">Right Pinky</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="typing-tips">
+                <h2>Essential Typing Tips</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon"><i class="fas fa-hand-point-up"></i></div>
+                        <h3>Home Row Position</h3>
+                        <p>Keep your fingers on the home row keys (ASDF for left hand, JKL; for right hand). This is your starting position for efficient typing.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon"><i class="fas fa-eye"></i></div>
+                        <h3>Look at the Screen</h3>
+                        <p>Focus on the screen, not the keyboard. This helps you catch mistakes immediately and improves your typing speed.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon"><i class="fas fa-walking"></i></div>
+                        <h3>Proper Posture</h3>
+                        <p>Maintain good posture: sit straight, keep your feet flat on the floor, and position your keyboard at elbow height.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <h3>Start Slow</h3>
+                        <p>Begin with accuracy over speed. As you become more comfortable, gradually increase your typing speed.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="practice-exercises">
+                <h2>Practice Exercises</h2>
+                <div class="exercise-container">
+                    <div class="exercise-card">
+                        <h3>Home Row Practice</h3>
+                        <p>Type the following sequence: asdf jkl; asdf jkl;</p>
+                        <div class="practice-area">
+                            <div class="text-display">asdf jkl; asdf jkl;</div>
+                            <textarea class="text-input" placeholder="Start typing here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Top Row Practice</h3>
+                        <p>Type the following sequence: qwer uiop qwer uiop</p>
+                        <div class="practice-area">
+                            <div class="text-display">qwer uiop qwer uiop</div>
+                            <textarea class="text-input" placeholder="Start typing here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="scripts/keyboard.js"></script>
+    <script src="scripts/typing-tips.js"></script>
+</body>
+</html> 

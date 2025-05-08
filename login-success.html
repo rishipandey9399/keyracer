@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Successful - Key Racer</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .success-container {
+            text-align: center;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: rgba(26, 34, 53, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-left: 5px solid var(--accent-color);
+            border-right: 5px solid var(--accent-color);
+        }
+        
+        .success-icon {
+            font-size: 64px;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .success-title {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-family: var(--heading-font);
+        }
+        
+        .success-message {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 221, 0.2);
+        }
+        
+        .profile-picture {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            margin-right: 15px;
+            object-fit: cover;
+        }
+        
+        .user-info {
+            text-align: left;
+        }
+        
+        .user-name {
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .user-email {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        
+        .provider-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            background-color: #4285f4;
+            color: white;
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        .action-buttons {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .continue-btn {
+            background: linear-gradient(135deg, var(--racing-stripe-light), var(--racing-stripe-dark));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(255, 74, 74, 0.4);
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .racing-car {
+            position: fixed;
+            width: 60px;
+            height: 30px;
+            background-color: var(--racing-stripe-light);
+            border-radius: 5px;
+            bottom: 50px;
+            right: -60px;
+            z-index: 5;
+            animation: raceCarAcross 8s linear infinite;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .racing-car::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            width: 40px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .racing-car::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10px;
+            width: 10px;
+            height: 10px;
+            background-color: #333;
+            border-radius: 50%;
+            box-shadow: 30px 0 0 #333;
+        }
+        
+        @keyframes raceCarAcross {
+            0% { 
+                right: -60px;
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% { 
+                right: calc(100% + 60px);
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="racing-car"></div>
+    <div class="racing-car" style="bottom: 120px; animation-delay: 3s;"></div>
+    <div class="racing-car" style="bottom: 190px; animation-delay: 1.5s;"></div>
+    
+    <div class="success-container">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1 class="success-title">Login Successful!</h1>
+        <p class="success-message">You have successfully signed in to Key Racer with Google.</p>
+        
+        <div id="user-profile" class="user-profile">
+            <img id="profile-picture" src="assets/default-avatar.png" alt="Profile Picture" class="profile-picture">
+            <div class="user-info">
+                <div id="user-name" class="user-name">Google User</div>
+                <div id="user-email" class="user-email">user@example.com</div>
+                <div class="provider-badge">
+                    <i class="fab fa-google"></i> Google
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="index.html" class="continue-btn">
+                <i class="fas fa-flag-checkered"></i> Start Racing
+            </a>
+            <button id="logout-btn" class="logout-btn">
+                Sign Out
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the user data from URL params (or make an API call to get current user)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userName = urlParams.get('name') || 'Google User';
+            const userEmail = urlParams.get('email') || '';
+            const userPicture = urlParams.get('picture') || 'assets/default-avatar.png';
+            
+            // Update the user profile
+            document.getElementById('user-name').textContent = userName;
+            if (userEmail) {
+                document.getElementById('user-email').textContent = userEmail;
+            }
+            if (userPicture) {
+                document.getElementById('profile-picture').src = userPicture;
+            }
+            
+            // Handle logout
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                // Clear user data
+                localStorage.removeItem('typingTestUser');
+                localStorage.removeItem('typingTestUserType');
+                
+                // Make logout API call
+                fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                }).finally(() => {
+                    // Redirect to login page
+                    window.location.href = 'login.html';
+                });
+            });
+            
+            // Add more racing cars
+            function addRacingCars(count) {
+                for (let i = 0; i < count; i++) {
+                    const car = document.createElement('div');
+                    car.classList.add('racing-car');
+                    
+                    // Random position and animation timing
+                    const bottom = Math.random() * 300 + 20;
+                    const delay = Math.random() * 5;
+                    const duration = 5 + Math.random() * 8;
+                    
+                    car.style.bottom = `${bottom}px`;
+                    car.style.animationDelay = `${delay}s`;
+                    car.style.animationDuration = `${duration}s`;
+                    
+                    // Random colors
+                    car.style.backgroundColor = Math.random() > 0.5 ? 
+                        'var(--racing-stripe-light)' : 'var(--racing-stripe-dark)';
+                    
+                    document.body.appendChild(car);
+                }
+            }
+            
+            // Add some racing cars to the background
+            addRacingCars(5);
+            
+            // Store user info in local storage for the app
+            localStorage.setItem('typingTestUser', userName);
+            localStorage.setItem('typingTestUserType', 'google');
+            localStorage.setItem('typingTestUserEmail', userEmail || '');
+            localStorage.setItem('typingTestUserPicture', userPicture || '');
+        });
+    </script>
+</body>
+</html> 

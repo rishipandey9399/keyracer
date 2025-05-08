@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Successful - Typing Test App</title>
+  <link rel="stylesheet" href="styles/auth-forms.css">
+  <link rel="stylesheet" href="styles/login.css">
+  <script src="api/googleAuth.js" type="module"></script>
+  <style>
+    .success-container {
+      text-align: center;
+    }
+    
+    .success-icon {
+      font-size: 64px;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+    
+    .profile-picture {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+    
+    .user-info {
+      text-align: left;
+    }
+    
+    .user-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .user-email {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .provider-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: #4285f4;
+      color: white;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    
+    .continue-btn {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="login-container success-container">
+      <div class="success-icon">✓</div>
+      <h1>Login Successful!</h1>
+      <p class="subtitle">You have successfully signed in</p>
+      
+      <div id="user-profile" class="user-profile" style="display: none;">
+        <img id="profile-picture" src="" alt="Profile Picture" class="profile-picture">
+        <div class="user-info">
+          <div id="user-name" class="user-name"></div>
+          <div id="user-email" class="user-email"></div>
+          <div id="provider-badge" class="provider-badge">Google</div>
+        </div>
+      </div>
+      
+      <button id="continue-btn" class="submit-btn continue-btn">
+        Continue to App
+      </button>
+      
+      <button id="logout-btn" class="google-btn" style="margin-top: 15px;">
+        Logout
+      </button>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const provider = urlParams.get('provider') || 'unknown';
+      
+      // Update provider badge
+      const providerBadge = document.getElementById('provider-badge');
+      providerBadge.textContent = provider === 'google' ? 'Google' : provider;
+      
+      // Get current user
+      fetchUserInfo();
+      
+      // Handle continue button
+      document.getElementById('continue-btn').addEventListener('click', function() {
+        window.location.href = '/';
+      });
+      
+      // Handle logout button
+      document.getElementById('logout-btn').addEventListener('click', function() {
+        if (typeof logout === 'function') {
+          logout().then(() => {
+            window.location.href = '/client/pages/login.html';
+          }).catch(err => {
+            console.error('Logout failed:', err);
+          });
+        } else {
+          window.location.href = '/client/pages/login.html';
+        }
+      });
+      
+      // Fetch and display user information
+      async function fetchUserInfo() {
+        try {
+          if (typeof getCurrentUser === 'function') {
+            const { authenticated, user } = await getCurrentUser();
+            
+            if (authenticated && user) {
+              // Display user profile
+              document.getElementById('user-profile').style.display = 'flex';
+              document.getElementById('user-name').textContent = user.name || 'User';
+              document.getElementById('user-email').textContent = user.email || '';
+              
+              if (user.picture) {
+                document.getElementById('profile-picture').src = user.picture;
+              } else {
+                document.getElementById('profile-picture').src = 'assets/default-avatar.png';
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      }
+    });
+  </script>
+</body>
+</html> 

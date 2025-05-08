@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification Example</title>
+  <link rel="stylesheet" href="../styles/auth-forms.css">
+</head>
+<body>
+  <div class="container">
+    <div id="email-verification-form" class="verification-form">
+      <h2>Verify Your Email</h2>
+      <p>Please enter your email address to receive a verification code.</p>
+      
+      <div class="form-group">
+        <label for="email-input">Email Address</label>
+        <input 
+          type="email" 
+          id="email-input" 
+          placeholder="Enter your email" 
+          autocomplete="email"
+        >
+      </div>
+      
+      <button id="send-code-btn" class="submit-btn">Send Verification Code</button>
+      
+      <div id="code-section" class="form-group" style="margin-top: 30px;">
+        <div class="timer">
+          Code expires in: <span id="countdown">10:00</span>
+        </div>
+        
+        <label for="verification-code-input">Verification Code</label>
+        <input 
+          type="text" 
+          id="verification-code-input" 
+          placeholder="Enter 6-digit code" 
+          maxlength="6" 
+          disabled
+        >
+      </div>
+      
+      <button id="verify-code-btn" class="submit-btn" disabled>Verify Code</button>
+      
+      <div id="message" class="message" style="display: none;"></div>
+    </div>
+  </div>
+  
+  <script src="vanilla-js-example.js"></script>
+</body>
+</html> 

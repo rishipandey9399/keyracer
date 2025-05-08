@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Racer - Typing Lessons</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/lessons.css">
+    <link rel="stylesheet" href="styles/keyboard-links.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="racing-car sports-car">
+        <div class="headlights"></div>
+        <div class="headlights right"></div>
+    </div>
+    <div class="racing-car formula" style="animation-delay: 2s; bottom: 120px;"></div>
+    <div class="racing-car" style="animation-delay: 4s; bottom: 80px;">
+        <div class="headlights"></div>
+        <div class="headlights right"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-keyboard"></i> Key Racer - Typing Lessons <i class="fas fa-flag-checkered"></i></h1>
+            <p class="header-text">Master your typing skills with our specialized lessons</p>
+            <div class="feature-tabs">
+                <a href="index.html" class="tab"><i class="fas fa-home"></i> Home</a>
+                <a href="lessons.html" class="tab active"><i class="fas fa-graduation-cap"></i> Lessons</a>
+                <a href="typing-tips.html" class="tab"><i class="fas fa-lightbulb"></i> Tips</a>
+                <a href="leaderboard.html" class="tab"><i class="fas fa-trophy"></i> Leaderboard</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="lesson-selector">
+                <div class="lesson-category">
+                    <h2><i class="fas fa-book"></i> Structured Lessons</h2>
+                    <div class="lesson-grid">
+                        <div class="lesson-card lesson-beginner" data-type="beginner">
+                            <div class="lesson-icon">
+                                <i class="fas fa-baby"></i>
+                            </div>
+                            <h3>Beginner</h3>
+                            <p>Master the home row and basic finger positions. Perfect for absolute beginners.</p>
+                            <div class="lesson-level">
+                                <span class="level-dot filled"></span>
+                                <span class="level-dot"></span>
+                                <span class="level-dot"></span>
+                            </div>
+                            <button class="start-lesson-btn">Begin Lesson</button>
+                        </div>
+                        
+                        <div class="lesson-card lesson-intermediate" data-type="intermediate">
+                            <div class="lesson-icon">
+                                <i class="fas fa-running"></i>
+                            </div>
+                            <h3>Intermediate</h3>
+                            <p>Develop speed and accuracy with common word patterns and basic punctuation.</p>
+                            <div class="lesson-level">
+                                <span class="level-dot filled"></span>
+                                <span class="level-dot filled"></span>
+                                <span class="level-dot"></span>
+                            </div>
+                            <button class="start-lesson-btn">Begin Lesson</button>
+                        </div>
+                        
+                        <div class="lesson-card lesson-advanced" data-type="advanced">
+                            <div class="lesson-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3>Advanced</h3>
+                            <p>Perfect your technique with challenging exercises focusing on speed and precision.</p>
+                            <div class="lesson-level">
+                                <span class="level-dot filled"></span>
+                                <span class="level-dot filled"></span>
+                                <span class="level-dot filled"></span>
+                            </div>
+                            <button class="start-lesson-btn">Begin Lesson</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-category">
+                    <h2><i class="fas fa-bolt"></i> Tricky Keys Challenge</h2>
+                    <div class="lesson-grid">
+                        <div class="lesson-card lesson-tricky" data-type="tricky-numbers">
+                            <div class="lesson-icon">
+                                <i class="fas fa-hashtag"></i>
+                            </div>
+                            <h3>Number Row</h3>
+                            <p>Master those tricky numbers and symbols that often slow typists down.</p>
+                            <div class="lesson-progress">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%;"></div>
+                                </div>
+                                <span>0% Mastered</span>
+                            </div>
+                            <button class="start-lesson-btn">Practice Now</button>
+                        </div>
+                        
+                        <div class="lesson-card lesson-tricky" data-type="tricky-special">
+                            <div class="lesson-icon">
+                                <i class="fas fa-percent"></i>
+                            </div>
+                            <h3>Special Characters</h3>
+                            <p>Get familiar with brackets, quotes, and other special characters.</p>
+                            <div class="lesson-progress">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%;"></div>
+                                </div>
+                                <span>0% Mastered</span>
+                            </div>
+                            <button class="start-lesson-btn">Practice Now</button>
+                        </div>
+                        
+                        <div class="lesson-card lesson-tricky" data-type="tricky-uncommon">
+                            <div class="lesson-icon">
+                                <i class="fas fa-puzzle-piece"></i>
+                            </div>
+                            <h3>Uncommon Combinations</h3>
+                            <p>Practice letter combinations that are difficult to type quickly.</p>
+                            <div class="lesson-progress">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%;"></div>
+                                </div>
+                                <span>0% Mastered</span>
+                            </div>
+                            <button class="start-lesson-btn">Practice Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-category">
+                    <h2><i class="fas fa-fire"></i> Bigram Blitz</h2>
+                    <p class="category-description">Bigrams are two-letter combinations that appear frequently in language. Mastering common bigrams significantly improves your typing speed.</p>
+                    
+                    <div class="bigram-container">
+                        <div class="bigram-groups">
+                            <div class="bigram-group active" data-group="common">
+                                <h3>Common Bigrams</h3>
+                                <div class="bigram-chips">
+                                    <span class="bigram-chip">th</span>
+                                    <span class="bigram-chip">he</span>
+                                    <span class="bigram-chip">in</span>
+                                    <span class="bigram-chip">er</span>
+                                    <span class="bigram-chip">an</span>
+                                    <span class="bigram-chip">re</span>
+                                    <span class="bigram-chip">on</span>
+                                    <span class="bigram-chip">at</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bigram-group" data-group="difficult">
+                                <h3>Challenging Bigrams</h3>
+                                <div class="bigram-chips">
+                                    <span class="bigram-chip">zx</span>
+                                    <span class="bigram-chip">qw</span>
+                                    <span class="bigram-chip">fp</span>
+                                    <span class="bigram-chip">bv</span>
+                                    <span class="bigram-chip">xc</span>
+                                    <span class="bigram-chip">kj</span>
+                                    <span class="bigram-chip">mn</span>
+                                    <span class="bigram-chip">zt</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bigram-group" data-group="custom">
+                                <h3>Custom Practice</h3>
+                                <div class="custom-bigram-input">
+                                    <input type="text" id="custom-bigram" placeholder="Enter bigrams..." maxlength="20">
+                                    <button id="add-custom-bigram" class="accent-btn btn-small">Add</button>
+                                </div>
+                                <div class="bigram-chips custom-chips">
+                                    <!-- Custom bigrams will be added here by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bigram-practice">
+                            <h3>Bigram Blitz Challenge</h3>
+                            <div class="bigram-stats">
+                                <div class="stat">
+                                    <span class="stat-value">0</span>
+                                    <p>WPM</p>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">0</span>
+                                    <p>Accuracy</p>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">0</span>
+                                    <p>Streak</p>
+                                </div>
+                            </div>
+                            <div class="bigram-display">
+                                <div class="current-bigram">th</div>
+                                <div class="next-bigrams">
+                                    <span>he</span>
+                                    <span>in</span>
+                                    <span>er</span>
+                                </div>
+                            </div>
+                            <input type="text" class="bigram-input" placeholder="Type the bigram above..." maxlength="2">
+                            <div class="bigram-timer">
+                                <div class="timer-bar">
+                                    <div class="timer-progress"></div>
+                                </div>
+                                <span class="timer-text">60s</span>
+                            </div>
+                            <button class="start-bigram-btn primary-btn">Start Bigram Blitz</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lesson Practice Area -->
+            <div class="lesson-practice" style="display: none;">
+                <div class="lesson-header">
+                    <h2 id="lesson-title">Lesson Title</h2>
+                    <button class="close-lesson-btn"><i class="fas fa-times"></i> Close Lesson</button>
+                </div>
+                
+                <div class="lesson-content">
+                    <div class="lesson-instructions">
+                        <p id="lesson-description">Lesson description will appear here.</p>
+                    </div>
+                    
+                    <div class="lesson-progress-indicator">
+                        <div class="progress-steps">
+                            <div class="step active">1</div>
+                            <div class="step">2</div>
+                            <div class="step">3</div>
+                            <div class="progress-line">
+                                <div class="progress-completed"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="typing-test-container">
+                        <div class="text-display lesson-text-display" id="lesson-text-display"></div>
+                        <textarea id="lesson-text-input" class="text-input" placeholder="Type the text above..."></textarea>
+                    </div>
+                    
+                    <div class="keyboard-container">
+                        <div class="keyboard" id="lesson-keyboard">
+                            <!-- Keyboard will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="lesson-navigation">
+                        <button class="nav-btn prev-btn" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button class="nav-btn next-btn">Next <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Completion Modal -->
+            <div class="completion-modal" style="display: none;">
+                <div class="modal-content">
+                    <h2>Lesson Complete!</h2>
+                    <div class="completion-stats">
+                        <div class="completion-stat">
+                            <span class="stat-value" id="completion-wpm">0</span>
+                            <p>WPM</p>
+                        </div>
+                        <div class="completion-stat">
+                            <span class="stat-value" id="completion-accuracy">0</span>
+                            <p>Accuracy</p>
+                        </div>
+                        <div class="completion-stat">
+                            <span class="stat-value" id="completion-time">0</span>
+                            <p>Time (s)</p>
+                        </div>
+                    </div>
+                    <div class="completion-message">
+                        <p id="completion-feedback">Great job! You've completed this lesson successfully.</p>
+                    </div>
+                    <div class="completion-actions">
+                        <button class="restart-lesson-btn">Restart Lesson</button>
+                        <button class="next-lesson-btn">Next Lesson</button>
+                        <button class="return-lessons-btn">Return to Lessons</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2023 Key Racer</p>
+            <div class="footer-links-container">
+                <div class="keyboard-links">
+                    <a href="about.html" class="keyboard-key">About Us</a>
+                    <a href="privacy-policy.html" class="keyboard-key">Privacy Policy</a>
+                    <a href="terms-conditions.html" class="keyboard-key">Terms & Conditions</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts/keyboard.js"></script>
+    <script src="scripts/database.js"></script>
+    <script src="scripts/lessons.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // This script is a placeholder until the full lessons.js is implemented
+            console.log('Lessons page loaded');
+            
+            // Initialize default progress for all tricky lessons
+            const trickyLessons = document.querySelectorAll('.lesson-card[data-type^="tricky-"]');
+            trickyLessons.forEach(function(card) {
+                const progressBar = card.querySelector('.progress');
+                const progressText = card.querySelector('.lesson-progress span');
+                
+                if (progressBar) progressBar.style.width = '0%';
+                if (progressText) progressText.textContent = '0% Mastered';
+            });
+            
+            // Try to load saved progress from localStorage
+            try {
+                const savedProgress = JSON.parse(localStorage.getItem('lessonProgress') || '{}');
+                
+                // Apply saved progress to each lesson
+                Object.keys(savedProgress).forEach(function(lessonType) {
+                    const progressPercentage = savedProgress[lessonType];
+                    const lessonCard = document.querySelector(`.lesson-card[data-type="${lessonType}"]`);
+                    
+                    if (lessonCard) {
+                        const progressBar = lessonCard.querySelector('.progress');
+                        const progressText = lessonCard.querySelector('.lesson-progress span');
+                        
+                        if (progressBar) progressBar.style.width = `${progressPercentage}%`;
+                        if (progressText) progressText.textContent = `${progressPercentage}% Mastered`;
+                        console.log(`Loaded saved progress: ${lessonType} - ${progressPercentage}%`);
+                    }
+                });
+            } catch (e) {
+                console.error('Error loading saved progress:', e);
+            }
+            
+            // Handle lesson card clicks
+            const lessonCards = document.querySelectorAll('.lesson-card');
+            const lessonSelector = document.querySelector('.lesson-selector');
+            const lessonPractice = document.querySelector('.lesson-practice');
+            const closeLessonBtn = document.querySelector('.close-lesson-btn');
+            const lessonTitle = document.getElementById('lesson-title');
+            const lessonDescription = document.getElementById('lesson-description');
+            
+            lessonCards.forEach(card => {
+                card.querySelector('.start-lesson-btn').addEventListener('click', function() {
+                    const lessonType = card.dataset.type;
+                    const lessonName = card.querySelector('h3').textContent;
+                    
+                    // Show lesson practice area
+                    lessonSelector.style.display = 'none';
+                    lessonPractice.style.display = 'block';
+                    
+                    // Set data attributes for tracking progress
+                    lessonPractice.dataset.lessonType = lessonType;
+                    lessonPractice.dataset.lessonIndex = 0;
+                    lessonPractice.dataset.stepIndex = 0;
+                    
+                    // Update lesson title and description
+                    lessonTitle.textContent = lessonName;
+                    
+                    // Set lesson description based on type
+                    switch(lessonType) {
+                        case 'beginner':
+                            lessonDescription.textContent = 'Learn the home row keys (ASDF JKL;) and proper finger positioning. Type slowly and focus on accuracy.';
+                            break;
+                        case 'intermediate':
+                            lessonDescription.textContent = 'Practice common words and simple sentences. Begin focusing on building speed while maintaining accuracy.';
+                            break;
+                        case 'advanced':
+                            lessonDescription.textContent = 'Challenge yourself with complex text and punctuation. Work on maximizing both speed and accuracy.';
+                            break;
+                        case 'tricky-numbers':
+                            lessonDescription.textContent = 'Practice typing numbers and symbols to improve your speed with non-alphabetic characters.';
+                            break;
+                        case 'tricky-special':
+                            lessonDescription.textContent = 'Master special characters like brackets, parentheses, and quotes that often slow typists down.';
+                            break;
+                        case 'tricky-uncommon':
+                            lessonDescription.textContent = 'Practice difficult letter combinations that don\'t frequently appear together to improve your overall typing fluency.';
+                            break;
+                        default:
+                            lessonDescription.textContent = 'Follow the instructions and type the text shown below.';
+                    }
+                    
+                    // Generate sample text for the lesson
+                    const sampleText = 'This is a sample lesson text. The full functionality will be implemented in the lessons.js file. Type this text to test the interface.';
+                    const textDisplay = document.getElementById('lesson-text-display');
+                    textDisplay.innerHTML = '';
+                    
+                    // Create spans for each character in the sample text
+                    for (let i = 0; i < sampleText.length; i++) {
+                        const span = document.createElement('span');
+                        span.textContent = sampleText[i];
+                        if (i === 0) span.className = 'current';
+                        textDisplay.appendChild(span);
+                    }
+                    
+                    // Initialize the keyboard if not already done
+                    if (typeof initKeyboard === 'function') {
+                        initKeyboard('lesson-keyboard');
+                    }
+                });
+            });
+            
+            // Handle close lesson button
+            closeLessonBtn.addEventListener('click', function() {
+                // Get current lesson data
+                const practiceArea = document.querySelector('.lesson-practice');
+                const lessonType = practiceArea.dataset.lessonType;
+                
+                // Update progress for tricky lessons
+                if (lessonType && lessonType.startsWith('tricky-')) {
+                    // Find the lesson card
+                    const lessonCard = document.querySelector(`.lesson-card[data-type="${lessonType}"]`);
+                    if (lessonCard) {
+                        // Set progress to 33% (completed 1/3 of the lesson)
+                        const progressBar = lessonCard.querySelector('.progress');
+                        const progressText = lessonCard.querySelector('.lesson-progress span');
+                        
+                        if (progressBar) progressBar.style.width = '33%';
+                        if (progressText) progressText.textContent = '33% Mastered';
+                    }
+                }
+                
+                // Close the lesson
+                lessonPractice.style.display = 'none';
+                lessonSelector.style.display = 'block';
+            });
+            
+            // Handle bigram group tabs
+            const bigramGroups = document.querySelectorAll('.bigram-group');
+            bigramGroups.forEach(group => {
+                group.addEventListener('click', function() {
+                    bigramGroups.forEach(g => g.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Start Bigram Blitz button
+            const startBigramBtn = document.querySelector('.start-bigram-btn');
+            let bigramBlitzActive = false;
+            let bigramTimer;
+            
+            startBigramBtn.addEventListener('click', function() {
+                if (!bigramBlitzActive) {
+                    // Start the game
+                    bigramBlitzActive = true;
+                    startBigramBtn.textContent = 'Stop Challenge';
+                    
+                    // Enable input and focus it
+                    const bigramInput = document.querySelector('.bigram-input');
+                    bigramInput.disabled = false;
+                    bigramInput.focus();
+                    
+                    // Reset stats
+                    document.querySelectorAll('.bigram-stats .stat-value').forEach(stat => {
+                        stat.textContent = '0';
+                    });
+                    
+                    // Start the timer animation
+                    const timerProgress = document.querySelector('.timer-progress');
+                    timerProgress.style.width = '100%';
+                    timerProgress.style.transition = 'width 60s linear';
+                    
+                    // Update timer text
+                    let timeLeft = 60;
+                    const timerText = document.querySelector('.timer-text');
+                    
+                    bigramTimer = setInterval(() => {
+                        timeLeft--;
+                        timerText.textContent = timeLeft + 's';
+                        
+                        if (timeLeft <= 0) {
+                            // End the game
+                            clearInterval(bigramTimer);
+                            bigramBlitzActive = false;
+                            startBigramBtn.textContent = 'Start Bigram Blitz';
+                            bigramInput.disabled = true;
+                            timerProgress.style.width = '0%';
+                            timerProgress.style.transition = 'none';
+                            
+                            // Show a simple completion message
+                            alert('Time\'s up! You completed the Bigram Blitz challenge.');
+                        }
+                    }, 1000);
+                } else {
+                    // Stop the game
+                    clearInterval(bigramTimer);
+                    bigramBlitzActive = false;
+                    startBigramBtn.textContent = 'Start Bigram Blitz';
+                    
+                    // Disable input
+                    const bigramInput = document.querySelector('.bigram-input');
+                    bigramInput.disabled = true;
+                    
+                    // Reset timer
+                    const timerProgress = document.querySelector('.timer-progress');
+                    timerProgress.style.width = '0%';
+                    timerProgress.style.transition = 'none';
+                    document.querySelector('.timer-text').textContent = '60s';
+                }
+            });
+            
+            // Custom bigram feature
+            const addCustomBigramBtn = document.getElementById('add-custom-bigram');
+            const customBigramInput = document.getElementById('custom-bigram');
+            const customChips = document.querySelector('.custom-chips');
+            
+            addCustomBigramBtn.addEventListener('click', function() {
+                const value = customBigramInput.value.trim().toLowerCase();
+                
+                // Validate input: must be exactly 2 letters
+                if (value.length === 2 && /^[a-z]{2}$/.test(value)) {
+                    // Create and add the chip
+                    const chip = document.createElement('span');
+                    chip.className = 'bigram-chip';
+                    chip.textContent = value;
+                    customChips.appendChild(chip);
+                    
+                    // Clear input
+                    customBigramInput.value = '';
+                    
+                    // Add click event to remove the chip
+                    chip.addEventListener('click', function() {
+                        chip.remove();
+                    });
+                } else {
+                    alert('Please enter exactly 2 letters (a-z).');
+                }
+            });
+            
+            // Allow pressing Enter to add a custom bigram
+            customBigramInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addCustomBigramBtn.click();
+                }
+            });
+            
+            // Add progress update to completion modal buttons
+            const restartBtn = document.querySelector('.restart-lesson-btn');
+            const nextLessonBtn = document.querySelector('.next-lesson-btn');
+            const returnBtn = document.querySelector('.return-lessons-btn');
+            
+            if (restartBtn && nextLessonBtn && returnBtn) {
+                // Function to update progress
+                function updateProgress(increment = true) {
+                    const practiceArea = document.querySelector('.lesson-practice');
+                    const lessonType = practiceArea.dataset.lessonType;
+                    
+                    if (lessonType && lessonType.startsWith('tricky-')) {
+                        // Find the lesson card
+                        const lessonCard = document.querySelector(`.lesson-card[data-type="${lessonType}"]`);
+                        if (lessonCard) {
+                            // Set progress (using a different percentage based on which button was clicked)
+                            let progressPercentage = 33; // Default progress
+                            
+                            if (increment) {
+                                // Check current progress
+                                const currentText = lessonCard.querySelector('.lesson-progress span').textContent;
+                                const currentPercentage = parseInt(currentText) || 0;
+                                
+                                // Increment by 33% (up to 100%)
+                                progressPercentage = Math.min(currentPercentage + 33, 100);
+                            }
+                            
+                            // Update the UI
+                            const progressBar = lessonCard.querySelector('.progress');
+                            const progressText = lessonCard.querySelector('.lesson-progress span');
+                            
+                            if (progressBar) progressBar.style.width = `${progressPercentage}%`;
+                            if (progressText) progressText.textContent = `${progressPercentage}% Mastered`;
+                            
+                            // Save progress to localStorage
+                            try {
+                                const progressData = JSON.parse(localStorage.getItem('lessonProgress') || '{}');
+                                progressData[lessonType] = progressPercentage;
+                                localStorage.setItem('lessonProgress', JSON.stringify(progressData));
+                                console.log(`Progress saved: ${lessonType} - ${progressPercentage}%`);
+                            } catch (e) {
+                                console.error('Error saving progress to localStorage:', e);
+                            }
+                        }
+                    }
+                }
+                
+                // Add event listeners to buttons
+                restartBtn.addEventListener('click', function() {
+                    // When restarting, don't increase progress
+                    updateProgress(false);
+                    document.querySelector('.completion-modal').style.display = 'none';
+                });
+                
+                nextLessonBtn.addEventListener('click', function() {
+                    // When moving to next lesson, increase progress
+                    updateProgress(true);
+                    document.querySelector('.completion-modal').style.display = 'none';
+                });
+                
+                returnBtn.addEventListener('click', function() {
+                    // When returning to lessons page, increase progress
+                    updateProgress(true);
+                    document.querySelector('.completion-modal').style.display = 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

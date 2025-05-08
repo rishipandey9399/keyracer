@@ -25,8 +25,8 @@ const keyClasses = {
 const racingKeys = ['w', 'a', 's', 'd', 'Space'];
 
 // Initialize the keyboard
-function initKeyboard() {
-    const keyboardElement = document.getElementById('keyboard');
+function initKeyboard(keyboardId = 'keyboard') {
+    const keyboardElement = document.getElementById(keyboardId);
     if (!keyboardElement) return;
 
     // Clear any existing keyboard
@@ -70,12 +70,12 @@ function initKeyboard() {
     });
     
     // Add 3D effect to keyboard
-    add3DEffect();
+    add3DEffect(keyboardId);
 }
 
 // Add 3D effect to the keyboard
-function add3DEffect() {
-    const keyboard = document.getElementById('keyboard');
+function add3DEffect(keyboardId = 'keyboard') {
+    const keyboard = document.getElementById(keyboardId);
     if (!keyboard) return;
     
     // Add perspective to keyboard

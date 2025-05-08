@@ -1,0 +1,227 @@
+.tips-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Finger Positioning Section */
+.finger-positioning {
+    background-color: #0f1620;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.keyboard-animation {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+}
+
+.keyboard {
+    position: relative;
+    width: 800px;
+    height: 300px;
+    background: #1a2634;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    transform-style: preserve-3d;
+}
+
+/* Finger Guide */
+.finger-guide {
+    position: absolute;
+    width: 800px;
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.finger {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 3;
+    transform: translateZ(20px);
+}
+
+.finger-tip {
+    width: 20px;
+    height: 20px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.finger-label {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: #fff;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.finger:hover .finger-label {
+    opacity: 1;
+}
+
+/* Finger Positions - Precise alignment */
+.left-pinky { top: 70%; left: 10%; }
+.left-ring { top: 65%; left: 20%; }
+.left-middle { top: 60%; left: 30%; }
+.left-index { top: 55%; left: 40%; }
+.right-index { top: 55%; left: 60%; }
+.right-middle { top: 60%; left: 70%; }
+.right-ring { top: 65%; left: 80%; }
+.right-pinky { top: 70%; left: 90%; }
+
+/* Typing Tips Section */
+.typing-tips {
+    margin-bottom: 2rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.tip-card {
+    background: #0f1620;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.tip-card:hover {
+    transform: translateY(-5px);
+}
+
+.tip-icon {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.tip-card h3 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.tip-card p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+
+/* Practice Exercises Section */
+.practice-exercises {
+    background: #0f1620;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.exercise-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.exercise-card {
+    background: #1a2634;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.exercise-card h3 {
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.exercise-card p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+}
+
+.practice-area {
+    background: #0f1620;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.text-display {
+    color: #fff;
+    font-family: monospace;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.text-input {
+    width: 100%;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: #fff;
+    font-family: monospace;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    resize: none;
+}
+
+.text-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tips-container {
+        padding: 1rem;
+    }
+
+    .keyboard-animation {
+        height: 300px;
+    }
+
+    .finger {
+        width: 30px;
+        height: 30px;
+    }
+
+    .finger-tip {
+        width: 15px;
+        height: 15px;
+    }
+
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exercise-container {
+        grid-template-columns: 1fr;
+    }
+} 

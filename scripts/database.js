@@ -98,7 +98,7 @@ class TypingDatabase {
     }
 
     // User-related methods
-    async registerUser(username, password) {
+    async registerUser(username, password, email = '') {
         try {
             await this.ensureDbReady();
             
@@ -117,6 +117,7 @@ class TypingDatabase {
                         const addRequest = store.add({
                             username: username,
                             password: password, // In a real app, this should be hashed
+                            email: email,
                             created: new Date().toISOString()
                         });
                         
