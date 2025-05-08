@@ -7,7 +7,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const verificationService = require('./services/verificationService');
 const tokenManager = require('./utils/tokenManager');
-const { authenticate } = require('./middleware/authMiddleware');
 
 // Load environment variables
 dotenv.config();
@@ -23,7 +22,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? ['https://keyracer.in', process.env.CORS_ORIGIN].filter(Boolean) : true,
+  origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN : true,
   credentials: true
 }));
 app.use(helmet({
@@ -31,7 +30,6 @@ app.use(helmet({
 }));
 app.use(morgan('dev')); // Logging
 app.use(cookieParser()); // Parse cookies for auth
-app.use(authenticate); // Apply authentication middleware to all routes
 
 // Check if Resend API key is configured
 if (!process.env.RESEND_API_KEY) {

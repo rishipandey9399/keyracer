@@ -22,7 +22,7 @@ class GoogleAuthService {
     
     // Set redirect URL based on environment
     this.redirectUrl = process.env.NODE_ENV === 'production'
-      ? 'https://keyracer.in/api/auth/google/callback'
+      ? `${process.env.BASE_URL || ''}/api/auth/google/callback`
       : 'http://localhost:3000/api/auth/google/callback';
       
     // Setup cleanup interval

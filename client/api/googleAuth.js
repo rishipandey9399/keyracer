@@ -4,8 +4,8 @@
  */
 
 // API base URL - adjust for development vs production
-const API_BASE_URL = process.env.NODE_ENV === 'production' || location.hostname === 'keyracer.in'
-  ? 'https://keyracer.in/api' 
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '/api' 
   : 'http://localhost:3000/api';
 
 /**

@@ -3,148 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Key Racer - Improve Your Typing Skills</title>
+    <title>Key Racer</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
      crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="client/styles/login.css">
-    <link rel="stylesheet" href="client/styles/google-signin.css">
-    <style>
-        /* Basic styles for the homepage */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f9fc;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1E2761;
-        }
-        
-        .logo span {
-            color: #FF4A4A;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #555;
-            padding: 10px;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #FF4A4A;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 60px 20px;
-        }
-        
-        .hero h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-            color: #1E2761;
-        }
-        
-        .hero p {
-            font-size: 18px;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto 30px;
-            line-height: 1.6;
-        }
-        
-        .auth-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .auth-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .auth-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .button {
-            display: inline-block;
-            padding: 12px 20px;
-            background-color: #FF4A4A;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        
-        .button:hover {
-            background-color: #e04141;
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .user-name {
-            font-weight: bold;
-        }
-        
-        .user-email {
-            font-size: 12px;
-            color: #666;
-        }
-    </style>
 </head>
 <body>
     <div class="racing-car sports-car">
@@ -159,56 +23,22 @@
     
     <div class="container">
         <header>
-            <div class="logo">Key<span>Racer</span></div>
-            <nav class="nav-links">
-                <a href="/">Home</a>
-                <a href="/practice">Practice</a>
-                <a href="/leaderboard">Leaderboard</a>
-                
-                <!-- Links shown only to authenticated users -->
-                <div data-auth-link style="display: none;">
-                    <a href="/profile">My Profile</a>
-                </div>
-                
-                <!-- User profile dropdown -->
-                <div class="user-profile" data-user-profile style="display: none;">
-                    <img data-user-avatar src="client/assets/default-avatar.png" alt="Avatar" class="user-avatar">
-                    <div class="user-info">
-                        <span data-user-name class="user-name">User Name</span>
-                        <span data-user-email class="user-email">user@example.com</span>
-                    </div>
-                </div>
-            </nav>
+            <h1><i class="fas fa-keyboard"></i> Key Racer <i class="fas fa-flag-checkered"></i></h1>
+            <div class="level-selector">
+                <button id="beginner" class="level-btn active">Beginner</button>
+                <button id="intermediate" class="level-btn">Intermediate</button>
+                <button id="advanced" class="level-btn">Advanced</button>
+            </div>
+            <div class="feature-tabs">
+                <button class="tab active" data-mode="standard">Standard</button>
+                <button class="tab" data-mode="timed">Timed Challenge</button>
+                <button class="tab" data-mode="marathon">Marathon</button>
+                <button class="tab" data-mode="custom">Custom Text</button>
+                <a href="lessons.html" class="tab"><i class="fas fa-graduation-cap"></i> Lessons</a>
+                <a href="typing-tips.html" class="tab"><i class="fas fa-lightbulb"></i> Tips</a>
+                <a href="leaderboard.html" class="tab leaderboard-tab"><i class="fas fa-trophy"></i> Leaderboard</a>
+            </div>
         </header>
-
-        <section class="hero">
-            <h1>Improve Your Typing Speed and Accuracy</h1>
-            <p>KeyRacer helps you become a faster and more accurate typist through fun, interactive typing tests and exercises.</p>
-            
-            <!-- Auth section - shown only to unauthenticated users -->
-            <div class="auth-container" data-unauth-link>
-                <h2>Get Started</h2>
-                <div class="auth-buttons">
-                    <button id="google-signin-btn" class="google-signin-btn">
-                        <img src="client/assets/google-logo.svg" alt="Google" class="google-icon">
-                        <span class="google-btn-text">Sign in with Google</span>
-                    </button>
-                    
-                    <div style="text-align: center; margin: 10px 0;">or</div>
-                    
-                    <a href="/client/pages/login.html" class="button">Sign in with Email</a>
-                </div>
-            </div>
-            
-            <!-- Welcome back section - shown only to authenticated users -->
-            <div class="auth-container" data-auth-link style="display: none;">
-                <h2>Welcome back, <span data-user-name>User</span>!</h2>
-                <div class="auth-buttons">
-                    <a href="/practice" class="button">Start Typing</a>
-                    <button id="logout-btn" class="google-signin-btn">Sign Out</button>
-                </div>
-            </div>
-        </section>
 
         <main>
             <div class="test-container">
@@ -491,108 +321,6 @@
                     question.style.borderBottomRightRadius = '0';
                 }
             });
-        });
-    </script>
-
-    <!-- Scripts -->
-    <script src="client/js/auth.js"></script>
-    <script>
-        // Simple function to get cookie
-        function getCookie(name) {
-            const cookieArr = document.cookie.split(';');
-            
-            for (let i = 0; i < cookieArr.length; i++) {
-                const cookiePair = cookieArr[i].split('=');
-                const cookieName = cookiePair[0].trim();
-                
-                if (cookieName === name) {
-                    return decodeURIComponent(cookiePair[1]);
-                }
-            }
-            
-            return null;
-        }
-        
-        // Update UI based on authentication state
-        function updateAuthUI() {
-            try {
-                // Check for user data in cookies
-                const userCookie = getCookie('user_data');
-                
-                if (userCookie) {
-                    const user = JSON.parse(userCookie);
-                    const authLinks = document.querySelectorAll('[data-auth-link]');
-                    const unauthLinks = document.querySelectorAll('[data-unauth-link]');
-                    const userNameElements = document.querySelectorAll('[data-user-name]');
-                    const userEmailElements = document.querySelectorAll('[data-user-email]');
-                    const userAvatars = document.querySelectorAll('[data-user-avatar]');
-                    const userProfiles = document.querySelectorAll('[data-user-profile]');
-                    
-                    // Show authenticated elements
-                    authLinks.forEach(el => el.style.display = 'block');
-                    unauthLinks.forEach(el => el.style.display = 'none');
-                    userProfiles.forEach(el => el.style.display = 'flex');
-                    
-                    // Update user info
-                    userNameElements.forEach(el => el.textContent = user.name || 'User');
-                    userEmailElements.forEach(el => el.textContent = user.email || '');
-                    userAvatars.forEach(el => {
-                        el.src = user.picture || 'client/assets/default-avatar.png';
-                        el.alt = user.name || 'Avatar';
-                    });
-                } else {
-                    // Hide authenticated elements
-                    document.querySelectorAll('[data-auth-link]').forEach(el => el.style.display = 'none');
-                    document.querySelectorAll('[data-unauth-link]').forEach(el => el.style.display = 'block');
-                    document.querySelectorAll('[data-user-profile]').forEach(el => el.style.display = 'none');
-                }
-            } catch (error) {
-                console.error('Error updating auth UI:', error);
-            }
-        }
-        
-        // Handle logout
-        function handleLogout() {
-            // Clear cookies
-            document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            document.cookie = 'user_data=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            
-            // Call logout API
-            fetch('/api/auth/logout', {
-                method: 'POST',
-                credentials: 'include'
-            }).catch(err => console.error('Logout API error:', err));
-            
-            // Update UI
-            updateAuthUI();
-            
-            // Show message
-            alert('You have been logged out successfully.');
-        }
-        
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update UI based on authentication state
-            updateAuthUI();
-            
-            // Set up Google sign-in button
-            const googleBtn = document.getElementById('google-signin-btn');
-            if (googleBtn) {
-                googleBtn.addEventListener('click', function() {
-                    // Disable button and show loading state
-                    googleBtn.disabled = true;
-                    googleBtn.innerHTML = '<span class="loading-spinner"></span> Connecting to Google...';
-                    
-                    // Redirect to Google auth endpoint
-                    window.location.href = '/api/auth/google';
-                });
-            }
-            
-            // Set up logout button
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', handleLogout);
-            }
         });
     </script>
 </body>
