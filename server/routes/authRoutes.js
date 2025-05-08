@@ -5,6 +5,7 @@ const emailService = require('../services/emailService');
 const verificationService = require('../services/verificationService');
 const tokenManager = require('../utils/tokenManager');
 const googleAuthService = require('../utils/googleAuthService');
+const jwtService = require('../utils/jwtService');
 
 // In-memory token storage (should use a database in production)
 const passwordResetTokens = new Map();
@@ -484,9 +485,11 @@ router.get('/google', (req, res) => {
  */
 router.get('/google/callback', async (req, res) => {
   try {
+    console.log('Google OAuth callback received:', req.query);
     const { code, state } = req.query;
     
     if (!code) {
+      console.error('No authorization code in callback');
       return res.status(400).json({
         success: false,
         message: 'Authorization code is missing'
@@ -494,41 +497,50 @@ router.get('/google/callback', async (req, res) => {
     }
     
     // Exchange code for tokens
+    console.log('Exchanging code for tokens...');
     const authData = await googleAuthService.exchangeCodeForTokens(code);
+    console.log('Auth data received:', { 
+      userId: authData.user.id,
+      email: authData.user.email,
+      name: authData.user.name 
+    });
     
     if (!authData.user.email_verified) {
+      console.error('Email not verified with Google');
       return res.status(400).json({
         success: false,
         message: 'Email not verified with Google'
       });
     }
     
-    // Create a session for the user
-    const { token, expiresAt } = googleAuthService.createSession(authData.user);
+    // Generate JWT token
+    console.log('Generating JWT token...');
+    const token = jwtService.generateToken(authData.user);
     
-    // Set a cookie with the session token
+    // Set secure cookie with JWT
+    console.log('Setting auth cookies...');
     res.cookie('auth_token', token, {
-      expires: new Date(expiresAt),
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
     });
     
-    // Also store user info in a client-accessible cookie for the frontend
-    const userInfo = {
-      id: authData.user.id,
+    // Store user data in session cookie that can be read by client JS
+    // Don't include sensitive info here since this is client-accessible
+    res.cookie('user_data', JSON.stringify({
       name: authData.user.name,
       email: authData.user.email,
-      picture: authData.user.picture
-    };
-    
-    res.cookie('user_info', JSON.stringify(userInfo), {
-      expires: new Date(expiresAt),
-      httpOnly: false, // Not httpOnly so it's accessible to client JS
+      picture: authData.user.picture,
+      provider: 'google'
+    }), {
+      httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
     });
     
+    console.log('Redirecting to homepage...');
     // Redirect to the homepage
     res.redirect('/');
   } catch (error) {

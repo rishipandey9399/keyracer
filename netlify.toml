@@ -1,0 +1,26 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Proxy API requests to your server
+[[redirects]]
+  from = "/api/*"
+  to = "https://keyracer-api.herokuapp.com/api/:splat"  # Update this with your actual API server
+  status = 200
+  force = true
+  
+# Handle Google OAuth callback
+[[redirects]]
+  from = "/api/auth/google/callback"
+  to = "https://keyracer-api.herokuapp.com/api/auth/google/callback"
+  status = 200
+  force = true
+  
+# For single page application routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "16" 
