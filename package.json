@@ -1,0 +1,25 @@
+{
+  "name": "keyracer",
+  "version": "1.0.0",
+  "description": "Key Racer - Improve Your Typing Skills",
+  "main": "index.html",
+  "scripts": {
+    "build": "mkdir -p dist && cp -r index.html styles scripts client assets *.html dist/ && [ -d 'docs' ] && cp -r docs dist/ || echo 'No docs directory found'",
+    "start": "cd server && node server.js"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/keyracer.git"
+  },
+  "keywords": [
+    "typing",
+    "practice",
+    "speed",
+    "accuracy"
+  ],
+  "author": "",
+  "license": "MIT"
+} 
