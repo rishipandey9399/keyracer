@@ -4,7 +4,7 @@
  */
 
 // API base URL - hardcoded for development
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = '/api';
 
 /**
  * Send a verification code to user's email during signup

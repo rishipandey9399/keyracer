@@ -4,7 +4,7 @@
  */
 
 // API base URL - hardcoded for development
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = '/api';
 
 /**
  * Initiate Google OAuth login

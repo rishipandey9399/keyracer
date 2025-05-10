@@ -62,7 +62,7 @@ function parseJwt(token) {
 
 // Send the ID token to the backend for verification and session creation
 function sendTokenToServer(idToken) {
-  const API_BASE_URL = 'http://localhost:3000/api';  // hardcoded for dev
+  const API_BASE_URL = '/api';  // Use relative path for production compatibility
   
   fetch(`${API_BASE_URL}/auth/google/verify`, {
     method: 'POST',
