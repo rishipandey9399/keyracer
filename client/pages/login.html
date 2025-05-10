@@ -6,9 +6,17 @@
   <title>Login - Typing Test App</title>
   <link rel="stylesheet" href="../styles/auth-forms.css">
   <link rel="stylesheet" href="../styles/login.css">
-  <script src="../api/googleAuth.js" type="module"></script>
+  <!-- Load Google Identity Services library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Load our Google Sign-In handler -->
+  <script src="../js/google-signin.js"></script>
+  <!-- Load navigation component -->
+  <script src="../js/nav.js"></script>
 </head>
 <body>
+  <!-- Navigation bar will be inserted by nav.js -->
+  <div id="app-nav"></div>
+  
   <div class="container">
     <div class="login-container">
       <h1>Welcome Back</h1>
@@ -51,12 +59,22 @@
         <span>OR</span>
       </div>
       
-      <!-- Social login buttons -->
+      <!-- Google Sign-In button -->
       <div class="social-login">
-        <button id="google-login-btn" class="google-btn">
-          <img src="../assets/google-logo.svg" alt="Google" class="google-icon">
-          Sign in with Google
-        </button>
+        <!-- Google Sign-In container -->
+        <div id="g_id_onload"
+             data-client_id="909422121907-7mpe98sc0rke9l2msklgi69s9fpdvcc5.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+        
+        <div class="g_id_signin" 
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
       </div>
       
       <!-- Registration link -->
@@ -65,7 +83,7 @@
       </div>
       
       <!-- Messages area -->
-      <div id="message" class="message" style="display: none;"></div>
+      <div id="login-message" class="message" style="display: none;"></div>
     </div>
   </div>
   
@@ -73,7 +91,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       // Handle standard login
       const loginForm = document.getElementById('login-form');
-      const messageEl = document.getElementById('message');
+      const messageEl = document.getElementById('login-message');
       
       loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -88,22 +106,6 @@
         showMessage('Login functionality is not implemented in this demo.', 'info');
       });
       
-      // Handle Google login
-      const googleBtn = document.getElementById('google-login-btn');
-      googleBtn.addEventListener('click', function() {
-        // Check if the Google OAuth client is loaded
-        if (typeof initiateGoogleLogin === 'function') {
-          initiateGoogleLogin();
-        } else {
-          showMessage('Google login is not available', 'error');
-        }
-      });
-      
-      // Check for Google auth callback
-      if (typeof isGoogleAuthCallback === 'function' && isGoogleAuthCallback()) {
-        handleGoogleCallback();
-      }
-      
       // Helper for showing messages
       function showMessage(text, type = 'error') {
         messageEl.textContent = text;
@@ -116,20 +118,9 @@
         }, 5000);
       }
       
-      // Handle Google callback
-      async function handleGoogleCallback() {
-        try {
-          if (typeof handleGoogleAuthCallback === 'function') {
-            const result = await handleGoogleAuthCallback();
-            
-            if (!result.success) {
-              showMessage(result.message || 'Authentication failed', 'error');
-            }
-          }
-        } catch (error) {
-          console.error('Error handling Google callback:', error);
-          showMessage('Authentication failed', 'error');
-        }
+      // Initialize Google Sign-In with your client ID
+      if (window.googleSignIn) {
+        window.googleSignIn.init('909422121907-7mpe98sc0rke9l2msklgi69s9fpdvcc5.apps.googleusercontent.com');
       }
     });
   </script>

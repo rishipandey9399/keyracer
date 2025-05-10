@@ -5,6 +5,8 @@ const emailService = require('../services/emailService');
 const verificationService = require('../services/verificationService');
 const tokenManager = require('../utils/tokenManager');
 const googleAuthService = require('../utils/googleAuthService');
+const authService = require('../services/authService');
+const { authenticate } = require('../middleware/authMiddleware');
 
 // In-memory token storage (should use a database in production)
 const passwordResetTokens = new Map();
@@ -44,50 +46,128 @@ function validateEmail(req, res, next) {
 }
 
 /**
- * Request password reset route
- * POST /auth/forgot-password
+ * Register a new user
+ * POST /auth/register
  */
-router.post('/forgot-password', async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, password, displayName } = req.body;
     
-    if (!email) {
-      return res.status(400).json({ success: false, message: 'Email is required' });
-    }
-    
-    // Generate password reset token
-    const resetToken = generateSecureToken();
-    const expirationTime = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
-    
-    // Store token (in a real app, store in database with user ID and expiration)
-    passwordResetTokens.set(resetToken, {
-      email,
-      expires: expirationTime
-    });
-    
-    // Generate the reset link 
-    // In production, use your full domain
-    const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
-    
-    // Send the password reset email
-    const emailResult = await emailService.sendPasswordResetEmail(email, resetToken, resetLink);
-    
-    if (!emailResult.success) {
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Failed to send password reset email'
+    // Validate inputs
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required'
       });
     }
     
-    // Respond with success
-    return res.json({ 
-      success: true, 
-      message: 'Password reset instructions sent to your email'
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 8 characters long'
+      });
+    }
+    
+    // Get base URL for verification link
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    
+    // Register user
+    const result = await authService.registerUser(
+      { email, password, displayName },
+      baseUrl
+    );
+    
+    return res.status(result.success ? 200 : 400).json(result);
+  } catch (error) {
+    console.error('Error registering user:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+/**
+ * Login user
+ * POST /auth/login
+ */
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Validate inputs
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required'
+      });
+    }
+    
+    // Login user
+    const result = await authService.loginUser(email, password, req);
+    
+    if (result.success) {
+      // Set token cookie
+      res.cookie('token', result.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      });
+    }
+    
+    return res.status(result.success ? 200 : 400).json(result);
+  } catch (error) {
+    console.error('Error logging in:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+/**
+ * Logout user
+ * POST /auth/logout
+ */
+router.post('/logout', authenticate, async (req, res) => {
+  try {
+    const success = await authService.logoutUser(req.token);
+    
+    // Clear cookie
+    res.clearCookie('token');
+    
+    return res.json({
+      success: true,
+      message: 'Logged out successfully'
     });
   } catch (error) {
+    console.error('Error logging out:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+/**
+ * Request password reset
+ * POST /auth/forgot-password
+ */
+router.post('/forgot-password', validateEmail, async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Get base URL for reset link
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    
+    // Request password reset
+    const result = await authService.requestPasswordReset(email, baseUrl);
+    
+    return res.status(result.success ? 200 : 400).json(result);
+  } catch (error) {
     console.error('Error requesting password reset:', error);
-    return res.status(500).json({ 
-      success: false, 
+    return res.status(500).json({
+      success: false,
       message: 'Internal server error'
     });
   }
@@ -102,114 +182,106 @@ router.post('/reset-password', async (req, res) => {
     const { token, newPassword } = req.body;
     
     if (!token || !newPassword) {
-      return res.status(400).json({ 
-        success: false, 
+      return res.status(400).json({
+        success: false,
         message: 'Token and new password are required'
       });
     }
     
-    // Check if token exists and is valid
-    const tokenData = passwordResetTokens.get(token);
-    
-    if (!tokenData) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid or expired reset token'
+    if (newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 8 characters long'
       });
     }
     
-    // Check if token is expired
-    if (tokenData.expires < Date.now()) {
-      // Remove expired token
-      passwordResetTokens.delete(token);
-      
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Reset token has expired. Please request a new one.'
-      });
-    }
+    // Reset password
+    const result = await authService.resetPassword(token, newPassword);
     
-    // In a real application, update the user's password in the database
-    // For this example, we'll just simulate success
-    
-    // Delete the used token
-    passwordResetTokens.delete(token);
-    
-    return res.json({ 
-      success: true, 
-      message: 'Password has been reset successfully'
-    });
+    return res.status(result.success ? 200 : 400).json(result);
   } catch (error) {
     console.error('Error resetting password:', error);
-    return res.status(500).json({ 
-      success: false, 
+    return res.status(500).json({
+      success: false,
       message: 'Internal server error'
     });
   }
 });
 
 /**
- * Send account verification code
+ * Send verification email
  * POST /auth/send-verification
  */
-router.post('/send-verification', async (req, res) => {
+router.post('/send-verification', validateEmail, async (req, res) => {
   try {
     const { email } = req.body;
     
-    if (!email) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Email is required'
-      });
-    }
+    // Get base URL for verification link
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
     
-    // Use our verification service to send the code
-    const result = await verificationService.sendVerificationCode(email);
+    // Send verification email
+    const result = await verificationService.sendVerificationEmail(email, baseUrl);
     
-    if (!result.success) {
-      return res.status(400).json(result);
-    }
-    
-    return res.json(result);
+    return res.status(result.success ? 200 : 400).json(result);
   } catch (error) {
-    console.error('Error sending verification code:', error);
-    return res.status(500).json({ 
-      success: false, 
+    console.error('Error sending verification email:', error);
+    return res.status(500).json({
+      success: false,
       message: 'Internal server error'
     });
   }
 });
 
 /**
- * Verify account with code
- * POST /auth/verify
+ * Verify email with token
+ * POST /auth/verify-email
  */
-router.post('/verify', async (req, res) => {
+router.post('/verify-email', async (req, res) => {
   try {
-    const { email, code } = req.body;
+    const { token } = req.body;
     
-    if (!email || !code) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Email and verification code are required'
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Verification token is required'
       });
     }
     
-    // Use our verification service to verify the code
-    const result = verificationService.verifyCode(email, code);
+    // Verify email
+    const result = await verificationService.verifyEmail(token);
     
-    if (!result.success) {
-      return res.status(400).json(result);
-    }
-    
-    // In a real application, mark the user's email as verified in the database
-    // For this example, we'll just return success
-    
-    return res.json(result);
+    return res.status(result.success ? 200 : 400).json(result);
   } catch (error) {
     console.error('Error verifying email:', error);
-    return res.status(500).json({ 
-      success: false, 
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+/**
+ * Get current user
+ * GET /auth/me
+ */
+router.get('/me', authenticate, async (req, res) => {
+  try {
+    return res.json({
+      success: true,
+      user: {
+        id: req.user._id,
+        email: req.user.email,
+        displayName: req.user.displayName,
+        username: req.user.username,
+        picture: req.user.picture,
+        hasSetUsername: req.user.hasSetUsername,
+        isVerified: req.user.isVerified
+      }
+    });
+  } catch (error) {
+    console.error('Error getting user:', error);
+    return res.status(500).json({
+      success: false,
       message: 'Internal server error'
     });
   }
@@ -527,79 +599,97 @@ router.get('/google/callback', async (req, res) => {
 });
 
 /**
- * Get current user route
- * GET /auth/me
+ * Verify Google ID token
+ * POST /auth/google/verify
  */
-router.get('/me', (req, res) => {
+router.post('/google/verify', async (req, res) => {
   try {
-    // Get session token from cookie
-    const token = req.cookies && req.cookies.auth_token;
+    const { idToken } = req.body;
     
-    if (!token) {
-      return res.status(401).json({
+    if (!idToken) {
+      return res.status(400).json({
         success: false,
-        message: 'Not authenticated'
+        message: 'ID token is required'
       });
     }
     
-    // Get user from session
-    const user = googleAuthService.getSession(token);
+    // Verify the ID token with Google
+    const ticket = await verifyGoogleIdToken(idToken);
     
-    if (!user) {
-      return res.status(401).json({
+    if (!ticket) {
+      return res.status(400).json({
         success: false,
-        message: 'Invalid or expired session'
+        message: 'Invalid ID token'
       });
     }
     
-    // Return user data
+    // Get user info from the ticket
+    const payload = ticket.getPayload();
+    const userId = payload['sub'];
+    const email = payload['email'];
+    const name = payload['name'];
+    const picture = payload['picture'];
+    const emailVerified = payload['email_verified'];
+    
+    if (!emailVerified) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email not verified with Google'
+      });
+    }
+    
+    // Create a session for the user
+    const { token, expiresAt } = googleAuthService.createSession({
+      id: userId,
+      email,
+      name,
+      picture,
+      email_verified: emailVerified
+    });
+    
+    // Set a cookie with the session token
+    res.cookie('auth_token', token, {
+      expires: new Date(expiresAt),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
+    
     return res.json({
       success: true,
+      message: 'Authentication successful',
       user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        picture: user.picture,
-        provider: 'google'
+        id: userId,
+        name,
+        email,
+        picture
       }
     });
   } catch (error) {
-    console.error('Error getting user data:', error);
+    console.error('Error verifying Google ID token:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'Failed to verify ID token'
     });
   }
 });
 
-/**
- * Logout route
- * POST /auth/logout
- */
-router.post('/logout', (req, res) => {
+// Helper function to verify Google ID token
+async function verifyGoogleIdToken(idToken) {
   try {
-    // Get session token from cookie
-    const token = req.cookies && req.cookies.auth_token;
+    const { OAuth2Client } = require('google-auth-library');
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
     
-    if (token) {
-      // Remove session
-      googleAuthService.removeSession(token);
-      
-      // Clear cookie
-      res.clearCookie('auth_token');
-    }
-    
-    return res.json({
-      success: true,
-      message: 'Logged out successfully'
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID
     });
+    
+    return ticket;
   } catch (error) {
-    console.error('Error logging out:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    });
+    console.error('Error verifying Google ID token:', error);
+    return null;
   }
-});
+}
 
 module.exports = router; 

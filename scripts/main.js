@@ -735,6 +735,53 @@ function initFAQ() {
     });
 }
 
+// Check if user is logged in
+function checkLoginStatus() {
+    try {
+        // Check if user data exists in localStorage
+        const userData = localStorage.getItem('typingTestUserData');
+        const username = localStorage.getItem('typingTestUser');
+        
+        if (userData && username) {
+            // User is logged in
+            console.log('User is logged in:', username);
+            
+            // Update UI elements if needed
+            const userDisplay = document.getElementById('user-display');
+            if (userDisplay) {
+                userDisplay.textContent = username;
+                userDisplay.style.display = 'inline-block';
+            }
+            
+            // Show logged-in elements
+            const loggedInElements = document.querySelectorAll('.logged-in-only');
+            loggedInElements.forEach(el => el.style.display = 'block');
+            
+            // Hide logged-out elements
+            const loggedOutElements = document.querySelectorAll('.logged-out-only');
+            loggedOutElements.forEach(el => el.style.display = 'none');
+            
+            return true;
+        } else {
+            // User is not logged in
+            console.log('User is not logged in');
+            
+            // Show logged-out elements
+            const loggedOutElements = document.querySelectorAll('.logged-out-only');
+            loggedOutElements.forEach(el => el.style.display = 'block');
+            
+            // Hide logged-in elements
+            const loggedInElements = document.querySelectorAll('.logged-in-only');
+            loggedInElements.forEach(el => el.style.display = 'none');
+            
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking login status:', error);
+        return false;
+    }
+}
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is logged in

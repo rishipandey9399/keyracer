@@ -1,172 +1,121 @@
 /**
  * Verification Service
- * Handles email verification codes
+ * Handles email verification
  */
 
 const crypto = require('crypto');
 const emailService = require('./emailService');
+const User = require('../models/User');
+const Token = require('../models/Token');
 
 class VerificationService {
   constructor() {
-    this.verificationCodes = new Map();
-    this.codeExpiryMinutes = 10; // Code expiry time in minutes
-    this.maxAttempts = 3; // Maximum number of verification attempts
+    // Token expiry time in hours
+    this.tokenExpiryHours = 1;
   }
   
   /**
-   * Generate a random 6-digit code
-   * @returns {string} - 6-digit code
-   */
-  generateCode() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-  
-  /**
-   * Store verification code for an email
+   * Send verification email to a user
    * @param {string} email - Email address
-   * @returns {Object} - Code and expiry info
-   */
-  storeCode(email) {
-    const normalizedEmail = email.toLowerCase().trim();
-    const code = this.generateCode();
-    const expiresAt = Date.now() + (this.codeExpiryMinutes * 60 * 1000);
-    
-    this.verificationCodes.set(normalizedEmail, {
-      code,
-      expiresAt,
-      attempts: 0
-    });
-    
-    return {
-      code,
-      expiresAt,
-      expiryMinutes: this.codeExpiryMinutes
-    };
-  }
-  
-  /**
-   * Send verification code to an email
-   * @param {string} email - Email address
+   * @param {string} baseUrl - Base URL for verification link
    * @returns {Promise<Object>} - Result of the operation
    */
-  async sendVerificationCode(email) {
+  async sendVerificationEmail(email, baseUrl) {
     try {
       const normalizedEmail = email.toLowerCase().trim();
       
-      // Check for existing unexpired code
-      const existingEntry = this.verificationCodes.get(normalizedEmail);
+      // Find user by email
+      const user = await User.findOne({ email: normalizedEmail });
       
-      if (existingEntry && existingEntry.expiresAt > Date.now()) {
-        // Calculate remaining minutes
-        const remainingMs = existingEntry.expiresAt - Date.now();
-        const remainingMinutes = Math.ceil(remainingMs / 60000);
-        
+      if (!user) {
         return {
-          success: true,
-          message: `Verification code already sent. Valid for ${remainingMinutes} more minutes.`,
-          expiresInMinutes: remainingMinutes
+          success: false,
+          message: 'User not found with this email address'
         };
       }
       
-      // Generate and store code
-      const { code, expiryMinutes } = this.storeCode(normalizedEmail);
+      // Check if user is already verified
+      if (user.isVerified) {
+        return {
+          success: true,
+          message: 'Email is already verified'
+        };
+      }
       
-      // Send email
-      const result = await emailService.sendVerificationEmail(normalizedEmail, code, expiryMinutes);
+      // Generate verification token
+      const token = await emailService.generateVerificationToken(user._id);
+      
+      // Create verification link
+      const verificationLink = `${baseUrl}/verify-email.html?token=${token}`;
+      
+      // Send verification email
+      const result = await emailService.sendVerificationEmail(normalizedEmail, verificationLink);
       
       if (!result.success) {
-        this.verificationCodes.delete(normalizedEmail);
         return result;
       }
       
       return {
         success: true,
-        message: `Verification code sent to ${normalizedEmail}`,
-        expiresInMinutes: expiryMinutes
+        message: `Verification email sent to ${normalizedEmail}`,
+        expiresInHours: this.tokenExpiryHours
       };
     } catch (error) {
-      console.error('Error sending verification code:', error);
+      console.error('Error sending verification email:', error);
       return {
         success: false,
-        message: error.message || 'Failed to send verification code'
+        message: error.message || 'Failed to send verification email'
       };
     }
   }
   
   /**
-   * Verify a code for an email
-   * @param {string} email - Email address
-   * @param {string} code - Verification code
-   * @returns {Object} - Result of verification
+   * Verify a user's email with token
+   * @param {string} token - Verification token
+   * @returns {Promise<Object>} - Result of verification
    */
-  verifyCode(email, code) {
+  async verifyEmail(token) {
     try {
-      const normalizedEmail = email.toLowerCase().trim();
-      const entry = this.verificationCodes.get(normalizedEmail);
+      // Find token in database
+      const tokenDoc = await Token.findOne({ 
+        token, 
+        type: 'emailVerification' 
+      });
       
-      if (!entry) {
+      if (!tokenDoc) {
         return {
           success: false,
-          message: 'No verification code found for this email'
+          message: 'Invalid or expired verification token'
         };
       }
       
-      // Check expiration
-      if (entry.expiresAt < Date.now()) {
-        this.verificationCodes.delete(normalizedEmail);
+      // Find user by ID
+      const user = await User.findById(tokenDoc.userId);
+      
+      if (!user) {
         return {
           success: false,
-          message: 'Verification code has expired'
+          message: 'User not found'
         };
       }
       
-      // Check attempts
-      if (entry.attempts >= this.maxAttempts) {
-        this.verificationCodes.delete(normalizedEmail);
-        return {
-          success: false,
-          message: 'Too many failed attempts. Please request a new code.'
-        };
-      }
+      // Mark user as verified
+      user.isVerified = true;
+      await user.save();
       
-      // Increment attempts
-      entry.attempts++;
-      
-      // Verify code
-      if (entry.code !== code) {
-        return {
-          success: false,
-          message: 'Invalid verification code',
-          attemptsLeft: this.maxAttempts - entry.attempts
-        };
-      }
-      
-      // Code is valid, remove it
-      this.verificationCodes.delete(normalizedEmail);
+      // Delete the verification token
+      await Token.deleteOne({ _id: tokenDoc._id });
       
       return {
         success: true,
         message: 'Email successfully verified'
       };
     } catch (error) {
-      console.error('Error verifying code:', error);
+      console.error('Error verifying email:', error);
       return {
         success: false,
-        message: error.message || 'Error verifying code'
+        message: error.message || 'Error verifying email'
       };
-    }
-  }
-  
-  /**
-   * Clean up expired verification codes
-   */
-  cleanupExpiredCodes() {
-    const now = Date.now();
-    
-    for (const [email, entry] of this.verificationCodes.entries()) {
-      if (entry.expiresAt < now) {
-        this.verificationCodes.delete(email);
-      }
     }
   }
 }

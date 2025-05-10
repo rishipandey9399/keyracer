@@ -3,10 +3,8 @@
  * Handles client-side interactions with Google OAuth
  */
 
-// API base URL - adjust for development vs production
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api' 
-  : 'http://localhost:3000/api';
+// API base URL - hardcoded for development
+const API_BASE_URL = 'http://localhost:3000/api';
 
 /**
  * Initiate Google OAuth login

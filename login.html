@@ -79,13 +79,13 @@
         .logo-section {
             text-align: center;
             margin-bottom: 30px;
-            animation: floatAnimation 4s ease-in-out infinite;
+            animation: floatAnimation 6s ease-in-out infinite;
             transform-style: preserve-3d;
         }
         
         @keyframes floatAnimation {
-            0%, 100% { transform: translateY(0) rotateX(0deg); }
-            50% { transform: translateY(-10px) rotateX(5deg); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
         
         .logo {
@@ -120,7 +120,7 @@
             z-index: -1;
             filter: blur(10px);
             opacity: 0.7;
-            animation: glowingBorder 10s linear infinite;
+            animation: glowingBorder 15s linear infinite;
         }
         
         .logo::after {
@@ -134,7 +134,7 @@
                 rgba(255, 255, 255, 0) 60%
             );
             transform: translateY(100%) rotate(45deg);
-            animation: shineEffect 6s infinite;
+            animation: shineEffect 8s infinite;
         }
         
         @keyframes glowingBorder {
@@ -154,7 +154,7 @@
             transition: all 0.5s ease;
             margin-right: 15px;
             vertical-align: middle;
-            transform: translateZ(30px);
+            transform: translateZ(20px);
         }
         
         .logo .race-flag {
@@ -162,8 +162,8 @@
             top: -15px;
             right: -25px;
             font-size: 1.8rem;
-            transform: rotate(15deg) translateZ(40px);
-            animation: waveFlag 2s ease-in-out infinite;
+            transform: rotate(15deg) translateZ(20px);
+            animation: waveFlag 3s ease-in-out infinite;
             color: #FFD700;
             filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
         }
@@ -173,30 +173,30 @@
             bottom: -10px;
             left: -30px;
             font-size: 1.5rem;
-            animation: raceCar 3s linear infinite;
+            animation: raceCar 5s linear infinite;
             color: #FF4A4A;
             filter: drop-shadow(0 0 10px rgba(255, 74, 74, 0.7));
-            transform: translateZ(20px);
+            transform: translateZ(15px);
         }
         
         @keyframes waveFlag {
-            0%, 100% { transform: rotate(15deg) translateZ(40px); }
-            50% { transform: rotate(30deg) scale(1.2) translateZ(40px); }
+            0%, 100% { transform: rotate(15deg) translateZ(20px); }
+            50% { transform: rotate(25deg) translateZ(20px); }
         }
         
         @keyframes raceCar {
-            0% { transform: translateX(0) translateZ(20px); }
-            50% { transform: translateX(150px) translateZ(20px); }
-            100% { transform: translateX(0) translateZ(20px); }
+            0% { transform: translateX(0) translateZ(15px); }
+            50% { transform: translateX(150px) translateZ(15px); }
+            100% { transform: translateX(0) translateZ(15px); }
         }
         
         .logo:hover {
-            transform: translateY(-5px) rotateX(10deg);
+            transform: translateY(-3px);
             text-shadow: 0 10px 25px rgba(0, 255, 221, 0.8);
         }
         
         .logo:hover i {
-            transform: scale(1.2) rotate(10deg) translateZ(50px);
+            transform: scale(1.1) translateZ(20px);
             color: #FF4A4A;
         }
         
@@ -457,6 +457,53 @@
             font-size: 14px;
             font-weight: 500;
         }
+        
+        .keyboard-key::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00FFDD;
+            transition: width 0.3s ease;
+        }
+        
+        .keyboard-key:hover::after {
+            width: 100%;
+        }
+        
+        /* Forgot Password Link Styling */
+        .forgot-password-link {
+            color: #00FFDD;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .forgot-password-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00FFDD;
+            transition: width 0.3s ease;
+        }
+        
+        .forgot-password-link:hover {
+            color: #FF4A4A;
+            transform: translateY(-2px);
+        }
+        
+        .forgot-password-link:hover::after {
+            width: 100%;
+            background: #FF4A4A;
+        }
     </style>
 </head>
 <body>
@@ -495,8 +542,8 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter your password">
                 </div>
-                <div class="forgot-password-container">
-                    <a href="#" id="forgot-password-link" class="forgot-password-link">Forgot Password?</a>
+                <div class="form-footer" style="text-align: right;">
+                    <a href="/forgot-password.html" class="forgot-password-link">Forgot Password?</a>
                 </div>
                 <button id="login-btn" class="primary-btn btn-ripple">Sign In</button>
                 
@@ -676,7 +723,7 @@
         // Create floating particles
         document.addEventListener('DOMContentLoaded', function() {
             const particlesContainer = document.getElementById('particles');
-            const numberOfParticles = 20;
+            const numberOfParticles = 10;
             
             for (let i = 0; i < numberOfParticles; i++) {
                 const particle = document.createElement('div');
@@ -693,7 +740,7 @@
                 const opacity = Math.random() * 0.3 + 0.1;
                 
                 // Random animation duration and delay
-                const duration = Math.random() * 10 + 10;
+                const duration = Math.random() * 10 + 15;
                 const delay = Math.random() * 5;
                 
                 // Set styles
@@ -738,11 +785,17 @@
                 });
             });
             
-            // 3D tilt effect for login container
+            // 3D tilt effect for login container - optimized with throttling
             const loginContainer = document.querySelector('.login-container');
-            const maxRotate = 5; // Max rotation in degrees
+            const maxRotate = 3;
+            let lastUpdate = 0;
+            const throttleTime = 50;
             
             document.addEventListener('mousemove', function(e) {
+                const now = Date.now();
+                if (now - lastUpdate < throttleTime) return;
+                lastUpdate = now;
+                
                 if (!loginContainer) return;
                 
                 const rect = loginContainer.getBoundingClientRect();
@@ -764,8 +817,8 @@
                 loginContainer.style.transform = `translateY(-5px) perspective(1000px) rotateX(0deg) rotateY(0deg)`;
             });
             
-            // Add racing cars
-            const numberOfCars = 3;
+            // Add racing cars - reduced count
+            const numberOfCars = 2;
             
             for (let i = 0; i < numberOfCars; i++) {
                 const car = document.createElement('div');
@@ -774,7 +827,7 @@
                 // Random positions and delays
                 const bottom = 30 + Math.random() * 50;
                 const delay = Math.random() * 5;
-                const duration = 8 + Math.random() * 7;
+                const duration = 12 + Math.random() * 7;
                 
                 // Set styles
                 car.style.bottom = `${bottom}px`;

@@ -3,10 +3,8 @@
  * Frontend client code for interacting with the email verification APIs
  */
 
-// API base URL - adjust for development vs production
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api' 
-  : 'http://localhost:3000/api';
+// API base URL - hardcoded for development
+const API_BASE_URL = 'http://localhost:3000/api';
 
 /**
  * Send a verification code to user's email during signup

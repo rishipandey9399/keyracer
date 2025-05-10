@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Typing Test App</title>
+  <link rel="stylesheet" href="../styles/auth-forms.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: #333;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px;
+      margin: 0 auto;
+      margin-top: 60px;
+    }
+    
+    .profile-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      color: #333;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+    
+    .profile-picture {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-right: 20px;
+      object-fit: cover;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .user-details {
+      flex: 1;
+    }
+    
+    .user-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .user-email {
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .auth-method {
+      display: inline-block;
+      padding: 4px 8px;
+      background-color: #4285f4;
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    
+    .stats-container {
+      margin-top: 20px;
+    }
+    
+    .stat-box {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .stat-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    
+    .stat-value {
+      font-size: 18px;
+      color: #333;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .button {
+      padding: 10px 20px;
+      border-radius: 4px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .primary-button {
+      background-color: #4285f4;
+      color: white;
+    }
+    
+    .primary-button:hover {
+      background-color: #3367d6;
+    }
+    
+    .danger-button {
+      background-color: #f44336;
+      color: white;
+    }
+    
+    .danger-button:hover {
+      background-color: #d32f2f;
+    }
+    
+    .not-logged-in {
+      text-align: center;
+      padding: 30px;
+    }
+  </style>
+  <!-- Load Google Identity Services library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Load our Google Sign-In handler -->
+  <script src="../js/google-signin.js"></script>
+  <!-- Load navigation component -->
+  <script src="../js/nav.js"></script>
+</head>
+<body>
+  <!-- Navigation bar will be inserted by nav.js -->
+  <div id="app-nav"></div>
+  
+  <div class="container">
+    <div class="profile-container" id="profile-container">
+      <h1>User Profile</h1>
+      
+      <!-- User info will be populated by JavaScript -->
+      <div id="profile-content">
+        <div class="not-logged-in">
+          <p>You are not logged in.</p>
+          <button class="button primary-button" onclick="window.location.href='login.html'">Go to Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const userData = localStorage.getItem('typingTestUserData');
+      
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          const userType = localStorage.getItem('typingTestUserType') || 'standard';
+          
+          // Create profile HTML
+          const profileContent = document.getElementById('profile-content');
+          
+          profileContent.innerHTML = `
+            <div class="user-info">
+              <img src="${user.picture || '../assets/default-avatar.png'}" alt="Profile Picture" class="profile-picture">
+              <div class="user-details">
+                <div class="user-name">${user.name || 'User'}</div>
+                <div class="user-email">${user.email || ''}</div>
+                <div class="auth-method">${userType.charAt(0).toUpperCase() + userType.slice(1)} Account</div>
+              </div>
+            </div>
+            
+            <div class="stats-container">
+              <div class="stat-box">
+                <div class="stat-title">Account ID</div>
+                <div class="stat-value">${user.id || 'N/A'}</div>
+              </div>
+              
+              <div class="stat-box">
+                <div class="stat-title">Last Login</div>
+                <div class="stat-value">${new Date().toLocaleString()}</div>
+              </div>
+            </div>
+            
+            <div class="button-container">
+              <button class="button primary-button" onclick="window.location.href='../../index.html'">Go to App</button>
+              <button class="button danger-button" onclick="handleSignOut()">Sign Out</button>
+            </div>
+          `;
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+        }
+      }
+    });
+    
+    // Handle sign out
+    function handleSignOut() {
+      // Use Google Sign-Out if available
+      if (window.googleSignIn && window.googleSignIn.signOut) {
+        window.googleSignIn.signOut();
+      } else {
+        // Fallback to manual sign out
+        localStorage.removeItem('typingTestUser');
+        localStorage.removeItem('typingTestUserType');
+        localStorage.removeItem('typingTestUserData');
+        
+        // Redirect to login page
+        window.location.href = 'login.html';
+      }
+    }
+  </script>
+</body>
+</html> 

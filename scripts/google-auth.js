@@ -6,9 +6,13 @@
 console.log('Google Auth Helper loaded');
 
 (function() {
+    // API base URL - hardcoded for development
+    const API_BASE_URL = 'http://localhost:3000/api';
+        
     // When DOM is loaded, initialize the Google sign-in button
     document.addEventListener('DOMContentLoaded', function() {
         initGoogleSignIn();
+        checkForGoogleCallback();
     });
 
     // Initialize Google Sign-In
@@ -43,29 +47,8 @@ console.log('Google Auth Helper loaded');
                 googleButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
             }
             
-            // Since we're having issues with the server, simulate a successful login
-            setTimeout(() => {
-                // Create a mock Google user
-                const googleUser = {
-                    id: 'g_' + Date.now(),
-                    name: 'Google User',
-                    email: 'google_user@example.com',
-                    picture: 'assets/default-avatar.png'
-                };
-                
-                // Store user data in localStorage
-                localStorage.setItem('typingTestUser', googleUser.name);
-                localStorage.setItem('typingTestUserType', 'google');
-                localStorage.setItem('typingTestUserData', JSON.stringify(googleUser));
-                
-                // Show success message
-                showMessage('Google sign-in successful! Redirecting...', 'success');
-                
-                // Redirect after a short delay
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            }, 1500);
+            // Redirect to the Passport.js Google auth endpoint
+            window.location.href = `${API_BASE_URL}/auth/google`;
         } catch (error) {
             console.error('Google sign-in error:', error);
             
@@ -79,6 +62,18 @@ console.log('Google Auth Helper loaded');
                 googleButton.style.opacity = '1';
                 googleButton.innerHTML = '<img src="assets/google-logo.svg" alt="Google" width="18" height="18"> <span class="google-btn-text">Sign in with Google</span>';
             }
+        }
+    }
+
+    // Check for Google OAuth callback parameters in URL
+    function checkForGoogleCallback() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('code') && urlParams.has('state')) {
+            // This is a callback from Google OAuth
+            showMessage('Processing authentication...', 'info');
+            
+            // Let Passport.js handle the callback
+            // No need to manually redirect as Passport.js will handle it
         }
     }
 

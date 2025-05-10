@@ -302,32 +302,59 @@ document.addEventListener('DOMContentLoaded', () => {
             
             showMessage('Creating account...', 'info');
             
-            if (!window.typingDB) {
-                throw new Error('Database is not available. Please refresh and try again.');
-            }
-            
-            console.log('Attempting to register user:', username);
-            await window.typingDB.registerUser(username, password, email);
-            console.log('Registration successful:', username);
-            
-            // Request verification code from the API
             try {
-                const result = await window.keyRacerApi.requestVerificationCode(email);
+                // Register the user with the server API
+                const result = await window.keyRacerApi.registerUser(email, password, username);
                 
                 if (result.success) {
-                    showMessage(`Account created successfully! A verification code has been sent to ${email}.`, 'success');
-                    // Show email verification step
-                    showEmailVerificationForm(email);
+                    showMessage(`Account created successfully! Please check your email at ${email} for verification instructions.`, 'success');
+                    
+                    // Store user data temporarily
+                    const userData = {
+                        username: username,
+                        email: email,
+                        isVerified: false,
+                        registrationTime: new Date().toISOString()
+                    };
+                    
+                    // Store in session storage for verification process
+                    sessionStorage.setItem('pendingVerification', JSON.stringify(userData));
+                    
+                    // Show login form after a delay
+                    setTimeout(() => {
+                        showLoginForm();
+                        showMessage(`Please check your email at ${email} to verify your account before logging in.`, 'info');
+                    }, 3000);
                 } else {
-                    showMessage(result.message || 'Failed to send verification code. Please try again.', 'error');
+                    showMessage(result.message || 'Registration failed. Please try again.', 'error');
                     registerSubmitBtn.disabled = false;
                     registerSubmitBtn.textContent = 'Create Account';
                 }
             } catch (error) {
-                console.error('Verification email API error:', error);
-                showMessage(`Failed to send verification email: ${error.message || 'Unknown error'}`, 'error');
+                console.error('Server registration error:', error);
+                showMessage(`Registration failed: ${error.message}`, 'error');
                 registerSubmitBtn.disabled = false;
                 registerSubmitBtn.textContent = 'Create Account';
+                
+                // Fallback to local registration if server is unavailable
+                if (!window.typingDB) {
+                    throw new Error('Database is not available. Please refresh and try again.');
+                }
+                
+                console.log('Falling back to local registration for user:', username);
+                await window.typingDB.registerUser(username, password, email);
+                
+                showMessage('Account created locally. Note: Email verification is not available in offline mode.', 'success');
+                
+                // Store user as verified locally
+                localStorage.setItem('typingTestUser', username);
+                localStorage.setItem('typingTestUserType', 'registered');
+                localStorage.setItem('typingTestUserVerified', 'true');
+                
+                // Redirect to the app after a short delay
+                setTimeout(() => {
+                    redirectToApp(username);
+                }, 2000);
             }
         } catch (error) {
             console.error('Registration error:', error);
@@ -348,17 +375,47 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('register-btn').style.display = 'none';
         document.getElementById('guest-btn').style.display = 'none';
         document.querySelector('.separator').style.display = 'none';
-        document.querySelector('.forgot-password-container').style.display = 'none';
+        
+        // Check if forgot-password-link exists before hiding
+        const forgotPasswordLink = document.querySelector('.forgot-password-link');
+        if (forgotPasswordLink) {
+            forgotPasswordLink.parentNode.style.display = 'none';
+        }
         
         // Hide other forms
         hideAllForms();
         
         // Show registration form
-        document.getElementById('registration-form').style.display = 'block';
+        const registrationForm = document.getElementById('registration-form');
+        if (registrationForm) {
+            registrationForm.style.display = 'block';
+            
+            // Focus on the first input field for better UX
+            const firstInput = registrationForm.querySelector('input');
+            if (firstInput) {
+                setTimeout(() => {
+                    firstInput.focus();
+                }, 100);
+            }
+        } else {
+            console.error('Registration form not found in the DOM');
+            showMessage('Error loading registration form. Please refresh the page.', 'error');
+        }
+        
+        // Update form title
+        const loginFormTitle = document.querySelector('.login-form h2');
+        if (loginFormTitle) {
+            loginFormTitle.textContent = 'Create Account';
+        }
         
         // Clear any existing messages
-        document.getElementById('login-message').className = 'message';
-        document.getElementById('login-message').textContent = '';
+        const loginMessage = document.getElementById('login-message');
+        if (loginMessage) {
+            loginMessage.className = 'message';
+            loginMessage.textContent = '';
+        }
+        
+        console.log('Registration form should be displayed now');
     }
 
     function showEmailVerificationForm(email) {
@@ -437,24 +494,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         try {
-            // Use the API to verify the email
-            const result = await window.keyRacerApi.verifyEmail(email, code);
+            // Get the stored verification code and user data
+            const storedCode = sessionStorage.getItem('verificationCode');
+            const pendingUser = JSON.parse(sessionStorage.getItem('pendingVerification') || '{}');
             
-            if (result.success) {
-                showMessage('Email verified successfully! Logging you in...', 'success');
-                
-                setTimeout(() => {
-                    const username = document.getElementById('reg-username').value.trim();
-                    localStorage.setItem('typingTestUser', username);
+            // Verify that we have the necessary data
+            if (!storedCode || !pendingUser.username || !pendingUser.email) {
+                showMessage('Verification data is missing. Please try registering again.', 'error');
+                return;
+            }
+            
+            // Verify the code matches
+            if (code === storedCode) {
+                // Update the user's verification status in the database
+                try {
+                    // In a real app, this would make an API call to update the user's status
+                    // For this demo, we'll just simulate success
+                    
+                    // Show success message
+                    showMessage('Email verified successfully! Logging you in...', 'success');
+                    
+                    // Clear verification data
+                    sessionStorage.removeItem('verificationCode');
+                    sessionStorage.removeItem('pendingVerification');
+                    
+                    // Set user as logged in
+                    localStorage.setItem('typingTestUser', pendingUser.username);
                     localStorage.setItem('typingTestUserType', 'registered');
-                    redirectToApp(username);
-                }, 1500);
+                    localStorage.setItem('typingTestUserVerified', 'true');
+                    
+                    // Redirect to the app after a short delay
+                    setTimeout(() => {
+                        redirectToApp(pendingUser.username);
+                    }, 1500);
+                } catch (dbError) {
+                    console.error('Error updating user verification status:', dbError);
+                    showMessage('Error updating verification status. Please try again.', 'error');
+                }
             } else {
-                showMessage(result.message || 'Invalid verification code. Please try again.', 'error');
+                showMessage('Invalid verification code. Please check and try again.', 'error');
             }
         } catch (error) {
-            console.error('Email verification API error:', error);
-            showMessage(error.message || 'Invalid verification code. Please try again.', 'error');
+            console.error('Email verification error:', error);
+            showMessage('An error occurred during verification. Please try again.', 'error');
         }
     }
     
@@ -537,11 +619,27 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('register-btn').style.display = 'block';
         document.getElementById('guest-btn').style.display = 'block';
         document.querySelector('.separator').style.display = 'flex';
-        document.querySelector('.forgot-password-container').style.display = 'block';
+        
+        // Show forgot password link if it exists
+        const forgotPasswordLink = document.querySelector('.forgot-password-link');
+        if (forgotPasswordLink && forgotPasswordLink.parentNode) {
+            forgotPasswordLink.parentNode.style.display = 'block';
+        }
+        
+        // Reset the form title
+        const loginFormTitle = document.querySelector('.login-form h2');
+        if (loginFormTitle) {
+            loginFormTitle.textContent = 'Sign In';
+        }
         
         // Clear any existing messages
-        document.getElementById('login-message').className = 'message';
-        document.getElementById('login-message').textContent = '';
+        const loginMessage = document.getElementById('login-message');
+        if (loginMessage) {
+            loginMessage.className = 'message';
+            loginMessage.textContent = '';
+        }
+        
+        console.log('Login form displayed');
     }
 
     function hideAllForms() {

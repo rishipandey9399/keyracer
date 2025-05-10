@@ -5,17 +5,17 @@
  * the Key Racer Node.js backend API.
  */
 
-// API base URL - adjust for development vs production
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3000/api'
-  : '/api'; // For production
+// API base URL - hardcoded for development
+const API_BASE_URL = 'http://localhost:3000/api';
 
 // Auth endpoints
 const AUTH_ENDPOINTS = {
+  REGISTER: '/auth/register',
+  LOGIN: '/auth/login',
   FORGOT_PASSWORD: '/auth/forgot-password',
   RESET_PASSWORD: '/auth/reset-password',
   SEND_VERIFICATION: '/auth/send-verification',
-  VERIFY: '/auth/verify'
+  VERIFY: '/auth/verify-email'
 };
 
 /**
@@ -52,6 +52,21 @@ async function apiRequest(endpoint, options = {}) {
     console.error(`API Error (${endpoint}):`, error);
     throw error;
   }
+}
+
+/**
+ * Register a new user
+ * 
+ * @param {string} email - User's email address
+ * @param {string} password - User's password
+ * @param {string} displayName - User's display name
+ * @returns {Promise<Object>} - Response indicating success or failure
+ */
+async function registerUser(email, password, displayName) {
+  return apiRequest(AUTH_ENDPOINTS.REGISTER, {
+    method: 'POST',
+    body: JSON.stringify({ email, password, displayName }),
+  });
 }
 
 /**
@@ -158,6 +173,7 @@ function startVerificationCountdown(expiryMinutes, onTick, onExpire) {
 
 // Export the API functions
 window.keyRacerApi = {
+  registerUser,
   requestPasswordReset,
   resetPassword,
   requestVerificationCode,

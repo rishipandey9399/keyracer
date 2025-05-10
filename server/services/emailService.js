@@ -7,12 +7,15 @@
 // This is a simplified implementation for demonstration purposes
 const { Resend } = require('resend');
 require('dotenv').config();
+const User = require('../models/User');
+const Token = require('../models/Token');
+const crypto = require('crypto');
 
 class EmailService {
   constructor() {
     this.apiKey = process.env.RESEND_API_KEY;
-    this.fromEmail = 'noreply@keyracer.com';
-    this.fromName = 'Key Racer';
+    this.fromEmail = process.env.EMAIL_FROM || 'noreply@keyracer.com';
+    this.fromName = process.env.EMAIL_FROM_NAME || 'Key Racer';
     
     if (this.apiKey) {
       this.resend = new Resend(this.apiKey);
@@ -30,20 +33,73 @@ class EmailService {
   }
   
   /**
+   * Generate verification token for a user
+   * @param {string} userId - User ID
+   * @returns {Promise<string>} - Generated token
+   */
+  async generateVerificationToken(userId) {
+    try {
+      // Delete any existing verification tokens for this user
+      await Token.deleteMany({ userId, type: 'emailVerification' });
+      
+      // Generate a new token
+      const token = crypto.randomBytes(32).toString('hex');
+      
+      // Save the token
+      await new Token({
+        userId,
+        token,
+        type: 'emailVerification'
+      }).save();
+      
+      return token;
+    } catch (error) {
+      console.error('Error generating verification token:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Generate password reset token for a user
+   * @param {string} userId - User ID
+   * @returns {Promise<string>} - Generated token
+   */
+  async generatePasswordResetToken(userId) {
+    try {
+      // Delete any existing password reset tokens for this user
+      await Token.deleteMany({ userId, type: 'passwordReset' });
+      
+      // Generate a new token
+      const token = crypto.randomBytes(32).toString('hex');
+      
+      // Save the token
+      await new Token({
+        userId,
+        token,
+        type: 'passwordReset'
+      }).save();
+      
+      return token;
+    } catch (error) {
+      console.error('Error generating password reset token:', error);
+      throw error;
+    }
+  }
+  
+  /**
    * Send verification email
    * @param {string} email - Recipient email
-   * @param {string} code - Verification code
-   * @param {number} expiryMinutes - Expiry time in minutes
+   * @param {string} verificationLink - Verification link
    * @returns {Promise<Object>} - Result of email send operation
    */
-  async sendVerificationEmail(email, code, expiryMinutes = 10) {
+  async sendVerificationEmail(email, verificationLink) {
     try {
       if (!this.apiKey) {
-        console.log(`[DEV MODE] Verification code for ${email}: ${code} (expires in ${expiryMinutes} minutes)`);
+        console.log(`[DEV MODE] Verification link for ${email}: ${verificationLink}`);
         return { success: true, message: 'Verification email would be sent in production' };
       }
       
-      const html = this.generateVerificationEmailContent(email, code, expiryMinutes);
+      const html = this.generateVerificationEmailContent(email, verificationLink);
       
       const data = await this.resend.emails.send({
         from: `${this.fromName} <${this.fromEmail}>`,
@@ -62,11 +118,10 @@ class EmailService {
   /**
    * Send password reset email
    * @param {string} email - Recipient email
-   * @param {string} token - Reset token
    * @param {string} resetLink - Password reset link
    * @returns {Promise<Object>} - Result of email send operation
    */
-  async sendPasswordResetEmail(email, token, resetLink) {
+  async sendPasswordResetEmail(email, resetLink) {
     try {
       if (!this.apiKey) {
         console.log(`[DEV MODE] Password reset link for ${email}: ${resetLink}`);
@@ -92,11 +147,10 @@ class EmailService {
   /**
    * Generate HTML content for verification email
    * @param {string} email - Recipient email
-   * @param {string} code - Verification code
-   * @param {number} expiryMinutes - Expiry time in minutes
+   * @param {string} verificationLink - Verification link
    * @returns {string} - HTML content
    */
-  generateVerificationEmailContent(email, code, expiryMinutes) {
+  generateVerificationEmailContent(email, verificationLink) {
     return `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
         <div style="text-align: center; margin-bottom: 20px;">
@@ -106,10 +160,12 @@ class EmailService {
         
         <div style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
           <h2 style="margin-top: 0; color: #333;">Email Verification</h2>
-          <p>Thank you for creating an account! Please enter the following verification code to complete your registration:</p>
-          <div style="background-color: #1E2761; padding: 15px; border-radius: 5px; text-align: center; font-size: 24px; letter-spacing: 5px; margin: 20px 0; color: #fff; font-weight: bold;">${code}</div>
-          <p>This code will expire in ${expiryMinutes} minutes.</p>
-          <p>If you didn't request this verification, you can safely ignore this email.</p>
+          <p>Thank you for creating an account! Please click the button below to verify your email address:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verificationLink}" style="background-color: #1E2761; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Verify Email</a>
+          </div>
+          <p>If you didn't create an account, you can safely ignore this email.</p>
+          <p>This link will expire in 1 hour.</p>
         </div>
         
         <div style="color: #777; font-size: 12px; text-align: center; margin-top: 20px;">
@@ -141,7 +197,7 @@ class EmailService {
             <a href="${resetLink}" style="background-color: #FF4A4A; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Reset Password</a>
           </div>
           <p>If you didn't request a password reset, you can safely ignore this email.</p>
-          <p>This link will expire in 24 hours.</p>
+          <p>This link will expire in 1 hour.</p>
         </div>
         
         <div style="color: #777; font-size: 12px; text-align: center; margin-top: 20px;">

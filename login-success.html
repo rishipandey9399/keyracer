@@ -188,6 +188,79 @@
                 transform: translateY(0);
             }
         }
+        
+        /* Username prompt styles */
+        .username-prompt {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 255, 221, 0.2);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .username-prompt h3 {
+            color: #fff;
+            margin-top: 0;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .username-prompt p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+        
+        .username-input-group {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .username-input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .username-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+        
+        .save-username-btn {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .save-username-btn:hover {
+            background: #00e0c2;
+            transform: translateY(-2px);
+        }
+        
+        .username-error {
+            color: #FF6B6B;
+            font-size: 14px;
+            margin-top: 8px;
+            text-align: left;
+            padding-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -201,6 +274,26 @@
         </div>
         <h1 class="success-title">Login Successful!</h1>
         <p class="success-message">You have successfully signed in to Key Racer with Google.</p>
+        
+        <!-- Username prompt overlay (initially hidden) -->
+        <div id="username-prompt" class="username-prompt" style="display: none;">
+            <h3>What should we call you?</h3>
+            <p>Choose a username for Key Racer</p>
+            <div class="username-input-group">
+                <input 
+                    type="text" 
+                    id="preferred-username" 
+                    placeholder="Enter username" 
+                    class="username-input"
+                    maxlength="20"
+                >
+                <button 
+                    id="save-username-btn" 
+                    class="save-username-btn"
+                >Save</button>
+            </div>
+            <div id="username-error" class="username-error" style="display: none;"></div>
+        </div>
         
         <div id="user-profile" class="user-profile">
             <img id="profile-picture" src="assets/default-avatar.png" alt="Profile Picture" class="profile-picture">
@@ -230,9 +323,40 @@
             const userName = urlParams.get('name') || 'Google User';
             const userEmail = urlParams.get('email') || '';
             const userPicture = urlParams.get('picture') || 'assets/default-avatar.png';
+            const provider = urlParams.get('provider') || 'google';
+            
+            console.log('Google auth data from URL:', { name: userName, email: userEmail, picture: userPicture });
+            
+            // First check if we have the user already logged in with a username
+            const currentUser = localStorage.getItem('typingTestUser');
+            const currentUserType = localStorage.getItem('typingTestUserType');
+            const currentUserData = JSON.parse(localStorage.getItem('typingTestUserData') || '{}');
+            
+            // If the user is already logged in with the same email, use that username
+            if (currentUser && currentUserType === 'google' && currentUserData.email === userEmail) {
+                console.log('User already logged in with username:', currentUser);
+                saveUsername(currentUser, false); // Pass false to show "Welcome back" message
+                return; // Skip the rest of the initialization
+            }
+            
+            // Check if we already have a stored username for this email
+            const storedUsername = getStoredUsernameByEmail(userEmail);
+            
+            if (storedUsername) {
+                // User has signed in before, use the stored username
+                console.log('Found stored username:', storedUsername);
+                saveUsername(storedUsername, false); // Pass false to show "Welcome back" message
+            } else {
+                // First time sign-in, show username prompt
+                showUsernamePrompt(userName);
+                
+                // Hide user profile and action buttons until username is set
+                document.getElementById('user-profile').style.display = 'none';
+                document.querySelector('.action-buttons').style.display = 'none';
+            }
             
             // Update the user profile
-            document.getElementById('user-name').textContent = userName;
+            document.getElementById('user-name').textContent = storedUsername || userName;
             if (userEmail) {
                 document.getElementById('user-email').textContent = userEmail;
             }
@@ -240,17 +364,191 @@
                 document.getElementById('profile-picture').src = userPicture;
             }
             
+            // Handle username prompt
+            function showUsernamePrompt(defaultName) {
+                const usernamePrompt = document.getElementById('username-prompt');
+                const preferredUsernameInput = document.getElementById('preferred-username');
+                const saveUsernameBtn = document.getElementById('save-username-btn');
+                const usernameError = document.getElementById('username-error');
+                
+                // Show the prompt
+                usernamePrompt.style.display = 'block';
+                
+                // Set default value from Google name
+                preferredUsernameInput.value = defaultName !== 'Google User' ? defaultName : '';
+                
+                // Focus the input
+                preferredUsernameInput.focus();
+                
+                // Handle save button click
+                saveUsernameBtn.addEventListener('click', async function() {
+                    const username = preferredUsernameInput.value.trim();
+                    
+                    if (!username) {
+                        usernameError.textContent = 'Please enter a username';
+                        usernameError.style.display = 'block';
+                        return;
+                    }
+                    
+                    if (username.length < 3) {
+                        usernameError.textContent = 'Username must be at least 3 characters';
+                        usernameError.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Check if username is already taken
+                    const isAvailable = await checkUsernameAvailability(username);
+                    if (!isAvailable) {
+                        usernameError.textContent = 'This username is already taken';
+                        usernameError.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Save the username and continue
+                    saveUsername(username, true);
+                    
+                    // Store username preference for this email
+                    if (userEmail) {
+                        storeUsernameForEmail(userEmail, username);
+                    }
+                });
+                
+                // Also handle Enter key
+                preferredUsernameInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        saveUsernameBtn.click();
+                    }
+                });
+                
+                // Clear error on input
+                preferredUsernameInput.addEventListener('input', function() {
+                    usernameError.style.display = 'none';
+                });
+            }
+            
+            // Save username and continue
+            function saveUsername(username, showWelcome = true) {
+                // Update displayed name
+                document.getElementById('user-name').textContent = username;
+                
+                // Hide username prompt
+                document.getElementById('username-prompt').style.display = 'none';
+                
+                // Show user profile and action buttons
+                document.getElementById('user-profile').style.display = 'flex';
+                document.querySelector('.action-buttons').style.display = 'flex';
+                
+                // Store user info in local storage with the custom username
+                localStorage.setItem('typingTestUser', username);
+                localStorage.setItem('typingTestUserType', 'google');
+                
+                // Make sure we're storing the email from URL parameters
+                const userData = {
+                    id: 'google_' + Date.now(),
+                    name: username,
+                    email: userEmail,  // Make sure this is used directly
+                    picture: userPicture || '',
+                    hasSetUsername: true // Add this flag to indicate username has been set
+                };
+                
+                localStorage.setItem('typingTestUserData', JSON.stringify(userData));
+                
+                // Update success message with username if showing welcome
+                if (showWelcome) {
+                    document.querySelector('.success-message').innerHTML = 
+                        `Welcome <span style="color: var(--accent-color); font-weight: bold;">${username}</span>! You've successfully signed in to Key Racer with Google.`;
+                } else {
+                    document.querySelector('.success-message').innerHTML = 
+                        `Welcome back <span style="color: var(--accent-color); font-weight: bold;">${username}</span>! You've successfully signed in to Key Racer.`;
+                }
+                
+                // Log the stored user data for debugging
+                console.log('User data stored:', userData);
+                
+                // Also update the server if we have an API endpoint for this
+                // This would be the ideal place to make an API call to update the username
+                try {
+                    fetch('/api/user/username', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username }),
+                        credentials: 'include'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Username updated on server:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error updating username on server:', error);
+                        // Continue anyway since we've updated localStorage
+                    });
+                } catch (error) {
+                    console.error('Error calling username update API:', error);
+                }
+            }
+            
+            // Store username preference for an email
+            function storeUsernameForEmail(email, username) {
+                if (!email || !username) return;
+                
+                try {
+                    // Get existing stored usernames
+                    let emailUsernames = JSON.parse(localStorage.getItem('keyRacer_emailUsernames') || '{}');
+                    
+                    // Add or update this email's username
+                    emailUsernames[email] = username;
+                    
+                    // Store back to localStorage
+                    localStorage.setItem('keyRacer_emailUsernames', JSON.stringify(emailUsernames));
+                    console.log(`Stored username "${username}" for email "${email}"`);
+                } catch (error) {
+                    console.error('Error storing username for email:', error);
+                }
+            }
+            
+            // Get stored username for an email
+            function getStoredUsernameByEmail(email) {
+                if (!email) return null;
+                
+                try {
+                    // Get existing stored usernames
+                    let emailUsernames = JSON.parse(localStorage.getItem('keyRacer_emailUsernames') || '{}');
+                    
+                    // Return the username for this email if it exists
+                    return emailUsernames[email] || null;
+                } catch (error) {
+                    console.error('Error retrieving username for email:', error);
+                    return null;
+                }
+            }
+            
             // Handle logout
             document.getElementById('logout-btn').addEventListener('click', function() {
+                console.log('Logging out user');
+                
                 // Clear user data
                 localStorage.removeItem('typingTestUser');
                 localStorage.removeItem('typingTestUserType');
+                localStorage.removeItem('typingTestUserData');
+                
+                // Note: We do NOT remove the emailUsernames mapping
+                // This ensures returning users don't need to re-enter their username
                 
                 // Make logout API call
                 fetch('/api/auth/logout', {
                     method: 'POST',
                     credentials: 'include'
-                }).finally(() => {
+                })
+                .then(response => {
+                    console.log('Logout API response:', response.status);
+                    return response.json().catch(() => ({})); // Handle non-JSON responses
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                })
+                .finally(() => {
                     // Redirect to login page
                     window.location.href = 'login.html';
                 });
@@ -282,11 +580,37 @@
             // Add some racing cars to the background
             addRacingCars(5);
             
-            // Store user info in local storage for the app
-            localStorage.setItem('typingTestUser', userName);
-            localStorage.setItem('typingTestUserType', 'google');
-            localStorage.setItem('typingTestUserEmail', userEmail || '');
-            localStorage.setItem('typingTestUserPicture', userPicture || '');
+            // Check if a username is available
+            async function checkUsernameAvailability(username) {
+                try {
+                    // First check local storage for existing usernames
+                    const allUsernames = getAllStoredUsernames();
+                    if (allUsernames.includes(username)) {
+                        return false;
+                    }
+                    
+                    // In a real app, you would make an API call to check the database
+                    // For this demo, we'll simulate a check with localStorage
+                    return true;
+                } catch (error) {
+                    console.error('Error checking username availability:', error);
+                    return true; // Default to available if check fails
+                }
+            }
+            
+            // Get all stored usernames
+            function getAllStoredUsernames() {
+                try {
+                    // Get existing stored usernames
+                    let emailUsernames = JSON.parse(localStorage.getItem('keyRacer_emailUsernames') || '{}');
+                    
+                    // Extract just the usernames
+                    return Object.values(emailUsernames);
+                } catch (error) {
+                    console.error('Error getting all usernames:', error);
+                    return [];
+                }
+            }
         });
     </script>
 </body>
