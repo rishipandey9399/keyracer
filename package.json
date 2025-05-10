@@ -1,0 +1,40 @@
+{
+  "name": "typing-test-app",
+  "version": "1.0.0",
+  "description": "Typing test application with Google OAuth integration",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "setup-google": "node setup-google-auth.js",
+    "start-with-google": "node start-with-google-auth.js",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "google-auth-library": "^9.4.1",
+    "helmet": "^7.2.0",
+    "mongoose": "^8.14.2",
+    "morgan": "^1.10.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "resend": "^2.0.0",
+    "mongodb": "^5.7.0",
+    "bcrypt": "^5.1.0",
+    "jsonwebtoken": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "private": true,
+  "keywords": ["typing", "test", "google-oauth"],
+  "author": "",
+  "license": "ISC"
+} 
