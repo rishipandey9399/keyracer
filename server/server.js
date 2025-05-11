@@ -16,6 +16,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const { URLSearchParams } = require('url');
+const rateLimit = require('express-rate-limit');
 
 // Import database connection
 const connectDB = require('./utils/dbConnect');
@@ -160,6 +161,25 @@ app.use(express.static(path.join(__dirname, '../')));
 
 // API routes
 app.use('/api/auth', authRoutes);
+
+// Add rate limiting for auth routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 requests per windowMs
+  message: {
+    success: false,
+    message: 'Too many requests from this IP, please try again after 15 minutes'
+  },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Apply rate limiting to auth routes
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+app.use('/api/auth/forgot-password', authLimiter);
+app.use('/api/auth/reset-password', authLimiter);
+app.use('/api/auth/send-verification', authLimiter);
 
 // User info endpoint
 app.get('/api/user', authenticate, (req, res) => {

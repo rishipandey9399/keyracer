@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -11,49 +11,61 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: false // Not required for OAuth users
+    required: function() {
+      return this.authMethod === 'local';
+    }
+  },
+  displayName: {
+    type: String,
+    required: true
   },
   username: {
     type: String,
     unique: true,
-    sparse: true // Allow null values to be unique
+    sparse: true,
+    trim: true
   },
-  displayName: String,
   firstName: String,
   lastName: String,
   picture: String,
-  isVerified: {
-    type: Boolean,
-    default: false
-  },
   authMethod: {
     type: String,
     enum: ['local', 'google'],
     default: 'local'
   },
   googleId: String,
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
   hasSetUsername: {
     type: Boolean,
     default: false
+  },
+  lastLogin: {
+    type: Date,
+    default: Date.now
   },
   createdAt: {
     type: Date,
     default: Date.now
   },
-  lastLogin: Date
+  // Password reset fields
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+  // Email verification fields
+  verificationCode: String,
+  verificationCodeExpires: Date
 });
 
-// Hash password before saving
-UserSchema.pre('save', async function(next) {
-  const user = this;
-  
+// Pre-save hook to hash password
+userSchema.pre('save', async function(next) {
   // Only hash the password if it's modified or new
-  if (!user.isModified('password') || !user.password) return next();
+  if (!this.isModified('password') || !this.password) return next();
   
   try {
-    // Generate salt and hash
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {
     next(error);
@@ -61,7 +73,7 @@ UserSchema.pre('save', async function(next) {
 });
 
 // Method to compare passwords
-UserSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function(candidatePassword) {
   try {
     return await bcrypt.compare(candidatePassword, this.password);
   } catch (error) {
@@ -69,6 +81,6 @@ UserSchema.methods.comparePassword = async function(candidatePassword) {
   }
 };
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User; 
