@@ -9,7 +9,7 @@ const authService = require('../services/authService');
 const { authenticate } = require('../middleware/authMiddleware');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/user');
+const User = require('../models/User');
 const { sendEmail, sendPasswordResetEmail } = require('../utils/emailUtils');
 
 // In-memory token storage (should use a database in production)
