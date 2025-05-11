@@ -318,12 +318,41 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the user data from URL params (or make an API call to get current user)
+            // Get the user data from URL params
             const urlParams = new URLSearchParams(window.location.search);
-            const userName = urlParams.get('name') || 'Google User';
-            const userEmail = urlParams.get('email') || '';
-            const userPicture = urlParams.get('picture') || 'assets/default-avatar.png';
             const provider = urlParams.get('provider') || 'google';
+            let userName = 'Google User';
+            let userEmail = '';
+            let userPicture = 'assets/default-avatar.png';
+            
+            // Check for base64 encoded user data
+            const userDataBase64 = urlParams.get('user');
+            if (userDataBase64) {
+                try {
+                    // Decode the base64 user data
+                    const userDataJson = atob(userDataBase64);
+                    const userData = JSON.parse(userDataJson);
+                    
+                    // Extract user info
+                    userName = userData.name || 'Google User';
+                    userEmail = userData.email || '';
+                    userPicture = userData.picture || 'assets/default-avatar.png';
+                    
+                    // Store Google user email in localStorage
+                    if (userEmail) {
+                        localStorage.setItem('googleUser', userEmail);
+                    }
+                    
+                    console.log('Decoded user data:', userData);
+                } catch (error) {
+                    console.error('Error decoding user data:', error);
+                }
+            } else {
+                // Fallback to individual URL parameters (legacy support)
+                userName = urlParams.get('name') || 'Google User';
+                userEmail = urlParams.get('email') || '';
+                userPicture = urlParams.get('picture') || 'assets/default-avatar.png';
+            }
             
             console.log('Google auth data from URL:', { name: userName, email: userEmail, picture: userPicture });
             

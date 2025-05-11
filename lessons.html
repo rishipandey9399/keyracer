@@ -45,7 +45,7 @@
                                 <i class="fas fa-baby"></i>
                             </div>
                             <h3>Beginner</h3>
-                            <p>Master the home row and basic finger positions. Perfect for absolute beginners.</p>
+                            <p>One alphabet/character at a time. Focus on key familiarity and building muscle memory.</p>
                             <div class="lesson-level">
                                 <span class="level-dot filled"></span>
                                 <span class="level-dot"></span>
@@ -59,7 +59,7 @@
                                 <i class="fas fa-running"></i>
                             </div>
                             <h3>Intermediate</h3>
-                            <p>Develop speed and accuracy with common word patterns and basic punctuation.</p>
+                            <p>One word at a time. Focus on word recognition, typing speed, and accuracy.</p>
                             <div class="lesson-level">
                                 <span class="level-dot filled"></span>
                                 <span class="level-dot filled"></span>
@@ -73,7 +73,7 @@
                                 <i class="fas fa-rocket"></i>
                             </div>
                             <h3>Advanced</h3>
-                            <p>Perfect your technique with challenging exercises focusing on speed and precision.</p>
+                            <p>Full sentence practice with punctuation, capitalization, and numbers. Real-time WPM and accuracy tracking.</p>
                             <div class="lesson-level">
                                 <span class="level-dot filled"></span>
                                 <span class="level-dot filled"></span>
@@ -289,7 +289,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2023 Key Racer</p>
+            <p>&copy; 2025 Key Racer</p>
             <div class="footer-links-container">
                 <div class="keyboard-links">
                     <a href="about.html" class="keyboard-key">About Us</a>
@@ -340,6 +340,88 @@
                 console.error('Error loading saved progress:', e);
             }
             
+            // Sample content for different lesson types
+            const lessonContent = {
+                beginner: {
+                    title: "Character-by-Character Practice",
+                    characters: "asdfjkl;ghqwertyuiopzxcvbnm1234567890",
+                    description: "🟢 Beginner: One alphabet/character at a time. When you type correctly, the next character appears. Focus on key familiarity and building muscle memory."
+                },
+                intermediate: {
+                    title: "Word-by-Word Practice",
+                    words: ["the", "and", "that", "have", "for", "not", "with", "you", "this", "but", 
+                            "his", "from", "they", "say", "her", "she", "will", "one", "all", "would", 
+                            "there", "their", "what", "about", "which", "when", "make", "like", "time", "just"],
+                    description: "🟡 Intermediate: One word at a time. Type the word, then the next word appears. Focus on word recognition, typing speed, and accuracy."
+                },
+                advanced: {
+                    title: "Full Sentence Practice",
+                    sentences: [
+                        "The quick brown fox jumps over the lazy dog.",
+                        "Pack my box with five dozen liquor jugs.",
+                        "How vexingly quick daft zebras jump!",
+                        "Sphinx of black quartz, judge my vow.",
+                        "Amazingly few discotheques provide jukeboxes.",
+                        "Crazy Fredrick bought many very exquisite opal jewels.",
+                        "The five boxing wizards jump quickly.",
+                        "We promptly judged antique ivory buckles for the next prize.",
+                        "A wizard's job is to vex chumps quickly in fog.",
+                        "Jackdaws love my big sphinx of quartz."
+                    ],
+                    description: "🔴 Advanced: Full sentence practice with timer. Includes real-time WPM tracking, accuracy percentage, and error highlighting. Uses punctuation, capitalization, and numbers for increased difficulty."
+                },
+                "tricky-numbers": {
+                    title: "Number Row Challenge",
+                    sequences: [
+                        "1234567890",
+                        "0987654321",
+                        "12345 67890",
+                        "1212 3434 5656 7878 9090",
+                        "1010 2020 3030 4040",
+                        "11 22 33 44 55 66 77 88 99 00",
+                        "19 28 37 46 55 64 73 82 91",
+                        "10293847 5647382910",
+                        "1a2b3c 4d5e6f 7g8h9i0j",
+                        "1! 2@ 3# 4$ 5% 6^ 7& 8* 9( 0)"
+                    ],
+                    description: "Practice typing numbers and symbols from the number row. Focus on building muscle memory for these often-neglected keys."
+                },
+                "tricky-special": {
+                    title: "Special Characters Challenge",
+                    sequences: [
+                        "!@#$%^&*()",
+                        "()[]{}<>",
+                        "\"'`~,./:;-_+=\\|",
+                        "Hello, world!",
+                        "\"To be or not to be\"",
+                        "(item1, item2, item3)",
+                        "[array1, array2, array3]",
+                        "{key1: value1, key2: value2}",
+                        "a+b=c; x-y=z; m*n=o",
+                        "file.txt, data.csv, image.png",
+                        "https://www.example.com/path?query=value",
+                        "/* This is a comment */"
+                    ],
+                    description: "Master special characters like brackets, quotes, and other symbols that often slow typists down."
+                },
+                "tricky-uncommon": {
+                    title: "Uncommon Combinations Challenge",
+                    sequences: [
+                        "zx cv bn mk lp qw er ty ui op",
+                        "xkcd zqpm wjvf btgh",
+                        "rhythm myth crypt glyph",
+                        "queue yacht plumb thumb",
+                        "pneumonia psychology pterodactyl",
+                        "xylophone synchronize paralysis",
+                        "acquiesce acquisition acquaintance",
+                        "mnemonic pneumatic pseudonym",
+                        "bureaucracy conscientious idiosyncrasy",
+                        "zwitterion quixotic juxtaposition"
+                    ],
+                    description: "Practice difficult letter combinations that don't frequently appear together to improve your overall typing fluency."
+                }
+            };
+            
             // Handle lesson card clicks
             const lessonCards = document.querySelectorAll('.lesson-card');
             const lessonSelector = document.querySelector('.lesson-selector');
@@ -347,6 +429,411 @@
             const closeLessonBtn = document.querySelector('.close-lesson-btn');
             const lessonTitle = document.getElementById('lesson-title');
             const lessonDescription = document.getElementById('lesson-description');
+            
+            // Variables to track typing progress
+            let currentIndex = 0;
+            let correctChars = 0;
+            let incorrectChars = 0;
+            let startTime = null;
+            let lessonMode = "";
+            let currentContent = "";
+            let currentWordIndex = 0;
+            let typingInterval;
+            
+            // Function to calculate WPM and accuracy
+            function calculateMetrics() {
+                if (!startTime) return { wpm: 0, accuracy: 100 };
+                
+                const timeElapsed = (Date.now() - startTime) / 60000; // in minutes
+                const wpm = Math.round((correctChars / 5) / timeElapsed); // standard WPM calculation
+                const accuracy = Math.round((correctChars / (correctChars + incorrectChars)) * 100);
+                
+                return { wpm, accuracy };
+            }
+            
+            // Function to update metrics display
+            function updateMetricsDisplay() {
+                const metrics = calculateMetrics();
+                
+                // Only update if in advanced mode
+                if (lessonMode === "advanced") {
+                    const wpmDisplay = document.createElement('div');
+                    wpmDisplay.className = 'live-metric';
+                    wpmDisplay.innerHTML = `<strong>WPM:</strong> ${metrics.wpm}`;
+                    
+                    const accuracyDisplay = document.createElement('div');
+                    accuracyDisplay.className = 'live-metric';
+                    accuracyDisplay.innerHTML = `<strong>Accuracy:</strong> ${metrics.accuracy}%`;
+                    
+                    const metricsContainer = document.querySelector('.lesson-metrics') || document.createElement('div');
+                    if (!document.querySelector('.lesson-metrics')) {
+                        metricsContainer.className = 'lesson-metrics';
+                        metricsContainer.style.cssText = 'position: absolute; top: 10px; right: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 8px;';
+                        document.querySelector('.typing-test-container').appendChild(metricsContainer);
+                    }
+                    
+                    metricsContainer.innerHTML = '';
+                    metricsContainer.appendChild(wpmDisplay);
+                    metricsContainer.appendChild(accuracyDisplay);
+                }
+            }
+            
+            // Function to generate lesson content based on type
+            function generateLessonContent(lessonType) {
+                const textDisplay = document.getElementById('lesson-text-display');
+                textDisplay.innerHTML = '';
+                currentIndex = 0;
+                correctChars = 0;
+                incorrectChars = 0;
+                startTime = null;
+                
+                if (lessonType === 'beginner') {
+                    lessonMode = "beginner";
+                    // For beginner, show one character at a time
+                    currentContent = lessonContent.beginner.characters;
+                    const span = document.createElement('span');
+                    span.textContent = currentContent[0];
+                    span.className = 'current';
+                    textDisplay.appendChild(span);
+                    
+                } else if (lessonType === 'intermediate') {
+                    lessonMode = "intermediate";
+                    // For intermediate, show one word at a time
+                    currentWordIndex = 0;
+                    currentContent = lessonContent.intermediate.words;
+                    const span = document.createElement('span');
+                    span.textContent = currentContent[0];
+                    span.className = 'current';
+                    textDisplay.appendChild(span);
+                    
+                } else if (lessonType === 'advanced') {
+                    lessonMode = "advanced";
+                    // For advanced, show a full sentence with character spans
+                    const randomIndex = Math.floor(Math.random() * lessonContent.advanced.sentences.length);
+                    currentContent = lessonContent.advanced.sentences[randomIndex];
+                    
+                    // Create spans for each character in the sentence
+                    for (let i = 0; i < currentContent.length; i++) {
+                        const span = document.createElement('span');
+                        span.textContent = currentContent[i];
+                        if (i === 0) span.className = 'current';
+                        textDisplay.appendChild(span);
+                    }
+                    
+                    // Add metrics display for advanced mode
+                    if (!document.querySelector('.lesson-metrics')) {
+                        const metricsContainer = document.createElement('div');
+                        metricsContainer.className = 'lesson-metrics';
+                        metricsContainer.style.cssText = 'position: absolute; top: 10px; right: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 8px;';
+                        
+                        const wpmDisplay = document.createElement('div');
+                        wpmDisplay.className = 'live-metric';
+                        wpmDisplay.innerHTML = '<strong>WPM:</strong> 0';
+                        
+                        const accuracyDisplay = document.createElement('div');
+                        accuracyDisplay.className = 'live-metric';
+                        accuracyDisplay.innerHTML = '<strong>Accuracy:</strong> 100%';
+                        
+                        metricsContainer.appendChild(wpmDisplay);
+                        metricsContainer.appendChild(accuracyDisplay);
+                        document.querySelector('.typing-test-container').appendChild(metricsContainer);
+                    }
+                    
+                    // Start updating metrics every second for advanced mode
+                    typingInterval = setInterval(updateMetricsDisplay, 1000);
+                } else if (lessonType.startsWith('tricky-')) {
+                    // Handle tricky challenges
+                    lessonMode = "tricky";
+                    
+                    // Get the specific tricky content
+                    if (lessonContent[lessonType]) {
+                        // Choose a random sequence from the tricky content
+                        const sequences = lessonContent[lessonType].sequences;
+                        const randomIndex = Math.floor(Math.random() * sequences.length);
+                        currentContent = sequences[randomIndex];
+                        
+                        // Create spans for each character in the sequence
+                        for (let i = 0; i < currentContent.length; i++) {
+                            const span = document.createElement('span');
+                            span.textContent = currentContent[i];
+                            if (i === 0) span.className = 'current';
+                            textDisplay.appendChild(span);
+                        }
+                        
+                        // Add a challenge title
+                        const challengeTitle = document.createElement('div');
+                        challengeTitle.className = 'challenge-title';
+                        challengeTitle.textContent = lessonContent[lessonType].title;
+                        challengeTitle.style.cssText = 'margin-bottom: 15px; color: var(--accent-color); font-size: 1.2rem; text-align: center;';
+                        textDisplay.parentNode.insertBefore(challengeTitle, textDisplay);
+                        
+                        // Add metrics display for tricky mode
+                        if (!document.querySelector('.lesson-metrics')) {
+                            const metricsContainer = document.createElement('div');
+                            metricsContainer.className = 'lesson-metrics';
+                            metricsContainer.style.cssText = 'position: absolute; top: 10px; right: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 8px;';
+                            
+                            const wpmDisplay = document.createElement('div');
+                            wpmDisplay.className = 'live-metric';
+                            wpmDisplay.innerHTML = '<strong>WPM:</strong> 0';
+                            
+                            const accuracyDisplay = document.createElement('div');
+                            accuracyDisplay.className = 'live-metric';
+                            accuracyDisplay.innerHTML = '<strong>Accuracy:</strong> 100%';
+                            
+                            const progressDisplay = document.createElement('div');
+                            progressDisplay.className = 'live-metric';
+                            progressDisplay.innerHTML = '<strong>Progress:</strong> 1/' + sequences.length;
+                            
+                            metricsContainer.appendChild(wpmDisplay);
+                            metricsContainer.appendChild(accuracyDisplay);
+                            metricsContainer.appendChild(progressDisplay);
+                            document.querySelector('.typing-test-container').appendChild(metricsContainer);
+                        }
+                        
+                        // Start updating metrics every second for tricky mode
+                        typingInterval = setInterval(updateMetricsDisplay, 1000);
+                    }
+                }
+            }
+            
+            // Handle input for different lesson modes
+            function handleLessonInput(e) {
+                const textInput = document.getElementById('lesson-text-input');
+                const textDisplay = document.getElementById('lesson-text-display');
+                
+                // Start timer on first keypress
+                if (startTime === null) {
+                    startTime = Date.now();
+                }
+                
+                if (lessonMode === "beginner") {
+                    // For beginner: check if the typed character matches the current character
+                    const typedChar = e.key;
+                    
+                    if (typedChar === currentContent[currentIndex]) {
+                        // Correct character
+                        correctChars++;
+                        currentIndex++;
+                        
+                        if (currentIndex < currentContent.length) {
+                            // Show next character
+                            textDisplay.innerHTML = '';
+                            const span = document.createElement('span');
+                            span.textContent = currentContent[currentIndex];
+                            span.className = 'current';
+                            textDisplay.appendChild(span);
+                        } else {
+                            // End of character set, loop back
+                            currentIndex = 0;
+                            textDisplay.innerHTML = '';
+                            const span = document.createElement('span');
+                            span.textContent = currentContent[currentIndex];
+                            span.className = 'current';
+                            textDisplay.appendChild(span);
+                        }
+                    } else {
+                        // Incorrect character
+                        incorrectChars++;
+                        textDisplay.querySelector('.current').classList.add('error');
+                        setTimeout(() => {
+                            textDisplay.querySelector('.current').classList.remove('error');
+                        }, 300);
+                    }
+                    
+                    // Clear input field
+                    textInput.value = '';
+                    
+                } else if (lessonMode === "intermediate") {
+                    // For intermediate: check if the typed word matches the current word
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        const typedWord = textInput.value.trim();
+                        
+                        if (typedWord === currentContent[currentWordIndex]) {
+                            // Correct word
+                            correctChars += currentContent[currentWordIndex].length;
+                            currentWordIndex++;
+                            
+                            if (currentWordIndex < currentContent.length) {
+                                // Show next word
+                                textDisplay.innerHTML = '';
+                                const span = document.createElement('span');
+                                span.textContent = currentContent[currentWordIndex];
+                                span.className = 'current';
+                                textDisplay.appendChild(span);
+                            } else {
+                                // End of word set, loop back
+                                currentWordIndex = 0;
+                                textDisplay.innerHTML = '';
+                                const span = document.createElement('span');
+                                span.textContent = currentContent[currentWordIndex];
+                                span.className = 'current';
+                                textDisplay.appendChild(span);
+                            }
+                        } else {
+                            // Incorrect word
+                            incorrectChars += currentContent[currentWordIndex].length;
+                            textDisplay.querySelector('.current').classList.add('error');
+                            setTimeout(() => {
+                                textDisplay.querySelector('.current').classList.remove('error');
+                            }, 300);
+                        }
+                        
+                        // Clear input field
+                        textInput.value = '';
+                        e.preventDefault();
+                    }
+                    
+                } else if (lessonMode === "advanced" || lessonMode === "tricky") {
+                    // For advanced and tricky: check character by character
+                    const chars = textDisplay.querySelectorAll('span');
+                    
+                    if (e.key === 'Backspace') {
+                        if (currentIndex > 0) {
+                            currentIndex--;
+                            chars[currentIndex].classList.remove('correct', 'incorrect');
+                            chars[currentIndex].classList.add('current');
+                            if (currentIndex + 1 < chars.length) {
+                                chars[currentIndex + 1].classList.remove('current');
+                            }
+                        }
+                    } else if (e.key.length === 1) {
+                        if (currentIndex < chars.length) {
+                            // Remove current class
+                            chars[currentIndex].classList.remove('current');
+                            
+                            // Check if character is correct
+                            if (e.key === chars[currentIndex].textContent) {
+                                chars[currentIndex].classList.add('correct');
+                                correctChars++;
+                            } else {
+                                chars[currentIndex].classList.add('incorrect');
+                                incorrectChars++;
+                            }
+                            
+                            // Move to next character
+                            currentIndex++;
+                            if (currentIndex < chars.length) {
+                                chars[currentIndex].classList.add('current');
+                            } else {
+                                // End of sequence
+                                clearInterval(typingInterval);
+                                
+                                // For tricky mode, show next sequence or completion
+                                if (lessonMode === "tricky") {
+                                    const lessonType = document.querySelector('.lesson-practice').dataset.lessonType;
+                                    const sequences = lessonContent[lessonType].sequences;
+                                    const currentSequenceIndex = parseInt(document.querySelector('.lesson-practice').dataset.sequenceIndex || "0");
+                                    
+                                    if (currentSequenceIndex < sequences.length - 1) {
+                                        // Show next sequence
+                                        document.querySelector('.lesson-practice').dataset.sequenceIndex = currentSequenceIndex + 1;
+                                        
+                                        // Update progress display
+                                        const progressDisplay = document.querySelector('.lesson-metrics .live-metric:nth-child(3)');
+                                        if (progressDisplay) {
+                                            progressDisplay.innerHTML = `<strong>Progress:</strong> ${currentSequenceIndex + 2}/${sequences.length}`;
+                                        }
+                                        
+                                        // Generate next sequence
+                                        textDisplay.innerHTML = '';
+                                        currentContent = sequences[currentSequenceIndex + 1];
+                                        currentIndex = 0;
+                                        
+                                        // Create spans for each character in the sequence
+                                        for (let i = 0; i < currentContent.length; i++) {
+                                            const span = document.createElement('span');
+                                            span.textContent = currentContent[i];
+                                            if (i === 0) span.className = 'current';
+                                            textDisplay.appendChild(span);
+                                        }
+                                        
+                                        // Restart metrics tracking
+                                        typingInterval = setInterval(updateMetricsDisplay, 1000);
+                                    } else {
+                                        // All sequences completed
+                                        const metrics = calculateMetrics();
+                                        showCompletionModal(metrics.wpm, metrics.accuracy);
+                                        
+                                        // Update progress for tricky lessons
+                                        updateTrickyProgress(lessonType);
+                                    }
+                                } else {
+                                    // For advanced mode, show completion
+                                    const metrics = calculateMetrics();
+                                    showCompletionModal(metrics.wpm, metrics.accuracy);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Prevent default behavior for advanced and tricky modes to avoid text input
+                    e.preventDefault();
+                    
+                    // Update metrics
+                    updateMetricsDisplay();
+                }
+            }
+            
+            // Function to show completion modal
+            function showCompletionModal(wpm, accuracy) {
+                const completionModal = document.querySelector('.completion-modal');
+                document.getElementById('completion-wpm').textContent = wpm;
+                document.getElementById('completion-accuracy').textContent = accuracy;
+                document.getElementById('completion-time').textContent = Math.round((Date.now() - startTime) / 1000);
+                
+                // Generate feedback based on performance
+                let feedback = "Great job!";
+                if (wpm > 60) {
+                    feedback += " Your typing speed is excellent!";
+                } else if (wpm > 40) {
+                    feedback += " Your typing speed is good, keep practicing!";
+                } else {
+                    feedback += " Keep practicing to improve your speed.";
+                }
+                
+                if (accuracy > 95) {
+                    feedback += " Your accuracy is outstanding!";
+                } else if (accuracy > 85) {
+                    feedback += " Your accuracy is good.";
+                } else {
+                    feedback += " Focus on accuracy before speed.";
+                }
+                
+                document.getElementById('completion-feedback').textContent = feedback;
+                completionModal.style.display = 'flex';
+            }
+            
+            // Function to update progress for tricky lessons
+            function updateTrickyProgress(lessonType) {
+                // Find the lesson card
+                const lessonCard = document.querySelector(`.lesson-card[data-type="${lessonType}"]`);
+                if (lessonCard) {
+                    // Get current progress
+                    const progressText = lessonCard.querySelector('.lesson-progress span');
+                    const currentText = progressText ? progressText.textContent : "0% Mastered";
+                    const currentPercentage = parseInt(currentText) || 0;
+                    
+                    // Increment by 33% (up to 100%)
+                    const progressPercentage = Math.min(currentPercentage + 33, 100);
+                    
+                    // Update the UI
+                    const progressBar = lessonCard.querySelector('.progress');
+                    
+                    if (progressBar) progressBar.style.width = `${progressPercentage}%`;
+                    if (progressText) progressText.textContent = `${progressPercentage}% Mastered`;
+                    
+                    // Save progress to localStorage
+                    try {
+                        const progressData = JSON.parse(localStorage.getItem('lessonProgress') || '{}');
+                        progressData[lessonType] = progressPercentage;
+                        localStorage.setItem('lessonProgress', JSON.stringify(progressData));
+                        console.log(`Progress saved: ${lessonType} - ${progressPercentage}%`);
+                    } catch (e) {
+                        console.error('Error saving progress to localStorage:', e);
+                    }
+                }
+            }
             
             lessonCards.forEach(card => {
                 card.querySelector('.start-lesson-btn').addEventListener('click', function() {
@@ -361,6 +848,7 @@
                     lessonPractice.dataset.lessonType = lessonType;
                     lessonPractice.dataset.lessonIndex = 0;
                     lessonPractice.dataset.stepIndex = 0;
+                    lessonPractice.dataset.sequenceIndex = 0; // For tracking tricky challenges
                     
                     // Update lesson title and description
                     lessonTitle.textContent = lessonName;
@@ -368,39 +856,38 @@
                     // Set lesson description based on type
                     switch(lessonType) {
                         case 'beginner':
-                            lessonDescription.textContent = 'Learn the home row keys (ASDF JKL;) and proper finger positioning. Type slowly and focus on accuracy.';
+                            lessonDescription.textContent = lessonContent.beginner.description;
                             break;
                         case 'intermediate':
-                            lessonDescription.textContent = 'Practice common words and simple sentences. Begin focusing on building speed while maintaining accuracy.';
+                            lessonDescription.textContent = lessonContent.intermediate.description;
                             break;
                         case 'advanced':
-                            lessonDescription.textContent = 'Challenge yourself with complex text and punctuation. Work on maximizing both speed and accuracy.';
+                            lessonDescription.textContent = lessonContent.advanced.description;
                             break;
                         case 'tricky-numbers':
-                            lessonDescription.textContent = 'Practice typing numbers and symbols to improve your speed with non-alphabetic characters.';
+                            lessonDescription.textContent = lessonContent['tricky-numbers'].description;
                             break;
                         case 'tricky-special':
-                            lessonDescription.textContent = 'Master special characters like brackets, parentheses, and quotes that often slow typists down.';
+                            lessonDescription.textContent = lessonContent['tricky-special'].description;
                             break;
                         case 'tricky-uncommon':
-                            lessonDescription.textContent = 'Practice difficult letter combinations that don\'t frequently appear together to improve your overall typing fluency.';
+                            lessonDescription.textContent = lessonContent['tricky-uncommon'].description;
                             break;
                         default:
                             lessonDescription.textContent = 'Follow the instructions and type the text shown below.';
                     }
                     
-                    // Generate sample text for the lesson
-                    const sampleText = 'This is a sample lesson text. The full functionality will be implemented in the lessons.js file. Type this text to test the interface.';
-                    const textDisplay = document.getElementById('lesson-text-display');
-                    textDisplay.innerHTML = '';
+                    // Generate lesson content based on type
+                    generateLessonContent(lessonType);
                     
-                    // Create spans for each character in the sample text
-                    for (let i = 0; i < sampleText.length; i++) {
-                        const span = document.createElement('span');
-                        span.textContent = sampleText[i];
-                        if (i === 0) span.className = 'current';
-                        textDisplay.appendChild(span);
-                    }
+                    // Set up input handling
+                    const textInput = document.getElementById('lesson-text-input');
+                    textInput.value = '';
+                    textInput.disabled = false;
+                    textInput.focus();
+                    
+                    // Add event listener for input
+                    textInput.addEventListener('keydown', handleLessonInput);
                     
                     // Initialize the keyboard if not already done
                     if (typeof initKeyboard === 'function') {
@@ -414,6 +901,14 @@
                 // Get current lesson data
                 const practiceArea = document.querySelector('.lesson-practice');
                 const lessonType = practiceArea.dataset.lessonType;
+                
+                // Clear any intervals
+                if (typingInterval) {
+                    clearInterval(typingInterval);
+                }
+                
+                // Remove event listeners
+                document.getElementById('lesson-text-input').removeEventListener('keydown', handleLessonInput);
                 
                 // Update progress for tricky lessons
                 if (lessonType && lessonType.startsWith('tricky-')) {
@@ -433,6 +928,44 @@
                 lessonPractice.style.display = 'none';
                 lessonSelector.style.display = 'block';
             });
+            
+            // Add CSS for typing interface
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+                .current { 
+                    background-color: rgba(0, 255, 221, 0.2);
+                    border-bottom: 2px solid var(--accent-color);
+                    color: white;
+                }
+                .correct { color: #00ffdd; }
+                .incorrect { color: #ff4040; text-decoration: underline; }
+                .error { animation: shake 0.3s; color: #ff4040; }
+                @keyframes shake {
+                    0% { transform: translateX(0); }
+                    25% { transform: translateX(-5px); }
+                    50% { transform: translateX(5px); }
+                    75% { transform: translateX(-5px); }
+                    100% { transform: translateX(0); }
+                }
+                .lesson-text-display {
+                    font-size: 24px;
+                    line-height: 1.5;
+                    letter-spacing: 1px;
+                }
+                .completion-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.7);
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                }
+            `;
+            document.head.appendChild(styleElement);
             
             // Handle bigram group tabs
             const bigramGroups = document.querySelectorAll('.bigram-group');

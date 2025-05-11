@@ -417,99 +417,101 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to end the test
     function endTest() {
-        // Clear timer
+        // Stop the timer
         clearInterval(timer);
-        
-        // Disable textarea
-        textInput.disabled = true;
-        
-        // Update buttons
-        startButton.disabled = false;
-        resetButton.disabled = false;
-        
-        // Resume background animation
-        document.body.classList.remove('race-active');
-        
-        // Calculate final metrics
-        endTime = Date.now();
-        const totalTime = endTime - startTime;
-        
-        // Analyze the typing data
-        const typingData = {
-            text: currentText,
-            userInput: textInput.value,
-            keyTimings: keyTimestamps
-        };
-        
-        // Generate stats and display results
-        if (window.aiFeedback) {
-            const testStats = window.aiFeedback.analyzeTypingData(typingData, totalTime);
-            
-            // Save to database if available
-            const currentUser = localStorage.getItem('typingTestUser');
-            if (currentUser && window.typingDB) {
-                // Get previous record for comparison
-                window.typingDB.getLastRecord(currentUser).then(lastRecord => {
-                    // Save current record
-                    const record = {
-                        username: currentUser,
-                        wpm: testStats.wpm,
-                        accuracy: testStats.accuracy,
-                        errors: testStats.errors,
-                        difficulty: currentDifficulty,
-                        mode: window.modesFunctions ? window.modesFunctions.getCurrentMode() : 'standard',
-                        timestamp: new Date().toISOString(),
-                        completionTime: Math.round((totalTime / 1000) * 10) / 10 // Add completion time in seconds with 1 decimal place
-                    };
-                    
-                    // Show completion modal
-                    showTestCompleteModal(record);
-                    
-                    window.typingDB.saveTypingRecord(record).then(async () => {
-                        // Display last record for comparison
-                        const lastRecord = await window.typingDB.getLastRecord(currentUser);
-                        if(lastRecord && lastRecord.id !== record.id) {
-                            const improvement = record.wpm - lastRecord.wpm;
-                            if(improvement > 0) {
-                                // Show improvement message
-                                showMessage(`Great job! You improved by ${improvement.toFixed(1)} WPM compared to your last test.`, 'success');
-                            }
-                        }
-                        
-                        // Update charts
-                        updateCharts();
-                    }).catch(error => {
-                        console.error('Error saving record:', error);
-                    });
-                }).catch(error => {
-                    console.error('Error accessing database:', error);
-                    // Fallback - show results without comparison
-                    displayResults(testStats);
-                });
-            } else {
-                // Fallback if no user or DB not available
-                displayResults(testStats);
-            }
-        } else {
-            // Minimal fallback if AI feedback not available
-            const wpm = Math.round((textInput.value.length / 5) / (totalTime / 60000));
-            const testStats = { wpm, accuracy: 100, errors: 0 };
-            displayResults(testStats);
-        }
-        
-        // Set test as inactive
         isTestActive = false;
         
-        // Re-enable level selection
-        [beginnerButton, intermediateButton, advancedButton].forEach(button => {
-            button.style.pointerEvents = 'auto';
-            button.style.opacity = '1';
-        });
+        // Calculate end time and elapsed time
+        endTime = Date.now();
+        const elapsedTime = (endTime - startTime) / 1000; // in seconds
         
-        // Clear keyboard highlights
-        if (window.keyboardFunctions) {
-            window.keyboardFunctions.clearKeyHighlights();
+        // Disable input
+        textInput.disabled = true;
+        
+        // Enable reset button
+        resetButton.disabled = false;
+        
+        // Calculate final metrics
+        const userInput = textInput.value;
+        const inputWords = userInput.length / 5; // standard WPM calculation
+        const wpm = Math.round(inputWords / (elapsedTime / 60) || 0);
+        
+        // Calculate accuracy
+        let correctChars = 0;
+        const inputLength = Math.min(userInput.length, currentText.length);
+        
+        for (let i = 0; i < inputLength; i++) {
+            if (userInput[i] === currentText[i]) {
+                correctChars++;
+            }
         }
+        
+        const accuracy = Math.round((correctChars / (inputLength || 1)) * 100) / 100; // Store as decimal (0-1)
+        const errors = inputLength - correctChars;
+        
+        // Update final displays
+        wpmDisplay.textContent = wpm;
+        accuracyDisplay.textContent = `${Math.round(accuracy * 100)}%`;
+        errorsDisplay.textContent = errors;
+        
+        // Update result displays
+        resultWpm.textContent = wpm;
+        resultAccuracy.textContent = Math.round(accuracy * 100);
+        resultErrors.textContent = errors;
+        
+        // Update result speedometer
+        updateResultSpeedometer(wpm);
+        
+        // Show results section
+        resultsSection.style.display = 'block';
+        
+        // Generate AI feedback
+        generateAIFeedback(wpm, accuracy, errors, keyTimestamps, elapsedTime);
+        
+        // Get the authenticated username from localStorage
+        // First try to get Google identity, then fallback to local username, then use Guest
+        const googleUser = localStorage.getItem('googleUser');
+        const localUser = localStorage.getItem('typingTestUser');
+        const username = googleUser || localUser || 'Guest';
+        
+        // Save the test results to the database
+        const testRecord = {
+            username: username,
+            wpm: wpm,
+            accuracy: accuracy, // Store as decimal (0-1)
+            errors: errors,
+            completionTime: elapsedTime,
+            difficulty: currentDifficulty,
+            timestamp: new Date().toISOString(),
+            textLength: currentText.length,
+            isGoogleUser: !!googleUser // Flag to indicate if this is a Google authenticated user
+        };
+        
+        console.log('Saving test record:', testRecord);
+        
+        // Save to database if available
+        if (window.typingDB) {
+            window.typingDB.saveTypingRecord(testRecord)
+                .then(recordId => {
+                    console.log('Test record saved with ID:', recordId);
+                    
+                    // Update progress chart with the new record
+                    if (window.chartFunctions) {
+                        window.chartFunctions.updateProgressHistory();
+                    }
+                    
+                    // Check for achievements
+                    checkAchievements(testRecord);
+                })
+                .catch(error => {
+                    console.error('Error saving test record:', error);
+                });
+        } else {
+            console.warn('Database not available, test record not saved');
+        }
+        
+        // Show test complete modal
+        showTestCompleteModal(testRecord);
     }
     
     // Function to reset the test

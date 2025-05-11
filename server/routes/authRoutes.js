@@ -202,7 +202,7 @@ router.post('/forgot-password', validateEmail, async (req, res) => {
   } catch (error) {
     console.error('Error sending password reset email:', error);
     res.status(500).json({ 
-      success: false, 
+      success: false,
       message: 'An error occurred while processing your request' 
     });
   }
@@ -217,9 +217,9 @@ router.post('/reset-password', async (req, res) => {
     const { token, newPassword } = req.body;
     
     if (!token || !newPassword) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Token and new password are required' 
+      return res.status(400).json({
+        success: false,
+        message: 'Token and new password are required'
       });
     }
     
@@ -234,8 +234,8 @@ router.post('/reset-password', async (req, res) => {
     });
     
     if (!user) {
-      return res.status(400).json({ 
-        success: false, 
+      return res.status(400).json({
+        success: false,
         message: 'Password reset token is invalid or has expired' 
       });
     }
@@ -288,7 +288,7 @@ router.post('/reset-password', async (req, res) => {
     }
     
     res.status(500).json({ 
-      success: false, 
+      success: false,
       message: 'An error occurred while resetting your password' 
     });
   }
@@ -361,7 +361,7 @@ router.post('/send-verification', validateEmail, async (req, res) => {
   } catch (error) {
     console.error('Error sending verification code:', error);
     res.status(500).json({ 
-      success: false, 
+      success: false,
       message: 'An error occurred while sending verification code' 
     });
   }
@@ -390,8 +390,8 @@ router.post('/verify-email', async (req, res) => {
     });
     
     if (!user) {
-      return res.status(400).json({ 
-        success: false, 
+      return res.status(400).json({
+        success: false,
         message: 'Invalid or expired verification code' 
       });
     }
@@ -430,7 +430,7 @@ router.post('/verify-email', async (req, res) => {
   } catch (error) {
     console.error('Error verifying email:', error);
     res.status(500).json({ 
-      success: false, 
+      success: false,
       message: 'An error occurred while verifying your email' 
     });
   }
@@ -710,8 +710,16 @@ router.get('/google/callback', async (req, res) => {
       sameSite: 'lax'
     });
     
-    // Redirect to the app or a success page
-    res.redirect('/login-success.html?provider=google');
+    // Encode user data to pass in URL
+    const userDataObj = {
+      email: authData.user.email,
+      name: authData.user.name,
+      picture: authData.user.picture
+    };
+    const userDataBase64 = Buffer.from(JSON.stringify(userDataObj)).toString('base64');
+    
+    // Redirect to the app or a success page with user data
+    res.redirect(`/login-success.html?provider=google&user=${userDataBase64}`);
   } catch (error) {
     console.error('Error processing Google callback:', error);
     res.status(500).json({
@@ -814,5 +822,61 @@ async function verifyGoogleIdToken(idToken) {
     return null;
   }
 }
+
+/**
+ * Test email sending
+ * GET /auth/test-email
+ * For testing purposes only
+ */
+router.get('/test-email', async (req, res) => {
+  try {
+    // This route should be protected in production
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Not available in production' 
+      });
+    }
+    
+    // Log the email configuration
+    console.log('Email configuration:');
+    console.log('RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'Set (hidden)' : 'Not set');
+    console.log('EMAIL_FROM:', process.env.EMAIL_FROM);
+    console.log('EMAIL_FROM_NAME:', process.env.EMAIL_FROM_NAME);
+    
+    // Send a test email
+    const testEmail = req.query.email || 'test@example.com';
+    
+    const emailData = {
+      to: testEmail,
+      subject: 'Test Email from Key Racer',
+      html: `
+        <h1>Test Email</h1>
+        <p>This is a test email from the Key Racer application.</p>
+        <p>If you received this, email sending is working correctly!</p>
+        <p>Current time: ${new Date().toISOString()}</p>
+      `
+    };
+    
+    const result = await sendEmail(emailData);
+    
+    return res.json({ 
+      success: true, 
+      message: 'Test email sent',
+      emailConfig: {
+        from: process.env.EMAIL_FROM,
+        fromName: process.env.EMAIL_FROM_NAME
+      },
+      result
+    });
+  } catch (error) {
+    console.error('Error sending test email:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Error sending test email',
+      error: error.message
+    });
+  }
+});
 
 module.exports = router; 

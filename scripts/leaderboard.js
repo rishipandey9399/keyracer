@@ -97,6 +97,9 @@ class LeaderboardManager {
                 timeRange: timeRangeMap[this.currentTimePeriod]
             });
             
+            // Log data for debugging
+            console.log('Leaderboard data retrieved:', data);
+            
             // Update the appropriate table
             this.updateTable(data);
             
@@ -168,13 +171,20 @@ class LeaderboardManager {
             const rank = index + 1;
             const rankClass = rank <= 3 ? `rank-${rank}` : '';
             
+            // Ensure accuracy is properly formatted (handle both decimal and percentage formats)
+            const accuracyValue = typeof record.accuracy === 'number' ? 
+                (record.accuracy <= 1 ? Math.round(record.accuracy * 100) : record.accuracy) : 0;
+                
+            // Ensure WPM is a valid number
+            const wpmValue = typeof record.wpm === 'number' ? Math.round(record.wpm) : 0;
+            
             switch (this.currentTab) {
                 case 'wpm':
                     row.innerHTML = `
                         <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username, rank)}</td>
-                        <td class="highlight">${Math.round(record.wpm)}</td>
-                        <td>${Math.round(record.accuracy * 100)}%</td>
+                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
+                        <td class="highlight">${wpmValue}</td>
+                        <td>${accuracyValue}%</td>
                         <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
                         <td>${this.formatDate(record.timestamp)}</td>
                     `;
@@ -183,9 +193,9 @@ class LeaderboardManager {
                 case 'accuracy':
                     row.innerHTML = `
                         <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username, rank)}</td>
-                        <td class="highlight">${Math.round(record.accuracy * 100)}%</td>
-                        <td>${Math.round(record.wpm)}</td>
+                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
+                        <td class="highlight">${accuracyValue}%</td>
+                        <td>${wpmValue}</td>
                         <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
                         <td>${this.formatDate(record.timestamp)}</td>
                     `;
@@ -194,10 +204,10 @@ class LeaderboardManager {
                 case 'time':
                     row.innerHTML = `
                         <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username, rank)}</td>
+                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
                         <td class="highlight">${this.formatTime(record.completionTime)}</td>
-                        <td>${Math.round(record.wpm)}</td>
-                        <td>${Math.round(record.accuracy * 100)}%</td>
+                        <td>${wpmValue}</td>
+                        <td>${accuracyValue}%</td>
                         <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
                     `;
                     break;
@@ -245,9 +255,6 @@ class LeaderboardManager {
     // Sort table by column
     sortTableByColumn(table, columnIndex, data) {
         const tbody = table.querySelector('tbody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-        
-        // Get all headers
         const headers = table.querySelectorAll('thead th');
         
         // Determine sort direction
@@ -402,13 +409,20 @@ class LeaderboardManager {
             const rank = index + 1;
             const rankClass = rank <= 3 ? `rank-${rank}` : '';
             
+            // Ensure accuracy is properly formatted (handle both decimal and percentage formats)
+            const accuracyValue = typeof record.accuracy === 'number' ? 
+                (record.accuracy <= 1 ? Math.round(record.accuracy * 100) : record.accuracy) : 0;
+                
+            // Ensure WPM is a valid number
+            const wpmValue = typeof record.wpm === 'number' ? Math.round(record.wpm) : 0;
+            
             switch (this.currentTab) {
                 case 'wpm':
                     row.innerHTML = `
                         <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username, rank)}</td>
-                        <td class="highlight">${Math.round(record.wpm)}</td>
-                        <td>${Math.round(record.accuracy * 100)}%</td>
+                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
+                        <td class="highlight">${wpmValue}</td>
+                        <td>${accuracyValue}%</td>
                         <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
                         <td>${this.formatDate(record.timestamp)}</td>
                     `;
@@ -417,9 +431,9 @@ class LeaderboardManager {
                 case 'accuracy':
                     row.innerHTML = `
                         <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username, rank)}</td>
-                        <td class="highlight">${Math.round(record.accuracy * 100)}%</td>
-                        <td>${Math.round(record.wpm)}</td>
+                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
+                        <td class="highlight">${accuracyValue}%</td>
+                        <td>${wpmValue}</td>
                         <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
                         <td>${this.formatDate(record.timestamp)}</td>
                     `;
@@ -428,10 +442,10 @@ class LeaderboardManager {
                 case 'time':
                     row.innerHTML = `
                         <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username, rank)}</td>
+                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
                         <td class="highlight">${this.formatTime(record.completionTime)}</td>
-                        <td>${Math.round(record.wpm)}</td>
-                        <td>${Math.round(record.accuracy * 100)}%</td>
+                        <td>${wpmValue}</td>
+                        <td>${accuracyValue}%</td>
                         <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
                     `;
                     break;
@@ -440,174 +454,92 @@ class LeaderboardManager {
             tbody.appendChild(row);
         });
     }
-
-    // Helper: Format username (add badge for top users)
+    
+    // Format username with trophy icon for top ranks
     formatUsername(username, rank) {
-        let badge = '';
-        
-        // Add badges for top ranks
         if (rank === 1) {
-            if (this.currentTab === 'wpm') badge = '<span class="badge">Champion</span>';
-            else if (this.currentTab === 'accuracy') badge = '<span class="badge">Precision</span>';
-            else if (this.currentTab === 'time') badge = '<span class="badge">Speedster</span>';
+            return `<i class="fas fa-trophy trophy-icon" style="color: gold;"></i> ${username}`;
+        } else if (rank === 2) {
+            return `<i class="fas fa-trophy trophy-icon" style="color: silver;"></i> ${username}`;
+        } else if (rank === 3) {
+            return `<i class="fas fa-trophy trophy-icon" style="color: #cd7f32;"></i> ${username}`;
+        } else {
+            return username;
         }
-        
-        return `${username} ${badge}`;
     }
-
-    // Helper: Format date
+    
+    // Format date to a readable string
     formatDate(timestamp) {
-        if (!timestamp) return 'Unknown';
+        if (!timestamp) return 'N/A';
         
-        const date = new Date(timestamp);
-        return date.toISOString().split('T')[0]; // YYYY-MM-DD format
+        try {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        } catch (e) {
+            console.error('Error formatting date:', e);
+            return 'Invalid date';
+        }
     }
-
-    // Helper: Format time in seconds
+    
+    // Format time in seconds to mm:ss format
     formatTime(seconds) {
-        if (!seconds) return 'Unknown';
-        return `${seconds.toFixed(1)}s`;
+        if (seconds === undefined || seconds === null) return 'N/A';
+        
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
-
-    // Helper: Capitalize first letter
+    
+    // Capitalize first letter of a string
     capitalizeFirst(str) {
-        if (!str) return '';
+        if (!str) return 'N/A';
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
-
-    // Helper: Show error message
+    
+    // Show error message
     showError(message) {
-        console.error(message);
-        
-        // Create error alert
-        const errorDiv = document.createElement('div');
-        errorDiv.style.cssText = 'color: white; background-color: #ff4444; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center;';
-        errorDiv.textContent = message;
-        
-        // Find a place to show the error
-        const container = document.querySelector('.leaderboard-container');
-        if (container) {
-            // Insert after the header
-            const header = container.querySelector('.leaderboard-header');
-            if (header) {
-                container.insertBefore(errorDiv, header.nextSibling);
-            } else {
-                container.prepend(errorDiv);
-            }
+        const tableId = `${this.currentTab}-tab`;
+        const tableElement = document.getElementById(tableId);
+        if (!tableElement) {
+            console.error(`Table element not found: ${tableId}`);
+            return;
         }
         
-        // Remove after 5 seconds
-        setTimeout(() => {
-            errorDiv.style.opacity = '0';
-            errorDiv.style.transition = 'opacity 0.5s';
-            setTimeout(() => errorDiv.remove(), 500);
-        }, 5000);
-    }
-}
-
-// Create a demo data generator for testing
-class DemoDataGenerator {
-    constructor(db) {
-        this.db = db;
-        this.demoUsernames = [
-            'Rishi Pandey', 'Etisha Pandey', 'SpeedyFingers', 'TypeMaster42',
-            'KeyboardWarrior', 'RacingTypist', 'SwiftKeys', 'FlashFingers',
-            'TypeRacer99', 'KeyMaster', 'PreciseTyper', 'AccuracyKing',
-            'TypePerfect', 'FlawlessTypist', 'ZeroErrors', 'SpeedRacer',
-            'LightningFingers', 'FastFingers', 'SpeedyGonzales', 'QuickTyper'
-        ];
-        this.difficulties = ['Beginner', 'Intermediate', 'Advanced'];
-    }
-
-    // Generate random typing record
-    generateRecord(username) {
-        // Random values with realistic ranges
-        const wpm = 60 + Math.floor(Math.random() * 70); // 60-130 WPM
-        const accuracy = 0.90 + (Math.random() * 0.10); // 90-100% accuracy
-        const difficulty = this.difficulties[Math.floor(Math.random() * this.difficulties.length)];
+        const tbody = tableElement.querySelector('tbody');
+        if (!tbody) {
+            console.error(`Table body not found in ${tableId}`);
+            return;
+        }
         
-        // Random date in the last 30 days
-        const timestamp = new Date();
-        timestamp.setDate(timestamp.getDate() - Math.floor(Math.random() * 30));
+        // Show error message
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 20px; color: #ff4040;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                    <div>${message}</div>
+                    <button id="retry-load" class="accent-btn" style="margin-top: 10px;">Retry</button>
+                </td>
+            </tr>
+        `;
         
-        // Completion time (roughly calculated from WPM)
-        // Assuming a standard text of 250 characters
-        const charsPerMin = wpm * 5; // Avg 5 chars per word
-        const minutes = 250 / charsPerMin;
-        const completionTime = minutes * 60; // in seconds
-        
-        return {
-            username,
-            wpm,
-            accuracy,
-            difficulty,
-            completionTime,
-            timestamp: timestamp.toISOString(),
-            textLength: 250,
-            mode: 'standard'
-        };
-    }
-
-    // Generate and save demo data
-    async generateDemoData() {
-        try {
-            // First ensure the database is ready
-            await this.db.ensureDbReady();
-            
-            console.log('Generating demo data for leaderboard...');
-            
-            // For each demo user, create 1-3 records
-            for (const username of this.demoUsernames) {
-                // Register the user if they don't exist
-                try {
-                    await this.db.registerUser(username, 'demo_password');
-                } catch (e) {
-                    // User may already exist, ignore error
-                }
-                
-                // Create 1-3 records per user
-                const recordCount = 1 + Math.floor(Math.random() * 3);
-                
-                for (let i = 0; i < recordCount; i++) {
-                    const record = this.generateRecord(username);
-                    await this.db.saveTypingRecord(record);
-                }
-            }
-            
-            console.log('Demo data generation complete!');
-            return true;
-        } catch (error) {
-            console.error('Error generating demo data:', error);
-            return false;
+        // Add retry button functionality
+        const retryButton = document.getElementById('retry-load');
+        if (retryButton) {
+            retryButton.addEventListener('click', () => {
+                this.loadLeaderboardData();
+            });
         }
     }
 }
 
-// Initialize the leaderboard when DOM is loaded
-document.addEventListener('DOMContentLoaded', async function() {
-    // Create leaderboard manager
-    const leaderboard = new LeaderboardManager();
-    
-    // For testing/demo purposes: generate sample data if needed
-    if (await checkForExistingData()) {
-        console.log('Using existing leaderboard data');
+// Initialize leaderboard when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if typingDB is available
+    if (window.typingDB) {
+        window.leaderboardManager = new LeaderboardManager();
+        console.log('Leaderboard initialized');
     } else {
-        console.log('No leaderboard data found, generating demo data...');
-        const demoGenerator = new DemoDataGenerator(window.typingDB);
-        await demoGenerator.generateDemoData();
-        // Reload data after generation
-        leaderboard.loadLeaderboardData();
-    }
-    
-    // Helper function to check if we have existing records
-    async function checkForExistingData() {
-        try {
-            await window.typingDB.ensureDbReady();
-            const records = await window.typingDB.getTypingRecords();
-            return records && records.length > 0;
-        } catch (error) {
-            console.error('Error checking for existing data:', error);
-            return false;
-        }
+        console.error('typingDB not found. Make sure database.js is loaded before leaderboard.js');
+        document.body.innerHTML += '<div style="color:red;padding:20px;background:#ffeeee;position:fixed;top:0;left:0;right:0;z-index:9999;">Error: Database not initialized</div>';
     }
 }); 

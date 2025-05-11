@@ -74,6 +74,28 @@ console.log('Google Auth Helper loaded');
             
             // Let Passport.js handle the callback
             // No need to manually redirect as Passport.js will handle it
+            
+            // Check if we have user info in the URL
+            if (urlParams.has('user')) {
+                try {
+                    // The user info is base64 encoded JSON
+                    const userInfoBase64 = urlParams.get('user');
+                    const userInfoJson = atob(userInfoBase64);
+                    const userInfo = JSON.parse(userInfoJson);
+                    
+                    // Store the Google username in localStorage
+                    if (userInfo && userInfo.email) {
+                        localStorage.setItem('googleUser', userInfo.email);
+                        localStorage.setItem('typingTestUser', userInfo.email);
+                        console.log('Google user stored:', userInfo.email);
+                        
+                        // Show success message
+                        showMessage('Successfully signed in with Google!', 'success');
+                    }
+                } catch (error) {
+                    console.error('Error parsing Google user info:', error);
+                }
+            }
         }
     }
 

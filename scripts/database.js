@@ -247,69 +247,141 @@ class TypingDatabase {
                 timeRange = null // 'day', 'week', 'month' or null for all time
             } = options;
             
-            // Get all records first
-            const allRecords = await this.getTypingRecords();
-            
-            // Apply difficulty filter if specified
-            let filteredRecords = allRecords;
-            if (difficulty) {
-                filteredRecords = filteredRecords.filter(record => 
-                    record.difficulty && record.difficulty.toLowerCase() === difficulty.toLowerCase()
-                );
-            }
-            
-            // Apply time range filter if specified
-            if (timeRange) {
-                const now = new Date();
-                let cutoffDate;
+            return new Promise((resolve, reject) => {
+                const transaction = this.db.transaction(['typingRecords'], 'readonly');
+                const store = transaction.objectStore('typingRecords');
                 
-                switch (timeRange) {
-                    case 'day':
-                        cutoffDate = new Date(now);
-                        cutoffDate.setHours(0, 0, 0, 0);
-                        break;
-                    case 'week':
-                        cutoffDate = new Date(now);
-                        cutoffDate.setDate(now.getDate() - now.getDay());
-                        cutoffDate.setHours(0, 0, 0, 0);
-                        break;
-                    case 'month':
-                        cutoffDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                        break;
-                    default:
-                        cutoffDate = null;
-                }
+                let records = [];
+                let userBestScores = new Map(); // Track best score per user
                 
-                if (cutoffDate) {
-                    filteredRecords = filteredRecords.filter(record => {
-                        const recordDate = new Date(record.timestamp);
-                        return recordDate >= cutoffDate;
-                    });
-                }
-            }
-            
-            // Sort records based on the specified field
-            switch (sortBy) {
-                case 'wpm':
-                    filteredRecords.sort((a, b) => b.wpm - a.wpm);
-                    break;
-                case 'accuracy':
-                    filteredRecords.sort((a, b) => b.accuracy - a.accuracy);
-                    break;
-                case 'completionTime':
-                    // Sort by completion time (ascending - faster times first)
-                    filteredRecords.sort((a, b) => {
-                        // Handle records without completionTime
-                        if (!a.completionTime) return 1;
-                        if (!b.completionTime) return -1;
-                        return a.completionTime - b.completionTime;
-                    });
-                    break;
-            }
-            
-            // Return limited number of records
-            return filteredRecords.slice(0, limit);
-            
+                // Get all records
+                const request = store.openCursor();
+                
+                request.onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        const record = cursor.value;
+                        
+                        // Skip records without a username (anonymous/guest users)
+                        // Only include records from authenticated users
+                        if (!record.username || record.username === 'Guest') {
+                            cursor.continue();
+                            return;
+                        }
+                        
+                        // Apply difficulty filter if specified
+                        if (difficulty && record.difficulty !== difficulty) {
+                            cursor.continue();
+                            return;
+                        }
+                        
+                        // Apply time range filter if specified
+                        if (timeRange) {
+                            const recordDate = new Date(record.timestamp);
+                            const now = new Date();
+                            
+                            let cutoffDate;
+                            if (timeRange === 'day') {
+                                cutoffDate = new Date(now.setDate(now.getDate() - 1));
+                            } else if (timeRange === 'week') {
+                                cutoffDate = new Date(now.setDate(now.getDate() - 7));
+                            } else if (timeRange === 'month') {
+                                cutoffDate = new Date(now.setMonth(now.getMonth() - 1));
+                            }
+                            
+                            if (recordDate < cutoffDate) {
+                                cursor.continue();
+                                return;
+                            }
+                        }
+                        
+                        // Ensure record has all required fields with valid values
+                        const validatedRecord = {
+                            ...record,
+                            // Ensure WPM is a number
+                            wpm: typeof record.wpm === 'number' ? record.wpm : 0,
+                            // Ensure accuracy is between 0-1 (convert if it's already a percentage)
+                            accuracy: typeof record.accuracy === 'number' ? 
+                                (record.accuracy > 1 ? record.accuracy / 100 : record.accuracy) : 0,
+                            // Ensure completionTime is a number
+                            completionTime: typeof record.completionTime === 'number' ? record.completionTime : 0,
+                            // Ensure timestamp exists
+                            timestamp: record.timestamp || new Date().toISOString()
+                        };
+                        
+                        // Get the metric we're sorting by
+                        const metricValue = sortBy === 'wpm' ? validatedRecord.wpm : 
+                                          sortBy === 'accuracy' ? validatedRecord.accuracy : 
+                                          validatedRecord.completionTime;
+                        
+                        // For each user, only keep their best score
+                        const username = validatedRecord.username;
+                        
+                        if (!userBestScores.has(username)) {
+                            userBestScores.set(username, {
+                                record: validatedRecord,
+                                value: metricValue
+                            });
+                        } else {
+                            const currentBest = userBestScores.get(username);
+                            
+                            // For WPM and accuracy, higher is better
+                            // For time, lower is better
+                            const isNewRecordBetter = sortBy === 'time' ? 
+                                metricValue < currentBest.value : 
+                                metricValue > currentBest.value;
+                                
+                            if (isNewRecordBetter) {
+                                userBestScores.set(username, {
+                                    record: validatedRecord,
+                                    value: metricValue
+                                });
+                            }
+                        }
+                        
+                        cursor.continue();
+                    } else {
+                        // Extract just the records from the Map
+                        records = Array.from(userBestScores.values()).map(item => item.record);
+                        
+                        // Sort records based on the specified field
+                        switch (sortBy) {
+                            case 'wpm':
+                                records.sort((a, b) => b.wpm - a.wpm);
+                                break;
+                            case 'accuracy':
+                                records.sort((a, b) => b.accuracy - a.accuracy);
+                                break;
+                            case 'time':
+                                // For time, lower is better
+                                records.sort((a, b) => a.completionTime - b.completionTime);
+                                break;
+                            default:
+                                records.sort((a, b) => b.wpm - a.wpm);
+                        }
+                        
+                        // Apply limit
+                        if (limit > 0) {
+                            records = records.slice(0, limit);
+                        }
+                        
+                        // Log the data being sent to the leaderboard
+                        console.log('Leaderboard data:', {
+                            sortBy,
+                            difficulty,
+                            timeRange,
+                            recordCount: records.length,
+                            records: records.slice(0, 3) // Log just the first 3 for brevity
+                        });
+                        
+                        resolve(records);
+                    }
+                };
+                
+                request.onerror = (e) => {
+                    reject('Error retrieving leaderboard data: ' + e.target.error.message);
+                };
+            });
         } catch (error) {
             console.error('Get leaderboard data error:', error);
             throw error;

@@ -603,7 +603,7 @@
         </main>
         
         <footer>
-            <p>&copy; 2023 Key Racer</p>
+            <p>&copy; 2025 Key Racer</p>
             <div class="footer-links">
                 <a href="about.html">About Us</a> | 
                 <a href="privacy-policy.html">Privacy Policy</a> | 
@@ -614,6 +614,16 @@
 
     <!-- Database and leaderboard scripts -->
     <script src="scripts/database.js"></script>
+    <script>
+        // Initialize the typing database
+        window.typingDB = new TypingDatabase();
+        console.log('Database initialized on leaderboard page');
+        
+        // Add debugging to check for any issues
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.message, e.filename, e.lineno);
+        });
+    </script>
     <script src="scripts/leaderboard.js"></script>
 </body>
 </html> 
