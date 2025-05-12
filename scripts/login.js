@@ -932,7 +932,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const state = urlParams.get('state');
             
             // Redirect to the backend to handle the token exchange
-            window.location.href = `/api/auth/google/callback?code=${code}&state=${state}`;
+            window.location.href = `/auth/google/callback?code=${code}&state=${state}`;
         }
     }
 

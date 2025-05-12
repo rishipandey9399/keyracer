@@ -88,7 +88,9 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `${process.env.BASE_URL || ''}/api/auth/google/callback`
+    callbackURL: process.env.NODE_ENV === 'production' 
+      ? 'https://keyracer.in/auth/google/callback'
+      : 'http://localhost:3000/auth/google/callback'
   }, async (accessToken, refreshToken, profile, done) => {
     try {
       // Get email from profile
@@ -236,11 +238,11 @@ app.post('/api/user/username', authenticate, async (req, res) => {
 });
 
 // Direct Passport routes
-app.get('/api/auth/google', passport.authenticate('google', {
+app.get('/auth/google', passport.authenticate('google', {
   scope: ['profile', 'email']
 }));
 
-app.get('/api/auth/google/callback',
+app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login.html' }),
   (req, res) => {
     // Check if user has set a username
