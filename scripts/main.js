@@ -446,17 +446,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        const accuracy = Math.round((correctChars / (inputLength || 1)) * 100) / 100; // Store as decimal (0-1)
+        const accuracy = Math.round((correctChars / (inputLength || 1)) * 100); // Store as percentage (0-100)
         const errors = inputLength - correctChars;
         
         // Update final displays
         wpmDisplay.textContent = wpm;
-        accuracyDisplay.textContent = `${Math.round(accuracy * 100)}%`;
+        accuracyDisplay.textContent = `${accuracy}%`;
         errorsDisplay.textContent = errors;
         
         // Update result displays
         resultWpm.textContent = wpm;
-        resultAccuracy.textContent = Math.round(accuracy * 100);
+        resultAccuracy.textContent = accuracy;
         resultErrors.textContent = errors;
         
         // Update result speedometer
@@ -466,25 +466,39 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsSection.style.display = 'block';
         
         // Generate AI feedback
-        generateAIFeedback(wpm, accuracy, errors, keyTimestamps, elapsedTime);
+        if (window.aiFeedback && typeof generateAIFeedback === 'function') {
+            generateAIFeedback(wpm, accuracy/100, errors, keyTimestamps, elapsedTime);
+        }
         
         // Get the authenticated username from localStorage
-        // First try to get Google identity, then fallback to local username, then use Guest
-        const googleUser = localStorage.getItem('googleUser');
-        const localUser = localStorage.getItem('typingTestUser');
-        const username = googleUser || localUser || 'Guest';
+        // For Google users, use the typingTestUserData
+        const userData = localStorage.getItem('typingTestUserData');
+        const userType = localStorage.getItem('typingTestUserType') || 'guest';
+        let username = localStorage.getItem('typingTestUser') || 'Guest';
+        let isGoogleUser = userType === 'google';
+        
+        let googleUserInfo = null;
+        if (isGoogleUser && userData) {
+            try {
+                googleUserInfo = JSON.parse(userData);
+            } catch (e) {
+                console.error('Error parsing Google user data:', e);
+            }
+        }
         
         // Save the test results to the database
         const testRecord = {
             username: username,
             wpm: wpm,
-            accuracy: accuracy, // Store as decimal (0-1)
+            accuracy: accuracy, // Store as percentage (0-100)
             errors: errors,
             completionTime: elapsedTime,
             difficulty: currentDifficulty,
+            mode: window.currentMode || 'standard', // Add current mode
             timestamp: new Date().toISOString(),
             textLength: currentText.length,
-            isGoogleUser: !!googleUser // Flag to indicate if this is a Google authenticated user
+            isGoogleUser: isGoogleUser,
+            googleId: googleUserInfo ? googleUserInfo.id : null
         };
         
         console.log('Saving test record:', testRecord);
@@ -495,13 +509,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(recordId => {
                     console.log('Test record saved with ID:', recordId);
                     
-                    // Update progress chart with the new record
-                    if (window.chartFunctions) {
-                        window.chartFunctions.updateProgressHistory();
+                    // Get previous record for comparison
+                    window.typingDB.getTypingRecords(username)
+                        .then(records => {
+                            if (records && records.length > 1) {
+                                // Get the previous record (current one is at index 0)
+                                const previousRecord = records[1];
+                                
+                                // Ensure the accuracy is consistently a percentage (0-100)
+                                if (previousRecord.accuracy <= 1) {
+                                    previousRecord.accuracy *= 100;
+                                }
+                                
+                                // Update progress comparison
+                                updateProgressComparison(testRecord, previousRecord);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error retrieving previous records:', error);
+                        });
+                    
+                    // Update charts if available
+                    if (window.chartFunctions && window.chartFunctions.addTestToHistory) {
+                        window.chartFunctions.addTestToHistory(testRecord);
                     }
                     
                     // Check for achievements
-                    checkAchievements(testRecord);
+                    if (typeof checkAchievements === 'function') {
+                        checkAchievements(testRecord);
+                    }
                 })
                 .catch(error => {
                     console.error('Error saving test record:', error);
@@ -671,13 +707,16 @@ function showTestCompleteModal(record) {
     const modal = document.querySelector('.test-complete-container');
     const resultDetails = document.getElementById('result-details');
     
+    // Default to 'standard' mode if not specified
+    const mode = record.mode || record.difficulty || 'standard';
+    
     // Create result details
     let detailsHTML = `
         <div class="result-stat"><span>Speed:</span> <strong>${record.wpm.toFixed(1)} WPM</strong></div>
         <div class="result-stat"><span>Accuracy:</span> <strong>${record.accuracy.toFixed(1)}%</strong></div>
         <div class="result-stat"><span>Errors:</span> <strong>${record.errors}</strong></div>
-        <div class="result-stat"><span>Time:</span> <strong>${record.completionTime}s</strong></div>
-        <div class="result-stat"><span>Mode:</span> <strong>${record.mode.charAt(0).toUpperCase() + record.mode.slice(1)}</strong></div>
+        <div class="result-stat"><span>Time:</span> <strong>${record.completionTime.toFixed(1)}s</strong></div>
+        <div class="result-stat"><span>Mode:</span> <strong>${mode.charAt(0).toUpperCase() + mode.slice(1)}</strong></div>
     `;
     
     // Add feedback based on performance
