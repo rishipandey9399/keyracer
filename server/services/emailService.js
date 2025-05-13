@@ -18,12 +18,12 @@ class EmailService {
     
     // Create a nodemailer transporter with Brevo SMTP settings
     this.transporter = nodemailer.createTransport({
-      host: 'smtp-relay.brevo.com',
+      host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
       port: 587,
       secure: false, // TLS
       auth: {
-        user: '8ce515001@smtp-brevo.com',
-        pass: 'xsmtpsib-464c069abf4dae3ad11489b9aca2243676e34b8dcdee65bac3ab8ef669e8b931-H31pRSKmkFc48YrL'
+        user: process.env.BREVO_SMTP_USER,
+        pass: process.env.BREVO_SMTP_PASSWORD
       }
     });
   }
