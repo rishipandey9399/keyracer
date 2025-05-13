@@ -242,29 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error('Server registration error:', error);
-                showMessage(`Registration failed: ${error.message}`, 'error');
+                showMessage(`Registration failed: ${error.message || 'Unable to register. Please try again later.'}`, 'error');
                 registerSubmitBtn.disabled = false;
                 registerSubmitBtn.textContent = 'Create Account';
-                
-                // Fallback to local registration if server is unavailable
-                if (!window.typingDB) {
-                    throw new Error('Database is not available. Please refresh and try again.');
-                }
-                
-                console.log('Falling back to local registration for user:', username);
-                await window.typingDB.registerUser(username, password, email);
-                
-                showMessage('Account created locally. Note: Email verification is not available in offline mode.', 'success');
-                
-                // Store user as verified locally
-                localStorage.setItem('typingTestUser', username);
-                localStorage.setItem('typingTestUserType', 'registered');
-                localStorage.setItem('typingTestUserVerified', 'true');
-                
-                // Redirect to the app after a short delay
-                setTimeout(() => {
-                    redirectToApp(username);
-                }, 2000);
             }
         } catch (error) {
             console.error('Registration error:', error);

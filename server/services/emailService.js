@@ -16,16 +16,53 @@ class EmailService {
     this.fromEmail = process.env.EMAIL_FROM || 'noreply@keyracer.in';
     this.fromName = process.env.EMAIL_FROM_NAME || 'Key Racer';
     
-    // Create a nodemailer transporter with Brevo SMTP settings
-    this.transporter = nodemailer.createTransport({
-      host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
-      port: 587,
-      secure: false, // TLS
-      auth: {
-        user: process.env.BREVO_SMTP_USER,
-        pass: process.env.BREVO_SMTP_PASSWORD
-      }
-    });
+    // Will create transporter when needed to allow for test accounts in development
+    this.transporter = null;
+    this.testAccount = null;
+  }
+  
+  /**
+   * Get or create a transporter
+   * @returns {Promise<Object>} - Nodemailer transporter
+   */
+  async getTransporter() {
+    if (this.transporter) {
+      return this.transporter;
+    }
+    
+    // Check if we're in production with proper credentials
+    if (process.env.NODE_ENV === 'production' && 
+        process.env.BREVO_SMTP_USER && 
+        process.env.BREVO_SMTP_PASSWORD) {
+      
+      // Create transporter with Brevo SMTP settings
+      this.transporter = nodemailer.createTransport({
+        host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
+        port: 587,
+        secure: false, // TLS
+        auth: {
+          user: process.env.BREVO_SMTP_USER,
+          pass: process.env.BREVO_SMTP_PASSWORD
+        }
+      });
+    } else {
+      // For development/testing, use ethereal.email (fake SMTP service)
+      this.testAccount = await nodemailer.createTestAccount();
+      
+      this.transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        secure: false,
+        auth: {
+          user: this.testAccount.user,
+          pass: this.testAccount.pass
+        }
+      });
+      
+      console.log('Using Ethereal test account for email delivery');
+    }
+    
+    return this.transporter;
   }
   
   /**
