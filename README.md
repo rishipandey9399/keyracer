@@ -37,9 +37,8 @@ SESSION_SECRET=keyracer_secret_session_key
 # JWT Secret for authentication tokens
 JWT_SECRET=keyracer_jwt_secret_key
 
-# Email Configuration (Resend.com)
-RESEND_API_KEY=your_resend_api_key
-EMAIL_FROM=your_email@example.com
+# Email Configuration (Brevo SMTP)
+EMAIL_FROM=noreply@keyracer.in
 EMAIL_FROM_NAME=Key Racer
 
 # Google OAuth Credentials (if using Google Sign-In)
@@ -82,6 +81,6 @@ http://localhost:3000
 
 If you encounter issues with email verification:
 
-1. Make sure your RESEND_API_KEY is valid
-2. Check server logs for API errors
+1. Make sure your email configuration (EMAIL_FROM and EMAIL_FROM_NAME) is valid
+2. Verify MongoDB connection string is correct and accessible
 3. For local development without email service, use the local registration option

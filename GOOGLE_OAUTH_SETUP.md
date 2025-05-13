@@ -88,8 +88,7 @@ The Google Identity Services method is already configured in the login page and 
    GOOGLE_CLIENT_SECRET=your-google-client-secret
    BASE_URL=http://localhost:3000
    
-   # Email Service (Resend)
-   RESEND_API_KEY=re_FXySrzpx_KtRMfyqVGowYc7MRSu5tSHGv
+   # Email Service (Brevo SMTP)
    EMAIL_FROM=customerkeyracer@gmail.com
    EMAIL_FROM_NAME=Key Racer
    ```

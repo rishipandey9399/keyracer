@@ -1,30 +1,34 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 /**
- * Email Service using Resend
+ * Email Service using Nodemailer with Brevo SMTP
  */
 class EmailService {
   constructor() {
-    // Initialize Resend with API key from environment variables
-    this.resend = new Resend(process.env.RESEND_API_KEY);
-    this.fromEmail = process.env.EMAIL_FROM || 'noreply@mydomain.com';
-    this.fromName = process.env.EMAIL_FROM_NAME || 'MyApp';
+    // Create a nodemailer transporter with Brevo SMTP settings
+    this.transporter = nodemailer.createTransport({
+      host: 'smtp-relay.brevo.com',
+      port: 587,
+      secure: false, // TLS
+      auth: {
+        user: '8ce515001@smtp-brevo.com',
+        pass: 'xsmtpsib-464c069abf4dae3ad11489b9aca2243676e34b8dcdee65bac3ab8ef669e8b931-H31pRSKmkFc48YrL'
+      }
+    });
     
-    // Verify API key is set
-    if (!process.env.RESEND_API_KEY) {
-      console.error('WARNING: RESEND_API_KEY is not set in environment variables');
-    }
+    this.fromEmail = process.env.EMAIL_FROM || 'noreply@keyracer.in';
+    this.fromName = process.env.EMAIL_FROM_NAME || 'Key Racer';
   }
 
   /**
-   * Send an email using Resend
+   * Send an email using Nodemailer
    * @param {Object} options - Email options
    * @param {string} options.to - Recipient email address
    * @param {string} options.subject - Email subject
    * @param {string} options.html - Email HTML content
    * @param {string} [options.text] - Plain text version of the email
-   * @returns {Promise<Object>} - Response from Resend
+   * @returns {Promise<Object>} - Response from email service
    */
   async sendEmail({ to, subject, html, text }) {
     try {
@@ -34,16 +38,17 @@ class EmailService {
         console.log(`Subject: ${subject}`);
       }
 
-      // Send email through Resend
-      const result = await this.resend.emails.send({
-        from: `${this.fromName} <${this.fromEmail}>`,
+      // Send email through Nodemailer
+      const info = await this.transporter.sendMail({
+        from: `"${this.fromName}" <${this.fromEmail}>`,
         to: [to],
         subject,
         html,
         text: text || this.stripHtml(html),
       });
 
-      return { success: true, data: result };
+      console.log('Email sent successfully, ID:', info.messageId);
+      return { success: true, data: info.messageId };
     } catch (error) {
       console.error('Error sending email:', error);
       return { success: false, error };
@@ -55,7 +60,7 @@ class EmailService {
    * @param {string} to - Recipient email address
    * @param {string} resetToken - Password reset token
    * @param {string} resetLink - Complete password reset link
-   * @returns {Promise<Object>} - Response from Resend
+   * @returns {Promise<Object>} - Response from email service
    */
   async sendPasswordResetEmail(to, resetToken, resetLink) {
     const subject = 'Reset Your Password';
@@ -69,7 +74,7 @@ class EmailService {
    * @param {string} to - Recipient email address
    * @param {string} verificationCode - Verification code
    * @param {number} expiryMinutes - Minutes until expiration
-   * @returns {Promise<Object>} - Response from Resend
+   * @returns {Promise<Object>} - Response from email service
    */
   async sendVerificationEmail(to, verificationCode, expiryMinutes = 10) {
     const subject = 'Verify Your Email Address';
@@ -94,7 +99,7 @@ class EmailService {
               <h2 style="margin-top: 0; color: #333;">Reset Your Password</h2>
               <p>We received a request to reset your password. Click the button below to set a new password:</p>
               <div style="text-align: center; margin: 30px 0;">
-                  <a href="${resetLink}" style="background-color: #4CAF50; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Reset Password</a>
+                  <a href="${resetLink}" style="background-color: #00FFDD; color: #111827; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Reset Password</a>
               </div>
               <p>If you did not request a password reset, please ignore this email.</p>
               <p><strong>This link will expire in 15 minutes.</strong></p>
@@ -102,7 +107,7 @@ class EmailService {
           
           <div style="color: #777; font-size: 12px; text-align: center; margin-top: 20px;">
               <p>This is an automated message, please do not reply to this email.</p>
-              <p>&copy; ${new Date().getFullYear()} MyApp. All rights reserved.</p>
+              <p>&copy; ${new Date().getFullYear()} Key Racer. All rights reserved.</p>
           </div>
       </div>
     `;
@@ -131,7 +136,7 @@ class EmailService {
           
           <div style="color: #777; font-size: 12px; text-align: center; margin-top: 20px;">
               <p>This is an automated message, please do not reply to this email.</p>
-              <p>&copy; ${new Date().getFullYear()} MyApp. All rights reserved.</p>
+              <p>&copy; ${new Date().getFullYear()} Key Racer. All rights reserved.</p>
           </div>
       </div>
     `;

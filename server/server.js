@@ -3,7 +3,6 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
 console.log("GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET);
-console.log("RESEND_API_KEY:", process.env.RESEND_API_KEY);
 console.log("EMAIL_FROM:", process.env.EMAIL_FROM);
 console.log("EMAIL_FROM_NAME:", process.env.EMAIL_FROM_NAME);
 
@@ -71,10 +70,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Check if Resend API key is configured
-if (!process.env.RESEND_API_KEY) {
-  console.error('WARNING: RESEND_API_KEY is not set in environment variables');
-  console.error('Email functionality will not work properly');
+// Check if email configuration is valid
+if (!process.env.EMAIL_FROM || !process.env.EMAIL_FROM_NAME) {
+  console.error('WARNING: Email configuration is not properly set in environment variables');
+  console.error('Email functionality may not work properly');
+} else {
+  console.log('Email configuration found using Brevo SMTP');
 }
 
 // Check if Google OAuth credentials are configured
