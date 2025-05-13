@@ -71,6 +71,11 @@ class EmailService {
    */
   async checkApiConfiguration() {
     try {
+      // Initialize transporter if not already done
+      if (!this.transporter) {
+        await this.getTransporter();
+      }
+      
       await this.transporter.verify();
       return true;
     } catch (error) {
@@ -141,6 +146,9 @@ class EmailService {
    */
   async sendVerificationEmail(email, verificationLink) {
     try {
+      // Initialize transporter before using it
+      await this.getTransporter();
+      
       if (process.env.NODE_ENV !== 'production') {
         console.log(`[DEV MODE] Verification link for ${email}: ${verificationLink}`);
         // Only return early if we're in development and the transporter verification fails
@@ -160,6 +168,11 @@ class EmailService {
       });
       
       console.log('Verification email sent successfully, ID:', info.messageId);
+      // For ethereal test accounts, log the URL where the email can be viewed
+      if (this.testAccount) {
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      }
+      
       return { success: true, message: 'Verification email sent successfully' };
     } catch (error) {
       console.error('Error sending verification email:', error);
@@ -175,6 +188,9 @@ class EmailService {
    */
   async sendPasswordResetEmail(email, resetLink) {
     try {
+      // Initialize transporter before using it
+      await this.getTransporter();
+      
       if (process.env.NODE_ENV !== 'production') {
         console.log(`[DEV MODE] Password reset link for ${email}: ${resetLink}`);
         // Only return early if we're in development and the transporter verification fails
@@ -194,6 +210,11 @@ class EmailService {
       });
       
       console.log('Password reset email sent successfully, ID:', info.messageId);
+      // For ethereal test accounts, log the URL where the email can be viewed
+      if (this.testAccount) {
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      }
+      
       return { success: true, message: 'Password reset email sent successfully' };
     } catch (error) {
       console.error('Error sending password reset email:', error);
@@ -266,4 +287,4 @@ class EmailService {
   }
 }
 
-module.exports = new EmailService(); 
+module.exports = new EmailService();
