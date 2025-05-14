@@ -16,41 +16,16 @@ const sendEmail = async ({ to, subject, html }) => {
       throw new Error('Missing required email fields');
     }
 
-    // Use development test account if in development and no SMTP credentials are provided
-    let transporter;
-    let testAccount;
-    
-    // Check if we're in production with proper credentials
-    if (process.env.NODE_ENV === 'production' && 
-        process.env.BREVO_SMTP_USER && 
-        process.env.BREVO_SMTP_PASSWORD) {
-      
-      // Create transporter with Brevo SMTP settings
-      transporter = nodemailer.createTransport({
-        host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
-        port: 587,
-        secure: false, // TLS
-        auth: {
-          user: process.env.BREVO_SMTP_USER,
-          pass: process.env.BREVO_SMTP_PASSWORD
-        }
-      });
-    } else {
-      // For development/testing, use ethereal.email (fake SMTP service)
-      testAccount = await nodemailer.createTestAccount();
-      
-      transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        secure: false,
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass
-        }
-      });
-      
-      console.log('Using Ethereal test account for email delivery');
-    }
+    // Create transporter with Brevo SMTP settings
+    const transporter = nodemailer.createTransport({
+      host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.BREVO_SMTP_USER,
+        pass: process.env.BREVO_SMTP_PASSWORD,
+      },
+    });
 
     // Send email using Nodemailer
     const info = await transporter.sendMail({
@@ -61,32 +36,15 @@ const sendEmail = async ({ to, subject, html }) => {
       text: html.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim() // Strip HTML for plain text version
     });
 
-    // For development, log the test URL where the email can be viewed
-    if (testAccount) {
-      console.log('Email preview URL: %s', nodemailer.getTestMessageUrl(info));
-      console.log('Message sent: %s', info.messageId);
-    } else {
-      console.log('Email sent successfully:', info.messageId);
-    }
+    console.log('Email sent successfully:', info.messageId);
     
     return { 
       success: true, 
-      messageId: info.messageId,
-      previewUrl: testAccount ? nodemailer.getTestMessageUrl(info) : null
+      messageId: info.messageId
     };
   } catch (error) {
     console.error('Error sending email:', error);
-    // Return success=true in development to allow the flow to continue for testing
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Simulating email success in development mode');
-      return { 
-        success: true,
-        simulated: true,
-        messageId: 'dev-' + Date.now(),
-        error: error.message
-      };
-    }
-    throw error;
+    return { success: false, error: error.message };
   }
 };
 
