@@ -148,33 +148,74 @@ function createConfetti() {
 // Function to check achievements
 function checkAchievements(testStats) {
     const achievements = [];
+    const unlockedAchievements = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
     
-    // Speed Demon achievement
-    if (testStats.wpm >= 60) {
+    // Speed achievements
+    if (testStats.wpm >= 60 && !unlockedAchievements.includes('speed')) {
         achievements.push('speed');
         document.getElementById('achievement-speed').classList.add('unlocked');
+        unlockedAchievements.push('speed');
+    }
+    if (testStats.wpm >= 100 && !unlockedAchievements.includes('speedMaster')) {
+        achievements.push('speedMaster');
+        document.getElementById('achievement-speedMaster').classList.add('unlocked');
+        unlockedAchievements.push('speedMaster');
     }
     
-    // Perfect Precision achievement
-    if (testStats.accuracy === 100) {
+    // Accuracy achievements
+    if (testStats.accuracy === 100 && !unlockedAchievements.includes('accuracy')) {
         achievements.push('accuracy');
         document.getElementById('achievement-accuracy').classList.add('unlocked');
+        unlockedAchievements.push('accuracy');
+    }
+    if (testStats.accuracy >= 95 && testStats.wpm >= 80 && !unlockedAchievements.includes('precisionMaster')) {
+        achievements.push('precisionMaster');
+        document.getElementById('achievement-precisionMaster').classList.add('unlocked');
+        unlockedAchievements.push('precisionMaster');
     }
     
-    // Marathon Runner achievement
+    // Consistency achievements
+    if (testStats.consistencyScore >= 90 && !unlockedAchievements.includes('consistency')) {
+        achievements.push('consistency');
+        document.getElementById('achievement-consistency').classList.add('unlocked');
+        unlockedAchievements.push('consistency');
+    }
+    
+    // Practice achievements
     const testCount = JSON.parse(localStorage.getItem('typingHistory') || '[]').length;
-    if (testCount >= 5) {
+    if (testCount >= 5 && !unlockedAchievements.includes('marathon')) {
         achievements.push('marathon');
         document.getElementById('achievement-marathon').classList.add('unlocked');
+        unlockedAchievements.push('marathon');
+    }
+    if (testCount >= 20 && !unlockedAchievements.includes('typingMaster')) {
+        achievements.push('typingMaster');
+        document.getElementById('achievement-typingMaster').classList.add('unlocked');
+        unlockedAchievements.push('typingMaster');
     }
     
-    // Show confetti for new achievements
+    // Save unlocked achievements
     if (achievements.length > 0) {
+        localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
         createConfetti();
     }
     
     return achievements;
 }
+
+// Function to load achievements on page load
+function loadAchievements() {
+    const unlockedAchievements = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
+    unlockedAchievements.forEach(achievement => {
+        const element = document.getElementById(`achievement-${achievement}`);
+        if (element) {
+            element.classList.add('unlocked');
+        }
+    });
+}
+
+// Call loadAchievements when the page loads
+document.addEventListener('DOMContentLoaded', loadAchievements);
 
 // Export achievement functions
 if (typeof window !== 'undefined') {

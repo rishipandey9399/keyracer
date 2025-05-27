@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Racer Championship</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .code-header { background: #181c2f; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .code-header .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 18px 24px; }
+        .code-header .logo-img { height: 48px; margin-right: 18px; }
+        .code-header .main-nav { display: flex; gap: 24px; }
+        .code-header .nav-item { color: #fff; text-decoration: none; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; transition: color 0.2s; }
+        .code-header .nav-item:hover, .code-header .nav-item.active { color: #00FFDD; }
+        .code-header .header-actions { display: flex; gap: 16px; }
+        .championship-container { max-width: 900px; margin: 40px auto; background: #20243a; border-radius: 14px; padding: 36px 32px; color: #fff; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+        .leaderboard-table th, .leaderboard-table td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #2c3150; font-family: 'JetBrains Mono', monospace; }
+        .leaderboard-table th { color: #00FFDD; font-size: 1.1rem; }
+        .leaderboard-table td { color: #fff; font-size: 1rem; }
+        .start-challenge-btn { background: #00FFDD; color: #181c2f; border: none; border-radius: 5px; padding: 10px 28px; font-weight: 600; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: background 0.2s; font-size: 1.1rem; }
+        .start-challenge-btn:hover { background: #00c2b2; }
+    </style>
+</head>
+<body>
+    <header class="code-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Code Racer Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="code-training.html" class="nav-item"><i class="fas fa-graduation-cap"></i> Training</a>
+                <a href="code-championship.html" class="nav-item active"><i class="fas fa-trophy"></i> Championship</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html" class="nav-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+        </div>
+    </header>
+    <div class="championship-container">
+        <h1>Code Racer Championship</h1>
+        <button class="start-challenge-btn"><i class="fas fa-play"></i> Start New Coding Challenge</button>
+        <h2 style="margin-top:32px; color:#00FFDD;">Leaderboard</h2>
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Language</th>
+                    <th>Challenge</th>
+                    <th>Time (s)</th>
+                    <th>Accuracy (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>CodeMaster</td>
+                    <td>Python</td>
+                    <td>Hello World</td>
+                    <td>12.3</td>
+                    <td>100</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>JSNinja</td>
+                    <td>JavaScript</td>
+                    <td>Sum of Two Numbers</td>
+                    <td>15.7</td>
+                    <td>98</td>
+                </tr>
+                <!-- More leaderboard rows here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html> 

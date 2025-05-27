@@ -1,601 +1,467 @@
-// Main application logic
-document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
-    const textDisplay = document.getElementById('text-display');
+/**
+ * Key Racer - Main Script (Rebuilt)
+ * Handles the typing test functionality, challenge/difficulty selection, timer, stats, and results modal.
+ */
+
+// Check what page we're on (needed for proper script integration)
+const isLessonsPage = window.location.href.includes('lessons.html');
+const isMainPage = !isLessonsPage && (window.location.href.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/'));
+
+// Set up dummy variables for cross-page compatibility
+if (isLessonsPage) {
+    // Only needed for lessons page
+    window.activeChallenge = 'Basic';
+    window.customTextInput = { value: '' };
+    window.raceModes = {};
+    window.beginnerButton = null;
+    window.intermediateButton = null;
+    window.advancedButton = null;
+}
+
+// --- Typing Test State (single declaration) ---
+let charsTyped = 0;
+let errors = 0;
+let wpm = 0;
+let accuracy = 100;
+let timer = null;
+
+// --- Utility Functions ---
+function $(selector) { return document.querySelector(selector); }
+function $all(selector) { return document.querySelectorAll(selector); }
+
+// DOM Elements
+const textInput = $('#text-input');
+const textDisplay = $('#text-display');
+const startBtn = $('#start-btn');
+const resetBtn = $('#reset-btn');
+const wpmDisplay = document.getElementById('wpm');
+const accuracyDisplay = document.getElementById('accuracy');
+const minutesDisplay = document.getElementById('minutes');
+const secondsDisplay = document.getElementById('seconds');
+const resultsOverlay = document.getElementById('results');
+const resultWpm = document.getElementById('result-wpm');
+const resultAccuracy = document.getElementById('result-accuracy');
+const resultErrors = document.getElementById('result-errors');
+const aiFeedback = document.querySelector('#ai-feedback .analysis-content');
+const testCompleteModal = document.querySelector('.test-complete-container');
+const resultDetails = document.getElementById('result-details');
+const retryButton = document.getElementById('retry-button');
+const customTextContainer = document.getElementById('custom-text-container');
+const customTextInput = document.getElementById('custom-text-input');
+const useCustomTextBtn = document.getElementById('use-custom-text');
+
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        // DOM Elements
+        const textInput = document.getElementById('text-input');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const retryButton = document.getElementById('retry-button');
+        const customTextInput = document.getElementById('custom-text-input');
+        const useCustomTextBtn = document.getElementById('use-custom-text');
+
+        // --- Challenge & Difficulty Selection ---
+        document.querySelectorAll('.challenge-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.challenge-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                window.activeChallenge = this.getAttribute('data-challenge');
+                const customTextContainer = document.getElementById('custom-text-container');
+                if (window.activeChallenge === 'custom') {
+                    customTextContainer.style.display = 'block';
+    } else {
+                    customTextContainer.style.display = 'none';
+                }
+                resetTest();
+            });
+        });
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                window.currentDifficulty = this.id;
+                resetTest();
+            });
+        });
+
+        // --- Start/Reset Buttons ---
+        if (startBtn) startBtn.addEventListener('click', startTest);
+        if (resetBtn) resetBtn.addEventListener('click', resetTest);
+        if (retryButton) retryButton.addEventListener('click', () => {
+            const modal = document.querySelector('.test-complete-container');
+            if (modal) modal.style.display = 'none';
+            resetTest();
+        });
+
+        // --- Custom Text Button ---
+        if (useCustomTextBtn) {
+            useCustomTextBtn.addEventListener('click', () => {
+                if (customTextInput.value.trim()) {
+                    window.currentText = customTextInput.value.trim();
+                    resetTest();
+                }
+            });
+        }
+
+        // --- Typing Input ---
+        if (textInput) textInput.addEventListener('input', handleInput);
+
+        // Initial reset
+        resetTest();
+        console.log('Typing test initialized successfully.');
+
+        // Only remove animation/fade/slide classes and set opacity/visibility
+        document.querySelectorAll('.fade-in, .slide-up').forEach(el => {
+            el.classList.remove('fade-in', 'slide-up');
+            el.style.opacity = 1;
+            el.style.visibility = 'visible';
+            el.style.transform = 'none';
+            el.style.transition = 'none';
+        });
+        document.body.classList.remove('content-hidden');
+
+        // Add event listener for 'Back to Track' button in the results overlay (class 'close-results')
+        const closeResultsBtn = document.querySelector('.close-results');
+        if (closeResultsBtn) {
+            closeResultsBtn.addEventListener('click', function() {
+                const resultsOverlay = document.getElementById('results');
+                if (resultsOverlay) resultsOverlay.style.display = 'none';
+                resetTest();
+            });
+    }
+    } catch (e) {
+        console.error('Critical error during typing test initialization:', e);
+    }
+});
+
+// Main typing test initialization function
+function initializeTypingTest() {
+    // Only run this on pages with the typing test
+    if (!document.getElementById('typing-test') && !document.getElementById('text-display')) return;
+
+    console.log('Main script initialized');
+    
+    // Force visibility of content on page load
+    forceContentVisibility();
+    
+    // Get DOM elements
     const textInput = document.getElementById('text-input');
     const startButton = document.getElementById('start-btn');
     const resetButton = document.getElementById('reset-btn');
-    const wpmDisplay = document.getElementById('wpm');
-    const accuracyDisplay = document.getElementById('accuracy');
-    const errorsDisplay = document.getElementById('errors');
-    const minutesDisplay = document.getElementById('minutes');
-    const secondsDisplay = document.getElementById('seconds');
-    const resultsSection = document.getElementById('results');
-    const resultWpm = document.getElementById('result-wpm');
-    const resultAccuracy = document.getElementById('result-accuracy');
-    const resultErrors = document.getElementById('result-errors');
-    const closeResultsButton = document.getElementById('close-results');
-    const aiFeedbackElement = document.getElementById('ai-feedback').querySelector('.feedback-content');
+    const closeResultsButton = document.querySelector('.close-results');
     
-    // Check for race intro flag
-    const shouldShowRaceIntro = localStorage.getItem('showRaceIntro') === 'true';
-    if (shouldShowRaceIntro) {
-        // Clear the flag so it only shows once
-        localStorage.removeItem('showRaceIntro');
-        // Show the race intro with a slight delay to ensure page is loaded
-        setTimeout(() => {
-            showRaceIntro();
-        }, 500);
+    // Set up event listeners
+    if (startButton) {
+        startButton.addEventListener('click', startTest);
     }
     
-    // Level selector elements
-    const beginnerButton = document.getElementById('beginner');
-    const intermediateButton = document.getElementById('intermediate');
-    const advancedButton = document.getElementById('advanced');
-    
-    // State variables
-    let currentDifficulty = 'beginner';
-    let currentText = '';
-    let timer = null;
-    let startTime = 0;
-    let endTime = 0;
-    let timeLeft = 60; // Default 1 minute
-    let keyTimestamps = [];
-    let isTestActive = false;
-    
-    // User authentication check
-    const currentUser = localStorage.getItem('typingTestUser');
-    const userType = localStorage.getItem('typingTestUserType') || 'guest';
-    
-    if (!currentUser) {
-        // Redirect to login if no user
-        window.location.href = 'login.html';
-        return;
-    } else {
-        // Create user header
-        let userHeader = document.createElement('div');
-        userHeader.className = 'user-header';
-        
-        // Display user info and logout button
-        userHeader.innerHTML = `
-            <div class="user-info">
-                <span class="user-name">${userType === 'guest' ? 'Guest User' : currentUser}</span>
-                <span class="user-badge ${userType}">${userType}</span>
-            </div>
-            <button id="logout-btn" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        `;
-        document.querySelector('header').appendChild(userHeader);
-        
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            localStorage.removeItem('typingTestUser');
-            localStorage.removeItem('typingTestUserType');
-            window.location.href = 'login.html';
+    if (resetButton) {
+        resetButton.addEventListener('click', function() {
+            clearInterval(window.timer);
+            window.isTestActive = false;
+            textInput.disabled = true;
+            textInput.value = '';
+            document.getElementById('text-display').innerHTML = '';
+            document.getElementById('wpm').textContent = '0';
+            document.getElementById('accuracy').textContent = '100';
+            document.getElementById('errors').textContent = '0';
+            document.getElementById('minutes').textContent = '1';
+            document.getElementById('seconds').textContent = '00';
+            startButton.disabled = false;
+            resetButton.disabled = true;
         });
     }
     
-    // Setup level buttons
-    [beginnerButton, intermediateButton, advancedButton].forEach(button => {
-        button.addEventListener('click', () => {
-            // Only change level if test is not active
-            if (!isTestActive) {
-                // Remove active class from all buttons
-                [beginnerButton, intermediateButton, advancedButton].forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                // Add active class to clicked button
-                button.classList.add('active');
-                
-                // Set current difficulty
-                currentDifficulty = button.id;
-                
-                // Reset the test
-                resetTest();
+    if (textInput) {
+        textInput.addEventListener('input', handleInput);
+    }
+    
+    if (closeResultsButton) {
+        closeResultsButton.addEventListener('click', function() {
+            const resultsSection = document.getElementById('results');
+            if (resultsSection) resultsSection.classList.remove('show');
+        });
+    }
+    
+    // Set up challenge cards
+    const challengeCards = document.querySelectorAll('.challenge-card');
+    challengeCards.forEach(card => {
+        card.addEventListener('click', function() {
+            challengeCards.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            
+            const challengeName = this.querySelector('.challenge-name').textContent;
+            window.activeChallenge = challengeName;
+            console.log('Active challenge:', window.activeChallenge);
+            
+            // Show/hide custom text area
+            const customTextContainer = document.getElementById('custom-text-container');
+            if (customTextContainer) {
+                if (challengeName === 'Custom Track') {
+                    customTextContainer.style.display = 'block';
+                } else {
+                    customTextContainer.style.display = 'none';
+                }
             }
         });
     });
     
-    // Function to get a random text based on difficulty
-    function getRandomText() {
-        const texts = typingTexts[currentDifficulty];
-        const randomIndex = Math.floor(Math.random() * texts.length);
-        return texts[randomIndex];
+    // Initialize difficulty buttons
+    const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+    difficultyBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            difficultyBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            });
+        });
+    }
+
+// Function to start the typing test
+async function startTest() {
+    console.log('Starting test...');
+    
+    // Get necessary elements
+    const textInput = document.getElementById('text-input');
+    const textDisplay = document.getElementById('text-display');
+    const startButton = document.getElementById('start-btn');
+    const resetButton = document.getElementById('reset-btn');
+    
+    if (!textInput || !textDisplay) {
+        console.error('Required elements not found');
+        return;
     }
     
-    // Function to display the text
-    function displayText(text) {
-        textDisplay.innerHTML = '';
-        
-        // Create spans for each character
-        for (let i = 0; i < text.length; i++) {
-            const span = document.createElement('span');
-            span.textContent = text[i];
-            textDisplay.appendChild(span);
-        }
-        
-        // Highlight the first character
-        if (textDisplay.firstChild) {
-            textDisplay.firstChild.classList.add('current');
-        }
-    }
+    // Disable start button and enable reset button
+    startButton.disabled = true;
+    resetButton.disabled = false;
     
-    // Function to update the timer
-    function updateTimer() {
-        timeLeft--;
-        
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        
-        minutesDisplay.textContent = minutes;
-        secondsDisplay.textContent = seconds < 10 ? `0${seconds}` : seconds;
-        
-        if (timeLeft <= 0) {
-            endTest();
-        }
-    }
+    // Get active challenge
+    const activeChallengeElement = document.querySelector('.challenge-card.active .challenge-name');
+    const currentChallenge = activeChallengeElement ? activeChallengeElement.textContent : 'Standard Race';
+    console.log('Starting test with challenge:', currentChallenge);
     
-    // Function to update metrics during the test
-    function updateMetrics() {
-        if (!startTime || !isTestActive) return;
-        
-        const currentTime = Date.now();
-        const elapsedTime = (currentTime - startTime) / 1000 / 60; // in minutes
-        
-        // Get user input
-        const userInput = textInput.value;
-        const inputWords = userInput.length / 5; // standard WPM calculation
-        
-        // Calculate WPM
-        const wpm = Math.round(inputWords / elapsedTime || 0);
-        wpmDisplay.textContent = wpm;
-        
-        // Update speedometer dial based on WPM
-        updateSpeedometerDial(wpm);
-        
-        // Calculate accuracy
-        let correctChars = 0;
-        const inputLength = Math.min(userInput.length, currentText.length);
-        
-        for (let i = 0; i < inputLength; i++) {
-            if (userInput[i] === currentText[i]) {
-                correctChars++;
-            }
+    // Get active difficulty
+    const activeDifficultyBtn = document.querySelector('.difficulty-btn.active');
+    const difficulty = activeDifficultyBtn ? activeDifficultyBtn.id : 'beginner';
+    console.log('Difficulty level:', difficulty);
+    
+    // Get text based on difficulty and challenge
+    let currentText = '';
+    
+    // Check if it's custom track
+    if (currentChallenge === 'Custom Track') {
+        const customTextInput = document.getElementById('custom-text-input');
+        if (customTextInput && customTextInput.value.trim()) {
+            currentText = customTextInput.value.trim();
+        } else {
+            // Default text if custom track is empty
+            currentText = "Please enter your custom text in the text area above. This is a default text since no custom text was provided.";
         }
-        
-        const accuracy = Math.round((correctChars / (inputLength || 1)) * 100);
-        accuracyDisplay.textContent = `${accuracy}%`;
-        
-        // Calculate errors
-        const errors = inputLength - correctChars;
-        errorsDisplay.textContent = errors;
-        
-        // Update charts if live statistics is enabled
-        if (document.getElementById('live-stats-toggle').checked && window.chartFunctions) {
-            window.chartFunctions.updateWPMChart(wpm, currentTime - startTime);
-        }
-        
-        // Highlight keys on the virtual keyboard
-        if (userInput.length > 0) {
-            const lastChar = userInput[userInput.length - 1];
-            if (window.keyboardFunctions) {
-                window.keyboardFunctions.highlightKey(lastChar);
-            }
+    } else {
+        // Use predefined texts
+        if (window.typingTexts && window.typingTexts[difficulty]) {
+            const texts = window.typingTexts[difficulty];
+            const randomIndex = Math.floor(Math.random() * texts.length);
+            currentText = texts[randomIndex];
+        } else {
+            // Fallback text if typingTexts not available
+            currentText = "The quick brown fox jumps over the lazy dog. This is a fallback text since typingTexts are not available.";
         }
     }
     
-    // Function to update speedometer dial
-    function updateSpeedometerDial(wpm) {
-        const maxWPM = 150; // Maximum WPM for full rotation
-        const rotationPercentage = Math.min(wpm / maxWPM, 1);
-        const rotationDegrees = -90 + (rotationPercentage * 180);
-        
-        const speedometerDial = document.querySelector('.speedometer-dial');
-        if (speedometerDial) {
-            speedometerDial.style.transform = `rotate(${rotationDegrees}deg)`;
+    // Display the racing countdown animation
+    try {
+        if (window.showRaceStartCountdown) {
+            await window.showRaceStartCountdown();
         }
+    } catch (error) {
+        console.error('Error showing race countdown:', error);
     }
     
-    // Function to update result speedometer
-    function updateResultSpeedometer(wpm) {
-        const maxWPM = 150; // Maximum WPM for full rotation
-        const rotationPercentage = Math.min(wpm / maxWPM, 1);
-        const rotationDegrees = -90 + (rotationPercentage * 180);
-        
-        const resultSpeedometerDial = document.querySelector('.result-speedometer .speedometer-dial');
-        if (resultSpeedometerDial) {
-            resultSpeedometerDial.style.transform = `rotate(${rotationDegrees}deg)`;
-        }
+    // Prepare text display with highlighted characters
+    textDisplay.innerHTML = '';
+    for (let i = 0; i < currentText.length; i++) {
+        const charSpan = document.createElement('span');
+        charSpan.textContent = currentText[i];
+        textDisplay.appendChild(charSpan);
     }
     
-    // Function to handle user input
+    // Focus and enable input
+    textInput.value = '';
+    textInput.disabled = false;
+    textInput.focus();
+    
+    // Set test as active
+    window.isTestActive = true;
+    window.currentText = currentText;
+    
+    // Start timer
+    window.timeLeft = 60; // 1 minute default
+    if (currentChallenge === 'Time Trial') {
+        window.timeLeft = 30; // 30 seconds for time trial
+    } else if (currentChallenge === 'Marathon') {
+        window.timeLeft = 180; // 3 minutes for marathon
+    }
+    
+    // Update timer display
+    const minutes = Math.floor(window.timeLeft / 60);
+    const seconds = window.timeLeft % 60;
+    const minutesDisplay = document.getElementById('minutes');
+    const secondsDisplay = document.getElementById('seconds');
+    
+    if (minutesDisplay) minutesDisplay.textContent = minutes;
+    if (secondsDisplay) secondsDisplay.textContent = seconds < 10 ? `0${seconds}` : seconds;
+    
+    // Start counting down
+    window.startTime = Date.now();
+    window.timer = setInterval(updateTimer, 1000);
+}
+
+// Function to update the timer
+function updateTimer() {
+    if (!window.isTestActive) return;
+    
+    window.timeLeft--;
+    
+    const minutes = Math.floor(window.timeLeft / 60);
+    const seconds = window.timeLeft % 60;
+    
+    const minutesDisplay = document.getElementById('minutes');
+    const secondsDisplay = document.getElementById('seconds');
+    
+    if (minutesDisplay) minutesDisplay.textContent = minutes;
+    if (secondsDisplay) secondsDisplay.textContent = seconds < 10 ? `0${seconds}` : seconds;
+    
+    if (window.timeLeft <= 0) {
+        endTest();
+    }
+}
+
+// Function to handle user input during the test
     function handleInput() {
+    if (!window.isTestActive) return;
+    
+    const textInput = document.getElementById('text-input');
+    const textDisplay = document.getElementById('text-display');
+    
+    if (!textInput || !textDisplay) return;
+    
         const userInput = textInput.value;
         const textSpans = textDisplay.querySelectorAll('span');
         
-        // Record timestamp for this keystroke
-        keyTimestamps.push(Date.now());
+    let correctChars = 0;
+    let errors = 0;
+    
+    // Process input
+    for (let i = 0; i < userInput.length; i++) {
+        // Check if we've reached the end of the text
+        if (i >= textSpans.length) break;
         
-        // Reset classes
-        textSpans.forEach(span => {
-            span.classList.remove('correct', 'incorrect', 'current');
-        });
+        // Remove any existing classes
+        textSpans[i].className = '';
         
-        // Apply appropriate classes
-        for (let i = 0; i < userInput.length; i++) {
-            if (i >= textSpans.length) break;
-            
+        // Check if character is correct
             if (userInput[i] === textSpans[i].textContent) {
                 textSpans[i].classList.add('correct');
+            correctChars++;
             } else {
                 textSpans[i].classList.add('incorrect');
-            }
+            errors++;
+        }
         }
         
-        // Highlight current character
+    // Mark the current position
         if (userInput.length < textSpans.length) {
             textSpans[userInput.length].classList.add('current');
         }
         
-        // Check if user completed the text
-        if (userInput.length === currentText.length) {
-            endTest();
-        }
-        
-        // Update metrics
-        updateMetrics();
+    // Remove classes from characters not yet typed
+    for (let i = userInput.length + 1; i < textSpans.length; i++) {
+        textSpans[i].className = '';
     }
     
-    // Function to create and display race start lights
-    function showRaceStartLights() {
-        return new Promise((resolve) => {
-            // Create the race start lights if they don't exist
-            if (!document.querySelector('.race-start-lights')) {
-                const raceStartLights = document.createElement('div');
-                raceStartLights.className = 'race-start-lights';
-                
-                const lightsContainer = document.createElement('div');
-                lightsContainer.className = 'lights-container';
-                
-                // Create three lights
-                for (let i = 0; i < 3; i++) {
-                    const light = document.createElement('div');
-                    light.className = 'light';
-                    lightsContainer.appendChild(light);
-                }
-                
-                const countdownNumber = document.createElement('div');
-                countdownNumber.className = 'countdown-number';
-                
-                raceStartLights.appendChild(lightsContainer);
-                raceStartLights.appendChild(countdownNumber);
-                document.body.appendChild(raceStartLights);
-            }
-            
-            const raceStartLights = document.querySelector('.race-start-lights');
-            const lights = raceStartLights.querySelectorAll('.light');
-            const countdownNumber = raceStartLights.querySelector('.countdown-number');
-            
-            // Show the lights container
-            raceStartLights.classList.add('active');
-            
-            // Countdown sequence
-            let count = 3;
-            
-            // Function to update countdown
-            function updateCountdown() {
-                // Clear previous state
-                lights.forEach(light => light.classList.remove('active', 'green'));
-                countdownNumber.textContent = count;
-                countdownNumber.classList.add('visible');
-                
-                if (count > 0) {
-                    // Light up the appropriate number of red lights
-                    for (let i = 0; i < count; i++) {
-                        lights[i].classList.add('active');
-                    }
-                    
-                    count--;
-                    setTimeout(updateCountdown, 1000);
-                } else {
-                    // Show GO!
-                    countdownNumber.textContent = 'GO!';
-                    countdownNumber.style.color = '#00FF00';
-                    countdownNumber.classList.add('go-text');
-                    
-                    // Turn all lights green
-                    lights.forEach(light => {
-                        light.classList.remove('active');
-                        light.classList.add('green');
-                    });
-                    
-                    // Hide after a delay
-                    setTimeout(() => {
-                        raceStartLights.classList.remove('active');
-                        countdownNumber.classList.remove('visible', 'go-text');
-                        countdownNumber.style.color = '';
-                        lights.forEach(light => light.classList.remove('green'));
-                        resolve();
-                    }, 1000);
-                }
-            }
-            
-            // Start the countdown
-            updateCountdown();
-        });
-    }
+    // Calculate WPM
+    const elapsedMinutes = (Date.now() - window.startTime) / 1000 / 60;
+    const wpm = Math.round((userInput.length / 5) / Math.max(elapsedMinutes, 0.01));
     
-    // Function to show race intro animation
-    function showRaceIntro() {
-        return new Promise((resolve) => {
-            // Create the race intro elements if they don't exist
-            if (!document.querySelector('.race-intro')) {
-                const raceIntro = document.createElement('div');
-                raceIntro.className = 'race-intro';
-                
-                const track = document.createElement('div');
-                track.className = 'race-intro-track';
-                
-                // Add track lines
-                for (let i = 0; i < 10; i++) {
-                    const line = document.createElement('div');
-                    line.className = 'track-line';
-                    line.style.top = `${i * 30}px`;
-                    track.appendChild(line);
-                }
-                
-                // Add cars
-                const car1 = document.createElement('div');
-                car1.className = 'race-intro-car';
-                
-                const car2 = document.createElement('div');
-                car2.className = 'race-intro-car player';
-                
-                const text = document.createElement('div');
-                text.className = 'race-intro-text';
-                text.textContent = 'KEY RACER';
-                
-                raceIntro.appendChild(track);
-                raceIntro.appendChild(car1);
-                raceIntro.appendChild(car2);
-                raceIntro.appendChild(text);
-                
-                document.body.appendChild(raceIntro);
-            }
-            
-            const raceIntro = document.querySelector('.race-intro');
-            raceIntro.classList.add('active');
-            
-            // Hide intro after animation completes
-            setTimeout(() => {
-                raceIntro.classList.remove('active');
-                resolve();
-            }, 4000);
-        });
-    }
+    // Calculate accuracy
+    const accuracy = Math.round((correctChars / Math.max(userInput.length, 1)) * 100);
     
-    // Function to start the test
-    function startTest() {
-        // Show countdown first
-        showRaceStartLights().then(() => {
-            // Reset previous state
-            resetTest();
-            
-            // Set up the new test
-            currentText = getRandomText();
-            displayText(currentText);
-            
-            // Enable textarea
-            textInput.disabled = false;
-            textInput.value = '';
-            textInput.focus();
-            
-            // Start timer
-            startTime = Date.now();
-            keyTimestamps = [startTime];
-            timer = setInterval(updateTimer, 1000);
-            
-            // Update buttons
-            startButton.disabled = true;
-            resetButton.disabled = false;
-            
-            // Set test as active
-            isTestActive = true;
-            
-            // Pause background animation
-            document.body.classList.add('race-active');
-            
-            // Disable level selection during test
-            [beginnerButton, intermediateButton, advancedButton].forEach(button => {
-                button.style.pointerEvents = 'none';
-                button.style.opacity = '0.6';
-            });
-        });
+    // Update metrics display
+    const wpmDisplay = document.getElementById('wpm');
+    const accuracyDisplay = document.getElementById('accuracy');
+    const errorsDisplay = document.getElementById('errors');
+    
+    if (wpmDisplay) wpmDisplay.textContent = wpm;
+    if (accuracyDisplay) accuracyDisplay.textContent = accuracy;
+    if (errorsDisplay) errorsDisplay.textContent = errors;
+    
+    // Check if test is complete (all text typed)
+    if (userInput.length === textSpans.length) {
+        endTest();
+    }
     }
     
     // Function to end the test
     function endTest() {
-        // Stop the timer
-        clearInterval(timer);
-        isTestActive = false;
-        
-        // Calculate end time and elapsed time
-        endTime = Date.now();
-        const elapsedTime = (endTime - startTime) / 1000; // in seconds
-        
-        // Disable input
-        textInput.disabled = true;
-        
-        // Enable reset button
-        resetButton.disabled = false;
-        
-        // Calculate final metrics
+    // Stop the test
+    window.isTestActive = false;
+    clearInterval(window.timer);
+    
+    // Calculate elapsed time
+    const endTime = Date.now();
+    const elapsedMinutes = (endTime - window.startTime) / 1000 / 60; // in minutes
+    
+    // Get final metrics
+    const textInput = document.getElementById('text-input');
+    if (!textInput) return;
+    
         const userInput = textInput.value;
-        const inputWords = userInput.length / 5; // standard WPM calculation
-        const wpm = Math.round(inputWords / (elapsedTime / 60) || 0);
+    const inputLength = Math.min(userInput.length, window.currentText.length);
         
-        // Calculate accuracy
+    // Count correct characters
         let correctChars = 0;
-        const inputLength = Math.min(userInput.length, currentText.length);
-        
         for (let i = 0; i < inputLength; i++) {
-            if (userInput[i] === currentText[i]) {
+        if (userInput[i] === window.currentText[i]) {
                 correctChars++;
             }
         }
         
-        const accuracy = Math.round((correctChars / (inputLength || 1)) * 100); // Store as percentage (0-100)
+    // Calculate final metrics
+    const wpm = Math.round((userInput.length / 5) / Math.max(elapsedMinutes, 0.01));
+    const accuracy = Math.round((correctChars / Math.max(inputLength, 1)) * 100);
         const errors = inputLength - correctChars;
         
-        // Update final displays
-        wpmDisplay.textContent = wpm;
-        accuracyDisplay.textContent = `${accuracy}%`;
-        errorsDisplay.textContent = errors;
-        
-        // Update result displays
-        resultWpm.textContent = wpm;
-        resultAccuracy.textContent = accuracy;
-        resultErrors.textContent = errors;
-        
-        // Update result speedometer
-        updateResultSpeedometer(wpm);
-        
-        // Show results section
-        resultsSection.style.display = 'block';
-        
-        // Generate AI feedback
-        if (window.aiFeedback && typeof generateAIFeedback === 'function') {
-            generateAIFeedback(wpm, accuracy/100, errors, keyTimestamps, elapsedTime);
-        }
-        
-        // Get the authenticated username from localStorage
-        // For Google users, use the typingTestUserData
-        const userData = localStorage.getItem('typingTestUserData');
-        const userType = localStorage.getItem('typingTestUserType') || 'guest';
-        let username = localStorage.getItem('typingTestUser') || 'Guest';
-        let isGoogleUser = userType === 'google';
-        
-        let googleUserInfo = null;
-        if (isGoogleUser && userData) {
-            try {
-                googleUserInfo = JSON.parse(userData);
-            } catch (e) {
-                console.error('Error parsing Google user data:', e);
-            }
-        }
-        
-        // Save the test results to the database
+    // Create test record
         const testRecord = {
-            username: username,
             wpm: wpm,
-            accuracy: accuracy, // Store as percentage (0-100)
+        accuracy: accuracy,
             errors: errors,
-            completionTime: elapsedTime,
-            difficulty: currentDifficulty,
-            mode: window.currentMode || 'standard', // Add current mode
+        textLength: window.currentText.length,
+        charsTyped: userInput.length,
+        completionTime: elapsedMinutes * 60, // in seconds
+        difficulty: document.querySelector('.difficulty-btn.active')?.id || 'beginner',
+        challenge: document.querySelector('.challenge-card.active .challenge-name')?.textContent || 'Standard Race',
             timestamp: new Date().toISOString(),
-            textLength: currentText.length,
-            isGoogleUser: isGoogleUser,
-            googleId: googleUserInfo ? googleUserInfo.id : null
+        username: localStorage.getItem('typingTestUser') || 'Guest'
         };
         
-        console.log('Saving test record:', testRecord);
+    console.log('Test completed:', testRecord);
         
-        // Save to database if available
+    // Save test record if database is available
         if (window.typingDB) {
             window.typingDB.saveTypingRecord(testRecord)
-                .then(recordId => {
-                    console.log('Test record saved with ID:', recordId);
-                    
-                    // Get previous record for comparison
-                    window.typingDB.getTypingRecords(username)
-                        .then(records => {
-                            if (records && records.length > 1) {
-                                // Get the previous record (current one is at index 0)
-                                const previousRecord = records[1];
-                                
-                                // Ensure the accuracy is consistently a percentage (0-100)
-                                if (previousRecord.accuracy <= 1) {
-                                    previousRecord.accuracy *= 100;
-                                }
-                                
-                                // Update progress comparison
-                                updateProgressComparison(testRecord, previousRecord);
-                            }
+            .then(id => {
+                console.log('Test record saved with ID:', id);
                         })
                         .catch(error => {
-                            console.error('Error retrieving previous records:', error);
+                console.error('Error saving test record:', error);
                         });
-                    
-                    // Update charts if available
-                    if (window.chartFunctions && window.chartFunctions.addTestToHistory) {
-                        window.chartFunctions.addTestToHistory(testRecord);
-                    }
-                    
-                    // Check for achievements
-                    if (typeof checkAchievements === 'function') {
-                        checkAchievements(testRecord);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error saving test record:', error);
-                });
-        } else {
-            console.warn('Database not available, test record not saved');
-        }
-        
-        // Show test complete modal
-        showTestCompleteModal(testRecord);
     }
     
-    // Function to reset the test
-    function resetTest() {
-        // Clear timer
-        clearInterval(timer);
-        
-        // Reset timer display
-        timeLeft = 60;
-        minutesDisplay.textContent = '1';
-        secondsDisplay.textContent = '00';
-        
-        // Reset metrics
-        wpmDisplay.textContent = '0';
-        accuracyDisplay.textContent = '100%';
-        errorsDisplay.textContent = '0';
-        
-        // Reset text display
-        textDisplay.innerHTML = '';
-        
-        // Reset textarea
-        textInput.value = '';
-        textInput.disabled = true;
-        
-        // Reset buttons
-        startButton.disabled = false;
-        resetButton.disabled = true;
-        
-        // Reset test state
-        isTestActive = false;
-        
-        // Clear keyboard highlights
-        if (window.keyboardFunctions) {
-            window.keyboardFunctions.clearKeyHighlights();
-        }
-    }
-    
-    // Event listeners
-    startButton.addEventListener('click', startTest);
-    resetButton.addEventListener('click', resetTest);
-    textInput.addEventListener('input', handleInput);
-    closeResultsButton.addEventListener('click', () => {
-        resultsSection.style.display = 'none';
-    });
-    
-    // Initialize
-    resetTest();
-});
+    // Show test results
+    displayResults(testRecord);
+}
 
 // Function to update progress comparison
 function updateProgressComparison(currentRecord, previousRecord) {
@@ -636,30 +502,15 @@ function updateProgressComparison(currentRecord, previousRecord) {
 // Function to display the test results
 function displayResults(testStats) {
     // Update result metrics
-    resultWpm.textContent = testStats.wpm;
-    resultAccuracy.textContent = testStats.accuracy;
-    resultErrors.textContent = testStats.errors;
-    
-    // Update result speedometer
-    updateResultSpeedometer(testStats.wpm);
-    
-    // Generate AI feedback if available
-    if (window.aiFeedback) {
-        const feedback = window.aiFeedback.generateAIFeedback(testStats);
-        aiFeedbackElement.innerHTML = feedback;
-    }
-    
-    // Check achievements if available
-    if (window.achievementFunctions) {
-        const achievements = window.achievementFunctions.checkAchievements(testStats);
-        if (achievements.length > 0) {
-            // Create a celebratory effect
-            createCelebration(achievements);
-        }
-    }
-    
+    const resultWpm = document.getElementById('result-wpm');
+    const resultAccuracy = document.getElementById('result-accuracy');
+    const resultErrors = document.getElementById('result-errors');
+    if (resultWpm) resultWpm.textContent = testStats.wpm;
+    if (resultAccuracy) resultAccuracy.textContent = testStats.accuracy;
+    if (resultErrors) resultErrors.textContent = testStats.errors;
     // Show results modal
-    resultsSection.style.display = 'flex';
+    const resultsSection = document.getElementById('results');
+    if (resultsSection) resultsSection.style.display = 'flex';
 }
 
 // Function to create celebration effects for achievements
@@ -823,22 +674,205 @@ function checkLoginStatus() {
     }
 }
 
-// Initialize the app
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is logged in
-    checkLoginStatus();
+// Check if championship page
+function checkChampionshipTab() {
+    // Check if we're on the championship page
+    const isChampionshipPage = window.location.href.includes('leaderboard.html');
     
-    // Initialize typing test
-    initTypingTest();
-    
-    // Initialize charts
-    if (window.chartFunctions) {
-        window.chartFunctions.initCharts();
+    if (isChampionshipPage) {
+        console.log('Championship page detected');
+        
+        // Make sure database is initialized
+        if (!window.typingDB) {
+            try {
+                console.log('Initializing database for championship...');
+                window.typingDB = new TypingDatabase();
+            } catch (error) {
+                console.error('Error initializing database for championship:', error);
+            }
+        }
+        
+        // Load leaderboard data if available
+        if (typeof loadLeaderboardData === 'function') {
+            setTimeout(() => {
+                loadLeaderboardData();
+            }, 1000);
+        } else {
+            console.log('Leaderboard function not available');
+        }
     }
+}
+
+/**
+ * Display race start countdown with racing lights
+ * @returns {Promise} - Resolves when countdown is complete
+ */
+function showRaceStartCountdown() {
+    return new Promise((resolve) => {
+        // Create race start lights element if it doesn't exist
+        let raceStartLights = document.querySelector('.race-start-lights');
+        
+        if (!raceStartLights) {
+            raceStartLights = document.createElement('div');
+            raceStartLights.className = 'race-start-lights';
+            
+            const lightsContainer = document.createElement('div');
+            lightsContainer.className = 'lights-container';
+            
+            // Create three lights
+            for (let i = 0; i < 3; i++) {
+                const light = document.createElement('div');
+                light.className = 'light';
+                lightsContainer.appendChild(light);
+            }
+            
+            const countdownNumber = document.createElement('div');
+            countdownNumber.className = 'countdown-number';
+            
+            raceStartLights.appendChild(lightsContainer);
+            raceStartLights.appendChild(countdownNumber);
+            document.body.appendChild(raceStartLights);
+        }
+        
+        const lights = raceStartLights.querySelectorAll('.light');
+        const countdownNumber = raceStartLights.querySelector('.countdown-number');
+        
+        // Show the lights container
+        raceStartLights.classList.add('active');
+        
+        // Countdown sequence
+        let count = 3;
+        
+        // Function to update countdown
+        function updateCountdown() {
+            // Clear previous state
+            lights.forEach(light => light.classList.remove('active', 'green'));
+            countdownNumber.textContent = count;
+            countdownNumber.classList.add('visible');
+            
+            if (count > 0) {
+                // Light up the appropriate number of red lights
+                for (let i = 0; i < count; i++) {
+                    lights[i].classList.add('active');
+                }
+                
+                count--;
+                setTimeout(updateCountdown, 1000);
+            } else {
+                // Show GO!
+                countdownNumber.textContent = 'GO!';
+                countdownNumber.style.color = '#00FF00';
+                countdownNumber.classList.add('go-text');
+                
+                // Turn all lights green
+                lights.forEach(light => {
+                    light.classList.remove('active');
+                    light.classList.add('green');
+                });
+                
+                // Hide after a delay
+                setTimeout(() => {
+                    raceStartLights.classList.remove('active');
+                    countdownNumber.classList.remove('visible', 'go-text');
+                    countdownNumber.style.color = '';
+                    lights.forEach(light => light.classList.remove('green'));
+                    resolve();
+                }, 1000);
+            }
+        }
+        
+        // Start the countdown
+        updateCountdown();
+    });
+}
+
+// Export function for use in other scripts
+window.showRaceStartCountdown = showRaceStartCountdown; 
+
+function forceContentVisibility() {
+    // Reveal all main content containers
+    const selectors = [
+        '.main-content', '.container', 'main', 'header', 'section', 
+        '.race-track', '.keyboard-container', '.championship-header',
+        '.filters-section', '.podium-section', '.leaderboard-section',
+        '.your-standings', '.lesson-selector', '.lesson-category',
+        '.lesson-grid', '.lesson-card', '.nav-section', '.feature-tabs',
+        '.tab', '.logo-section', '.logo-heading', '.header-text'
+    ];
     
-    // Initialize FAQ
-    initFAQ();
+    selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+            el.style.display = el.tagName === 'SECTION' ? 'block' : '';
+            el.style.opacity = '1';
+            el.style.visibility = 'visible';
+        });
+    });
     
-    // Get test difficulty
-    updateSelectedDifficulty();
-}); 
+    // Ensure all text is visible
+    document.querySelectorAll('h1, h2, h3, h4, p, span, a, button').forEach(el => {
+        el.style.opacity = '1';
+        el.style.visibility = 'visible';
+    });
+    
+    // Remove any classes that might hide content
+    document.body.classList.remove('content-hidden');
+    
+    // Force display for specific elements
+    const specificElements = document.querySelectorAll('.header-container, .logo-section, .nav-section');
+    specificElements.forEach(el => {
+        el.style.display = 'block';
+        el.style.opacity = '1';
+        el.style.visibility = 'visible';
+    });
+}
+
+// Add CSS for feedback if not present
+if (!document.getElementById('typing-feedback-style')) {
+    const style = document.createElement('style');
+    style.id = 'typing-feedback-style';
+    style.textContent = `
+        #text-display span.correct { color: #4CAF50; }
+        #text-display span.incorrect { color: #FF5252; }
+        #text-display span.current { border-bottom: 2px solid #FFC700; }
+    `;
+    document.head.appendChild(style);
+}
+
+function renderTextDisplay(text) {
+    const textDisplay = document.getElementById('text-display');
+    if (!textDisplay) return;
+    textDisplay.innerHTML = '';
+    for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];
+        textDisplay.appendChild(span);
+    }
+}
+
+// --- Add global resetTest function ---
+function resetTest() {
+    const textInput = document.getElementById('text-input');
+    const textDisplay = document.getElementById('text-display');
+    if (textInput) {
+        textInput.value = '';
+        textInput.disabled = true;
+    }
+    if (textDisplay) {
+        textDisplay.innerHTML = '';
+    }
+    const wpmDisplay = document.getElementById('wpm');
+    const accuracyDisplay = document.getElementById('accuracy');
+    const errorsDisplay = document.getElementById('errors');
+    if (wpmDisplay) wpmDisplay.textContent = '0';
+    if (accuracyDisplay) accuracyDisplay.textContent = '100';
+    if (errorsDisplay) errorsDisplay.textContent = '0';
+    const modal = document.querySelector('.test-complete-container');
+    if (modal) modal.style.display = 'none';
+    const resultsOverlay = document.getElementById('results');
+    if (resultsOverlay) resultsOverlay.style.display = 'none';
+    // Enable Start, disable Reset
+    const startBtn = document.getElementById('start-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    if (startBtn) startBtn.disabled = false;
+    if (resetBtn) resetBtn.disabled = true;
+} 

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Racer - Coding Challenge Arena</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/code-racer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <style>
+        body {
+            background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto 0 auto;
+            padding: 0 16px;
+        }
+        .code-challenge-card {
+            background: rgba(14, 30, 56, 0.98);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            border: 2px solid var(--accent-color, #00FFDD);
+            padding: 36px 32px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+            max-width: 700px;
+        }
+        .code-challenge-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        .code-challenge-header img {
+            height: 60px;
+        }
+        .code-challenge-title {
+            color: var(--accent-color, #00FFDD);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+        .selectors {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .selectors select, .selectors button {
+            font-size: 1.1rem;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 1px solid #00FFDD;
+            background: #0e1e38;
+            color: #00FFDD;
+            font-family: 'Rajdhani', sans-serif;
+            margin-bottom: 8px;
+        }
+        .selectors button.selected, .selectors button:focus {
+            background: linear-gradient(90deg, #00FFDD 0%, #00C2FF 100%);
+            color: #111827;
+            border-color: #FFC700;
+        }
+        .code-area-row {
+            display: flex;
+            gap: 24px;
+            width: 100%;
+            margin-bottom: 18px;
+        }
+        .code-snippet-area, .code-input {
+            width: 50%;
+            min-width: 0;
+            background: #181f2e;
+            border-radius: 10px;
+            padding: 22px 18px;
+            font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace;
+            font-size: 1.08rem;
+            color: #b8eaff;
+            min-height: 120px;
+            box-shadow: 0 2px 12px #00ffdd11;
+            border: 1.5px solid #00FFDD33;
+            resize: none;
+        }
+        .code-input {
+            color: #fff;
+            background: #0e1e38;
+            border: 1.5px solid #00FFDD99;
+        }
+        .code-input:focus {
+            border-color: #FFC700;
+        }
+        @media (max-width: 900px) {
+            .code-area-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .code-snippet-area, .code-input {
+                width: 100%;
+            }
+        }
+        .live-feedback-label {
+            margin-top: 8px;
+            font-size: 1rem;
+            color: #00FFDD;
+            text-align: left;
+            width: 100%;
+        }
+        .code-stats {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), #D01712);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(228, 27, 23, 0.4);
+            margin-bottom: 25px;
+        }
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(228, 27, 23, 0.5);
+        }
+        .back-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+        .code-header { background: #181c2f; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .code-header .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 18px 24px; }
+        .code-header .logo-img { height: 48px; margin-right: 18px; }
+        .code-header .main-nav { display: flex; gap: 24px; }
+        .code-header .nav-item { color: #fff; text-decoration: none; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; transition: color 0.2s; }
+        .code-header .nav-item:hover, .code-header .nav-item.active { color: #00FFDD; }
+        .code-header .header-actions { display: flex; gap: 16px; }
+        .code-main { display: flex; max-width: 1200px; margin: 40px auto; gap: 32px; }
+        .code-sidebar { width: 220px; background: #23284a; border-radius: 12px; padding: 24px 16px; color: #fff; }
+        .code-sidebar h3 { font-size: 1.1rem; margin-bottom: 12px; }
+        .code-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .code-sidebar li { margin-bottom: 10px; }
+        .code-sidebar .lang-btn { background: none; border: none; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 1rem; cursor: pointer; padding: 6px 0; transition: color 0.2s; }
+        .code-sidebar .lang-btn.active, .code-sidebar .lang-btn:hover { color: #00FFDD; }        .code-content { flex: 1; background: #20243a; border-radius: 12px; padding: 32px 28px; min-height: 400px; color: #fff; }
+        .code-content h1 { font-size: 2rem; margin-bottom: 18px; }
+        .code-content .challenge-list { margin-top: 24px; margin-bottom: 24px; }
+        .code-content .challenge-card { background: #23284a; border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.2s; cursor: pointer; }
+        .code-content .challenge-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .code-content .challenge-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 6px; }
+        .code-content .challenge-desc { color: #b3b8d0; font-size: 1rem; margin-bottom: 8px; }
+        .code-content .start-btn { background: #00FFDD; color: #181c2f; border: none; border-radius: 5px; padding: 8px 18px; font-weight: 600; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.2s; }
+        .code-content .start-btn:hover { background: #00c2b2; transform: translateY(-1px); }
+        .code-content .start-btn:disabled { background: #4a5067; color: #9aa0b8; cursor: not-allowed; transform: none; }
+        .code-area-row { display: none; gap: 24px; margin-top: 24px; }
+        .code-snippet-area, .code-input { width: 100%; background: #181f2e; border-radius: 10px; padding: 22px; font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.5; }
+        .code-snippet-area { color: #b8eaff; border: 1px solid #2a3246; }
+        .code-input { color: #fff; background: #161c2a; border: 1px solid #2a3246; resize: none; height: 200px; transition: border-color 0.2s; }
+        .code-input:focus { outline: none; border-color: #00FFDD; }
+        .completion-message { margin-top: 24px; padding: 20px; background: #2a3653; border-radius: 8px; text-align: center; animation: slideIn 0.3s ease-out; }
+        .completion-message h3 { color: #00FFDD; margin-bottom: 12px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .stats-container { display: flex; gap: 24px; justify-content: center; margin-top: 16px; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 600; color: #00FFDD; }
+        .stat-label { color: #b3b8d0; font-size: 0.9rem; }
+        .difficulty-header-selector {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-right: 32px;
+        }
+        .difficulty-btn-header {
+            background: #23284a;
+            color: #fff;
+            border: 1.5px solid #00FFDD;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .difficulty-btn-header.active, .difficulty-btn-header:focus {
+            background: linear-gradient(90deg, #00FFDD 0%, #00C2FF 100%);
+            color: #181c2f;
+            border-color: #FFC700;
+        }
+        @media (max-width: 900px) {
+            .difficulty-header-selector {
+                margin: 12px 0 0 0;
+                flex-wrap: wrap;
+            }
+        }
+        .difficulty-header-bar {
+            width: 100%;
+            background: #20243a;
+            border-top: 1.5px solid #23284a;
+            border-bottom: 1.5px solid #23284a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0 8px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .difficulty-header-selector {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+        .difficulty-btn-header {
+            background: #23284a;
+            color: #fff;
+            border: 1.5px solid #00FFDD;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .difficulty-btn-header.active, .difficulty-btn-header:focus {
+            background: linear-gradient(90deg, #00FFDD 0%, #00C2FF 100%);
+            color: #181c2f;
+            border-color: #FFC700;
+        }
+        @media (max-width: 900px) {
+            .difficulty-header-bar {
+                padding: 8px 0 6px 0;
+            }
+            .difficulty-header-selector {
+                margin: 0;
+                flex-wrap: wrap;
+            }
+        }
+        .selection-header-bar {
+            width: 100%;
+            background: #20243a;
+            border-top: 1.5px solid #23284a;
+            border-bottom: 1.5px solid #23284a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0 8px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .selection-header-group {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .difficulty-header-selector, .mode-header-selector {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+        .difficulty-btn-header, .mode-btn-header {
+            background: #23284a;
+            color: #fff;
+            border: 1.5px solid #00FFDD;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 1px 4px #00ffdd11;
+        }
+        .difficulty-btn-header.active, .difficulty-btn-header:focus,
+        .mode-btn-header.active, .mode-btn-header:focus {
+            background: linear-gradient(90deg, #00FFDD 0%, #00C2FF 100%);
+            color: #181c2f;
+            border-color: #FFC700;
+            box-shadow: 0 2px 8px #00ffdd33;
+        }
+        .mode-header-selector {
+            margin-left: 24px;
+            border-left: 2px solid #23284a;
+            padding-left: 24px;
+        }
+        @media (max-width: 900px) {
+            .selection-header-bar {
+                padding: 8px 0 6px 0;
+            }
+            .selection-header-group {
+                gap: 16px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .mode-header-selector {
+                margin-left: 0;
+                border-left: none;
+                padding-left: 0;
+                margin-top: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Effects Layer -->
+    <div id="particles-js"></div>
+    <header class="code-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Code Racer Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item active"><i class="fas fa-home"></i> Home</a>
+                <a href="code-training.html" class="nav-item"><i class="fas fa-graduation-cap"></i> Training</a>
+                <a href="code-championship.html" class="nav-item"><i class="fas fa-trophy"></i> Championship</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-info">
+                    <img src="assets/avatars/default-avatar.png" alt="User Avatar" class="profile-pic">
+                    <span class="user-name">Guest Racer</span>
+                </div>
+                <a href="login.html" class="nav-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <div class="selection-header-bar">
+            <div class="selection-header-group">
+                <div class="difficulty-header-selector">
+                    <button class="difficulty-btn-header active" data-level="beginner">
+                        <i class="fas fa-baby"></i> Beginner
+                    </button>
+                    <button class="difficulty-btn-header" data-level="intermediate">
+                        <i class="fas fa-user"></i> Intermediate
+                    </button>
+                    <button class="difficulty-btn-header" data-level="advanced">
+                        <i class="fas fa-star"></i> Advanced
+                    </button>
+                </div>
+                <div class="mode-header-selector">
+                    <button class="mode-btn-header active" data-mode="practice">
+                        <i class="fas fa-dumbbell"></i> Practice
+                    </button>
+                    <button class="mode-btn-header" data-mode="challenge">
+                        <i class="fas fa-flag-checkered"></i> Challenge
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>    <div class="challenge-container">
+        <!-- Sidebar -->
+        <aside class="challenge-sidebar">
+            <section class="sidebar-section">
+                <h3>Programming Languages</h3>
+                <div class="language-list">
+                    <button class="lang-btn active" data-lang="python">
+                        <i class="fab fa-python"></i> Python
+                    </button>
+                    <button class="lang-btn" data-lang="javascript">
+                        <i class="fab fa-js"></i> JavaScript
+                    </button>
+                    <button class="lang-btn" data-lang="typescript">
+                        <i class="fab fa-js"></i> TypeScript
+                    </button>
+                    <button class="lang-btn" data-lang="java">
+                        <i class="fab fa-java"></i> Java
+                    </button>
+                    <button class="lang-btn" data-lang="cpp">
+                        <i class="fas fa-code"></i> C++
+                    </button>
+                    <button class="lang-btn" data-lang="rust">
+                        <i class="fas fa-cogs"></i> Rust
+                    </button>
+                    <button class="lang-btn" data-lang="go">
+                        <i class="fas fa-code"></i> Go
+                    </button>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="challenge-content">
+            <!-- Challenge Selection View -->
+            <div id="challenge-selection" class="challenge-selection-view">
+                <div class="challenge-header">
+                    <!-- Heading removed as requested -->
+                </div>
+                <p class="intro-text">Race your way to coding mastery! Choose a language and start a challenge, or train with our interactive tutorials.</p>
+
+                <div class="challenge-list">
+                    <div class="challenge-card">
+                        <div class="challenge-title">Print Hello World</div>
+                        <div class="challenge-desc">Write a program that prints <code>Hello, World!</code> to the console.</div>                        <div class="challenge-meta">
+                            <span class="difficulty">Beginner</span>
+                            <span class="completion-rate">Success: 95%</span>
+                        </div>
+                        <button class="start-btn"><i class="fas fa-play"></i> Start Challenge</button>
+                    </div>
+                    <div class="challenge-card">
+                        <div class="challenge-title">Sum of Two Numbers</div>
+                        <div class="challenge-desc">Write a function that takes two numbers and returns their sum.</div>                        <div class="challenge-meta">
+                            <span class="difficulty">Beginner</span>
+                            <span class="completion-rate">Success: 88%</span>
+                        </div>
+                        <button class="start-btn"><i class="fas fa-play"></i> Start Challenge</button>
+                    </div>
+                    <div class="challenge-card">
+                        <div class="challenge-title">Generic Function</div>
+                        <div class="challenge-desc">Create a generic function that returns its input.</div>
+                        <div class="challenge-meta">
+                            <span class="difficulty">Intermediate</span>
+                            <span class="completion-rate">Success: 75%</span>
+                        </div>
+                        <button class="start-btn">Start Challenge</button>
+                    </div>
+                </div>
+            </div>            <!-- Code Editor View -->
+            <div id="challenge-editor" class="challenge-editor-view" style="display: none;">
+                <div class="editor-header">
+                    <div class="challenge-info">
+                        <h2 class="challenge-name"></h2>
+                        <p class="challenge-description"></p>
+                    </div>
+                    <div class="editor-controls">
+                        <div class="timer">
+                            <i class="fas fa-clock"></i>
+                            <span id="timer">00:00</span>
+                        </div>
+                        <button class="reset-btn">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <div class="code-editor">
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>Challenge Code</span>
+                            <div class="panel-controls">
+                                <button class="theme-toggle">
+                                    <i class="fas fa-adjust"></i>
+                                </button>
+                                <button class="fullscreen-toggle">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="code-snippet-area" class="code-snippet"></div>
+                    </div>
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>Your Code</span>
+                            <div class="typing-status">
+                                <span class="status-indicator"></span>
+                                Ready to start
+                            </div>
+                        </div>
+                        <textarea id="code-input" class="code-input" placeholder="Start typing when ready..." disabled></textarea>
+                    </div>
+                </div>                <!-- Code Evaluation Results -->
+                <div id="evaluation-results" class="evaluation-results" style="display: none;">
+                    <div class="results-header">
+                        <h3>Test Results</h3>
+                        <div class="results-summary"></div>
+                    </div>
+                    <div class="test-cases"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    
+    <script src="scripts/code-evaluator.js"></script>
+    <script src="scripts/code-runner.js"></script>
+    <script src="scripts/code-racer.js"></script>
+    <script src="scripts/header-auth.js"></script>
+</body>
+</html> 

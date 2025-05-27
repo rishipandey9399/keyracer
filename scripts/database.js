@@ -5,16 +5,32 @@ class TypingDatabase {
         this.dbVersion = 1;
         this.db = null;
         this.initSuccess = false;
-        this.initialized = this.initDB();
+        this.useLocalStorage = false;
         
-        console.log('TypingDatabase constructor called');
-        
-        // Set a timeout to check if database initialized successfully
-        setTimeout(() => {
-            if (!this.initSuccess) {
-                console.warn('Database initialization taking longer than expected. This might indicate an issue.');
-            }
-        }, 3000);
+        try {
+            console.log('TypingDatabase constructor called');
+            this.initialized = this.initDB();
+            
+            // Set a timeout to check if database initialized successfully
+            setTimeout(() => {
+                if (!this.initSuccess) {
+                    console.warn('Database initialization taking longer than expected. This might indicate an issue.');
+                }
+            }, 3000);
+        } catch (error) {
+            console.error('Error in database constructor:', error);
+            this.initSuccess = false;
+            
+            // Show a visible error message
+            const errorMsg = 'Database error: ' + (error.message || 'Unknown error');
+            const errorElem = document.createElement('div');
+            errorElem.style.cssText = 'position:fixed;top:60px;left:10px;right:10px;background:#ff4b4b;color:white;padding:10px;border-radius:5px;z-index:9999;text-align:center;box-shadow:0 3px 6px rgba(0,0,0,0.2);';
+            errorElem.innerHTML = errorMsg;
+            document.body.appendChild(errorElem);
+            
+            // Remove after 8 seconds
+            setTimeout(() => errorElem.remove(), 8000);
+        }
     }
 
     // Initialize the database
@@ -23,9 +39,10 @@ class TypingDatabase {
         return new Promise((resolve, reject) => {
             // Check if IndexedDB is available
             if (!window.indexedDB) {
-                console.error('IndexedDB is not supported in this browser');
-                document.body.innerHTML += '<div style="color:red;padding:20px;background:#ffeeee;position:fixed;top:0;left:0;right:0;z-index:9999;">Database error: Your browser does not support IndexedDB</div>';
-                reject('Your browser does not support the necessary storage features.');
+                console.warn('IndexedDB is not supported, falling back to localStorage');
+                this.useLocalStorage = true;
+                this.initSuccess = true;
+                resolve(true);
                 return;
             }
             
@@ -163,6 +180,14 @@ class TypingDatabase {
     // Typing records methods
     async saveTypingRecord(record) {
         try {
+            if (this.useLocalStorage) {
+                const records = JSON.parse(localStorage.getItem('typingRecords') || '[]');
+                record.id = Date.now(); // Generate unique ID
+                records.push(record);
+                localStorage.setItem('typingRecords', JSON.stringify(records));
+                return record.id;
+            }
+            
             await this.ensureDbReady();
             
             return new Promise((resolve, reject) => {
@@ -190,6 +215,11 @@ class TypingDatabase {
 
     async getTypingRecords(username) {
         try {
+            if (this.useLocalStorage) {
+                const records = JSON.parse(localStorage.getItem('typingRecords') || '[]');
+                return records.filter(record => record.username === username);
+            }
+            
             await this.ensureDbReady();
             
             return new Promise((resolve, reject) => {
@@ -385,6 +415,96 @@ class TypingDatabase {
         } catch (error) {
             console.error('Get leaderboard data error:', error);
             throw error;
+        }
+    }
+
+    /**
+     * Save user progress for lessons
+     * @param {string} username - The username
+     * @param {object} progressData - The progress data to save
+     * @returns {Promise<boolean>} - Whether save was successful
+     */
+    async saveUserProgress(username, progressData) {
+        try {
+            await this.ensureDbReady();
+            
+            const transaction = this.db.transaction(['users'], 'readwrite');
+            const userStore = transaction.objectStore('users');
+            
+            // Get the user record
+            const getUserRequest = userStore.get(username);
+            
+            return new Promise((resolve, reject) => {
+                getUserRequest.onerror = (event) => {
+                    console.error('Error getting user for progress update:', event.target.error);
+                    reject(event.target.error);
+                };
+                
+                getUserRequest.onsuccess = (event) => {
+                    const userData = event.target.result;
+                    
+                    if (userData) {
+                        // Update user progress
+                        userData.lessonProgress = progressData;
+                        
+                        // Save the updated user data
+                        const updateRequest = userStore.put(userData);
+                        
+                        updateRequest.onerror = (event) => {
+                            console.error('Error updating user progress:', event.target.error);
+                            reject(event.target.error);
+                        };
+                        
+                        updateRequest.onsuccess = () => {
+                            console.log('User progress saved successfully');
+                            resolve(true);
+                        };
+                    } else {
+                        reject(new Error('User not found'));
+                    }
+                };
+            });
+        } catch (error) {
+            console.error('Error saving user progress:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Get user progress for lessons
+     * @param {string} username - The username
+     * @returns {Promise<object>} - The user's progress data
+     */
+    async getUserProgress(username) {
+        try {
+            await this.ensureDbReady();
+            
+            const transaction = this.db.transaction(['users'], 'readonly');
+            const userStore = transaction.objectStore('users');
+            
+            // Get the user record
+            const getUserRequest = userStore.get(username);
+            
+            return new Promise((resolve, reject) => {
+                getUserRequest.onerror = (event) => {
+                    console.error('Error getting user progress:', event.target.error);
+                    reject(event.target.error);
+                };
+                
+                getUserRequest.onsuccess = (event) => {
+                    const userData = event.target.result;
+                    
+                    if (userData && userData.lessonProgress) {
+                        resolve(userData.lessonProgress);
+                    } else {
+                        // Return empty object if no progress data found
+                        resolve({});
+                    }
+                };
+            });
+        } catch (error) {
+            console.error('Error retrieving user progress:', error);
+            return {};
         }
     }
 }

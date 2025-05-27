@@ -8,18 +8,89 @@
     <link rel="stylesheet" href="styles/typing-tips.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF4A4A;
+            --secondary-color: #1E2761;
+            --accent-color: #00FFDD;
+            --racing-stripe-light: #FF4A4A;
+            --racing-stripe-dark: #1E2761;
+            --card-shadow: 0 10px 25px rgba(255, 74, 74, 0.2);
+            --text-color: #e9e9e9;
+        }
+        
+        .logo-img {
+            max-height: 100px;
+            vertical-align: middle;
+            margin-right: 15px;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 221, 0.5));
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1E2761, rgba(30, 39, 97, 0.8));
+            border-radius: 16px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(255, 74, 74, 0.2);
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid #FF4A4A;
+            border-right: 5px solid #FF4A4A;
+            margin-bottom: 2rem;
+        }
+        
+        .header-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 4s infinite;
+            pointer-events: none;
+        }
+        
+        .logo-section {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #00FFDD;
+            margin-bottom: 15px;
+        }
+        
+        .logo-heading {
+            text-align: left;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-section {
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Typing Tips & Techniques <i class="fas fa-keyboard"></i></h1>
-        </header>
+        <div class="header-container">
+            <div class="logo-section">
+                <h1 class="logo-heading"><img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img"> - Typing Tips <i class="fas fa-flag-checkered"></i></h1>
+            </div>
 
+            <div class="nav-section">
         <div class="feature-tabs">
-            <a href="index.html" class="tab"><i class="fas fa-home"></i> Home</a>
-            <a href="lessons.html" class="tab"><i class="fas fa-graduation-cap"></i> Lessons</a>
-            <a href="typing-tips.html" class="tab active"><i class="fas fa-lightbulb"></i> Tips</a>
-            <a href="leaderboard.html" class="tab leaderboard-tab"><i class="fas fa-trophy"></i> Leaderboard</a>
+            <a href="index.html" class="tab" style="color:#fff;"><i class="fas fa-home"></i> Home</a>
+            <a href="lessons.html" class="tab" style="color:#fff;"><i class="fas fa-graduation-cap"></i> Training</a>
+            <a href="typing-tips.html" class="tab active" style="color:#fff;"><i class="fas fa-lightbulb"></i> Tips</a>
+            <a href="leaderboard.html" class="tab" style="color:#fff;"><i class="fas fa-trophy"></i> Championship</a>
+                </div>
+            </div>
         </div>
 
         <div class="tips-container">

@@ -6,6 +6,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Lessons script loaded');
     
+    // Check for database availability
+    checkDatabaseConnection();
+    
     // Reset progress for all tricky lessons to ensure they start at 0%
     document.querySelectorAll('.lesson-card[data-type^="tricky-"] .progress').forEach(function(progressBar) {
         progressBar.style.width = '0%';
@@ -18,6 +21,97 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize lessons data
     initLessonsModule();
 });
+
+/**
+ * Check database connection and initialize if needed
+ */
+function checkDatabaseConnection() {
+    if (window.typingDB) {
+        console.log('Database already initialized for lessons module');
+        // Load user progress from database
+        loadUserProgress();
+    } else {
+        try {
+            console.log('Initializing database for lessons module...');
+            window.typingDB = new TypingDatabase();
+            // Set a timer to wait for database initialization
+            setTimeout(loadUserProgress, 1000);
+        } catch (error) {
+            console.error('Error initializing database for lessons:', error);
+            // Create fallback database functionality
+            window.typingDB = {
+                saveUserProgress: (username, progressData) => {
+                    console.log('Using fallback saveUserProgress for:', username);
+                    // Save to localStorage instead
+                    localStorage.setItem('lessonProgress', JSON.stringify(progressData));
+                    return Promise.resolve(true);
+                },
+                getUserProgress: (username) => {
+                    console.log('Using fallback getUserProgress for:', username);
+                    // Try to get from localStorage
+                    const data = localStorage.getItem('lessonProgress');
+                    return Promise.resolve(data ? JSON.parse(data) : {});
+                }
+            };
+        }
+    }
+}
+
+/**
+ * Load user progress from database or localStorage
+ */
+async function loadUserProgress() {
+    try {
+        // Get current user from localStorage - fixed to use consistent key
+        const currentUser = localStorage.getItem('typingTestUser');
+        
+        if (currentUser && window.typingDB) {
+            console.log('Loading progress for user:', currentUser);
+            
+            // Try to get user progress from database
+            const progress = await window.typingDB.getUserProgress(currentUser);
+            
+            if (progress && Object.keys(progress).length > 0) {
+                console.log('Progress loaded from database:', progress);
+                updateProgressUI(progress);
+            } else {
+                // Fallback to localStorage
+                const localProgress = localStorage.getItem('lessonProgress');
+                if (localProgress) {
+                    updateProgressUI(JSON.parse(localProgress));
+                }
+            }
+        } else {
+            // Not logged in or no database, try localStorage
+            const localProgress = localStorage.getItem('lessonProgress');
+            if (localProgress) {
+                updateProgressUI(JSON.parse(localProgress));
+            }
+        }
+    } catch (error) {
+        console.error('Error loading user progress:', error);
+    }
+}
+
+/**
+ * Update UI with progress data
+ */
+function updateProgressUI(progressData) {
+    if (!progressData) return;
+    
+    Object.keys(progressData).forEach(lessonType => {
+        const progressPercentage = progressData[lessonType];
+        const lessonCard = document.querySelector(`.lesson-card[data-type="${lessonType}"]`);
+        
+        if (lessonCard) {
+            const progressBar = lessonCard.querySelector('.progress');
+            const progressText = lessonCard.querySelector('.lesson-progress span');
+            
+            if (progressBar) progressBar.style.width = `${progressPercentage}%`;
+            if (progressText) progressText.textContent = `${progressPercentage}% Mastered`;
+        }
+    });
+}
 
 /**
  * Main lessons module initialization
@@ -162,30 +256,65 @@ function initLessonsModule() {
     const closeLessonBtn = document.querySelector('.close-lesson-btn');
     const startBigramBtn = document.querySelector('.start-bigram-btn');
     
+    // Lesson state variables
+    let currentLessonType = '';
+    let currentLessonStepIndex = 0;
+    let lessonStartTime = null;
+    let lessonTimer = null;
+    let keyTimestamps = [];
+    let correctChars = 0;
+    let incorrectChars = 0;
+    
     // Set up listeners for lesson cards
     lessonCards.forEach(card => {
         card.addEventListener('click', () => {
             const lessonType = card.getAttribute('data-type');
             const lesson = lessonData[lessonType][0]; // For now, just use the first lesson of each type
-
+            
+            currentLessonType = lessonType;
+            
             // Update lesson content
             document.getElementById('lesson-title').textContent = lesson.title;
             document.getElementById('lesson-description').textContent = lesson.description;
-            document.getElementById('lesson-text').textContent = lesson.text;
             
-            // Update tips
-            const lessonTips = document.getElementById('lesson-tips');
-            lessonTips.innerHTML = lesson.tips.map(tip => `<li>${tip}</li>`).join('');
-
-            // Show lesson interface
-            lessonSelector.style.display = 'none';
-            lessonPractice.style.display = 'block';
+            // Setup the text display
+            setupLessonText(lesson.text);
+            
+            // Reset metrics
+            resetLessonMetrics();
+            
+            // Show race start animation and then display the lesson
+            startLessonWithRaceAnimation(lessonType);
         });
     });
+    
+    // Handle lesson text input
+    const lessonTextInput = document.getElementById('lesson-text-input');
+    if (lessonTextInput) {
+        lessonTextInput.addEventListener('input', function() {
+            // Record keystroke timestamp
+            keyTimestamps.push(Date.now());
+            
+            // First keystroke - start the lesson timer
+            if (keyTimestamps.length === 1) {
+                startLessonTimer();
+            }
+            
+            // Process input
+            processLessonInput(this.value);
+        });
+    }
     
     // Close lesson button
     if (closeLessonBtn) {
         closeLessonBtn.addEventListener('click', function() {
+            // Stop any active timers
+            if (lessonTimer) {
+                clearInterval(lessonTimer);
+                lessonTimer = null;
+            }
+            
+            // Hide lesson interface
             lessonPractice.style.display = 'none';
             lessonSelector.style.display = 'block';
         });
@@ -200,6 +329,364 @@ function initLessonsModule() {
     // Initialize keyboard
     if (typeof initKeyboard === 'function') {
         initKeyboard('lesson-keyboard');
+    }
+    
+    /**
+     * Function to display race start lights countdown
+     */
+    function showRaceStartLights() {
+        return new Promise((resolve) => {
+            // Create race start lights element
+            const raceStartLights = document.createElement('div');
+            raceStartLights.className = 'race-start-lights';
+            
+            const lightsContainer = document.createElement('div');
+            lightsContainer.className = 'lights-container';
+            
+            // Create three lights
+            for (let i = 0; i < 3; i++) {
+                const light = document.createElement('div');
+                light.className = 'light';
+                lightsContainer.appendChild(light);
+            }
+            
+            const countdownNumber = document.createElement('div');
+            countdownNumber.className = 'countdown-number';
+            
+            raceStartLights.appendChild(lightsContainer);
+            raceStartLights.appendChild(countdownNumber);
+            document.body.appendChild(raceStartLights);
+            
+            // Show the lights container
+            raceStartLights.classList.add('active');
+            
+            // Countdown sequence
+            let count = 3;
+            const lights = raceStartLights.querySelectorAll('.light');
+            
+            // Function to update countdown
+            function updateCountdown() {
+                // Clear previous state
+                lights.forEach(light => light.classList.remove('active', 'green'));
+                countdownNumber.textContent = count;
+                countdownNumber.classList.add('visible');
+                
+                if (count > 0) {
+                    // Light up the appropriate number of red lights
+                    for (let i = 0; i < count; i++) {
+                        lights[i].classList.add('active');
+                    }
+                    
+                    count--;
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    // Show GO!
+                    countdownNumber.textContent = 'GO!';
+                    countdownNumber.style.color = '#00FF00';
+                    
+                    // Turn all lights green
+                    lights.forEach(light => {
+                        light.classList.remove('active');
+                        light.classList.add('green');
+                    });
+                    
+                    // Hide after a delay
+                    setTimeout(() => {
+                        raceStartLights.classList.remove('active');
+                        setTimeout(() => {
+                            raceStartLights.remove();
+                        }, 300);
+                        resolve();
+                    }, 1000);
+                }
+            }
+            
+            // Start the countdown
+            updateCountdown();
+        });
+    }
+    
+    /**
+     * Setup the text display for a lesson
+     */
+    function setupLessonText(text) {
+        const textDisplay = document.getElementById('lesson-text-display');
+        textDisplay.innerHTML = '';
+        
+        // Create spans for each character
+        for (let i = 0; i < text.length; i++) {
+            const span = document.createElement('span');
+            span.textContent = text[i];
+            textDisplay.appendChild(span);
+        }
+        
+        // Highlight the first character
+        if (textDisplay.firstChild) {
+            textDisplay.firstChild.classList.add('current');
+        }
+    }
+    
+    /**
+     * Show race start animation and then display the lesson
+     */
+    async function startLessonWithRaceAnimation(lessonType) {
+        try {
+            // Use the shared race start countdown if available
+            if (typeof window.showRaceStartCountdown === 'function') {
+                await window.showRaceStartCountdown();
+            } else {
+                // Fallback to local implementation
+                await showRaceStartLights();
+            }
+            
+            // After countdown, show the lesson
+            document.querySelector('.lesson-selector').style.display = 'none';
+            document.querySelector('.lesson-practice').style.display = 'block';
+            
+            // Focus on input field
+            document.getElementById('lesson-text-input').focus();
+            
+            // Start tracking time
+            startLessonTimer();
+        } catch (error) {
+            console.error('Error starting lesson with animation:', error);
+            // Fallback - show lesson immediately
+            document.querySelector('.lesson-selector').style.display = 'none';
+            document.querySelector('.lesson-practice').style.display = 'block';
+            document.getElementById('lesson-text-input').focus();
+            startLessonTimer();
+        }
+    }
+    
+    /**
+     * Process user input during a lesson
+     */
+    function processLessonInput(userInput) {
+        const textDisplay = document.getElementById('lesson-text-display');
+        const textSpans = textDisplay.querySelectorAll('span');
+        
+        // Reset classes
+        textSpans.forEach(span => {
+            span.classList.remove('correct', 'incorrect', 'current');
+        });
+        
+        // Reset counters
+        correctChars = 0;
+        incorrectChars = 0;
+        
+        // Process the input
+        for (let i = 0; i < userInput.length; i++) {
+            if (i >= textSpans.length) break;
+            
+            if (userInput[i] === textSpans[i].textContent) {
+                textSpans[i].classList.add('correct');
+                correctChars++;
+            } else {
+                textSpans[i].classList.add('incorrect');
+                incorrectChars++;
+            }
+        }
+        
+        // Highlight current character
+        if (userInput.length < textSpans.length) {
+            textSpans[userInput.length].classList.add('current');
+        }
+        
+        // Calculate metrics
+        updateLessonMetrics();
+        
+        // Check if user completed the text
+        if (userInput.length === textSpans.length) {
+            completeLessonStep();
+        }
+    }
+    
+    /**
+     * Start the lesson timer
+     */
+    function startLessonTimer() {
+        // Reset previous timer if exists
+        if (lessonTimer) {
+            clearInterval(lessonTimer);
+        }
+        
+        // Set start time
+        lessonStartTime = Date.now();
+        
+        // Start timer
+        lessonTimer = setInterval(() => {
+            const elapsedTime = Math.floor((Date.now() - lessonStartTime) / 1000);
+            document.getElementById('lesson-time').textContent = `${elapsedTime}s`;
+            
+            // Update metrics periodically
+            updateLessonMetrics();
+        }, 1000);
+    }
+    
+    /**
+     * Update lesson metrics (WPM, accuracy)
+     */
+    function updateLessonMetrics() {
+        if (!lessonStartTime) return;
+        
+        // Calculate time elapsed in minutes
+        const elapsedMinutes = (Date.now() - lessonStartTime) / 1000 / 60;
+        
+        // Calculate WPM (standard calculation: characters/5 divided by minutes)
+        const userInput = document.getElementById('lesson-text-input').value;
+        const inputLength = userInput.length;
+        const inputWords = inputLength / 5;
+        const wpm = Math.round(inputWords / Math.max(elapsedMinutes, 0.01));
+        
+        // Calculate accuracy
+        const totalChars = correctChars + incorrectChars;
+        const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+        
+        // Update UI
+        document.querySelector('.speedometer-value').textContent = `${wpm} WPM`;
+        document.getElementById('lesson-accuracy').textContent = `${accuracy}%`;
+        
+        // Update speedometer dial
+        updateSpeedometerDial(wpm);
+    }
+    
+    /**
+     * Update the speedometer dial based on WPM
+     */
+    function updateSpeedometerDial(wpm) {
+        const maxWPM = 150; // Maximum WPM for full rotation
+        const rotationPercentage = Math.min(wpm / maxWPM, 1);
+        const rotationDegrees = -90 + (rotationPercentage * 180);
+        
+        const speedometerDial = document.querySelector('.speedometer-dial');
+        if (speedometerDial) {
+            speedometerDial.style.transform = `translate(-50%, -100%) rotate(${rotationDegrees}deg)`;
+        }
+    }
+    
+    /**
+     * Reset lesson metrics
+     */
+    function resetLessonMetrics() {
+        // Reset timers
+        if (lessonTimer) {
+            clearInterval(lessonTimer);
+            lessonTimer = null;
+        }
+        lessonStartTime = null;
+        
+        // Reset counters
+        keyTimestamps = [];
+        correctChars = 0;
+        incorrectChars = 0;
+        
+        // Reset UI
+        document.querySelector('.speedometer-value').textContent = '0 WPM';
+        document.getElementById('lesson-accuracy').textContent = '100%';
+        document.getElementById('lesson-time').textContent = '0s';
+        document.getElementById('lesson-text-input').value = '';
+        
+        // Reset speedometer dial
+        updateSpeedometerDial(0);
+    }
+    
+    /**
+     * Complete a lesson step
+     */
+    function completeLessonStep() {
+        // Stop timer
+        if (lessonTimer) {
+            clearInterval(lessonTimer);
+            lessonTimer = null;
+        }
+        
+        // Calculate final metrics
+        const elapsedTime = Math.floor((Date.now() - lessonStartTime) / 1000);
+        const userInput = document.getElementById('lesson-text-input').value;
+        const inputLength = userInput.length;
+        const inputWords = inputLength / 5;
+        const wpm = Math.round(inputWords / (elapsedTime / 60));
+        const accuracy = Math.round((correctChars / inputLength) * 100);
+        
+        // Update lesson progress
+        updateLessonProgress(currentLessonType, wpm, accuracy);
+        
+        // Show completion modal
+        showCompletionModal(wpm, accuracy, elapsedTime);
+    }
+    
+    /**
+     * Update lesson progress in database and localStorage
+     */
+    async function updateLessonProgress(lessonType, wpm, accuracy) {
+        try {
+            // Calculate progress percentage
+            const progressPercentage = Math.min(
+                Math.round((wpm / 60) * 100), // Progressive % based on WPM (60 WPM = 100%)
+                100 // Max 100%
+            );
+            
+            // Create progress object
+            const progressData = JSON.parse(localStorage.getItem('lessonProgress') || '{}');
+            progressData[lessonType] = progressPercentage;
+            
+            // Save to localStorage as backup
+            localStorage.setItem('lessonProgress', JSON.stringify(progressData));
+            
+            // Get current user
+            const currentUser = localStorage.getItem('typingTestUser');
+            
+            // Save to database if user is logged in
+            if (currentUser && window.typingDB && typeof window.typingDB.saveUserProgress === 'function') {
+                await window.typingDB.saveUserProgress(currentUser, progressData);
+                console.log('Progress saved to database for user:', currentUser);
+            }
+            
+            // Update UI
+            updateProgressUI(progressData);
+        } catch (e) {
+            console.error('Error saving lesson progress:', e);
+        }
+    }
+    
+    /**
+     * Show completion modal
+     */
+    function showCompletionModal(wpm, accuracy, time) {
+        // Update completion stats
+        document.getElementById('completion-wpm').textContent = wpm;
+        document.getElementById('completion-accuracy').textContent = accuracy;
+        document.getElementById('completion-time').textContent = time;
+        
+        // Set appropriate feedback
+        let feedback = '';
+        if (wpm > 80) {
+            feedback = 'Outstanding! You\'re racing at top speed! 🏆';
+        } else if (wpm > 60) {
+            feedback = 'Great driving! You\'re cruising at a good speed! 🏁';
+        } else if (wpm > 40) {
+            feedback = 'Good job! You\'re picking up speed! 🚗';
+        } else {
+            feedback = 'Keep practicing! More laps will improve your speed. 🔄';
+        }
+        
+        document.getElementById('completion-feedback').textContent = feedback;
+        
+        // Show the modal
+        document.querySelector('.completion-modal').style.display = 'flex';
+        
+        // Add event listeners for buttons
+        document.querySelector('.restart-lesson-btn').addEventListener('click', function() {
+            document.querySelector('.completion-modal').style.display = 'none';
+            resetLessonMetrics();
+            setupLessonText(lessonData[currentLessonType][0].text);
+        });
+        
+        document.querySelector('.return-lessons-btn').addEventListener('click', function() {
+            document.querySelector('.completion-modal').style.display = 'none';
+            lessonPractice.style.display = 'none';
+            lessonSelector.style.display = 'block';
+        });
     }
 }
 

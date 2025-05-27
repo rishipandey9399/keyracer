@@ -2,56 +2,86 @@
 
 // Initialize charts when document is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Setup for historical progress chart
-    setupHistoryChart();
-
-    // Load user history when page loads
+    // Initial delay to ensure DOM is fully loaded
     setTimeout(() => {
-        if (window.typingDB) {
-            loadUserHistory();
+        if (window.chartFunctions) {
+            window.chartFunctions.initCharts();
         }
-    }, 1000); // Delay to ensure DB is ready
+    }, 500);
 });
+
+// Function to initialize all charts
+function initCharts() {
+    console.log('Initializing charts...');
+    
+    // Setup for historical progress chart if element exists
+    if (document.getElementById('history-chart')) {
+        setupHistoryChart();
+        
+        // Load user history when charts are initialized
+        setTimeout(() => {
+            if (window.typingDB) {
+                loadUserHistory();
+            }
+        }, 1000); // Delay to ensure DB is ready
+    } else {
+        console.log('History chart container not found on this page');
+    }
+}
 
 // Function to setup history chart
 function setupHistoryChart() {
-    const ctx = document.createElement('canvas');
     const historyChartContainer = document.getElementById('history-chart');
     
     if (!historyChartContainer) {
-        console.warn('History chart container not found');
+        console.log('History chart container not found on this page');
         return;
     }
     
-    historyChartContainer.appendChild(ctx);
+    // Create canvas if it doesn't exist
+    let ctx = historyChartContainer.querySelector('canvas');
+    if (!ctx) {
+        ctx = document.createElement('canvas');
+        historyChartContainer.appendChild(ctx);
+    }
     
     // Get historical data from localStorage or use empty array
     const historyData = JSON.parse(localStorage.getItem('typingHistory') || '[]');
     
-    window.historyChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: historyData.map((_, index) => `Test ${index + 1}`),
-            datasets: [{
-                label: 'WPM',
-                data: historyData.map(item => item.wpm),
-                backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--primary-color')
-            }, {
-                label: 'Accuracy %',
-                data: historyData.map(item => item.accuracy),
-                backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color')
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
+    // Check if Chart.js is available
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded. Please ensure the script is included.');
+        return;
+    }
+    
+    try {
+        window.historyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: historyData.map((_, index) => `Test ${index + 1}`),
+                datasets: [{
+                    label: 'WPM',
+                    data: historyData.map(item => item.wpm),
+                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--primary-color')
+                }, {
+                    label: 'Accuracy %',
+                    data: historyData.map(item => item.accuracy),
+                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color')
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    } catch (error) {
+        console.error('Error creating chart:', error);
+    }
 }
 
 // Function to add new test result to history
@@ -183,6 +213,7 @@ if (typeof window !== 'undefined') {
         resetWPMChart,
         addTestToHistory,
         updateHistoryChart,
-        loadUserHistory
+        loadUserHistory,
+        initCharts
     };
 } 

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Racer - Choose Your Path</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+        }
+        .preference-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .brand-section {
+            margin-bottom: 40px;
+        }
+        .preference-title {
+            color: var(--accent-color, #00FFDD);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+        .preference-cards {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .preference-card {
+            background: rgba(14, 30, 56, 0.95);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            border: 2px solid var(--accent-color, #00FFDD);
+            width: 340px;
+            max-width: 90vw;
+            padding: 36px 28px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+        .preference-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 16px 48px rgba(0,255,221,0.10);
+            border-color: #FFC700;
+        }
+        .preference-card .icon {
+            font-size: 3.5rem;
+            margin-bottom: 18px;
+            color: var(--accent-color, #00FFDD);
+            text-shadow: 0 0 16px #00FFDD44;
+        }
+        .preference-card .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+        .preference-card .card-desc {
+            color: #b8eaff;
+            font-size: 1.05rem;
+            margin-bottom: 24px;
+        }
+        .preference-card .card-btn {
+            background: linear-gradient(90deg, #00FFDD 0%, #00C2FF 100%);
+            color: #111827;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 4px 16px #00ffdd22;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .preference-card .card-btn:hover {
+            background: linear-gradient(90deg, #FFC700 0%, #FF4A4A 100%);
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .preference-cards {
+                flex-direction: column;
+                gap: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preference-page">
+        <div class="brand-section">
+            <img src="assets/images/logo.png" alt="Key Racer Logo" class="brand-logo">
+            <h2 class="brand-tagline">The Ultimate Keyboard Racing Championship</h2>
+        </div>
+        <div class="preference-title">What would you like to do today?</div>
+        <div class="preference-cards">
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-keyboard"></i></div>
+                <div class="card-title">Typing Test</div>
+                <div class="card-desc">Test and improve your typing speed and accuracy with fun, competitive races and challenges.</div>
+                <a href="typing-test.html" class="card-btn">Start Typing</a>
+            </div>
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-code"></i></div>
+                <div class="card-title">Code Racer</div>
+                <div class="card-desc">Practice coding in Python, Java, C++, and more. Level up from beginner to advanced with real code snippets.</div>
+                <a href="code-racer.html" class="card-btn">Start Coding</a>
+            </div>
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-user-tie"></i></div>
+                <div class="card-title">Professional Skills</div>
+                <div class="card-desc">Enhance your soft skills: practice resumes, cover letters, business emails, and more with real-world templates.</div>
+                <a href="pro-skills.html" class="card-btn">Practice Soft Skills</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

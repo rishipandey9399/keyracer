@@ -22,7 +22,7 @@ const keyClasses = {
 };
 
 // Special keys with racing themes
-const racingKeys = ['w', 'a', 's', 'd', 'Space'];
+const racingKeys = ['w', 'a', 's', 'd', 'Space', 'Shift'];
 
 // Initialize the keyboard
 function initKeyboard(keyboardId = 'keyboard') {
@@ -48,8 +48,8 @@ function initKeyboard(keyboardId = 'keyboard') {
                 keyElement.classList.add(keyClasses[key]);
             }
             
-            // Add racing theme to WASD keys
-            if (racingKeys.includes(key.toLowerCase())) {
+            // Add racing theme to racing keys
+            if (racingKeys.includes(key.toLowerCase()) || racingKeys.includes(key)) {
                 keyElement.classList.add('racing-key');
                 
                 // Add racing stripe to Space bar
@@ -58,10 +58,38 @@ function initKeyboard(keyboardId = 'keyboard') {
                     stripe.className = 'racing-stripe';
                     keyElement.appendChild(stripe);
                 }
+                
+                // Add special icon to racing control keys
+                if (['w', 'a', 's', 'd'].includes(key.toLowerCase())) {
+                    const icon = document.createElement('i');
+                    
+                    if (key.toLowerCase() === 'w') {
+                        icon.className = 'fas fa-chevron-up racing-icon';
+                    } else if (key.toLowerCase() === 'a') {
+                        icon.className = 'fas fa-chevron-left racing-icon';
+                    } else if (key.toLowerCase() === 's') {
+                        icon.className = 'fas fa-chevron-down racing-icon';
+                    } else if (key.toLowerCase() === 'd') {
+                        icon.className = 'fas fa-chevron-right racing-icon';
+                    }
+                    
+                    keyElement.appendChild(icon);
+                }
+                
+                // Add boost icon to Shift keys
+                if (key === 'Shift') {
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-bolt racing-icon-small';
+                    keyElement.appendChild(icon);
+                }
             }
 
             // Set key label
-            keyElement.textContent = key === 'Space' ? '' : key;
+            if (key === 'Space') {
+                keyElement.setAttribute('aria-label', 'Space');
+            } else {
+                keyElement.textContent = key;
+            }
             
             rowElement.appendChild(keyElement);
         });
@@ -69,35 +97,60 @@ function initKeyboard(keyboardId = 'keyboard') {
         keyboardElement.appendChild(rowElement);
     });
     
-    // Add 3D effect to keyboard
-    add3DEffect(keyboardId);
+    // Add glow effect to keyboard
+    addKeyboardEffects(keyboardId);
 }
 
-// Add 3D effect to the keyboard
-function add3DEffect(keyboardId = 'keyboard') {
+// Add enhanced effects to the keyboard
+function addKeyboardEffects(keyboardId = 'keyboard') {
     const keyboard = document.getElementById(keyboardId);
     if (!keyboard) return;
     
-    // Add perspective to keyboard
-    keyboard.style.transform = 'perspective(1000px) rotateX(10deg)';
+    // Add perspective and 3D effect to keyboard
+    keyboard.style.transform = 'perspective(1200px) rotateX(12deg)';
     keyboard.style.transformStyle = 'preserve-3d';
+    keyboard.style.transition = 'all 0.5s ease';
 
-    // Add hover effect
+    // Add ambient light effect
+    const ambientLight = document.createElement('div');
+    ambientLight.className = 'keyboard-ambient-light';
+    keyboard.parentNode.insertBefore(ambientLight, keyboard);
+
+    // Add hover effect to keyboard
     keyboard.addEventListener('mouseover', function() {
-        keyboard.style.transform = 'perspective(1000px) rotateX(5deg)';
+        keyboard.style.transform = 'perspective(1200px) rotateX(8deg)';
+        ambientLight.style.opacity = '0.7';
     });
     
     keyboard.addEventListener('mouseout', function() {
-        keyboard.style.transform = 'perspective(1000px) rotateX(10deg)';
+        keyboard.style.transform = 'perspective(1200px) rotateX(12deg)';
+        ambientLight.style.opacity = '0.4';
     });
     
-    // Add 3D effect to keys
+    // Add 3D effect to keys with staggered animation
     const keys = keyboard.querySelectorAll('.key');
     keys.forEach((key, index) => {
-        // Add slight delay for each key
-        setTimeout(() => {
+        // Add random delay for each key for a wave effect
+        const delay = Math.random() * 0.5;
+        key.style.animation = `keyAppear 0.5s ${delay}s both`;
+        
+        // Add transform for 3D effect
             key.style.transform = 'translateZ(5px)';
-        }, index * 10);
+        
+        // Add hover effect to individual keys
+        key.addEventListener('mouseover', function() {
+            if (!this.classList.contains('highlight')) {
+                this.style.transform = 'translateZ(10px) translateY(-2px)';
+                this.style.boxShadow = '0 8px 15px rgba(0, 0, 0, 0.3)';
+            }
+        });
+        
+        key.addEventListener('mouseout', function() {
+            if (!this.classList.contains('highlight')) {
+                this.style.transform = 'translateZ(5px)';
+                this.style.boxShadow = '';
+            }
+        });
     });
 }
 
@@ -122,6 +175,11 @@ function highlightKey(keyChar) {
         // Add particle effect for racing keys
         if (racingKeys.includes(keyChar)) {
             createKeyParticle(keyElement);
+            
+            // Add speedline effect for racing keys
+            if (['w', 'a', 's', 'd', 'space'].includes(keyChar)) {
+                createSpeedLines(keyElement);
+            }
         }
     }
 }
@@ -137,8 +195,8 @@ function createKeyParticle(keyElement) {
     const rect = keyElement.getBoundingClientRect();
     const keyboard = document.getElementById('keyboard');
     
-    // Create 5 particles
-    for (let i = 0; i < 5; i++) {
+    // Create 8 particles
+    for (let i = 0; i < 8; i++) {
         const particle = document.createElement('div');
         particle.classList.add('key-particle');
         
@@ -151,8 +209,13 @@ function createKeyParticle(keyElement) {
         particle.style.top = `${y}px`;
         
         // Random color
-        const colors = ['#FF4A4A', '#00FFDD', '#FFD700'];
+        const colors = ['#FF4A4A', '#00FFDD', '#FFD700', '#00C2FF'];
         particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Random size
+        const size = 3 + Math.random() * 6;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
         
         // Add to document
         document.body.appendChild(particle);
@@ -160,6 +223,52 @@ function createKeyParticle(keyElement) {
         // Animate and remove
         setTimeout(() => {
             particle.remove();
+        }, 800);
+    }
+}
+
+// Create speed lines for racing key effects
+function createSpeedLines(keyElement) {
+    const rect = keyElement.getBoundingClientRect();
+    const direction = keyElement.dataset.key;
+    
+    // Create 5 speed lines
+    for (let i = 0; i < 5; i++) {
+        const speedLine = document.createElement('div');
+        speedLine.classList.add('speed-line');
+        
+        // Position based on key and direction
+        let x = rect.left + rect.width / 2;
+        let y = rect.top + rect.height / 2;
+        
+        // Set line position and style
+        speedLine.style.left = `${x}px`;
+        speedLine.style.top = `${y}px`;
+        
+        // Set direction based on key
+        if (direction === 'w') {
+            speedLine.style.transform = `rotate(${90 + (Math.random() * 30 - 15)}deg)`;
+        } else if (direction === 's') {
+            speedLine.style.transform = `rotate(${270 + (Math.random() * 30 - 15)}deg)`;
+        } else if (direction === 'a') {
+            speedLine.style.transform = `rotate(${180 + (Math.random() * 30 - 15)}deg)`;
+        } else if (direction === 'd') {
+            speedLine.style.transform = `rotate(${0 + (Math.random() * 30 - 15)}deg)`;
+        } else {
+            // Random direction for space
+            speedLine.style.transform = `rotate(${Math.random() * 360}deg)`;
+        }
+        
+        // Random length
+        const length = 30 + Math.random() * 50;
+        speedLine.style.width = `${length}px`;
+        
+        // Add to document
+        document.body.appendChild(speedLine);
+        
+        // Animate and remove
+        setTimeout(() => {
+            speedLine.remove();
         }, 500);
     }
 }
@@ -168,12 +277,14 @@ function createKeyParticle(keyElement) {
 document.addEventListener('DOMContentLoaded', function() {
     initKeyboard();
     
-    // Add CSS for particle effects
+    // Add CSS for enhanced keyboard effects
     const style = document.createElement('style');
     style.textContent = `
+        /* Racing key styling */
         .racing-key {
-            background: linear-gradient(to bottom, var(--racing-stripe-light), var(--key-bg)) !important;
-            border-color: var(--racing-stripe-light) !important;
+            background: linear-gradient(to bottom, var(--primary-color), #AA1612) !important;
+            border-color: var(--primary-color) !important;
+            color: white !important;
         }
         
         .racing-stripe {
@@ -181,26 +292,60 @@ document.addEventListener('DOMContentLoaded', function() {
             top: 50%;
             left: 0;
             right: 0;
-            height: 6px;
+            height: 8px;
             background: repeating-linear-gradient(
                 90deg,
-                var(--racing-stripe-light) 0px,
-                var(--racing-stripe-light) 20px,
-                var(--racing-stripe-dark) 20px,
-                var(--racing-stripe-dark) 40px
+                #FFC700 0px,
+                #FFC700 20px,
+                var(--secondary-color) 20px,
+                var(--secondary-color) 40px
             );
             transform: translateY(-50%);
-            opacity: 0.5;
+            opacity: 0.7;
+            border-radius: 4px;
         }
         
+        .racing-icon {
+            position: absolute;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .racing-icon-small {
+            position: absolute;
+            font-size: 0.7rem;
+            right: 10px;
+            top: 10px;
+            color: #FFC700;
+        }
+        
+        /* Keyboard ambient light */
+        .keyboard-ambient-light {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at 50% 50%,
+                var(--accent-color) 0%,
+                transparent 70%
+            );
+            opacity: 0.4;
+            pointer-events: none;
+            transition: all 0.5s ease;
+            z-index: 0;
+        }
+        
+        /* Key particle effects */
         .key-particle {
             position: fixed;
             width: 6px;
             height: 6px;
             border-radius: 50%;
             pointer-events: none;
-            animation: key-particle 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: key-particle 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             z-index: 1000;
+            filter: blur(1px);
         }
         
         @keyframes key-particle {
@@ -210,7 +355,42 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             100% { 
                 opacity: 0;
-                transform: translate(${Math.random() * 30 - 15}px, -20px) scale(0);
+                transform: translate(${Math.random() * 50 - 25}px, -40px) scale(0);
+            }
+        }
+        
+        /* Speed line effects */
+        .speed-line {
+            position: fixed;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.7;
+            transform-origin: left center;
+            animation: speed-line 0.5s ease-out forwards;
+        }
+        
+        @keyframes speed-line {
+            0% {
+                opacity: 0.7;
+                transform: translateX(0) scaleX(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(20px) scaleX(1);
+            }
+        }
+        
+        /* Key appear animation */
+        @keyframes keyAppear {
+            0% {
+                opacity: 0;
+                transform: translateZ(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateZ(5px);
             }
         }
     `;

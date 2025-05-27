@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Racer Training</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .code-header { background: #181c2f; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .code-header .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 18px 24px; }
+        .code-header .logo-img { height: 48px; margin-right: 18px; }
+        .code-header .main-nav { display: flex; gap: 24px; }
+        .code-header .nav-item { color: #fff; text-decoration: none; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; transition: color 0.2s; }
+        .code-header .nav-item:hover, .code-header .nav-item.active { color: #00FFDD; }
+        .code-header .header-actions { display: flex; gap: 16px; }
+        .training-container { max-width: 900px; margin: 40px auto; background: #20243a; border-radius: 14px; padding: 36px 32px; color: #fff; }
+        .training-section { margin-bottom: 36px; }
+        .training-section h2 { font-size: 1.3rem; margin-bottom: 10px; color: #00FFDD; }
+        .training-section p { color: #b3b8d0; margin-bottom: 10px; }
+        .training-section pre { background: #23284a; color: #00FFDD; border-radius: 8px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 1rem; margin-bottom: 10px; }
+        .training-section .practice-btn { background: #00FFDD; color: #181c2f; border: none; border-radius: 5px; padding: 7px 18px; font-weight: 600; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: background 0.2s; }
+        .training-section .practice-btn:hover { background: #00c2b2; }
+    </style>
+</head>
+<body>
+    <header class="code-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Code Racer Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="code-training.html" class="nav-item active"><i class="fas fa-graduation-cap"></i> Training</a>
+                <a href="code-championship.html" class="nav-item"><i class="fas fa-trophy"></i> Championship</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html" class="nav-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+        </div>
+    </header>
+    <div class="training-container">
+        <h1>Code Racer Training</h1>
+        <div class="training-section">
+            <h2>Python Basics</h2>
+            <p>Learn about variables, data types, and basic syntax in Python.</p>
+            <pre>name = "Alice"
+print("Hello, " + name)</pre>
+            <button class="practice-btn">Practice</button>
+        </div>
+        <div class="training-section">
+            <h2>JavaScript Basics</h2>
+            <p>Learn about variables, functions, and console output in JavaScript.</p>
+            <pre>let name = "Alice";
+console.log("Hello, " + name);</pre>
+            <button class="practice-btn">Practice</button>
+        </div>
+        <div class="training-section">
+            <h2>C++ Basics</h2>
+            <p>Learn about variables, functions, and output in C++.</p>
+            <pre>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    string name = "Alice";
+    cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; endl;
+    return 0;
+}</pre>
+            <button class="practice-btn">Practice</button>
+        </div>
+        <div class="training-section">
+            <h2>Java Basics</h2>
+            <p>Learn about classes, methods, and output in Java.</p>
+            <pre>public class HelloWorld {
+    public static void main(String[] args) {
+        String name = "Alice";
+        System.out.println("Hello, " + name);
+    }
+}</pre>
+            <button class="practice-btn">Practice</button>
+        </div>
+        <div class="training-section">
+            <h2>C# Basics</h2>
+            <p>Learn about variables, methods, and output in C#.</p>
+            <pre>using System;
+class Program {
+    static void Main() {
+        string name = "Alice";
+        Console.WriteLine("Hello, " + name);
+    }
+}</pre>
+            <button class="practice-btn">Practice</button>
+        </div>
+    </div>
+</body>
+</html> 
