@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Tutorial - Code Racer Learning Hub</title>
+    <link rel="stylesheet" href="styles/python-tutorial.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="assets/images/logo.png" alt="Code Racer Logo" height="60">
+            </div>
+            <nav>
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="challenges.html" class="nav-item"><i class="fas fa-code"></i> Challenges</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <button class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="tutorial-container">
+        <aside class="tutorial-sidebar">
+            <div class="tutorial-nav">
+                <h3>Python Tutorial</h3>
+                <div class="tutorial-menu">
+                    <a href="#introduction" class="menu-item active">
+                        <i class="fas fa-book"></i> Introduction
+                    </a>
+                    <div class="submenu">
+                        <a href="#getting-started" class="menu-item">
+                            <i class="fas fa-rocket"></i> Getting Started
+                            <div class="submenu-items">
+                                <a href="#install-python">Install Python</a>
+                                <a href="#python-quickstart">Quickstart</a>
+                                <a href="#python-command-line">Command Line</a>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="submenu">
+                        <a href="#syntax" class="menu-item">
+                            <i class="fas fa-code"></i> Python Syntax
+                            <div class="submenu-items">
+                                <a href="#syntax-execute">Code Execution</a>
+                                <a href="#syntax-indentation">Indentation</a>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="submenu">
+                        <a href="#variables" class="menu-item">
+                            <i class="fas fa-box"></i> Variables
+                            <div class="submenu-items">
+                                <a href="#variables-create">Creating Variables</a>
+                                <a href="#variables-naming">Naming Rules</a>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="#data-types" class="menu-item">
+                        <i class="fas fa-list"></i> Data Types
+                    </a>
+                    <div class="menu-section">Control Flow</div>
+                    <a href="#conditions" class="menu-item">
+                        <i class="fas fa-random"></i> If...Else
+                    </a>
+                    <a href="#loops" class="menu-item">
+                        <i class="fas fa-redo"></i> While Loops
+                    </a>
+                    <a href="#for-loops" class="menu-item">
+                        <i class="fas fa-sync"></i> For Loops
+                    </a>
+                    <div class="menu-section">Functions</div>
+                    <a href="#functions" class="menu-item">
+                        <i class="fas fa-cube"></i> Functions
+                    </a>
+                    <a href="#arguments" class="menu-item">
+                        <i class="fas fa-boxes"></i> Arguments
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Tutorial Content -->
+        <main class="tutorial-content">
+            <!-- Introduction Section -->
+            <section id="introduction" class="tutorial-section active">
+                <h1>Introduction to Python</h1>
+                <p>Python is a high-level, interpreted programming language known for its simplicity and readability. It's perfect for beginners and powerful enough for experts.</p>
+                
+                <div class="example-box">
+                    <h3>Your First Python Program</h3>
+                    <div class="code-demo">
+                        <pre><code class="language-python">print("Hello, World!")</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                    <p>This simple program outputs "Hello, World!" to the screen.</p>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice Editor</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Python Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea class="code-input" placeholder="Type your Python code here..."></textarea>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Getting Started Section -->
+            <div id="getting-started" class="tutorial-section">
+                <h1>Getting Started with Python</h1>
+                
+                <div id="install-python" class="subsection">
+                    <h2>Install Python</h2>
+                    <p>Many computers come with Python pre-installed. To check if you have Python installed, open a terminal and type:</p>
+                    <div class="example-box">
+                        <div class="code-demo">
+                            <pre><code class="language-bash">python --version</code></pre>
+                        </div>
+                    </div>
+                    <p>If Python is not installed, download it from <a href="https://www.python.org/downloads/" target="_blank">python.org</a>.</p>
+                </div>
+
+                <div id="python-quickstart" class="subsection">
+                    <h2>Python Quickstart</h2>
+                    <p>Once Python is installed, you can write your first program:</p>
+                    <div class="example-box">
+                        <h3>Your First Python Program:</h3>
+                        <div class="code-demo">
+                            <pre><code class="language-python">print("Hello, World!")</code></pre>
+                            <button class="try-it-btn">Try it Yourself</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="python-command-line" class="subsection">
+                    <h2>Python Command Line</h2>
+                    <p>Python has a command line interface where you can write code directly:</p>
+                    <div class="example-box">
+                        <div class="code-demo">
+                            <pre><code class="language-python">>> print("Hello, Python!")
+Hello, Python!
+>>> 2 + 2
+4</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Syntax Section -->
+            <div id="syntax" class="tutorial-section">
+                <h1>Python Syntax</h1>
+
+                <div id="syntax-execute" class="subsection">
+                    <h2>Execute Python Syntax</h2>
+                    <p>Python syntax can be executed by writing directly in the command line or by creating a .py file:</p>
+                    <div class="example-box">
+                        <h3>Example:</h3>
+                        <div class="code-demo">
+                            <pre><code class="language-python"># This is a comment
+print("Hello, World!")</code></pre>
+                            <button class="try-it-btn">Try it Yourself</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="syntax-indentation" class="subsection">
+                    <h2>Python Indentation</h2>
+                    <p>Indentation refers to the spaces at the beginning of a code line. In Python, indentation is crucial:</p>
+                    <div class="example-box">
+                        <div class="code-demo">
+                            <pre><code class="language-python">if 5 > 2:
+    print("Five is greater than two!")
+    if True:
+        print("Nested indentation")</code></pre>
+                            <button class="try-it-btn">Try it Yourself</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variables Section -->
+            <div id="variables" class="tutorial-section">
+                <h1>Python Variables</h1>
+
+                <div id="variables-create" class="subsection">
+                    <h2>Creating Variables</h2>
+                    <p>Python has no command for declaring variables. A variable is created when you first assign a value to it:</p>
+                    <div class="example-box">
+                        <div class="code-demo">
+                            <pre><code class="language-python">x = 5
+y = "Hello, World!"
+print(x)
+print(y)</code></pre>
+                            <button class="try-it-btn">Try it Yourself</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="variables-naming" class="subsection">
+                    <h2>Variable Naming Rules</h2>
+                    <p>A variable name must start with a letter or underscore</p>
+                    <div class="example-box">
+                        <h3>Valid variable names:</h3>
+                        <div class="code-demo">
+                            <pre><code class="language-python">myvar = "John"
+my_var = "John"
+_my_var = "John"
+MYVAR = "John"
+myvar2 = "John"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section id="data-types" class="tutorial-section">
+                <h1>Python Data Types</h1>
+
+                <div class="example-box">
+                    <h3>Built-in Data Types</h3>
+                    <p>Python has several built-in data types:</p>
+                    <ul>
+                        <li><code>int</code> - Integer numbers</li>
+                        <li><code>float</code> - Floating-point numbers</li>
+                        <li><code>str</code> - Strings</li>
+                        <li><code>bool</code> - Boolean values</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>Dynamic Typing</h3>
+                    <p>Python is dynamically typed, meaning you don't declare variable types:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">x = 10        # x is an integer
+x = "Hello"    # Now x is a string</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice: Explore Data Types</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Python Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea class="code-input" placeholder="Experiment with different data types..."></textarea>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conditions" class="tutorial-section">
+                <h1>If...Else Statements</h1>
+
+                <div class="example-box">
+                    <h3>Syntax</h3>
+                    <p>The basic syntax for an if...else statement:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">if condition:
+    # code to execute if condition is true
+else:
+    # code to execute if condition is false</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Example</h3>
+                    <p>An example that checks if a number is positive:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">number = 5
+if number > 0:
+    print("Positive number")
+else:
+    print("Negative number or zero")</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice: If...Else Challenge</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Python Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea class="code-input" placeholder="Write an if...else statement to check even or odd..."></textarea>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="loops" class="tutorial-section">
+                <h1>While Loops</h1>
+
+                <div class="example-box">
+                    <h3>Syntax</h3>
+                    <p>The basic syntax for a while loop:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">while condition:
+    # code to execute as long as condition is true</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Example</h3>
+                    <p>An example that prints numbers 1 to 5:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">count = 1
+while count &lt;= 5:
+    print(count)
+    count += 1</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice: Create a Countdown</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Python Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea class="code-input" placeholder="Write a loop that counts down from 10 to 1..."></textarea>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="for-loops" class="tutorial-section">
+                <h1>For Loops</h1>
+
+                <div class="example-box">
+                    <h3>Syntax</h3>
+                    <p>The basic syntax for a for loop:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">for variable in iterable:
+    # code to execute for each item</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Example</h3>
+                    <p>An example that prints each fruit in a list:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice: Loop Through a String</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Python Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea class="code-input" placeholder="Write a for loop that prints each letter in 'Hello'..."></textarea>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="functions" class="tutorial-section">
+                <h1>Python Functions</h1>
+
+                <div class="example-box">
+                    <h3>Defining a Function</h3>
+                    <p>Use the <code>def</code> keyword to define a function:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">def my_function():
+    print("Hello from a function!")</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Function Parameters</h3>
+                    <p>Functions can take parameters:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Alice")</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice: Create a Function</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Python Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea class="code-input" placeholder="Define a function that takes two numbers and prints their sum..."></textarea>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="arguments" class="tutorial-section">
+                <h1>Function Arguments</h1>
+
+                <div class="example-box">
+                    <h3>Positional Arguments</h3>
+                    <p>Arguments are passed to functions in the order they are defined:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">def add(a, b):
+    return a + b
+
+result = add(3, 5)  # 3 and 5 are positional arguments</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Keyword Arguments</h3>
+                    <p>Arguments can also be passed by keyword:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">def describe_pet(name, animal_type="dog"):
+    print(f"{name} is a {animal_type}")
+
+describe_pet("Buddy")  # animal_type defaults to "dog"</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice: Explore Function Arguments</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Python Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea class="code-input" placeholder="Experiment with functions that have different types of arguments..."></textarea>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="scope" class="tutorial-section">
+                <h1>Variable Scope</h1>
+
+                <div class="example-box">
+                    <h3>Local and Global Scope</h3>
+                    <p>Variables defined inside a function are in the local scope and cannot be accessed outside:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">def my_function():
+    x = 10  # Local variable
+    print(x)
+
+my_function()
+print(x)  # This will cause an error</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Global Variables</h3>
+                    <p>Variables can be declared global using the <code>global</code> keyword:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">x = "global"
+
+def my_function():
+    global x
+    x = "modified inside function"
+
+my_function()
+print(x)  # This will print "modified inside function"</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="modules" class="tutorial-section">
+                <h1>Python Modules</h1>
+
+                <div class="example-box">
+                    <h3>Importing Modules</h3>
+                    <p>Modules can be imported using the <code>import</code> statement:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">import math
+
+print(math.pi)  # Accessing a variable from the math module</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Creating a Module</h3>
+                    <p>You can create your own modules by saving Python code in a .py file. For example, create a file named <code>mymodule.py</code>:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python"># mymodule.py
+def greet(name):
+    return f"Hello, {name}!"</code></pre>
+                    </div>
+                    <p>Then import and use it in another file:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">import mymodule
+
+print(mymodule.greet("Alice"))</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="exceptions" class="tutorial-section">
+                <h1>Exception Handling</h1>
+
+                <div class="example-box">
+                    <h3>Try and Except</h3>
+                    <p>Exceptions can be handled using the <code>try</code> and <code>except</code> blocks:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">try:
+    # code that may cause an exception
+except SomeException:
+    # code to handle the exception</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Finally Block</h3>
+                    <p>The <code>finally</code> block always executes, regardless of an exception occurring or not:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">try:
+    x = 1 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+finally:
+    print("This will execute no matter what")</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="file-handling" class="tutorial-section">
+                <h1>File Handling</h1>
+
+                <div class="example-box">
+                    <h3>Opening and Closing Files</h3>
+                    <p>Files are opened using the <code>open()</code> function and closed using the <code>close()</code> method:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">file = open("myfile.txt", "r")
+content = file.read()
+file.close()</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>With Statement</h3>
+                    <p>The <code>with</code> statement simplifies file handling by automatically closing the file:</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python">with open("myfile.txt", "r") as file:
+    content = file.read()</code></pre>
+                        <button class="try-it-btn">Try it Yourself →</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="practice-projects" class="tutorial-section">
+                <h1>Practice Projects</h1>
+
+                <div class="example-box">
+                    <h3>Project 1: Calculator</h3>
+                    <p>Build a simple calculator that can add, subtract, multiply, and divide.</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python"># Simple calculator project</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Project 2: To-Do List</h3>
+                    <p>Create a command-line to-do list application.</p>
+                    <div class="code-demo">
+                        <pre><code class="language-python"># To-Do list project</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="resources" class="tutorial-section">
+                <h1>Additional Resources</h1>
+
+                <div class="example-box">
+                    <h3>Official Python Documentation</h3>
+                    <p>Access the official Python documentation for in-depth understanding.</p>
+                    <a href="https://docs.python.org/3/" target="_blank" class="resource-link">View Documentation</a>
+                </div>
+
+                <div class="example-box">
+                    <h3>Python Package Index (PyPI)</h3>
+                    <p>Explore thousands of third-party Python packages.</p>
+                    <a href="https://pypi.org/" target="_blank" class="resource-link">Visit PyPI</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Code Racer Learning Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="scripts/python-tutorial.js"></script>
+</body>
+</html>

@@ -94,19 +94,16 @@
             visibility: visible !important;
         }
         
-        /* Immediately visible header container */
-        .header-container {
-            max-width: 1200px;
+        /* Immediately visible header container */            .header-container {
+            max-width: 1300px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #1E2761, rgba(30, 39, 97, 0.8));
-            border-radius: 16px;
+            background-color: var(--secondary-color);
             color: white;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
-            border-left: 5px solid var(--racing-stripe-light);
-            border-right: 5px solid var(--racing-stripe-light);
+            border-bottom: 3px solid var(--primary-color);
             margin-bottom: 2rem;
             opacity: 1 !important;
         }
@@ -198,6 +195,98 @@
         @keyframes blinkHeadlights {
             from { opacity: 0.7; }
             to { opacity: 1; }
+        }
+        
+        .content-section {
+            background-color: rgba(14, 30, 56, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-family: var(--body-font, 'Rajdhani', sans-serif);
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: rgba(7, 11, 24, 0.6);
+            border: 1px solid var(--accent-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 255, 221, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 255, 221, 0.15);
+        }
+
+        .nav-button.active {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(0, 255, 221, 0.3);
+        }
+
+        /* Remove duplicate training button */
+        .nav-section .nav-button[href="training.html"] {
+            display: none;
+        }
+
+        /* Lesson section boxes */
+        .lessons-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .lesson-box {
+            background-color: rgba(14, 30, 56, 0.5);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+            background-color: rgba(14, 30, 56, 0.7);
+        }
+
+        .lesson-box h3 {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-family: var(--heading-font);
+        }
+
+        .lesson-box p {
+            color: var(--text-color);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Challenge section boxes */
+        .challenges-section {
+            background-color: rgba(14, 30, 56, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
     </style>
     <!-- Add no-js class to html, will be removed if JS is enabled -->
@@ -557,4 +646,4 @@
     <script src="scripts/lessons.js"></script>
     <script src="scripts/header-auth.js"></script>
 </body>
-</html> 
+</html>

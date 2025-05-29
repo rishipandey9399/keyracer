@@ -97,10 +97,14 @@ section h2::after {
 }
 
 .content-image {
-    padding: 30px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 255, 221, 0.1);
+    border: 1px solid rgba(0, 255, 221, 0.1);
 }
 
 .content-image img {
@@ -563,4 +567,4 @@ section h2::after {
     .contact-cards {
         grid-template-columns: 1fr;
     }
-} 
+}

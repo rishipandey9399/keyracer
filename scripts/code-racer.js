@@ -130,11 +130,15 @@ const prismLangMap = {
     go: 'go'
 };
 
-class CodeRacer {    constructor() {
+class CodeRacer {
+    constructor() {
         this.currentLang = 'python';
-        this.currentChallenge = 'Print Hello World';
-        this.currentMode = 'practice'; // 'practice' or 'challenge'
-        this.evaluator = new CodeEvaluator();
+        this.currentDifficulty = 'beginner';
+        this.currentChallenge = null;
+        this.currentMode = 'practice';
+        this.isRacing = false;
+        this.timer = null;
+        this.startTime = null;
         
         // Initialize DOM elements
         this.initializeDOM();
@@ -146,266 +150,223 @@ class CodeRacer {    constructor() {
 
     initializeDOM() {
         this.elements = {
-            langButtons: document.querySelectorAll('.lang-btn'),
-            startButtons: document.querySelectorAll('.start-btn'),
+            languageSelect: document.querySelector('.language-select'),
+            difficultySelect: document.querySelector('.difficulty-select'),
             codeSnippetArea: document.getElementById('code-snippet-area'),
             codeInput: document.getElementById('code-input'),
             modeToggle: document.getElementById('mode-toggle'),
-            evaluationResults: document.getElementById('evaluation-results')
+            evaluationResults: document.getElementById('evaluation-results'),
+            resetBtn: document.querySelector('.reset-btn'),
+            challengeDescription: document.querySelector('.challenge-description')
         };
+
+        // Set initial language from select if it exists
+        if (this.elements.languageSelect) {
+            this.currentLang = this.elements.languageSelect.value;
+        }
+
+        // Set initial difficulty from select if it exists
+        if (this.elements.difficultySelect) {
+            this.currentDifficulty = this.elements.difficultySelect.value;
+        }
     }
 
     setupEventListeners() {
         // Language selection
-        this.elements.langButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.elements.langButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.currentLang = btn.textContent.toLowerCase();
+        if (this.elements.languageSelect) {
+            this.elements.languageSelect.addEventListener('change', (e) => {
+                this.currentLang = e.target.value;
+                this.resetChallenge();
                 this.loadChallenge();
             });
-        });
+        }
 
-        // Start challenge
-        this.elements.startButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => this.startChallenge(e));
-        });
+        // Difficulty selection
+        if (this.elements.difficultySelect) {
+            this.elements.difficultySelect.addEventListener('change', (e) => {
+                this.currentDifficulty = e.target.value;
+                this.resetChallenge();
+                this.loadChallenge();
+            });
+        }
 
         // Code input
-        this.elements.codeInput.addEventListener('input', () => this.handleInput());        // Mode toggle
-        if (this.elements.modeToggle) {
-            this.elements.modeToggle.addEventListener('click', () => this.toggleMode());
+        if (this.elements.codeInput) {
+            this.elements.codeInput.addEventListener('input', () => this.handleInput());
+            this.elements.codeInput.addEventListener('keydown', (e) => {
+                // Prevent tab from changing focus
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.elements.codeInput.selectionStart;
+                    const end = this.elements.codeInput.selectionEnd;
+                    this.elements.codeInput.value = 
+                        this.elements.codeInput.value.substring(0, start) + 
+                        '    ' + 
+                        this.elements.codeInput.value.substring(end);
+                    this.elements.codeInput.selectionStart = 
+                    this.elements.codeInput.selectionEnd = start + 4;
+                }
+            });
         }
-        
+
         // Reset button
-        const resetBtn = document.querySelector('.reset-btn');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => this.resetChallenge());
+        if (this.elements.resetBtn) {
+            this.elements.resetBtn.addEventListener('click', () => this.resetChallenge());
         }
     }
 
+    getRandomChallenge() {
+        if (!codeSnippets[this.currentLang]) {
+            console.error(`No snippets found for language: ${this.currentLang}`);
+            return null;
+        }
+
+        const availableChallenges = Object.entries(codeSnippets[this.currentLang])
+            .filter(([_, challenge]) => 
+                !challenge.difficulty || 
+                challenge.difficulty.toLowerCase() === this.currentDifficulty.toLowerCase()
+            );
+
+        if (availableChallenges.length === 0) {
+            // If no challenges match the current difficulty, return the first challenge
+            const firstChallenge = Object.entries(codeSnippets[this.currentLang])[0];
+            return { name: firstChallenge[0], ...firstChallenge[1] };
+        }
+
+        const randomIndex = Math.floor(Math.random() * availableChallenges.length);
+        const [name, challenge] = availableChallenges[randomIndex];
+        return { name, ...challenge };
+    }
+
     loadChallenge() {
-        const challenge = codeSnippets[this.currentLang][this.currentChallenge];
+        const challenge = this.getRandomChallenge();
+        if (!challenge) {
+            console.error('Failed to load challenge');
+            return;
+        }
+
+        this.currentChallenge = challenge.name;
         
         // Update code display with syntax highlighting
         this.elements.codeSnippetArea.textContent = challenge.code;
         this.elements.codeSnippetArea.className = 'language-' + (prismLangMap[this.currentLang] || this.currentLang);
-        if (window.Prism) Prism.highlightElement(this.elements.codeSnippetArea);
+        
+        if (window.Prism) {
+            Prism.highlightElement(this.elements.codeSnippetArea);
+        }
         
         // Reset input and stats
         this.elements.codeInput.value = '';
-        this.elements.codeInput.disabled = true;
-        this.updateStats(true);
+        this.elements.codeInput.disabled = false;
+        this.isRacing = false;
+        this.startTime = null;
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
         
         // Show challenge description
-        this.updateChallengeDescription(challenge.description);
-    }    async startChallenge(event) {
-        const card = event.target.closest('.challenge-card');
-        const challengeTitle = card.querySelector('.challenge-title').textContent;
-        const startBtn = event.target;
-        
-        // Disable button and show loading state
-        startBtn.disabled = true;
-        startBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-        
-        try {
-            this.currentChallenge = challengeTitle;
-            
-            // Hide challenge selection and show editor
-            document.getElementById('challenge-selection').style.display = 'none';
-            document.getElementById('challenge-editor').style.display = 'block';
-            
-            // Update challenge name and description in editor
-            document.querySelector('.challenge-name').textContent = challengeTitle;
-            
-            this.loadChallenge();
-            
-            // Add a short delay for visual feedback
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            // Start countdown animation
-            await this.showStartCountdown();
-            
-            // Enable typing after countdown
+        if (challenge.description && this.elements.challengeDescription) {
+            this.elements.challengeDescription.textContent = challenge.description;
+        }
+
+        this.updateStats(true);
+    }
+
+    startChallenge() {
+        if (!this.isRacing) {
+            this.isRacing = true;
             this.elements.codeInput.disabled = false;
             this.elements.codeInput.focus();
-            this.startTime = Date.now();
-            this.timerInterval = setInterval(() => this.updateStats(), 200);
+            this.startTime = new Date();
+            this.updateStats();
             
-            // Update all start buttons
-            this.elements.startButtons.forEach(b => {
-                b.disabled = true;
-                b.innerHTML = '<i class="fas fa-code"></i> In Progress...';
-            });
-        } catch (error) {
-            console.error('Error starting challenge:', error);
-            startBtn.disabled = false;
-            startBtn.innerHTML = '<i class="fas fa-play"></i> Start Challenge';
-        }
-    }    handleInput() {
-        this.updateInputFeedback();
-        
-        // Check if challenge is complete
-        if (this.elements.codeInput.value === codeSnippets[this.currentLang][this.currentChallenge].code) {
-            this.completeChallenge();
+            // Start the timer
+            this.timer = setInterval(() => this.updateStats(), 1000);
         }
     }
 
-    async completeChallenge() {
-        this.elements.codeInput.disabled = true;
-        
-        // Enable start buttons
-        this.elements.startButtons.forEach(b => {
-            b.disabled = false;
-            b.innerHTML = '<i class="fas fa-play"></i> Start Challenge';
-        });
-
-        // In challenge mode, evaluate the code
-        if (this.currentMode === 'challenge') {
-            const results = await this.evaluator.evaluateCode(
-                this.currentChallenge,
-                this.elements.codeInput.value,
-                this.currentLang
-            );
-            this.evaluator.displayResults(results, this.elements.evaluationResults);
+    handleInput() {
+        if (!this.isRacing) {
+            this.startChallenge();
         }
+
+        const currentInput = this.elements.codeInput.value;
+        const targetCode = codeSnippets[this.currentLang][this.currentChallenge].code;
+
+        // Check for completion
+        if (currentInput === targetCode) {
+            this.finishChallenge();
+        }
+
+        // Update stats
+        this.updateStats();
     }
 
-    updateStats(finish = false) {
-        const input = this.elements.codeInput.value;
-        let errors = 0;
-        for (let i = 0; i < input.length; i++) {
-            if (input[i] !== codeSnippets[this.currentLang][this.currentChallenge].code[i]) errors++;
-        }
-        errors += Math.max(0, codeSnippets[this.currentLang][this.currentChallenge].code.length - input.length);
-        this.elements.errorsSpan.textContent = errors;
-        
-        const correctChars = input.split('').filter((ch, i) => ch === codeSnippets[this.currentLang][this.currentChallenge].code[i]).length;
-        const accuracy = input.length ? Math.round((correctChars / input.length) * 100) : 100;
-        this.elements.accuracySpan.textContent = accuracy;
-        
-        const elapsed = ((finish ? Date.now() : Date.now()) - this.startTime) / 1000 / 60;
-        const wpm = input.length ? Math.round((input.length / 5) / (elapsed || 1/60)) : 0;
-        this.elements.wpmSpan.textContent = wpm;
-    }
+    finishChallenge() {
+        this.isRacing = false;
+        clearInterval(this.timer);
+        this.timer = null;
 
-    updateInputFeedback() {
-        const input = this.elements.codeInput.value;
-        let html = '';
-        for (let i = 0; i < codeSnippets[this.currentLang][this.currentChallenge].code.length; i++) {
-            const char = codeSnippets[this.currentLang][this.currentChallenge].code[i];
-            const inputChar = input[i];
-            if (inputChar === undefined) {
-                html += `<span class="remaining">${char}</span>`;
-            } else if (inputChar === char) {
-                html += `<span class="correct">${char}</span>`;
-            } else {
-                html += `<span class="incorrect">${char}</span>`;
-            }
-        }
-        this.elements.codeSnippetArea.innerHTML = html;
-    }
+        const endTime = new Date();
+        const timeElapsed = (endTime - this.startTime) / 1000; // in seconds
+        
+        // Calculate WPM
+        const words = this.elements.codeInput.value.length / 5; // standard word length
+        const wpm = Math.round((words / timeElapsed) * 60);
 
-    showCompletionMessage() {
-        const message = document.createElement('div');
-        message.className = 'completion-message';
-        message.innerHTML = `
-            <h3>Challenge Complete! 🎉</h3>
-            <p>WPM: ${this.elements.wpmSpan.textContent}</p>
-            <p>Accuracy: ${this.elements.accuracySpan.textContent}%</p>
-            <p>Errors: ${this.elements.errorsSpan.textContent}</p>
-        `;
-        
-        const existingMessage = document.querySelector('.completion-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-        
-        document.querySelector('.code-content').appendChild(message);
-    }    // Leaderboard functionality removed
-
-    toggleMode() {
-        this.currentMode = this.currentMode === 'practice' ? 'challenge' : 'practice';
-        this.elements.modeToggle.textContent = `Switch to ${this.currentMode === 'practice' ? 'Challenge' : 'Practice'} Mode`;
-        
-        // Show/hide evaluation results based on mode
+        // Show completion message
         if (this.elements.evaluationResults) {
-            this.elements.evaluationResults.style.display = 
-                this.currentMode === 'challenge' ? 'block' : 'none';
-        }
-    }
-
-    async showStartCountdown() {
-        return new Promise((resolve) => {
-            const countdownOverlay = document.createElement('div');
-            countdownOverlay.className = 'race-start-countdown';
-            countdownOverlay.innerHTML = `
-                <div class="countdown-content">
-                    <div class="lights-container">
-                        <div class="light"></div>
-                        <div class="light"></div>
-                        <div class="light"></div>
-                    </div>
-                    <div class="countdown-number"></div>
+            this.elements.evaluationResults.innerHTML = `
+                <div class="completion-message">
+                    <h3>Challenge Complete!</h3>
+                    <p>Time: ${timeElapsed.toFixed(2)} seconds</p>
+                    <p>Speed: ${wpm} WPM</p>
                 </div>
             `;
-            
-            document.querySelector('.challenge-content').appendChild(countdownOverlay);
-            
-            const lights = countdownOverlay.querySelectorAll('.light');
-            const countdownNumber = countdownOverlay.querySelector('.countdown-number');
-            let count = 3;
-            
-            const animateCountdown = () => {
-                if (count > 0) {
-                    lights[3 - count].classList.add('active');
-                    countdownNumber.textContent = count;
-                    count--;
-                    setTimeout(animateCountdown, 1000);
-                } else {
-                    lights.forEach(light => light.classList.add('green'));
-                    countdownNumber.textContent = 'GO!';
-                    countdownNumber.classList.add('go-text');
-                    
-                    setTimeout(() => {
-                        countdownOverlay.remove();
-                        resolve();
-                    }, 1000);
-                }
-            };
-            
-            animateCountdown();
-        });
-    }
-
-    updateChallengeDescription(description) {
-        const descriptionElement = document.querySelector('.challenge-description');
-        if (descriptionElement) {
-            descriptionElement.textContent = description;
         }
     }
 
     resetChallenge() {
-        // Clear timer
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
+        this.isRacing = false;
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
         }
-        
-        // Reset input and stats
         this.elements.codeInput.value = '';
-        this.elements.codeInput.disabled = true;
+        this.elements.codeInput.disabled = false;
         this.startTime = null;
         this.updateStats(true);
-        
-        // Reset UI
-        document.getElementById('challenge-editor').style.display = 'none';
-        document.getElementById('challenge-selection').style.display = 'block';
-        
-        // Reset buttons
-        this.elements.startButtons.forEach(b => {
-            b.disabled = false;
-            b.innerHTML = '<i class="fas fa-play"></i> Start Challenge';
-        });
+        this.loadChallenge();
+    }
+
+    updateStats(reset = false) {
+        if (!this.elements.evaluationResults) return;
+
+        if (reset) {
+            this.elements.evaluationResults.innerHTML = '<div class="stats">Ready to start typing!</div>';
+            return;
+        }
+
+        if (!this.startTime) return;
+
+        const currentTime = new Date();
+        const timeElapsed = (currentTime - this.startTime) / 1000; // in seconds
+        const currentInput = this.elements.codeInput.value;
+        const words = currentInput.length / 5; // standard word length
+        const wpm = Math.round((words / timeElapsed) * 60);
+
+        this.elements.evaluationResults.innerHTML = `
+            <div class="stats">
+                Time: ${timeElapsed.toFixed(2)}s | Speed: ${wpm} WPM
+            </div>
+        `;
+    }
+
+    updateChallengeDescription(description) {
+        if (this.elements.challengeDescription) {
+            this.elements.challengeDescription.textContent = description;
+        }
     }
 }
 

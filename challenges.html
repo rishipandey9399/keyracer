@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Challenges - Code Racer</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/code-racer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-bg-color: #0a0e17;
+            --sidebar-bg: #141b2d;
+            --header-bg: #0d1117;
+            --text-color: #ffffff;
+            --code-bg: #161b22;
+            --accent-color: #00FFDD;
+            --hover-color: #00E5C8;
+            --border-color: rgba(0, 255, 221, 0.1);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--main-bg-color) 0%, #141b2d 100%);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, rgba(0,255,221,0.05) 0%, rgba(0,255,221,0) 100%);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, var(--accent-color) 0%, #00C2FF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #b3b8d0;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .language-card {
+            background: rgba(20, 27, 45, 0.7);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .language-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0,255,221,0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .language-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .language-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 221, 0.15);
+            border-color: rgba(0, 255, 221, 0.3);
+        }
+
+        .language-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(0, 255, 221, 0.3);
+        }
+
+        .language-name {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .language-description {
+            color: #b3b8d0;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .start-learning-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(90deg, var(--accent-color) 0%, #00C2FF 100%);
+            color: var(--main-bg-color);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .start-learning-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 221, 0.4);
+        }
+
+        .start-learning-btn.disabled {
+            background: linear-gradient(90deg, #2a3246 0%, #1e2433 100%);
+            color: #6c7693;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .start-learning-btn.disabled:hover {
+            transform: none;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(0, 255, 221, 0.2),
+                            0 0 20px rgba(0, 255, 221, 0.2),
+                            0 0 30px rgba(0, 255, 221, 0.2);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 255, 221, 0.4),
+                            0 0 40px rgba(0, 255, 221, 0.4),
+                            0 0 60px rgba(0, 255, 221, 0.4);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.25rem;
+            }
+            
+            .languages-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem 4rem;
+                gap: 2rem;
+            }
+
+            .language-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .language-icon {
+                font-size: 3rem;
+            }
+
+            .language-name {
+                font-size: 1.75rem;
+            }
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Ensure content is above particles */
+        .hero-section, .languages-grid {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Effects Layer -->
+    <div id="particles-js"></div>
+
+    <header class="tutorial-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="challenges.html" class="nav-item active"><i class="fas fa-code"></i> Challenges</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1 class="hero-title">Programming Challenges</h1>
+        <p class="hero-subtitle">Choose a language to start coding challenges</p>
+    </section>
+
+    <section id="languages" class="languages-grid">
+        <div class="language-card">
+            <i class="fab fa-python language-icon"></i>
+            <h2 class="language-name">Python</h2>
+            <p class="language-description">Start with Python - perfect for beginners and experienced coders alike.</p>
+            <a href="python-challenges.html" class="start-learning-btn">Start Python Challenges</a>
+        </div>
+
+        <div class="language-card">
+            <i class="fab fa-js language-icon"></i>
+            <h2 class="language-name">JavaScript</h2>
+            <p class="language-description">Master JavaScript through interactive coding challenges.</p>
+            <a href="#" class="start-learning-btn disabled">Coming Soon</a>
+        </div>
+
+        <div class="language-card">
+            <i class="fab fa-java language-icon"></i>
+            <h2 class="language-name">Java</h2>
+            <p class="language-description">Practice Java programming with hands-on challenges.</p>
+            <a href="#" class="start-learning-btn disabled">Coming Soon</a>
+        </div>
+    </section>
+
+    <script src="scripts/code-executor.js"></script>
+    <script src="scripts/challenges.js"></script>
+    <script src="scripts/header-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#00FFDD"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.2,
+                    "random": true
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#00FFDD",
+                    "opacity": 0.1,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>

@@ -8,14 +8,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const userInfoContainer = document.querySelector('.user-info');
     const userProfilePic = document.querySelector('.profile-pic');
     const userName = document.querySelector('.user-name');
-    const loginLink = document.querySelector('.header-actions .nav-item');
+    const loginBtn = document.querySelector('#loginBtn');
+    const logoutBtn = document.querySelector('#logoutBtn');
     
     // Check if user is logged in
     updateUserDisplay();
     
-    // Handle login/logout
-    if (loginLink) {
-        loginLink.addEventListener('click', function(e) {
+    // Handle logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             const isLoggedIn = localStorage.getItem('typingTestUser');
             
             if (isLoggedIn) {
@@ -52,10 +54,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
-            // Change login link to logout
-            if (loginLink) {
-                loginLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-                loginLink.href = '#';
+            // Toggle login/logout buttons
+            if (loginBtn) {
+                loginBtn.style.display = 'none';
+            }
+            if (logoutBtn) {
+                logoutBtn.style.display = 'block';
+            }
+            // Show preference button for logged in users
+            const prefBtn = document.querySelector('.pref-btn');
+            if (prefBtn) {
+                prefBtn.style.display = 'block';
             }
         } else {
             // User is not logged in
@@ -67,9 +76,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 userProfilePic.src = 'assets/avatars/default.svg';
             }
             
-            if (loginLink) {
-                loginLink.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-                loginLink.href = 'login.html';
+            if (loginBtn) {
+                loginBtn.style.display = 'block';
+            }
+            if (logoutBtn) {
+                logoutBtn.style.display = 'none';
+            }
+            // Hide preference button for guests
+            const prefBtn = document.querySelector('.pref-btn');
+            if (prefBtn) {
+                prefBtn.style.display = 'none';
             }
         }
     }

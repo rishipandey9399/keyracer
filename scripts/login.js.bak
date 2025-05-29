@@ -232,11 +232,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const guestUsername = `Guest_${timestamp.toString().slice(-6)}`;
         
         console.log('Guest login successful:', guestUsername);
+        
+        // Store guest user data
+        const guestData = {
+            name: guestUsername,
+            id: 'guest_' + timestamp,
+            type: 'guest',
+            picture: 'assets/default-avatar.png'
+        };
+        
         localStorage.setItem('typingTestUser', guestUsername);
-            localStorage.setItem('typingTestUserType', 'guest');
-            
-        // Redirect to app
-        redirectToApp(guestUsername);
+        localStorage.setItem('typingTestUserType', 'guest');
+        localStorage.setItem('typingTestUserData', JSON.stringify(guestData));
+        
+        // Show success message and redirect
+        showMessage('Logging in as guest...', 'success');
+        setTimeout(() => {
+            // Redirect to app
+            redirectToApp(guestUsername);
     }
     
     // Message display function
@@ -291,12 +304,11 @@ document.addEventListener('DOMContentLoaded', () => {
             email: localStorage.getItem('typingTestUserEmail') || ''
         };
         localStorage.setItem('typingTestUserData', JSON.stringify(userData));
-        localStorage.setItem('typingTestUser', username); // Ensure this is set for header auth
         
-        // Redirect to home page
-        window.location.href = 'index.html';
+        // Redirect to the login success page which shows the action choices
+        window.location.href = 'login-success.html';
     }
-
+    
     // Set the current year in footer
     const yearElement = document.getElementById('current-year');
     if (yearElement) {

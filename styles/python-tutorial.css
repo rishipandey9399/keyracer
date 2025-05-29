@@ -1,0 +1,351 @@
+/* Python Tutorial Styles */
+:root {
+    --main-bg-color: #0a0e17;
+    --sidebar-bg: #141b2d;
+    --header-bg: #0d1117;
+    --text-color: #ffffff;
+    --code-bg: #161b22;
+    --accent-color: #00FFDD;
+    --hover-color: #00E5C8;
+    --example-bg: #1a1f2b;
+    --border-color: rgba(0, 255, 221, 0.1);
+}
+
+/* Tutorial Section Visibility */
+.tutorial-section {
+    display: none;
+}
+
+.tutorial-section.active {
+    display: block;
+}
+
+/* Base Styles */
+body {
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+    font-family: 'JetBrains Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Header Styles */
+.header {
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    transition: transform 0.2s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+nav .nav-item {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+nav .nav-item:hover {
+    color: var(--accent-color);
+}
+
+nav .nav-item i {
+    font-size: 1rem;
+}
+
+.logout-btn {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(0, 255, 221, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Layout */
+.tutorial-container {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+/* Sidebar */
+.tutorial-sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 5rem;
+    height: calc(100vh - 7rem);
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+}
+
+.tutorial-nav h3 {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.menu-item {
+    position: relative;
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+    background-color: var(--accent-color);
+    color: var(--main-bg-color);
+}
+
+/* Tutorial Submenu Styles */
+.submenu {
+    position: relative;
+}
+
+.submenu-items {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: var(--sidebar-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    min-width: 180px;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.submenu:hover .submenu-items {
+    display: block;
+}
+
+.submenu-items a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.submenu-items a:hover {
+    background-color: var(--hover-color);
+    color: var(--main-bg-color);
+}
+
+/* Enhance menu item styles */
+.tutorial-menu .menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin: 0.2rem 0;
+}
+
+.tutorial-menu .menu-item:hover,
+.tutorial-menu .menu-item.active {
+    background-color: rgba(0, 255, 221, 0.1);
+    color: var(--accent-color);
+}
+
+.tutorial-menu .menu-item i {
+    margin-right: 0.5rem;
+}
+
+/* Main Content */
+.tutorial-content {
+    flex: 1;
+    background: var(--sidebar-bg);
+    border-radius: 8px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+/* Code Examples */
+.example-box {
+    background: var(--example-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.code-demo {
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+pre code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+}
+
+.try-it-btn {
+    background: var(--accent-color);
+    color: var(--main-bg-color);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.try-it-btn:hover {
+    background: var(--hover-color);
+    transform: translateY(-1px);
+}
+
+/* Practice Section */
+.practice-section {
+    background: var(--example-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.code-editor {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.editor-header {
+    background: var(--header-bg);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.run-btn {
+    background: var(--accent-color);
+    color: var(--main-bg-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.code-input {
+    width: 100%;
+    min-height: 200px;
+    background: var(--code-bg);
+    color: var(--text-color);
+    border: none;
+    padding: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.output-container {
+    background: var(--code-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+.output-header {
+    padding: 0.75rem 1rem;
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.output-content {
+    padding: 1rem;
+    min-height: 50px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Tutorial Section Visibility */
+.tutorial-section {
+    display: none;
+    padding: 2rem;
+}
+
+.tutorial-section.active {
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .tutorial-sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+    
+    .tutorial-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+    
+    .tutorial-container {
+        flex-direction: column;
+    }
+}

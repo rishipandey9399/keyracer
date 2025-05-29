@@ -27,17 +27,15 @@
         }
         
         .header-container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #1E2761, rgba(30, 39, 97, 0.8));
-            border-radius: 16px;
+            background-color: var(--secondary-color);
             color: white;
-            box-shadow: 0 10px 25px rgba(255, 74, 74, 0.2);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
-            border-left: 5px solid #FF4A4A;
-            border-right: 5px solid #FF4A4A;
+            border-bottom: 3px solid var(--primary-color);
             margin-bottom: 2rem;
         }
         
@@ -69,10 +67,62 @@
         }
         
         .nav-section {
-            padding: 10px 0;
+            padding: 15px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        /* Navigation styling updates */
+        .feature-tabs {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-color);
+            font-family: var(--body-font, 'Rajdhani', sans-serif);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: rgba(7, 11, 24, 0.6);
+            border: 1px solid var(--accent-color);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 255, 221, 0.1);
+            color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0, 255, 221, 0.15);
+        }
+
+        .tab.active {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(0, 255, 221, 0.3);
+        }
+
+        .tab i {
+            font-size: 1rem;
+        }
+
+        /* Section box styling updates */
+        .content-section {
+            background-color: rgba(14, 30, 56, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -80,15 +130,14 @@
     <div class="container">
         <div class="header-container">
             <div class="logo-section">
-                <h1 class="logo-heading"><img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img"> - Typing Tips <i class="fas fa-flag-checkered"></i></h1>
+                <h1 class="logo-heading"><img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">Typing Tips</h1>
             </div>
 
             <div class="nav-section">
-        <div class="feature-tabs">
-            <a href="index.html" class="tab" style="color:#fff;"><i class="fas fa-home"></i> Home</a>
-            <a href="lessons.html" class="tab" style="color:#fff;"><i class="fas fa-graduation-cap"></i> Training</a>
-            <a href="typing-tips.html" class="tab active" style="color:#fff;"><i class="fas fa-lightbulb"></i> Tips</a>
-            <a href="leaderboard.html" class="tab" style="color:#fff;"><i class="fas fa-trophy"></i> Championship</a>
+                <div class="feature-tabs">
+                    <a href="index.html" class="tab"><i class="fas fa-home"></i> Home</a>
+                    <a href="lessons.html" class="tab"><i class="fas fa-graduation-cap"></i> Training</a>
+                    <a href="leaderboard.html" class="tab"><i class="fas fa-trophy"></i> Championship</a>
                 </div>
             </div>
         </div>
@@ -190,4 +239,4 @@
     <script src="scripts/keyboard.js"></script>
     <script src="scripts/typing-tips.js"></script>
 </body>
-</html> 
+</html>
