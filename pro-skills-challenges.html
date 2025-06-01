@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Skills Challenges - Key Racer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Enhanced CSS Variables */
+        :root {
+            --primary-bg: #0a0a0f;
+            --secondary-bg: #1a1a2e;
+            --accent-color: #00c2ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8d4;
+            --border-color: #2a2a3e;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --info-color: #2196f3;
+            
+            /* Enhanced Gradients */
+            --gradient-primary: linear-gradient(135deg, #00c2ff 0%, #0099cc 100%);
+            --gradient-secondary: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            --gradient-accent: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            --gradient-warning: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            --gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #2a2a3e 100%);
+            
+            /* Enhanced Effects */
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --box-shadow-hover: 0 12px 48px rgba(0, 194, 255, 0.2);
+            --glow-primary: 0 0 20px rgba(0, 194, 255, 0.3);
+            --glow-secondary: 0 0 20px rgba(255, 107, 107, 0.3);
+            --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(0, 194, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        .floating-particle:nth-child(1) { width: 4px; height: 4px; left: 10%; animation-delay: 0s; }
+        .floating-particle:nth-child(2) { width: 6px; height: 6px; left: 20%; animation-delay: 2s; }
+        .floating-particle:nth-child(3) { width: 3px; height: 3px; left: 30%; animation-delay: 4s; }
+        .floating-particle:nth-child(4) { width: 5px; height: 5px; left: 40%; animation-delay: 6s; }
+        .floating-particle:nth-child(5) { width: 4px; height: 4px; left: 50%; animation-delay: 8s; }
+        .floating-particle:nth-child(6) { width: 7px; height: 7px; left: 60%; animation-delay: 10s; }
+        .floating-particle:nth-child(7) { width: 3px; height: 3px; left: 70%; animation-delay: 12s; }
+        .floating-particle:nth-child(8) { width: 5px; height: 5px; left: 80%; animation-delay: 14s; }
+        .floating-particle:nth-child(9) { width: 4px; height: 4px; left: 90%; animation-delay: 16s; }
+        .floating-particle:nth-child(10) { width: 6px; height: 6px; left: 95%; animation-delay: 18s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--box-shadow);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            filter: drop-shadow(var(--glow-primary));
+            transition: all 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 25px rgba(0, 194, 255, 0.8));
+        }
+
+        .brand-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            background: rgba(0, 194, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            background: rgba(0, 194, 255, 0.2);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: var(--glow-primary);
+        }
+
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Challenge Categories */
+        .challenge-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 20px 20px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .category-card.beginner::before { background: var(--gradient-success); }
+        .category-card.intermediate::before { background: var(--gradient-warning); }
+        .category-card.advanced::before { background: var(--gradient-secondary); }
+        .category-card.expert::before { background: var(--gradient-accent); }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-color);
+            background: rgba(0, 194, 255, 0.05);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .category-card.beginner .category-icon { color: var(--success-color); }
+        .category-card.intermediate .category-icon { color: var(--warning-color); }
+        .category-card.advanced .category-icon { color: var(--error-color); }
+        .category-card.expert .category-icon { color: var(--info-color); }
+
+        .category-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.3rem;
+        }
+
+        /* Challenge List */
+        .challenges-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenges-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .challenge-card {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            background: rgba(0, 194, 255, 0.05);
+            box-shadow: 0 8px 25px rgba(0, 194, 255, 0.2);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-difficulty {
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty-beginner {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .difficulty-intermediate {
+            background: rgba(255, 152, 0, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .difficulty-advanced {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .difficulty-expert {
+            background: rgba(33, 150, 243, 0.2);
+            color: var(--info-color);
+            border: 1px solid var(--info-color);
+        }
+
+        .challenge-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .challenge-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.3rem;
+        }
+
+        .challenge-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-practice {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+        }
+
+        .btn-practice:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 194, 255, 0.3);
+        }
+
+        .btn-view {
+            background: rgba(0, 194, 255, 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-view:hover {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+        }
+
+        /* Progress Indicators */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .challenge-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .challenge-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .challenge-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .challenge-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .challenge-card:nth-child(1) { animation-delay: 0.1s; }
+        .challenge-card:nth-child(2) { animation-delay: 0.2s; }
+        .challenge-card:nth-child(3) { animation-delay: 0.3s; }
+        .challenge-card:nth-child(4) { animation-delay: 0.4s; }
+        .challenge-card:nth-child(5) { animation-delay: 0.5s; }
+        .challenge-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
+                <h1 class="brand-title">Professional Skills Challenges</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="pro-skills.html" class="nav-link">
+                    <i class="fas fa-user-tie"></i> Practice
+                </a>
+                <a href="pro-skills-challenges.html" class="nav-link active">
+                    <i class="fas fa-trophy"></i> Challenges
+                </a>
+                <a href="preference.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-trophy"></i>
+                Professional Skills Challenges
+            </h1>
+            <p class="page-subtitle">
+                Master professional typing skills through structured challenges. Progress from basic business communication to advanced technical documentation.
+            </p>
+        </div>
+
+        <!-- Challenge Categories -->
+        <div class="challenge-categories">
+            <div class="category-card beginner" onclick="scrollToSection('beginner-challenges')">
+                <i class="fas fa-seedling category-icon"></i>
+                <h3 class="category-title">Beginner Level</h3>
+                <p class="category-description">
+                    Start your professional typing journey with basic business documents and simple email communication.
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">6</span>
+                        <span class="stat-label">Challenges</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">25+</span>
+                        <span class="stat-label">WPM Target</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">90%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card intermediate" onclick="scrollToSection('intermediate-challenges')">
+                <i class="fas fa-chart-line category-icon"></i>
+                <h3 class="category-title">Intermediate Level</h3>
+                <p class="category-description">
+                    Advance to complex business reports, detailed correspondence, and professional presentations.
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">6</span>
+                        <span class="stat-label">Challenges</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">40+</span>
+                        <span class="stat-label">WPM Target</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">95%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card advanced" onclick="scrollToSection('advanced-challenges')">
+                <i class="fas fa-rocket category-icon"></i>
+                <h3 class="category-title">Advanced Level</h3>
+                <p class="category-description">
+                    Master technical documentation, legal documents, and high-speed professional communication.
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">6</span>
+                        <span class="stat-label">Challenges</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">60+</span>
+                        <span class="stat-label">WPM Target</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">98%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card expert" onclick="scrollToSection('expert-challenges')">
+                <i class="fas fa-crown category-icon"></i>
+                <h3 class="category-title">Expert Level</h3>
+                <p class="category-description">
+                    Ultimate challenges featuring complex technical content, multi-language documents, and speed tests.
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">6</span>
+                        <span class="stat-label">Challenges</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">80+</span>
+                        <span class="stat-label">WPM Target</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">99%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beginner Challenges -->
+        <div class="challenges-section" id="beginner-challenges">
+            <h2 class="section-title">
+                <i class="fas fa-seedling"></i>
+                Beginner Challenges
+            </h2>
+            <div class="challenges-grid" id="beginner-grid">
+                <!-- Challenges will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Intermediate Challenges -->
+        <div class="challenges-section" id="intermediate-challenges" style="margin-top: 3rem;">
+            <h2 class="section-title">
+                <i class="fas fa-chart-line"></i>
+                Intermediate Challenges
+            </h2>
+            <div class="challenges-grid" id="intermediate-grid">
+                <!-- Challenges will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Advanced Challenges -->
+        <div class="challenges-section" id="advanced-challenges" style="margin-top: 3rem;">
+            <h2 class="section-title">
+                <i class="fas fa-rocket"></i>
+                Advanced Challenges
+            </h2>
+            <div class="challenges-grid" id="advanced-grid">
+                <!-- Challenges will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Expert Challenges -->
+        <div class="challenges-section" id="expert-challenges" style="margin-top: 3rem;">
+            <h2 class="section-title">
+                <i class="fas fa-crown"></i>
+                Expert Challenges
+            </h2>
+            <div class="challenges-grid" id="expert-grid">
+                <!-- Challenges will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/pro-skills-challenges.js"></script>
+</body>
+</html>

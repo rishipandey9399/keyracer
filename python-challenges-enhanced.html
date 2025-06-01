@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Challenges - Code Racer</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/code-racer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-vs-dark.min.css" rel="stylesheet" />
+    <style>
+        /* Define missing CSS variables */
+        :root {
+            --sidebar-bg: rgba(14, 30, 56, 0.8);
+            --code-bg: #1e1e1e;
+            --example-bg: rgba(28, 43, 74, 0.6);
+            --border-color: #2d3f60;
+            --header-bg: rgba(20, 27, 45, 0.9);
+        }
+
+        /* Enhanced Challenge Container */
+        .challenge-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Enhanced Section Styling */
+        .challenge-section, .code-section {
+            background: linear-gradient(145deg, rgba(14, 30, 56, 0.9), rgba(20, 35, 65, 0.8));
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(0, 194, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-section::before, .code-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--accent-color) 20%, 
+                #00C2FF 50%, 
+                var(--accent-color) 80%, 
+                transparent 100%);
+            animation: headerGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Enhanced Challenge Section */
+        .challenge-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .challenge-header {
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .challenge-title {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, var(--accent-color) 0%, #00C2FF 50%, #667eea 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 194, 255, 0.3);
+            position: relative;
+        }
+
+        .challenge-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), #00C2FF);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
+        }
+
+        .challenge-description {
+            color: #b3b8d0;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-family: 'Rajdhani', sans-serif;
+            background: rgba(179, 184, 208, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Enhanced Example Sections */
+        .example-section {
+            background: linear-gradient(135deg, rgba(0, 194, 255, 0.05), rgba(102, 126, 234, 0.03));
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .example-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 194, 255, 0.02), transparent);
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        .example-section h3 {
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .example-section h3::before {
+            content: '▶';
+            color: #00C2FF;
+            font-size: 0.8em;
+        }
+
+        .example-section ul {
+            color: #b3b8d0;
+            line-height: 1.8;
+            padding-left: 1.5rem;
+        }
+
+        .example-section ul li {
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+
+        .example-section ul li::marker {
+            color: var(--accent-color);
+        }
+
+        .example-section pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            color: #00C2FF;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Enhanced Code Section */
+        .code-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Enhanced Code Editor Container */
+        .editor-container {
+            position: relative;
+            min-height: 300px;
+            background: linear-gradient(145deg, #1a1a1a, #252525);
+            border-radius: 15px;
+            border: 2px solid rgba(0, 194, 255, 0.3);
+            overflow: hidden;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(0, 194, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .editor-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--accent-color) 0%, 
+                #00C2FF 25%, 
+                #667eea 50%, 
+                #00C2FF 75%, 
+                var(--accent-color) 100%);
+            animation: editorGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes editorGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .editor-container:focus-within {
+            border-color: rgba(0, 194, 255, 0.6);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 194, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Enhanced Code Input */
+        .code-input {
+            width: 100%;
+            min-height: 300px;
+            background: transparent;
+            color: #d4d4d4;
+            caret-color: #00c2ff;
+            border: none;
+            padding: 2rem;
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            tab-size: 4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+        }
+
+        .code-input::placeholder {
+            color: rgba(135, 206, 235, 0.4);
+            font-style: italic;
+        }
+
+        .code-input:focus {
+            caret-color: var(--accent-color);
+        }
+
+        /* Enhanced Code Preview for Syntax Highlighting */
+        .code-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            padding: 2rem;
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+            background: transparent;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            z-index: 1;
+            overflow: hidden;
+            box-sizing: border-box;
+            tab-size: 4;
+        }
+
+        /* Enhanced Syntax highlighting with glowing effects */
+        .code-preview .comment {
+            color: #6a9955;
+            font-style: italic;
+            text-shadow: 0 0 8px rgba(106, 149, 85, 0.4);
+        }
+
+        .code-preview .string {
+            color: #ce9178;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(206, 145, 120, 0.4);
+        }
+
+        .code-preview .number {
+            color: #b5cea8;
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(181, 206, 168, 0.4);
+        }
+
+        .code-preview .keyword {
+            color: #569cd6;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(86, 156, 214, 0.5);
+        }
+
+        .code-preview .builtin {
+            color: #4ec9b0;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(78, 201, 176, 0.5);
+        }
+
+        .code-preview .function {
+            color: #dcdcaa;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(220, 220, 170, 0.4);
+        }
+
+        /* Enhanced Editor Status */
+        .editor-status {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(0, 194, 255, 0.2), rgba(102, 126, 234, 0.1));
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            z-index: 10;
+            display: none;
+            border: 1px solid rgba(0, 194, 255, 0.3);
+            backdrop-filter: blur(10px);
+            text-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { 
+                box-shadow: 0 0 15px rgba(0, 194, 255, 0.2);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(0, 194, 255, 0.4);
+                transform: scale(1.02);
+            }
+        }
+
+        .editor-status.active {
+            display: block;
+        }
+
+        /* Enhanced Code Actions with Better Layout */
+        .code-actions {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, 
+                rgba(0, 194, 255, 0.08), 
+                rgba(102, 126, 234, 0.05), 
+                rgba(255, 64, 129, 0.03));
+            border-radius: 20px;
+            border: 2px solid rgba(0, 194, 255, 0.15);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .code-actions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(0, 194, 255, 0.02) 50%, 
+                transparent 70%);
+            border-radius: 20px;
+            pointer-events: none;
+            animation: backgroundShift 4s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .run-btn, .submit-btn, .next-challenge-btn {
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            min-width: 160px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* Enhanced Run Button with Vibrant Green Design */
+        .run-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #8bc34a 25%, #cddc39 50%, #ffeb3b 75%, #ffc107 100%);
+            color: #1a1a1a;
+            border: 2px solid rgba(76, 175, 80, 0.4);
+            box-shadow: 
+                0 6px 20px rgba(76, 175, 80, 0.4),
+                0 0 40px rgba(139, 195, 74, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            font-weight: 700;
+        }
+
+        .run-btn::before {
+            content: '⚡';
+            margin-right: 0.5rem;
+            font-size: 1.1em;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+            }
+            50% { 
+                transform: scale(1.2) rotate(180deg);
+                text-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
+            }
+        }
+
+        .run-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: linear-gradient(135deg, #66bb6a 0%, #9ccc65 25%, #d4e157 50%, #ffee58 75%, #ffca28 100%);
+            box-shadow: 
+                0 12px 35px rgba(76, 175, 80, 0.5),
+                0 0 60px rgba(139, 195, 74, 0.4),
+                0 0 100px rgba(205, 220, 57, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(76, 175, 80, 0.6);
+            color: #0a0a0a;
+        }
+
+        .run-btn:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 
+                0 8px 25px rgba(76, 175, 80, 0.6),
+                0 0 40px rgba(139, 195, 74, 0.5),
+                inset 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced Submit Button with Vibrant Orange Design */
+        .submit-btn {
+            background: linear-gradient(135deg, #ff5722 0%, #ff9800 25%, #ffc107 50%, #ffeb3b 75%, #cddc39 100%);
+            color: #1a1a1a;
+            border: 2px solid rgba(255, 87, 34, 0.4);
+            box-shadow: 
+                0 6px 20px rgba(255, 87, 34, 0.4),
+                0 0 40px rgba(255, 152, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            font-weight: 700;
+        }
+
+        .submit-btn::before {
+            content: '🔥';
+            margin-right: 0.5rem;
+            font-size: 1.1em;
+            animation: fireFlicker 1.5s ease-in-out infinite;
+        }
+
+        @keyframes fireFlicker {
+            0%, 100% { 
+                transform: scale(1) rotate(-2deg);
+                text-shadow: 0 0 5px rgba(255, 87, 34, 0.5);
+            }
+            25% { 
+                transform: scale(1.1) rotate(2deg);
+                text-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+            }
+            50% { 
+                transform: scale(1.05) rotate(-1deg);
+                text-shadow: 0 0 8px rgba(255, 87, 34, 0.6);
+            }
+            75% { 
+                transform: scale(1.15) rotate(1deg);
+                text-shadow: 0 0 12px rgba(255, 87, 34, 0.8);
+            }
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: linear-gradient(135deg, #ff6f3f 0%, #ffb74d 25%, #ffcc02 50%, #ffee58 75%, #d4e157 100%);
+            box-shadow: 
+                0 12px 35px rgba(255, 87, 34, 0.5),
+                0 0 60px rgba(255, 152, 0, 0.4),
+                0 0 100px rgba(255, 193, 7, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 87, 34, 0.6);
+            color: #0a0a0a;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 
+                0 8px 25px rgba(255, 87, 34, 0.6),
+                0 0 40px rgba(255, 152, 0, 0.5),
+                inset 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced Next Challenge Button with Stunning Design */
+        .next-challenge-btn {
+            background: linear-gradient(135deg, #ff4081 0%, #e91e63 25%, #9c27b0 50%, #673ab7 75%, #3f51b5 100%);
+            color: white;
+            border: 2px solid rgba(255, 64, 129, 0.4);
+            box-shadow: 
+                0 6px 20px rgba(255, 64, 129, 0.4),
+                0 0 40px rgba(233, 30, 99, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-challenge-btn::before {
+            content: '🚀';
+            margin-right: 0.5rem;
+            font-size: 1.1em;
+            animation: rocketBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes rocketBounce {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(5deg); }
+        }
+
+        .next-challenge-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 70%);
+            transform: rotate(45deg);
+            animation: shimmerEffect 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmerEffect {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(0%) translateY(0%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .next-challenge-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: linear-gradient(135deg, #ff5722 0%, #e91e63 20%, #9c27b0 40%, #673ab7 60%, #3f51b5 80%, #2196f3 100%);
+            box-shadow: 
+                0 12px 35px rgba(255, 64, 129, 0.5),
+                0 0 60px rgba(233, 30, 99, 0.4),
+                0 0 100px rgba(156, 39, 176, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 64, 129, 0.6);
+            animation: buttonPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 12px 35px rgba(255, 64, 129, 0.5),
+                    0 0 60px rgba(233, 30, 99, 0.4),
+                    0 0 100px rgba(156, 39, 176, 0.2),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    0 15px 40px rgba(255, 64, 129, 0.7),
+                    0 0 80px rgba(233, 30, 99, 0.6),
+                    0 0 120px rgba(156, 39, 176, 0.4),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .next-challenge-btn:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 
+                0 8px 25px rgba(255, 64, 129, 0.6),
+                0 0 40px rgba(233, 30, 99, 0.5),
+                inset 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button animation effects with improved shimmer */
+        .run-btn::after, .submit-btn::after, .next-challenge-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+
+        .run-btn:hover::after, .submit-btn:hover::after, .next-challenge-btn:hover::after {
+            left: 100%;
+        }
+
+        /* Enhanced glow effects on focus */
+        .run-btn:focus, .submit-btn:focus, .next-challenge-btn:focus {
+            outline: none;
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .run-btn:focus {
+            box-shadow: 
+                0 0 0 3px rgba(76, 175, 80, 0.3),
+                0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-btn:focus {
+            box-shadow: 
+                0 0 0 3px rgba(255, 87, 34, 0.3),
+                0 8px 25px rgba(255, 87, 34, 0.4);
+        }
+
+        .next-challenge-btn:focus {
+            box-shadow: 
+                0 0 0 3px rgba(255, 64, 129, 0.3),
+                0 8px 25px rgba(255, 64, 129, 0.4);
+        }
+
+        /* Button loading state animation */
+        .btn-loading {
+            position: relative;
+            color: transparent !important;
+        }
+
+        .btn-loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: buttonSpin 1s linear infinite;
+        }
+
+        @keyframes buttonSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Fade in animation for Next Challenge button */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Progress Tracking Container */
+        .progress-container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header h2 {
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0, 194, 255, 0.5);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .challenge-counter, .completion-percentage {
+            color: #b3b8d0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
+            padding: 8px;
+            margin: 2rem 0;
+            border: 2px solid rgba(0, 194, 255, 0.2);
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, rgba(14, 30, 56, 0.8), rgba(20, 35, 65, 0.6));
+            border-radius: 20px;
+            height: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #00C2FF 0%, #667eea 50%, #00C2FF 100%);
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s ease-in-out infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .completion-status {
+            background: linear-gradient(145deg, rgba(14, 30, 56, 0.6), rgba(20, 35, 65, 0.4));
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .completion-badges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 194, 255, 0.1);
+        }
+
+        .completion-badges::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .completion-badges::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .completion-badges::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00C2FF, #667eea);
+            border-radius: 4px;
+        }
+
+        .badge {
+            padding: 0.8rem 1.2rem;
+            background: rgba(0, 0, 0, 0.4);
+            color: #666;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            border: 2px solid rgba(102, 102, 102, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 194, 255, 0.2);
+        }
+
+        .badge.completed {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(139, 195, 74, 0.2));
+            color: #4caf50;
+            border-color: rgba(76, 175, 80, 0.5);
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .badge.completed::after {
+            content: '✓';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .progress-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .prev-challenge-btn, .next-challenge-btn-nav {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 194, 255, 0.2), rgba(102, 126, 234, 0.1));
+            color: var(--accent-color);
+            border: 2px solid rgba(0, 194, 255, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .prev-challenge-btn:hover, .next-challenge-btn-nav:hover {
+            background: linear-gradient(135deg, rgba(0, 194, 255, 0.3), rgba(102, 126, 234, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .prev-challenge-btn:disabled, .next-challenge-btn-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reset-btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 87, 34, 0.2), rgba(255, 152, 0, 0.1));
+            color: #ff5722;
+            border: 2px solid rgba(255, 87, 34, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 87, 34, 0.3), rgba(255, 152, 0, 0.2));
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Output Section */
+        .output-section {
+            background: linear-gradient(145deg, #1a1a1a, #252525);
+            border-radius: 15px;
+            padding: 2rem;
+            min-height: 150px;
+            border: 2px solid rgba(0, 194, 255, 0.2);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .output-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        .output-section h3 {
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .output-section h3::before {
+            content: '📤';
+            font-size: 0.9em;
+        }
+
+        .output-section pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #00C2FF;
+            margin: 0;
+            white-space: pre-wrap;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #00C2FF;
+        }
+
+        /* Next Challenge Section Styling */
+        .next-challenge-section {
+            margin-top: 1.5rem;
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, rgba(14, 30, 56, 0.9), rgba(20, 35, 65, 0.8));
+            border-radius: 15px;
+            border: 2px solid rgba(255, 64, 129, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 64, 129, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-challenge-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff4081 0%, #e91e63 25%, #9c27b0 50%, #673ab7 75%, #3f51b5 100%);
+            border-radius: 2px;
+        }
+
+        .next-challenge-section .next-challenge-btn {
+            margin: 0;
+            width: auto;
+            min-width: 200px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .challenge-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .challenge-section, .code-section {
+                padding: 2rem;
+            }
+            
+            .challenge-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .challenge-container {
+                padding: 1rem;
+            }
+            
+            .challenge-section, .code-section {
+                padding: 1.5rem;
+            }
+            
+            .code-input, .code-preview {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .run-btn, .submit-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="tutorial-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="challenges.html" class="nav-item active"><i class="fas fa-code"></i> Challenges</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="preference.html" class="pref-btn">
+                        <i class="fas fa-cog"></i> Preference
+                    </a>
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Tracking Section -->
+    <div class="progress-container">
+        <div class="progress-header">
+            <h2>🎯 Python Challenge Progress</h2>
+            <div class="progress-stats">
+                <span class="challenge-counter">Challenge <span id="currentChallenge">1</span> of <span id="totalChallenges">5</span></span>
+                <span class="completion-percentage"><span id="completionPercent">0</span>% Complete</span>
+            </div>
+        </div>
+        
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="completion-status">
+            <div class="completion-badges" id="completionBadges">
+                <!-- Challenge badges will be dynamically generated -->
+            </div>
+            <div class="progress-navigation">
+                <button class="prev-challenge-btn" id="prevChallengeBtn" disabled>← Previous</button>
+                <button class="next-challenge-btn-nav" id="nextChallengeNavBtn" disabled>Next →</button>
+                <button class="reset-btn" id="resetProgressBtn">Reset Progress</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="challenge-container">
+        <section class="challenge-section">
+            <div class="challenge-header">
+                <h1 class="challenge-title" id="challengeTitle">Hello World</h1>
+                <p class="challenge-description" id="challengeDescription">Write a program that prints "Hello, World!" to the console. This is traditionally the first program you write when learning a new programming language.</p>
+            </div>
+
+            <div class="example-section" id="exampleSection">
+                <h3>💡 Examples</h3>
+                <div id="exampleContent">
+                    <p>Expected output:</p>
+                    <pre><code>Hello, World!</code></pre>
+                </div>
+            </div>
+
+            <div class="example-section" id="notesSection">
+                <h3>📝 Notes</h3>
+                <ul id="notesList">
+                    <li>The output must match exactly, including capitalization and punctuation</li>
+                    <li>Make sure to include the exclamation mark</li>
+                    <li>There should be no extra spaces or new lines</li>
+                </ul>
+            </div>
+
+            <div class="example-section">
+                <h3>🚀 Enhanced Code Editor Features</h3>
+                <ul style="color: #00C2FF; font-size: 14px;">
+                    <li>✨ <strong>Syntax Highlighting:</strong> Keywords, strings, comments auto-colored</li>
+                    <li>🔗 <strong>Auto-closing brackets:</strong> Type (, [, {, ", ' and they close automatically</li>
+                    <li>📝 <strong>Tab indentation:</strong> Press Tab for 4-space indentation</li>
+                    <li>⏎ <strong>Smart Enter:</strong> Auto-indent after colons (:)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="code-section">
+            <div class="editor-container">
+                <textarea id="codeInput" class="code-input" spellcheck="false" placeholder="# Write your solution here..."></textarea>
+                <div id="codePreview" class="code-preview"></div>
+            </div>
+            
+            <div class="code-actions">
+                <button class="run-btn">Run Code</button>
+                <button class="submit-btn">Submit Solution</button>
+            </div>
+
+            <div class="output-section">
+                <h3>Output</h3>
+                <pre class="code-output">Click "Run Code" to see your output here...</pre>
+            </div>
+            
+            <div class="next-challenge-section" style="display: none;">
+                <button class="next-challenge-btn">Next Challenge</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="scripts/code-executor.js"></script>
+    <script src="scripts/challenges.js"></script>
+    <script src="scripts/header-auth.js"></script>
+    
+    <script>
+        // Global challenges array to be loaded from JSON
+        let challenges = [];
+        
+        // Load challenges from JSON file
+        async function loadChallenges() {
+            try {
+                const response = await fetch('scripts/challenges.json');
+                const data = await response.json();
+                challenges = data.challenges.map(challenge => ({
+                    ...challenge,
+                    expectedOutput: challenge.testCases[0].expectedOutput,
+                    simulatedInput: challenge.testCases[0].input || null
+                }));
+                
+                // Initialize challenge tracker after loading challenges
+                window.challengeTracker = new ChallengeTracker();
+            } catch (error) {
+                console.error('Error loading challenges:', error);
+                // Fallback to basic challenges if JSON loading fails
+                challenges = [
+                    {
+                        id: 1,
+                        title: "Hello World",
+                        description: "Write a program that prints \"Hello, World!\" to the console.",
+                        examples: { output: "Hello, World!" },
+                        notes: ["The output must match exactly, including capitalization and punctuation"],
+                        expectedOutput: "Hello, World!"
+                    }
+                ];
+                window.challengeTracker = new ChallengeTracker();
+            }
+        }
+
+        // Challenge Tracker Class
+        class ChallengeTracker {
+            constructor() {
+                this.currentChallengeIndex = parseInt(localStorage.getItem('currentChallenge') || '0');
+                this.completedChallenges = JSON.parse(localStorage.getItem('completedChallenges') || '[]');
+                this.totalChallenges = challenges.length;
+                this.init();
+            }
+
+            init() {
+                this.createChallengeBadges();
+                this.updateProgressUI();
+                this.loadCurrentChallenge();
+                this.setupEventListeners();
+            }
+
+            createChallengeBadges() {
+                const badgesContainer = document.getElementById('completionBadges');
+                badgesContainer.innerHTML = ''; // Clear existing badges
+                
+                challenges.forEach((challenge, index) => {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge';
+                    badge.setAttribute('data-challenge', index);
+                    
+                    // Truncate long titles for badges
+                    let badgeTitle = challenge.title;
+                    if (badgeTitle.length > 15) {
+                        badgeTitle = badgeTitle.substring(0, 12) + '...';
+                    }
+                    
+                    badge.textContent = `${index + 1}. ${badgeTitle}`;
+                    badge.title = challenge.title; // Full title on hover
+                    
+                    // Add click listener for navigation
+                    badge.addEventListener('click', () => {
+                        this.navigateToChallenge(index);
+                    });
+                    
+                    badgesContainer.appendChild(badge);
+                });
+            }
+
+            navigateToChallenge(index) {
+                if (index >= 0 && index < this.totalChallenges) {
+                    this.currentChallengeIndex = index;
+                    this.saveProgress();
+                    this.updateProgressUI();
+                    this.loadCurrentChallenge();
+                }
+            }
+
+            loadCurrentChallenge() {
+                const challenge = challenges[this.currentChallengeIndex];
+                if (!challenge) return;
+
+                // Update challenge content
+                document.getElementById('challengeTitle').textContent = challenge.title;
+                document.getElementById('challengeDescription').textContent = challenge.description;
+                
+                // Update examples
+                const exampleContent = document.getElementById('exampleContent');
+                exampleContent.innerHTML = `
+                    <p>Expected output:</p>
+                    <pre><code>${challenge.examples.output}</code></pre>
+                `;
+
+                // Update notes
+                const notesList = document.getElementById('notesList');
+                notesList.innerHTML = challenge.notes.map(note => `<li>${note}</li>`).join('');
+
+                // Clear the code input and hide next challenge section
+                document.getElementById('codeInput').value = '';
+                document.querySelector('.next-challenge-section').style.display = 'none';
+                document.querySelector('.code-output').textContent = 'Click "Run Code" to see your output here...';
+                document.querySelector('.code-output').style.color = '#00C2FF';
+                
+                // Update syntax highlighting
+                if (window.codeEditor) {
+                    window.codeEditor.updateHighlighting();
+                }
+            }
+
+            updateProgressUI() {
+                // Update total challenges count
+                this.totalChallenges = challenges.length;
+                
+                // Update progress indicators
+                document.getElementById('currentChallenge').textContent = this.currentChallengeIndex + 1;
+                document.getElementById('totalChallenges').textContent = this.totalChallenges;
+                
+                const completionPercent = Math.round((this.completedChallenges.length / this.totalChallenges) * 100);
+                document.getElementById('completionPercent').textContent = completionPercent;
+                
+                // Update progress bar
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) {
+                    progressFill.style.width = `${completionPercent}%`;
+                }
+
+                // Update challenge badges
+                const badges = document.querySelectorAll('.badge');
+                badges.forEach((badge, index) => {
+                    if (this.completedChallenges.includes(index)) {
+                        badge.classList.add('completed');
+                    } else {
+                        badge.classList.remove('completed');
+                    }
+                    
+                    // Highlight current challenge
+                    if (index === this.currentChallengeIndex) {
+                        badge.style.borderColor = '#00C2FF';
+                        badge.style.boxShadow = '0 0 10px rgba(0, 194, 255, 0.5)';
+                    } else {
+                        badge.style.borderColor = '';
+                        badge.style.boxShadow = '';
+                    }
+                });
+
+                // Update navigation buttons
+                const prevBtn = document.getElementById('prevChallengeBtn');
+                const nextNavBtn = document.getElementById('nextChallengeNavBtn');
+                
+                if (prevBtn) {
+                    prevBtn.disabled = this.currentChallengeIndex === 0;
+                }
+                
+                if (nextNavBtn) {
+                    nextNavBtn.disabled = this.currentChallengeIndex >= this.totalChallenges - 1;
+                }
+            }
+
+            submitSolution(code) {
+                const challenge = challenges[this.currentChallengeIndex];
+                const result = this.simulatePythonExecution(code, challenge);
+                
+                let isCorrect = false;
+                if (challenge.simulatedInput) {
+                    // For challenges that need input simulation
+                    isCorrect = result.trim() === challenge.expectedOutput;
+                } else {
+                    isCorrect = result.trim() === challenge.expectedOutput;
+                }
+
+                if (isCorrect) {
+                    // Mark challenge as completed
+                    if (!this.completedChallenges.includes(this.currentChallengeIndex)) {
+                        this.completedChallenges.push(this.currentChallengeIndex);
+                        this.saveProgress();
+                    }
+                    this.updateProgressUI();
+                    
+                    return {
+                        success: true,
+                        message: `🎉 Congratulations! Your solution is correct!\n\nExpected: ${challenge.expectedOutput}\nYour output: ${result.trim()}`
+                    };
+                } else {
+                    return {
+                        success: false,
+                        message: `❌ Solution incorrect. Please try again.\n\nExpected: ${challenge.expectedOutput}\nYour output: ${result.trim()}`
+                    };
+                }
+            }
+
+            nextChallenge() {
+                if (this.currentChallengeIndex < this.totalChallenges - 1) {
+                    this.currentChallengeIndex++;
+                    this.saveProgress();
+                    this.updateProgressUI();
+                    this.loadCurrentChallenge();
+                }
+            }
+
+            previousChallenge() {
+                if (this.currentChallengeIndex > 0) {
+                    this.currentChallengeIndex--;
+                    this.saveProgress();
+                    this.updateProgressUI();
+                    this.loadCurrentChallenge();
+                }
+            }
+
+            goToChallenge(index) {
+                if (index >= 0 && index < this.totalChallenges) {
+                    this.currentChallengeIndex = index;
+                    this.saveProgress();
+                    this.updateProgressUI();
+                    this.loadCurrentChallenge();
+                }
+            }
+
+            resetProgress() {
+                this.currentChallengeIndex = 0;
+                this.completedChallenges = [];
+                this.saveProgress();
+                this.updateProgressUI();
+                this.loadCurrentChallenge();
+            }
+
+            saveProgress() {
+                localStorage.setItem('currentChallenge', this.currentChallengeIndex.toString());
+                localStorage.setItem('completedChallenges', JSON.stringify(this.completedChallenges));
+            }
+
+            setupEventListeners() {
+                // Previous/Next navigation buttons
+                const prevBtn = document.getElementById('prevChallengeBtn');
+                const nextNavBtn = document.getElementById('nextChallengeNavBtn');
+                const resetBtn = document.getElementById('resetProgressBtn');
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => this.previousChallenge());
+                }
+
+                if (nextNavBtn) {
+                    nextNavBtn.addEventListener('click', () => this.nextChallenge());
+                }
+
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', () => {
+                        if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                            this.resetProgress();
+                        }
+                    });
+                }
+            }
+
+            previousChallenge() {
+                if (this.currentChallengeIndex > 0) {
+                    this.navigateToChallenge(this.currentChallengeIndex - 1);
+                }
+            }
+
+            nextChallenge() {
+                if (this.currentChallengeIndex < this.totalChallenges - 1) {
+                    this.navigateToChallenge(this.currentChallengeIndex + 1);
+                }
+            }
+
+            resetProgress() {
+                this.currentChallengeIndex = 0;
+                this.completedChallenges = [];
+                this.saveProgress();
+                this.updateProgressUI();
+                this.loadCurrentChallenge();
+            }
+
+            simulatePythonExecution(code, challenge) {
+                let output = '';
+                let variables = {};
+                let functions = {};
+                
+                try {
+                    // Simple Python simulator for common patterns
+                    const lines = code.split('\n').filter(line => line.trim());
+                    
+                    // Handle function definitions first
+                    let inFunction = false;
+                    let currentFunction = null;
+                    let functionBody = [];
+                    
+                    for (let i = 0; i < lines.length; i++) {
+                        const line = lines[i].trim();
+                        
+                        // Skip comments and empty lines
+                        if (line.startsWith('#') || !line) continue;
+                        
+                        // Function definition
+                        const funcMatch = line.match(/def\s+(\w+)\s*\((.*?)\)\s*:/);
+                        if (funcMatch) {
+                            inFunction = true;
+                            currentFunction = {
+                                name: funcMatch[1],
+                                params: funcMatch[2].split(',').map(p => p.trim()).filter(p => p),
+                                body: []
+                            };
+                            continue;
+                        }
+                        
+                        // End of function (dedented line or end of code)
+                        if (inFunction && (!line.startsWith('    ') && !line.startsWith('\t')) && line) {
+                            functions[currentFunction.name] = currentFunction;
+                            inFunction = false;
+                            currentFunction = null;
+                            i--; // Reprocess this line
+                            continue;
+                        }
+                        
+                        if (inFunction) {
+                            currentFunction.body.push(line.replace(/^    /, ''));
+                            continue;
+                        }
+                        
+                        // Regular code execution
+                        const result = this.executeLine(line, variables, functions, challenge);
+                        if (result !== null && result !== undefined) output += result + '\n';
+                    }
+                    
+                    // Handle end of file function
+                    if (inFunction && currentFunction) {
+                        functions[currentFunction.name] = currentFunction;
+                    }
+                    
+                    // For function-based challenges, test the function with the given inputs
+                    if (challenge.testCases && Object.keys(functions).length > 0) {
+                        console.log('Testing function-based challenge:', challenge.title);
+                        console.log('Available functions:', Object.keys(functions));
+                        console.log('Test cases:', challenge.testCases);
+                        
+                        for (const testCase of challenge.testCases) {
+                            // Try to find the right function name based on challenge
+                            let functionName = Object.keys(functions)[0]; // Get first function
+                            
+                            // For prime number checker, look for is_prime function specifically
+                            if (challenge.title && challenge.title.includes('Prime')) {
+                                const primeFunc = Object.keys(functions).find(name => name.includes('prime') || name === 'is_prime');
+                                if (primeFunc) functionName = primeFunc;
+                            }
+                            
+                            console.log(`Testing function '${functionName}' with input:`, testCase.input);
+                            
+                            if (functions[functionName] && testCase.input !== undefined) {
+                                // Call the function with the test input
+                                const result = this.executeFunction(functionName, testCase.input, variables, functions, challenge);
+                                console.log('Function execution result:', result, 'type:', typeof result);
+                                
+                                if (result !== null && result !== undefined) {
+                                    // Convert boolean to Python boolean string representation
+                                    const pythonResult = (result === true) ? 'True' : (result === false) ? 'False' : result;
+                                    console.log('Python formatted result:', pythonResult);
+                                    output += pythonResult + '\n';
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Execute any standalone function calls that might have been missed
+                    const finalLines = code.split('\n').filter(line => line.trim() && !line.trim().startsWith('#') && !line.trim().startsWith('def') && !line.trim().startsWith('    '));
+                    for (const line of finalLines) {
+                        if (line.includes('(') && !line.includes('print(') && !line.includes('input(') && !line.includes('=')) {
+                            const result = this.executeLine(line.trim(), variables, functions, challenge);
+                            if (result !== null && result !== undefined) output += result + '\n';
+                        }
+                    }
+                    
+                } catch (e) {
+                    console.error('Simulation error:', e);
+                    return 'Error in code execution';
+                }
+                
+                return output.trim() || 'Code executed successfully (no output)';
+            }
+            
+            executeLine(line, variables, functions, challenge) {
+                // Handle print statements
+                const printMatch = line.match(/print\s*\(\s*([^)]*)\s*\)/);
+                if (printMatch) {
+                    return this.evaluateExpression(printMatch[1], variables, functions, challenge);
+                }
+                
+                // Handle variable assignments
+                const assignMatch = line.match(/(\w+)\s*=\s*(.+)/);
+                if (assignMatch && !line.includes('==')) {
+                    const varName = assignMatch[1];
+                    const value = this.evaluateExpression(assignMatch[2], variables, functions, challenge);
+                    variables[varName] = value;
+                    return null;
+                }
+                
+                // Handle for loops (simple cases)
+                const forMatch = line.match(/for\s+(\w+)\s+in\s+range\s*\(\s*([^)]+)\s*\):/);
+                if (forMatch) {
+                    const varName = forMatch[1];
+                    const rangeExpr = forMatch[2];
+                    const rangeArgs = rangeExpr.split(',').map(arg => parseInt(arg.trim()));
+                    
+                    let start = 0, end = 0, step = 1;
+                    if (rangeArgs.length === 1) {
+                        end = rangeArgs[0];
+                    } else if (rangeArgs.length === 2) {
+                        start = rangeArgs[0];
+                        end = rangeArgs[1];
+                    } else if (rangeArgs.length === 3) {
+                        start = rangeArgs[0];
+                        end = rangeArgs[1];
+                        step = rangeArgs[2];
+                    }
+                    
+                    let result = '';
+                    for (let i = start; i < end; i += step) {
+                        variables[varName] = i;
+                        result += i + '\n';
+                    }
+                    return result.trim();
+                }
+                
+                // Handle if statements (simple cases)
+                const ifMatch = line.match(/if\s+(.+):/);
+                if (ifMatch) {
+                    const condition = ifMatch[1];
+                    const conditionResult = this.evaluateExpression(condition, variables, functions, challenge);
+                    // Return the condition result for tracking, actual if-block execution would need more context
+                    return conditionResult ? 'True' : 'False';
+                }
+                
+                // Handle function calls
+                const funcCallMatch = line.match(/(\w+)\s*\(([^)]*)\)/);
+                if (funcCallMatch && functions[funcCallMatch[1]]) {
+                    return this.executeFunction(funcCallMatch[1], funcCallMatch[2], variables, functions, challenge);
+                }
+                
+                // Handle return statements (for function context)
+                const returnMatch = line.match(/return\s+(.+)/);
+                if (returnMatch) {
+                    return this.evaluateExpression(returnMatch[1], variables, functions, challenge);
+                }
+                
+                return null;
+            }
+            
+            evaluateExpression(expr, variables, functions, challenge) {
+                if (!expr) return '';
+                
+                expr = expr.trim();
+                
+                // Handle string literals
+                if (expr.match(/^["'].*["']$/)) {
+                    return expr.slice(1, -1);
+                }
+                
+                // Handle numbers
+                if (expr.match(/^\d+(\.\d+)?$/)) {
+                    return parseFloat(expr);
+                }
+                
+                // Handle boolean literals
+                if (expr === 'True') return true;
+                if (expr === 'False') return false;
+                
+                // Handle variables
+                if (variables[expr] !== undefined) {
+                    return variables[expr];
+                }
+                
+                // Handle input() function
+                if (expr.includes('input(')) {
+                    if (challenge.simulatedInput) {
+                        return challenge.simulatedInput;
+                    }
+                    return 'simulated_input';
+                }
+                
+                // Handle comparison operators
+                if (expr.includes('==') || expr.includes('!=') || expr.includes('<=') || expr.includes('>=') || expr.includes('<') || expr.includes('>')) {
+                    try {
+                        let evalExpr = expr;
+                        // Replace variables in the expression
+                        Object.keys(variables).forEach(varName => {
+                            const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                            evalExpr = evalExpr.replace(regex, variables[varName]);
+                        });
+                        
+                        // Handle Python comparison operators
+                        evalExpr = evalExpr.replace(/==/g, '===');
+                        evalExpr = evalExpr.replace(/!=/g, '!==');
+                        
+                        const result = eval(evalExpr);
+                        return result;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+                
+                // Handle logical operators (and, or)
+                if (expr.includes(' and ') || expr.includes(' or ')) {
+                    try {
+                        let evalExpr = expr;
+                        // Replace variables in the expression
+                        Object.keys(variables).forEach(varName => {
+                            const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                            evalExpr = evalExpr.replace(regex, variables[varName]);
+                        });
+                        
+                        // Convert Python logical operators to JavaScript
+                        evalExpr = evalExpr.replace(/ and /g, ' && ');
+                        evalExpr = evalExpr.replace(/ or /g, ' || ');
+                        
+                        const result = eval(evalExpr);
+                        return result;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+                
+                // Handle modulo operations (common in prime checking)
+                if (expr.includes('%')) {
+                    try {
+                        let evalExpr = expr;
+                        Object.keys(variables).forEach(varName => {
+                            const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                            evalExpr = evalExpr.replace(regex, variables[varName]);
+                        });
+                        
+                        const result = eval(evalExpr);
+                        return result;
+                    } catch (e) {
+                        return expr;
+                    }
+                }
+                
+                // Handle arithmetic expressions
+                try {
+                    // Replace variables in the expression
+                    let evalExpr = expr;
+                    Object.keys(variables).forEach(varName => {
+                        const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                        evalExpr = evalExpr.replace(regex, variables[varName]);
+                    });
+                    
+                    // Handle basic Python operators
+                    evalExpr = evalExpr.replace(/\*\*/g, '**'); // Power operator (JavaScript doesn't have **)
+                    evalExpr = evalExpr.replace(/\/\//g, 'Math.floor('); // Integer division
+                    if (evalExpr.includes('Math.floor(')) {
+                        evalExpr += ')';
+                    }
+                    
+                    const result = eval(evalExpr);
+                    return isNaN(result) ? expr : result;
+                } catch (e) {
+                    return expr;
+                }
+            }
+            
+            executeFunction(funcName, argsStr, variables, functions, challenge) {
+                const func = functions[funcName];
+                if (!func) return null;
+                
+                // Parse arguments - handle single values and comma-separated values
+                let args = [];
+                if (argsStr !== undefined && argsStr !== null) {
+                    if (typeof argsStr === 'string' && argsStr.includes(',')) {
+                        args = argsStr.split(',').map(arg => this.evaluateExpression(arg.trim(), variables, functions, challenge));
+                    } else {
+                        // Single argument
+                        args = [this.evaluateExpression(argsStr.toString().trim(), variables, functions, challenge)];
+                    }
+                }
+                
+                // Create local scope
+                const localVars = {...variables};
+                func.params.forEach((param, index) => {
+                    if (args[index] !== undefined) {
+                        // Convert to integer if it's a numeric string
+                        const value = args[index];
+                        localVars[param] = (typeof value === 'string' && /^\d+$/.test(value)) ? parseInt(value) : value;
+                    }
+                });
+                
+                // Special handling for prime checking functions
+                if (funcName === 'is_prime' || funcName.includes('prime')) {
+                    const n = localVars[func.params[0]];
+                    return this.simulatePrimeFunction(n, func.body);
+                }
+                
+                // Execute function body
+                let result = null;
+                let output = '';
+                
+                for (const line of func.body) {
+                    const trimmedLine = line.trim();
+                    
+                    // Handle return statements
+                    if (trimmedLine.startsWith('return')) {
+                        const returnExpr = trimmedLine.substring(6).trim();
+                        result = this.evaluateExpression(returnExpr, localVars, functions, challenge);
+                        break;
+                    }
+                    
+                    // Handle other statements in function
+                    const lineResult = this.executeLine(trimmedLine, localVars, functions, challenge);
+                    if (lineResult !== null && lineResult !== undefined) {
+                        output += lineResult;
+                    }
+                }
+                
+                return result !== null ? result : output;
+            }
+            
+            simulatePrimeFunction(n, functionBody) {
+                // Extract parameter name from function definition
+                let paramName = 'n'; // default
+                const defLine = functionBody.find(line => line.trim().startsWith('def'));
+                if (defLine) {
+                    const match = defLine.match(/def\s+\w+\s*\(\s*(\w+)\s*\)/);
+                    if (match) {
+                        paramName = match[1];
+                    }
+                }
+                
+                // Execute the actual user-written function body with proper control flow
+                const localVars = {[paramName]: n};
+                
+                // Parse the function body into executable blocks
+                const lines = functionBody.filter(line => !line.trim().startsWith('def') && line.trim());
+                
+                return this.executeCodeBlock(lines, localVars, {}, null);
+            }
+            
+            executeCodeBlock(lines, variables, functions, challenge) {
+                let i = 0;
+                
+                while (i < lines.length) {
+                    const line = lines[i].trim();
+                    
+                    // Skip empty lines and comments
+                    if (!line || line.startsWith('#')) {
+                        i++;
+                        continue;
+                    }
+                    
+                    // Handle return statements
+                    if (line.startsWith('return')) {
+                        const returnExpr = line.substring(6).trim();
+                        return this.evaluateExpression(returnExpr, variables, functions, challenge);
+                    }
+                    
+                    // Handle if statements
+                    if (line.match(/if\s+.+:/)) {
+                        const conditionMatch = line.match(/if\s+(.+):/);
+                        if (conditionMatch) {
+                            const condition = conditionMatch[1];
+                            const conditionResult = this.evaluateExpression(condition, variables, functions, challenge);
+                            
+                            // Find the if block (indented lines after the if statement)
+                            const ifBlock = [];
+                            let j = i + 1;
+                            while (j < lines.length && (lines[j].startsWith('    ') || lines[j].startsWith('\t'))) {
+                                ifBlock.push(lines[j].replace(/^    /, '').replace(/^\t/, ''));
+                                j++;
+                            }
+                            
+                            // Execute if block if condition is true
+                            if (conditionResult) {
+                                const result = this.executeCodeBlock(ifBlock, variables, functions, challenge);
+                                if (result !== null && result !== undefined) {
+                                    return result;
+                                }
+                            }
+                            
+                            i = j; // Skip to after the if block
+                            continue;
+                        }
+                    }
+                    
+                    // Handle for loops
+                    if (line.match(/for\s+\w+\s+in\s+range\s*\([^)]+\):/)) {
+                        const forMatch = line.match(/for\s+(\w+)\s+in\s+range\s*\(\s*([^)]+)\s*\):/);
+                        if (forMatch) {
+                            const loopVar = forMatch[1];
+                            const rangeExpr = forMatch[2];
+                            const rangeArgs = rangeExpr.split(',').map(arg => {
+                                const evaluated = this.evaluateExpression(arg.trim(), variables, functions, challenge);
+                                return typeof evaluated === 'number' ? evaluated : parseInt(evaluated);
+                            });
+                            
+                            let start = 0, end = 0, step = 1;
+                            if (rangeArgs.length === 1) {
+                                end = rangeArgs[0];
+                            } else if (rangeArgs.length === 2) {
+                                start = rangeArgs[0];
+                                end = rangeArgs[1];
+                            } else if (rangeArgs.length === 3) {
+                                start = rangeArgs[0];
+                                end = rangeArgs[1];
+                                step = rangeArgs[2];
+                            }
+                            
+                            // Find the loop block
+                            const loopBlock = [];
+                            let j = i + 1;
+                            while (j < lines.length && (lines[j].startsWith('    ') || lines[j].startsWith('\t'))) {
+                                loopBlock.push(lines[j].replace(/^    /, '').replace(/^\t/, ''));
+                                j++;
+                            }
+                            
+                            // Execute loop
+                            for (let loopValue = start; loopValue < end; loopValue += step) {
+                                variables[loopVar] = loopValue;
+                                const result = this.executeCodeBlock(loopBlock, variables, functions, challenge);
+                                if (result !== null && result !== undefined) {
+                                    return result;
+                                }
+                            }
+                            
+                            i = j; // Skip to after the loop block
+                            continue;
+                        }
+                    }
+                    
+                    // Handle regular statements
+                    this.executeLine(line, variables, functions, challenge);
+                    i++;
+                }
+                
+                return null;
+            }
+        }
+
+        // Initialize challenge tracker
+        let challengeTracker;
+        // Enhanced CodeEditor with syntax highlighting
+        class CodeEditor {
+            constructor(textareaId, previewId) {
+                this.textarea = document.getElementById(textareaId);
+                this.preview = document.getElementById(previewId);
+                
+                if (!this.textarea || !this.preview) {
+                    console.error('CodeEditor: textarea or preview element not found');
+                    return;
+                }
+                
+                this.init();
+            }
+            
+            init() {
+                // Initial highlighting and sync
+                this.syncDimensions();
+                this.updateHighlighting();
+                
+                // Event listeners
+                this.textarea.addEventListener('input', () => this.updateHighlighting());
+                this.textarea.addEventListener('scroll', () => this.syncScroll());
+                this.textarea.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                this.textarea.addEventListener('focus', () => this.handleFocus());
+                this.textarea.addEventListener('blur', () => this.handleBlur());
+                
+                // Handle resize events to maintain sync
+                this.textarea.addEventListener('resize', () => this.syncDimensions());
+                
+                // Use ResizeObserver for better resize handling if available
+                if (window.ResizeObserver) {
+                    const resizeObserver = new ResizeObserver(() => {
+                        this.syncDimensions();
+                        this.syncScroll();
+                    });
+                    resizeObserver.observe(this.textarea);
+                }
+                
+                // Initial sync
+                this.syncScroll();
+            }
+            
+            handleFocus() {
+                // Status message removed
+            }
+            
+            handleBlur() {
+                // Status message removed
+            }
+            
+            handleKeyDown(e) {
+                // Handle Tab key for indentation
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.textarea.selectionStart;
+                    const end = this.textarea.selectionEnd;
+                    const before = this.textarea.value.substring(0, start);
+                    const after = this.textarea.value.substring(end);
+                    this.textarea.value = before + '    ' + after;
+                    this.textarea.selectionStart = this.textarea.selectionEnd = start + 4;
+                    this.updateHighlighting();
+                }
+                // Handle Enter key for auto-indentation
+                else if (e.key === 'Enter') {
+                    const start = this.textarea.selectionStart;
+                    const lines = this.textarea.value.substring(0, start).split('\n');
+                    const currentLine = lines[lines.length - 1];
+                    const indent = currentLine.match(/^(\s*)/)[1];
+                    let newIndent = indent;
+                    
+                    // Add extra indentation after colons
+                    if (currentLine.trim().endsWith(':')) {
+                        newIndent += '    ';
+                    }
+                    
+                    setTimeout(() => {
+                        const newStart = this.textarea.selectionStart;
+                        const beforeCursor = this.textarea.value.substring(0, newStart);
+                        const afterCursor = this.textarea.value.substring(newStart);
+                        this.textarea.value = beforeCursor + newIndent + afterCursor;
+                        this.textarea.selectionStart = this.textarea.selectionEnd = newStart + newIndent.length;
+                        this.updateHighlighting();
+                    }, 0);
+                }
+            }
+            
+            updateHighlighting() {
+                const code = this.textarea.value;
+                const highlighted = this.highlightPython(code);
+                this.preview.innerHTML = highlighted;
+                
+                // Ensure elements maintain the same dimensions
+                this.syncDimensions();
+                this.syncScroll();
+            }
+            
+            syncScroll() {
+                // Synchronize scroll position
+                this.preview.scrollTop = this.textarea.scrollTop;
+                this.preview.scrollLeft = this.textarea.scrollLeft;
+            }
+            
+            syncDimensions() {
+                // Ensure both elements have identical dimensions and spacing
+                const textareaStyles = window.getComputedStyle(this.textarea);
+                this.preview.style.minHeight = textareaStyles.minHeight;
+                this.preview.style.height = this.textarea.style.height || textareaStyles.height;
+            }
+            
+            highlightPython(code) {
+                if (!code) return '';
+                
+                // Escape HTML first
+                let highlighted = code.replace(/[<>&"']/g, function(match) {
+                    const map = {'<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#x27;'};
+                    return map[match];
+                });
+                
+                // Split into lines to preserve spacing and line breaks
+                const lines = highlighted.split('\n');
+                const highlightedLines = lines.map(line => {
+                    let lineHighlighted = line;
+                    
+                    // Python syntax highlighting patterns - order matters!
+                    const patterns = [
+                        // Comments (must come first)
+                        { regex: /(#.*$)/g, replacement: '<span class="comment">$1</span>' },
+                        
+                        // Triple-quoted strings
+                        { regex: /("""[\s\S]*?""")/g, replacement: '<span class="string">$1</span>' },
+                        { regex: /('''[\s\S]*?''')/g, replacement: '<span class="string">$1</span>' },
+                        
+                        // Double-quoted strings
+                        { regex: /("(?:[^"\\]|\\.)*")/g, replacement: '<span class="string">$1</span>' },
+                        
+                        // Single-quoted strings
+                        { regex: /('(?:[^'\\]|\\.)*')/g, replacement: '<span class="string">$1</span>' },
+                        
+                        // Numbers
+                        { regex: /\b(\d+\.?\d*(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?)\b/g, replacement: '<span class="number">$1</span>' },
+                        
+                        // Python keywords
+                        { regex: /\b(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield|async|await)\b/g, replacement: '<span class="keyword">$1</span>' },
+                        
+                        // Built-in functions
+                        { regex: /\b(abs|all|any|ascii|bin|bool|bytearray|bytes|callable|chr|classmethod|compile|complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format|frozenset|getattr|globals|hasattr|hash|help|hex|id|input|int|isinstance|issubclass|iter|len|list|locals|map|max|memoryview|min|next|object|oct|open|ord|pow|print|property|range|repr|reversed|round|set|setattr|slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip|__import__|True|False|None)\b/g, replacement: '<span class="builtin">$1</span>' },
+                        
+                        // Function calls
+                        { regex: /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g, replacement: '<span class="function">$1</span>' }
+                    ];
+                    
+                    // Apply each pattern
+                    patterns.forEach(pattern => {
+                        lineHighlighted = lineHighlighted.replace(pattern.regex, pattern.replacement);
+                    });
+                    
+                    return lineHighlighted;
+                });
+                
+                // Join lines back with newlines
+                return highlightedLines.join('\n');
+            }
+        }
+
+        // Enhanced Run Code functionality
+        function setupRunButton() {
+            const runBtn = document.querySelector('.run-btn');
+            const submitBtn = document.querySelector('.submit-btn');
+            const nextBtn = document.querySelector('.next-challenge-btn');
+            const nextSection = document.querySelector('.next-challenge-section');
+            const output = document.querySelector('.code-output');
+            const codeInput = document.getElementById('codeInput');
+            
+            // Setup Run Button
+            if (runBtn && output && codeInput) {
+                runBtn.addEventListener('click', () => {
+                    const code = codeInput.value.trim();
+                    
+                    if (!code) {
+                        output.textContent = 'Please write some Python code first!';
+                        output.style.color = '#ff6b6b';
+                        return;
+                    }
+                    
+                    // Show running animation
+                    runBtn.innerHTML = '⚡ Running...';
+                    runBtn.disabled = true;
+                    output.textContent = 'Executing code...';
+                    output.style.color = '#00C2FF';
+                    
+                    // Simulate code execution (just running, not testing)
+                    setTimeout(() => {
+                        try {
+                            const result = simulatePythonExecution(code);
+                            output.innerHTML = result;
+                            output.style.color = '#00C2FF';
+                        } catch (error) {
+                            output.textContent = `Error: ${error.message}`;
+                            output.style.color = '#ff6b6b';
+                        }
+                        
+                        // Reset button
+                        runBtn.innerHTML = '⚡ Run Code';
+                        runBtn.disabled = false;
+                    }, 1000);
+                });
+            }
+            
+            // Setup Submit Button - only this shows Next Challenge button
+            if (submitBtn && output && codeInput && nextBtn && nextSection) {
+                submitBtn.addEventListener('click', () => {
+                    const code = codeInput.value.trim();
+                    
+                    if (!code) {
+                        output.textContent = 'Please write some Python code first!';
+                        output.style.color = '#ff6b6b';
+                        return;
+                    }
+                    
+                    // Show submitting animation
+                    submitBtn.innerHTML = '🔥 Submitting...';
+                    submitBtn.disabled = true;
+                    output.textContent = 'Testing your solution...';
+                    output.style.color = '#00C2FF';
+                    
+                    // Use challenge tracker to test solution
+                    setTimeout(() => {
+                        try {
+                            const result = challengeTracker.submitSolution(code);
+                            output.innerHTML = result.message;
+                            output.style.color = result.success ? '#4caf50' : '#ff6b6b';
+                            
+                            if (result.success) {
+                                // Show the Next Challenge section only on successful submission
+                                nextSection.style.display = 'block';
+                                nextSection.style.animation = 'fadeInUp 0.5s ease-out';
+                            } else {
+                                // Keep Next Challenge section hidden
+                                nextSection.style.display = 'none';
+                            }
+                        } catch (error) {
+                            output.textContent = `Error: ${error.message}`;
+                            output.style.color = '#ff6b6b';
+                            
+                            // Keep Next Challenge section hidden on error
+                            nextSection.style.display = 'none';
+                        }
+                        
+                        // Reset button
+                        submitBtn.innerHTML = '🔥 Submit Solution';
+                        submitBtn.disabled = false;
+                    }, 1500);
+                });
+            }
+            
+            // Setup Next Challenge Button
+            if (nextBtn && nextSection) {
+                nextBtn.addEventListener('click', () => {
+                    // Add animation and feedback
+                    nextBtn.innerHTML = '🚀 Loading...';
+                    nextBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        challengeTracker.nextChallenge();
+                        nextBtn.innerHTML = '🚀 Next Challenge';
+                        nextBtn.disabled = false;
+                        // Hide the section after transition
+                        nextSection.style.display = 'none';
+                    }, 1000);
+                });
+            }
+        }
+        
+        // Updated Python execution simulator
+        function simulatePythonExecution(code) {
+            return challengeTracker.simulatePythonExecution(code, challenges[challengeTracker.currentChallengeIndex]);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load challenges first, then initialize
+            await loadChallenges();
+            
+            // Then initialize code editor
+            window.codeEditor = new CodeEditor('codeInput', 'codePreview');
+            setupRunButton();
+        });
+    </script>
+</body>
+</html>

@@ -114,21 +114,45 @@
                 <div class="icon"><i class="fas fa-keyboard"></i></div>
                 <div class="card-title">Typing Test</div>
                 <div class="card-desc">Test and improve your typing speed and accuracy with fun, competitive races and challenges.</div>
-                <a href="index.html" class="card-btn">Start Typing</a>
+                <a href="index.html" class="card-btn" onclick="markPreferencesComplete('typing')">Start Typing</a>
             </div>
             <div class="preference-card">
                 <div class="icon"><i class="fas fa-code"></i></div>
                 <div class="card-title">Code Racer</div>
                 <div class="card-desc">Practice coding in Python, Java, C++, and more. Level up from beginner to advanced with real code snippets.</div>
-                <a href="code-racer.html" class="card-btn">Start Coding</a>
+                <a href="code-racer.html" class="card-btn" onclick="markPreferencesComplete('coding')">Start Coding</a>
             </div>
             <div class="preference-card">
                 <div class="icon"><i class="fas fa-user-tie"></i></div>
                 <div class="card-title">Professional Skills</div>
                 <div class="card-desc">Enhance your soft skills: practice resumes, cover letters, business emails, and more with real-world templates.</div>
-                <a href="pro-skills.html" class="card-btn">Practice Soft Skills</a>
+                <a href="pro-skills.html" class="card-btn" onclick="markPreferencesComplete('professional')">Practice Soft Skills</a>
             </div>
         </div>
+        <div class="continue-section" style="margin-top: 30px; text-align: center;">
+            <a href="index.html" class="continue-btn" style="background-color: var(--primary-color); color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease;" onclick="markPreferencesComplete('general')">
+                <i class="fas fa-arrow-right"></i> Continue to App
+            </a>
+        </div>
     </div>
+
+    <script>
+        // Function to mark preferences complete
+        function markPreferencesComplete(preferenceType) {
+            // Store the user's preference
+            localStorage.setItem('userPreference', preferenceType);
+            
+            // Also mark that preferences have been set
+            localStorage.setItem('preferencesComplete', 'true');
+        }
+
+        // Check if user is logged in, if not redirect to login
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('typingTestUser');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
 </body>
 </html> 

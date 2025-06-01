@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Test - Code Racer</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/code-racer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="tutorial-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="challenges.html" class="nav-item active"><i class="fas fa-code"></i> Challenges</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="preference.html" class="pref-btn" id="prefBtn">
+                        <i class="fas fa-cog"></i> Preference
+                    </a>
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main style="padding: 2rem;">
+        <h1>Header Avatar Test</h1>
+        <p>This page tests the avatar functionality in the header.</p>
+        
+        <div style="margin: 2rem 0;">
+            <h2>Test Different User States:</h2>
+            <button onclick="simulateGuestUser()">Simulate Guest User</button>
+            <button onclick="simulateGoogleUser()">Simulate Google User</button>
+            <button onclick="simulateLogout()">Simulate Logout</button>
+        </div>
+
+        <div id="status" style="margin: 1rem 0; padding: 1rem; background: #f5f5f5; border-radius: 8px;">
+            <strong>Current Status:</strong> <span id="userStatus">Not logged in</span>
+        </div>
+    </main>
+
+    <script src="scripts/header-auth.js"></script>
+    <script>
+        function simulateGuestUser() {
+            localStorage.setItem('typingTestUser', 'Guest User');
+            localStorage.setItem('typingTestUserType', 'guest');
+            location.reload();
+        }
+
+        function simulateGoogleUser() {
+            localStorage.setItem('typingTestUser', 'John Doe');
+            localStorage.setItem('typingTestUserType', 'google');
+            localStorage.setItem('typingTestUserData', JSON.stringify({
+                name: 'John Doe',
+                email: 'john.doe@gmail.com',
+                picture: 'https://lh3.googleusercontent.com/a/ACg8ocKxSE8RIH3Q-7xY-placeholder-avatar-url'
+            }));
+            location.reload();
+        }
+
+        function simulateLogout() {
+            localStorage.removeItem('typingTestUser');
+            localStorage.removeItem('typingTestUserType');
+            localStorage.removeItem('typingTestUserData');
+            location.reload();
+        }
+
+        // Update status display
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('typingTestUser');
+            const userType = localStorage.getItem('typingTestUserType');
+            const statusEl = document.getElementById('userStatus');
+            
+            if (user) {
+                statusEl.textContent = `Logged in as ${user} (${userType})`;
+            } else {
+                statusEl.textContent = 'Not logged in';
+            }
+        });
+    </script>
+</body>
+</html>

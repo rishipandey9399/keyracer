@@ -8,138 +8,38 @@
     <link rel="stylesheet" href="styles/typing-tips.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #FF4A4A;
-            --secondary-color: #1E2761;
-            --accent-color: #00FFDD;
-            --racing-stripe-light: #FF4A4A;
-            --racing-stripe-dark: #1E2761;
-            --card-shadow: 0 10px 25px rgba(255, 74, 74, 0.2);
-            --text-color: #e9e9e9;
-        }
-        
-        .logo-img {
-            max-height: 100px;
-            vertical-align: middle;
-            margin-right: 15px;
-            filter: drop-shadow(0 0 10px rgba(0, 255, 221, 0.5));
-        }
-        
-        .header-container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: var(--secondary-color);
-            color: white;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            border-bottom: 3px solid var(--primary-color);
-            margin-bottom: 2rem;
-        }
-        
-        .header-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 4s infinite;
-            pointer-events: none;
-        }
-        
-        .logo-section {
-            text-align: left;
-            padding: 15px;
-            border-bottom: 2px solid #00FFDD;
-            margin-bottom: 15px;
-        }
-        
-        .logo-heading {
-            text-align: left;
-            margin: 0;
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-section {
-            padding: 15px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Navigation styling updates */
-        .feature-tabs {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            padding: 10px 0;
-        }
-
-        .tab {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-color);
-            font-family: var(--body-font, 'Rajdhani', sans-serif);
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            background: rgba(7, 11, 24, 0.6);
-            border: 1px solid var(--accent-color);
-        }
-
-        .tab:hover {
-            transform: translateY(-2px);
-            background: rgba(0, 255, 221, 0.1);
-            color: var(--accent-color);
-            box-shadow: 0 4px 15px rgba(0, 255, 221, 0.15);
-        }
-
-        .tab.active {
-            background: var(--accent-color);
-            color: var(--secondary-color);
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(0, 255, 221, 0.3);
-        }
-
-        .tab i {
-            font-size: 1rem;
-        }
-
-        /* Section box styling updates */
-        .content-section {
-            background-color: rgba(14, 30, 56, 0.5);
-            border-radius: 16px;
-            padding: 30px;
-            margin: 20px;
-            border: 1px solid rgba(0, 194, 255, 0.2);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-container">
+    <!-- Header Section -->
+    <header>
+        <div class="header-content">
             <div class="logo-section">
-                <h1 class="logo-heading"><img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">Typing Tips</h1>
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
             </div>
-
-            <div class="nav-section">
-                <div class="feature-tabs">
-                    <a href="index.html" class="tab"><i class="fas fa-home"></i> Home</a>
-                    <a href="lessons.html" class="tab"><i class="fas fa-graduation-cap"></i> Training</a>
-                    <a href="leaderboard.html" class="tab"><i class="fas fa-trophy"></i> Championship</a>
-                </div>
+            
+            <nav class="main-nav">
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="lessons.html" class="nav-item"><i class="fas fa-graduation-cap"></i> Training</a>
+                <a href="typing-tips.html" class="nav-item active"><i class="fas fa-lightbulb"></i> Tips</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Championship</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="preference.html" class="pref-btn"><i class="fas fa-cog"></i> Preference</a>
+                <a href="login.html" id="loginBtn" class="nav-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="#" id="logoutBtn" class="nav-item" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="tips-header">
+            <h1><i class="fas fa-lightbulb"></i> Typing Tips & Techniques</h1>
+            <p>Master the art of fast and accurate typing with expert guidance</p>
         </div>
 
         <div class="tips-container">
@@ -238,5 +138,6 @@
 
     <script src="scripts/keyboard.js"></script>
     <script src="scripts/typing-tips.js"></script>
+    <script src="scripts/header-auth.js"></script>
 </body>
 </html>

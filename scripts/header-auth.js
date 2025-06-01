@@ -5,11 +5,27 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // DOM elements
-    const userInfoContainer = document.querySelector('.user-info');
-    const userProfilePic = document.querySelector('.profile-pic');
-    const userName = document.querySelector('.user-name');
+    const headerActions = document.querySelector('.header-actions');
     const loginBtn = document.querySelector('#loginBtn');
     const logoutBtn = document.querySelector('#logoutBtn');
+    
+    // Check if on index.html and not logged in - redirect to login page
+    const isIndexPage = window.location.pathname.endsWith('index.html') || 
+                        window.location.pathname.endsWith('/') ||
+                        window.location.pathname.endsWith('/keyracer/');
+    const isLoggedIn = localStorage.getItem('typingTestUser');
+    
+    if (isIndexPage && !isLoggedIn) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // If user is logged in but hasn't visited preferences page, redirect there first
+    const preferencesComplete = localStorage.getItem('preferencesComplete');
+    if (isIndexPage && isLoggedIn && !preferencesComplete) {
+        window.location.href = 'preference.html';
+        return;
+    }
     
     // Check if user is logged in
     updateUserDisplay();
@@ -30,6 +46,57 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /**
+     * Create user info section dynamically
+     */
+    function createUserInfoSection(username, userType) {
+        // Remove existing user-info if it exists
+        const existingUserInfo = document.querySelector('.user-info');
+        if (existingUserInfo) {
+            existingUserInfo.remove();
+        }
+        
+        // Create new user info section
+        const userInfoDiv = document.createElement('div');
+        userInfoDiv.className = 'user-info';
+        
+        const profilePic = document.createElement('img');
+        profilePic.className = 'profile-pic';
+        profilePic.alt = 'User Avatar';
+        
+        // Get user data to check for Google profile picture
+        const userData = JSON.parse(localStorage.getItem('typingTestUserData') || '{}');
+        
+        // Set appropriate profile picture
+        if (userType === 'google' && userData.picture) {
+            // Use Google profile picture if available
+            profilePic.src = userData.picture;
+            profilePic.onerror = function() {
+                // Fallback to default avatar if Google image fails to load
+                this.src = 'assets/avatars/default.svg';
+            };
+        } else if (userType === 'guest') {
+            // Use guest avatar for guests
+            profilePic.src = 'assets/avatars/guest.svg';
+        } else {
+            // Use default avatar for other users
+            profilePic.src = 'assets/avatars/default.svg';
+        }
+        
+        // Create tooltip with username on hover
+        profilePic.title = username;
+        userInfoDiv.title = username;
+        
+        userInfoDiv.appendChild(profilePic);
+        
+        // Insert before login button
+        if (headerActions && loginBtn) {
+            headerActions.insertBefore(userInfoDiv, loginBtn);
+        }
+        
+        return userInfoDiv;
+    }
+    
+    /**
      * Update the header display based on login status
      */
     function updateUserDisplay() {
@@ -37,22 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const userType = localStorage.getItem('typingTestUserType');
         
         if (currentUser) {
-            // User is logged in
-            if (userName) {
-                userName.textContent = currentUser;
-            }
-            
-            // Set appropriate profile picture
-            if (userProfilePic) {
-                // Check if it's a guest user
-                if (userType === 'guest') {
-                    userProfilePic.src = 'assets/avatars/guest.svg';
-                } else {
-                    // Use a deterministic avatar based on username
-                    const avatarIndex = getAvatarIndex(currentUser);
-                    userProfilePic.src = `assets/avatars/avatar${avatarIndex}.png`;
-                }
-            }
+            // User is logged in - create user info section
+            createUserInfoSection(currentUser, userType);
             
             // Toggle login/logout buttons
             if (loginBtn) {
@@ -67,13 +120,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 prefBtn.style.display = 'block';
             }
         } else {
-            // User is not logged in
-            if (userName) {
-                userName.textContent = 'Guest Racer';
-            }
-            
-            if (userProfilePic) {
-                userProfilePic.src = 'assets/avatars/default.svg';
+            // User is not logged in - remove user info section
+            const existingUserInfo = document.querySelector('.user-info');
+            if (existingUserInfo) {
+                existingUserInfo.remove();
             }
             
             if (loginBtn) {
@@ -97,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.removeItem('typingTestUser');
         localStorage.removeItem('typingTestUserType');
         localStorage.removeItem('typingTestUserEmail');
+        localStorage.removeItem('typingTestUserData');
         
         // Update the display
         updateUserDisplay();
@@ -166,4 +217,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         }, 3000);
     }
-}); 
+});

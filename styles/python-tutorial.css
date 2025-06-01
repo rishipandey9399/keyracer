@@ -14,10 +14,14 @@
 /* Tutorial Section Visibility */
 .tutorial-section {
     display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    padding: 2rem;
 }
 
 .tutorial-section.active {
     display: block;
+    opacity: 1;
 }
 
 /* Base Styles */
@@ -224,115 +228,675 @@ nav .nav-item i {
 }
 
 /* Code Examples */
+/* Enhanced Code Examples Styling */
 .example-box {
-    background: var(--example-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
+    background: linear-gradient(135deg, var(--example-bg) 0%, rgba(28, 43, 74, 0.8) 100%);
+    border: 1px solid rgba(0, 194, 255, 0.3);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.example-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 194, 255, 0.2);
+    border-color: rgba(0, 194, 255, 0.5);
 }
 
 .code-demo {
-    background: var(--code-bg);
-    border-radius: 4px;
-    padding: 1rem;
-    margin: 1rem 0;
+    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+    border: 2px solid rgba(0, 194, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-pre code {
+.code-demo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #00c2ff, #00ff7f, #ff6b35, #00c2ff);
+    background-size: 200% 100%;
+    animation: codeGlow 3s ease-in-out infinite;
+}
+
+@keyframes codeGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.code-demo pre {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.code-demo pre code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #d4d4d4;
+    background: transparent;
+    text-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+}
+
+/* Enhanced syntax highlighting for static code examples */
+.code-demo .language-python {
+    background: transparent !important;
+}
+
+/* Make print statements more colorful */
+.code-demo code .token.function {
+    color: #4ec9b0 !important;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(78, 201, 176, 0.4);
+}
+
+.code-demo code .token.string {
+    color: #ce9178 !important;
+    font-weight: 500;
+    text-shadow: 0 0 8px rgba(206, 145, 120, 0.4);
+}
+
+.code-demo code .token.keyword {
+    color: #569cd6 !important;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(86, 156, 214, 0.4);
+}
+
+.code-demo code .token.comment {
+    color: #6a9955 !important;
+    font-style: italic;
+    text-shadow: 0 0 8px rgba(106, 153, 85, 0.4);
+}
+
+.code-demo code .token.number {
+    color: #b5cea8 !important;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(181, 206, 168, 0.4);
 }
 
 .try-it-btn {
-    background: var(--accent-color);
-    color: var(--main-bg-color);
+    background: linear-gradient(135deg, #00c2ff 0%, #00ff7f 100%);
+    color: #0a0f1a;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
+    padding: 1rem 2rem;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 194, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.try-it-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.try-it-btn:hover::before {
+    left: 100%;
 }
 
 .try-it-btn:hover {
-    background: var(--hover-color);
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #00ff7f 0%, #00c2ff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 194, 255, 0.5);
 }
 
-/* Practice Section */
-.practice-section {
-    background: var(--example-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    margin-top: 2rem;
+.try-it-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 194, 255, 0.3);
 }
 
-.code-editor {
-    border-radius: 8px;
+/* Enhanced resource links and additional styling */
+.try-it-btn[href] {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
     overflow: hidden;
 }
 
+.try-it-btn[href]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.try-it-btn[href]:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.try-it-btn[href]:hover:before {
+    left: 100%;
+}
+
+/* Enhanced section titles with more variety */
+#modules h1 {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+#exceptions h1 {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#file-handling h1 {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#practice-projects h1 {
+    background: linear-gradient(135deg, #ff8a80 0%, #ff80ab 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#resources h1 {
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Add subtle animations to featured examples */
+.featured-example {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.featured-example:nth-child(1) { animation-delay: 0.1s; }
+.featured-example:nth-child(2) { animation-delay: 0.2s; }
+.featured-example:nth-child(3) { animation-delay: 0.3s; }
+.featured-example:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced code highlighting for better readability */
+.highlight-demo .language-python .comment {
+    color: #6a9955;
+    font-style: italic;
+    text-shadow: 0 0 5px rgba(106, 149, 85, 0.5);
+}
+
+.highlight-demo .language-python .string {
+    color: #ce9178;
+    text-shadow: 0 0 5px rgba(206, 145, 120, 0.5);
+}
+
+.highlight-demo .language-python .keyword {
+    color: #569cd6;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(86, 156, 214, 0.5);
+}
+
+.highlight-demo .language-python .number {
+    color: #b5cea8;
+    text-shadow: 0 0 5px rgba(181, 206, 168, 0.5);
+}
+
+.highlight-demo .language-python .builtin {
+    color: #dcdcaa;
+    text-shadow: 0 0 5px rgba(220, 220, 170, 0.5);
+}
+
+.highlight-demo .language-python .function {
+    color: #4fc1ff;
+    text-shadow: 0 0 5px rgba(79, 193, 255, 0.5);
+}
+
+/* Add special effects for project code examples */
+#practice-projects .highlight-demo {
+    position: relative;
+    overflow: hidden;
+}
+
+#practice-projects .highlight-demo:before {
+    content: '🚀';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* Enhanced resources section styling */
+#resources .featured-example {
+    background: linear-gradient(135deg, rgba(132, 250, 176, 0.1) 0%, rgba(143, 211, 244, 0.1) 100%);
+    border: 2px solid transparent;
+    background-image: linear-gradient(white, white), linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+#resources .featured-example:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(132, 250, 176, 0.3);
+}
+
+/* Tutorial Section Visibility */
+/* Enhanced Practice Editor Styling */
+.practice-section {
+    background: linear-gradient(135deg, rgba(0, 194, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 2px solid rgba(0, 194, 255, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    animation: practiceFloat 6s ease-in-out infinite;
+}
+
+@keyframes practiceFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+.practice-section::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 194, 255, 0.02) 0%, transparent 70%);
+    animation: practiceRotate 15s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes practiceRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Enhanced Code Editor with 3D Effect */
+.code-editor {
+    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+    border: 2px solid rgba(0, 194, 255, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    position: relative;
+    transform: perspective(1000px) rotateX(2deg);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.code-editor:hover {
+    transform: perspective(1000px) rotateX(0deg);
+    box-shadow: 0 15px 50px rgba(0, 194, 255, 0.3);
+}
+
+/* Advanced Editor Header with Pulsing Effect */
 .editor-header {
-    background: var(--header-bg);
-    padding: 1rem;
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%);
+    padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid rgba(0, 194, 255, 0.2);
+    position: relative;
 }
 
+.editor-header span {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.editor-header span::before {
+    content: '💻';
+    font-size: 1.2rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.editor-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 194, 255, 0.05) 0%, rgba(0, 255, 127, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.editor-header:hover::after {
+    opacity: 1;
+}
+
+/* Enhanced Run Button with More Dynamic Effects */
 .run-btn {
-    background: var(--accent-color);
-    color: var(--main-bg-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #00c2ff 100%);
+    color: #0a0f1a;
     border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 194, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    background-size: 200% 200%;
+    animation: runBtnGradient 3s ease infinite;
+}
+
+@keyframes runBtnGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.run-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 194, 255, 0.5);
+    animation: runBtnGradient 1s ease infinite, btnPulse 0.5s ease;
+}
+
+@keyframes btnPulse {
+    0% { transform: scale(1) translateY(-2px); }
+    50% { transform: scale(1.05) translateY(-3px); }
+    100% { transform: scale(1) translateY(-2px); }
+}
+
+/* Enhanced Code Input Area with Active State Effects */
+.editor-container {
+    position: relative;
+    min-height: 180px;
+    background: #1e1e1e;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.editor-container:hover {
+    box-shadow: inset 0 0 30px rgba(0, 194, 255, 0.1);
 }
 
 .code-input {
     width: 100%;
-    min-height: 200px;
-    background: var(--code-bg);
-    color: var(--text-color);
+    min-height: 180px;
+    background: transparent;
+    color: transparent;
+    caret-color: #00c2ff;
     border: none;
-    padding: 1rem;
+    padding: 1.5rem;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.6;
     resize: vertical;
+    outline: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    tab-size: 4;
+    background-image: 
+        linear-gradient(to right, rgba(0, 194, 255, 0.1) 0px, rgba(0, 194, 255, 0.1) 40px, transparent 40px),
+        repeating-linear-gradient(transparent, transparent 1.5em, rgba(255, 255, 255, 0.03) 1.5em, rgba(255, 255, 255, 0.03) calc(1.5em + 1px));
+    background-size: 100% 100%, 100% 1.6em;
+    background-position: 0 0, 0 1.5rem;
 }
 
-.output-container {
-    background: var(--code-bg);
-    border-top: 1px solid var(--border-color);
+.code-input:focus {
+    box-shadow: inset 0 0 20px rgba(0, 194, 255, 0.1);
+    animation: inputFocus 2s ease-in-out infinite;
 }
 
-.output-header {
-    padding: 0.75rem 1rem;
-    color: var(--accent-color);
-    font-weight: 500;
+@keyframes inputFocus {
+    0%, 100% { caret-color: #00c2ff; }
+    50% { caret-color: #00ff7f; }
 }
 
-.output-content {
-    padding: 1rem;
-    min-height: 50px;
+/* Enhanced Code Preview for Syntax Highlighting */
+.code-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    padding: 1.5rem;
     font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #d4d4d4;
+    background: transparent;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    z-index: 1;
+    overflow: hidden;
 }
 
-/* Tutorial Section Visibility */
-.tutorial-section {
-    display: none;
-    padding: 2rem;
+/* Enhanced Syntax Highlighting for Code Editor */
+.code-preview .comment {
+    color: #6a9955;
+    font-style: italic;
+    text-shadow: 0 0 8px rgba(106, 149, 85, 0.4);
 }
 
-.tutorial-section.active {
-    display: block;
+.code-preview .string {
+    color: #ce9178;
+    text-shadow: 0 0 8px rgba(206, 145, 120, 0.4);
 }
 
-/* Responsive Design */
+.code-preview .keyword {
+    color: #569cd6;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(86, 156, 214, 0.4);
+}
+
+.code-preview .number {
+    color: #b5cea8;
+    text-shadow: 0 0 8px rgba(181, 206, 168, 0.4);
+}
+
+.code-preview .builtin {
+    color: #dcdcaa;
+    text-shadow: 0 0 8px rgba(220, 220, 170, 0.4);
+}
+
+.code-preview .function {
+    color: #4fc1ff;
+    text-shadow: 0 0 8px rgba(79, 193, 255, 0.4);
+}
+
+/* Enhanced Output Container */
+.output-container {
+    background: linear-gradient(135deg, #0f1620 0%, #1a252f 100%);
+    border-top: 2px solid rgba(0, 194, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.output-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 194, 255, 0.1), transparent);
+    animation: dataStream 4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes dataStream {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Enhanced Output Header */
+.output-header {
+    background: linear-gradient(135deg, #161b22 0%, #21262d 100%);
+    padding: 1rem 1.5rem;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(0, 194, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.output-header::before {
+    content: '📤';
+    font-size: 1.1rem;
+}
+
+/* Enhanced Output Content */
+.output-content {
+    padding: 1.5rem;
+    min-height: 120px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #e6fffa;
+    background: linear-gradient(135deg, rgba(0, 194, 255, 0.02) 0%, rgba(0, 255, 127, 0.02) 100%);
+    border-radius: 0 0 10px 10px;
+    position: relative;
+}
+
+.output-content:empty::before {
+    content: 'Output will appear here...';
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+.output-content:not(:empty) {
+    background: linear-gradient(135deg, rgba(0, 255, 127, 0.05) 0%, rgba(0, 194, 255, 0.05) 100%);
+    border-left: 3px solid #00ff7f;
+}
+
+/* Add glowing effect when output is present */
+.output-content:not(:empty)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 255, 127, 0.02) 0%, rgba(0, 194, 255, 0.02) 100%);
+    border-radius: 0 0 10px 10px;
+    animation: outputGlow 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes outputGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Enhanced placeholder styling */
+.code-input::placeholder {
+    color: rgba(135, 206, 235, 0.6);
+    font-style: italic;
+    font-size: 0.95em;
+}
+
+.code-input:focus::placeholder {
+    color: rgba(135, 206, 235, 0.4);
+}
+
+/* Add special effects for when code is being typed */
+.code-input:focus + .code-preview {
+    box-shadow: inset 0 0 30px rgba(0, 194, 255, 0.1);
+}
+
+/* Responsive adjustments for practice editors */
+@media (max-width: 768px) {
+    .practice-section {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .code-input, .code-preview {
+        font-size: 0.9rem;
+        padding: 1rem;
+    }
+    
+    .editor-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .run-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
 @media (max-width: 900px) {
     .tutorial-sidebar {
         width: 100%;
@@ -348,4 +912,223 @@ pre code {
     .tutorial-container {
         flex-direction: column;
     }
+}
+
+/* Success/Error State Styling */
+.output-content.success {
+    border-left-color: #00ff7f;
+    background: linear-gradient(135deg, rgba(0, 255, 127, 0.1) 0%, rgba(0, 194, 255, 0.05) 100%);
+}
+
+.output-content.error {
+    border-left-color: #ff4757;
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+}
+
+/* Mobile Responsiveness Enhancements */
+@media (max-width: 768px) {
+    .code-editor {
+        transform: none;
+    }
+    
+    .practice-section {
+        animation: none;
+        backdrop-filter: none;
+    }
+    
+    .practice-section::after {
+        display: none;
+    }
+}
+
+/* Special Focus and Active States for Enhanced Interactivity */
+.editor-focused {
+    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 50%, #1a252f 100%) !important;
+    border-color: rgba(0, 194, 255, 0.6) !important;
+    box-shadow: 
+        0 0 30px rgba(0, 194, 255, 0.3),
+        inset 0 0 20px rgba(0, 194, 255, 0.1) !important;
+    animation: editorPulse 2s ease-in-out infinite;
+}
+
+@keyframes editorPulse {
+    0%, 100% { 
+        box-shadow: 
+            0 0 30px rgba(0, 194, 255, 0.3),
+            inset 0 0 20px rgba(0, 194, 255, 0.1);
+    }
+    50% { 
+        box-shadow: 
+            0 0 40px rgba(0, 194, 255, 0.5),
+            inset 0 0 30px rgba(0, 194, 255, 0.15);
+    }
+}
+
+/* Enhanced Run Button States */
+.run-btn.running {
+    background: linear-gradient(135deg, #ff6b35 0%, #f093fb 50%, #764ba2 100%) !important;
+    background-size: 200% 200% !important;
+    animation: runningGradient 1s ease-in-out infinite, runningPulse 1s ease-in-out infinite !important;
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4) !important;
+}
+
+@keyframes runningGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes runningPulse {
+    0%, 100% { transform: scale(1) translateY(-2px); }
+    50% { transform: scale(1.05) translateY(-3px); }
+}
+
+/* Info Output State */
+.output-content.info {
+    border-left-color: #00c2ff !important;
+    background: linear-gradient(135deg, rgba(0, 194, 255, 0.1) 0%, rgba(102, 126, 234, 0.05) 100%) !important;
+    color: #87ceeb !important;
+}
+
+/* Enhanced Placeholder Animation */
+.code-input:empty::before {
+    content: '';
+    color: rgba(135, 206, 235, 0.4);
+    font-style: italic;
+    animation: placeholderGlow 3s ease-in-out infinite;
+}
+
+@keyframes placeholderGlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+}
+
+/* Code Completion Effects */
+.code-preview.highlight-line {
+    animation: codeHighlight 0.5s ease-out;
+}
+
+@keyframes codeHighlight {
+    0% { background: rgba(0, 194, 255, 0.2); }
+    100% { background: transparent; }
+}
+
+/* Enhanced Line Numbers */
+.editor-container.show-line-numbers {
+    counter-reset: line-number;
+}
+
+.editor-container.show-line-numbers .code-input,
+.editor-container.show-line-numbers .code-preview {
+    padding-left: 60px;
+}
+
+.editor-container.show-line-numbers::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: linear-gradient(135deg, rgba(0, 194, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-right: 2px solid rgba(0, 194, 255, 0.2);
+    z-index: 10;
+}
+
+/* Scrollbar Enhancement for Code Editor */
+.code-input::-webkit-scrollbar,
+.code-preview::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.code-input::-webkit-scrollbar-track,
+.code-preview::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.code-input::-webkit-scrollbar-thumb,
+.code-preview::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00c2ff 0%, #667eea 100%);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+}
+
+.code-input::-webkit-scrollbar-thumb:hover,
+.code-preview::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Special Effects for Code Execution */
+.practice-section.executing {
+    border-color: rgba(255, 107, 53, 0.4);
+    animation: executionGlow 2s ease-in-out;
+}
+
+@keyframes executionGlow {
+    0%, 100% { 
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+    50% { 
+        box-shadow: 0 15px 50px rgba(255, 107, 53, 0.3);
+    }
+}
+
+/* Success/Error Animation Enhancement */
+.output-content.success::before {
+    content: '✅ ';
+    color: #00ff7f;
+    font-size: 1.1em;
+    animation: successPulse 1s ease-out;
+}
+
+.output-content.error::before {
+    content: '❌ ';
+    color: #ff4757;
+    font-size: 1.1em;
+    animation: errorShake 0.5s ease-out;
+}
+
+@keyframes successPulse {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .editor-focused {
+        animation: none;
+    }
+    
+    .practice-section.executing {
+        animation: none;
+    }
+    
+    .run-btn.running {
+        animation: runningPulse 1s ease-in-out infinite;
+    }
+}
+
+/* Code Completion Animation */
+@keyframes codeCompletionPulse {
+    0% { transform: scale(1); }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 0 40px rgba(0, 255, 127, 0.3);
+    }
+    100% { transform: scale(1); }
+}
+
+/* Additional Interactive Enhancements */
+.practice-section:hover .code-editor {
+    transform: perspective(1000px) rotateX(0deg);
+    transition: all 0.3s ease;
 }

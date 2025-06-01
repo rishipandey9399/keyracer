@@ -4,24 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Tutorial - Code Racer Learning Hub</title>
+    <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/python-tutorial.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-vs-dark.min.css" rel="stylesheet" />
 </head>
 <body>
-    <header class="header">
+    <header class="tutorial-header">
         <div class="header-content">
-            <div class="logo">
-                <img src="assets/images/logo.png" alt="Code Racer Logo" height="60">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Logo" class="logo-img">
             </div>
-            <nav>
+            <nav class="main-nav">
                 <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
                 <a href="challenges.html" class="nav-item"><i class="fas fa-code"></i> Challenges</a>
                 <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
-                <button class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
             </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="preference.html" class="pref-btn" id="prefBtn">
+                        <i class="fas fa-cog"></i> Preference
+                    </a>
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -92,13 +106,13 @@
                 <h1>Introduction to Python</h1>
                 <p>Python is a high-level, interpreted programming language known for its simplicity and readability. It's perfect for beginners and powerful enough for experts.</p>
                 
-                <div class="example-box">
-                    <h3>Your First Python Program</h3>
-                    <div class="code-demo">
+                <div class="example-box featured-example">
+                    <h3>🚀 Your First Python Program</h3>
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">print("Hello, World!")</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
-                    <p>This simple program outputs "Hello, World!" to the screen.</p>
+                    <p>This simple program outputs <span class="highlight-text">"Hello, World!"</span> to the screen.</p>
                 </div>
 
                 <div class="practice-section">
@@ -109,7 +123,8 @@
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea class="code-input" placeholder="Type your Python code here..."></textarea>
+                            <textarea id="codeInput1" class="code-input" placeholder="Type your Python code here..." spellcheck="false"></textarea>
+                            <div id="codePreview1" class="code-preview"></div>
                         </div>
                         <div class="output-container">
                             <div class="output-header">Output</div>
@@ -137,11 +152,11 @@
                 <div id="python-quickstart" class="subsection">
                     <h2>Python Quickstart</h2>
                     <p>Once Python is installed, you can write your first program:</p>
-                    <div class="example-box">
-                        <h3>Your First Python Program:</h3>
-                        <div class="code-demo">
+                    <div class="example-box featured-example">
+                        <h3>🎯 Your First Python Program:</h3>
+                        <div class="code-demo highlight-demo">
                             <pre><code class="language-python">print("Hello, World!")</code></pre>
-                            <button class="try-it-btn">Try it Yourself</button>
+                            <button class="try-it-btn">✨ Try it Yourself</button>
                         </div>
                     </div>
                 </div>
@@ -167,12 +182,12 @@ Hello, Python!
                 <div id="syntax-execute" class="subsection">
                     <h2>Execute Python Syntax</h2>
                     <p>Python syntax can be executed by writing directly in the command line or by creating a .py file:</p>
-                    <div class="example-box">
-                        <h3>Example:</h3>
-                        <div class="code-demo">
+                    <div class="example-box featured-example">
+                        <h3>💡 Example:</h3>
+                        <div class="code-demo highlight-demo">
                             <pre><code class="language-python"># This is a comment
 print("Hello, World!")</code></pre>
-                            <button class="try-it-btn">Try it Yourself</button>
+                            <button class="try-it-btn">✨ Try it Yourself</button>
                         </div>
                     </div>
                 </div>
@@ -199,13 +214,13 @@ print("Hello, World!")</code></pre>
                 <div id="variables-create" class="subsection">
                     <h2>Creating Variables</h2>
                     <p>Python has no command for declaring variables. A variable is created when you first assign a value to it:</p>
-                    <div class="example-box">
-                        <div class="code-demo">
+                    <div class="example-box featured-example">
+                        <div class="code-demo highlight-demo">
                             <pre><code class="language-python">x = 5
 y = "Hello, World!"
 print(x)
 print(y)</code></pre>
-                            <button class="try-it-btn">Try it Yourself</button>
+                            <button class="try-it-btn">✨ Try it Yourself</button>
                         </div>
                     </div>
                 </div>
@@ -240,13 +255,13 @@ myvar2 = "John"</code></pre>
                     </ul>
                 </div>
 
-                <div class="example-box">
-                    <h3>Dynamic Typing</h3>
+                <div class="example-box featured-example">
+                    <h3>🔄 Dynamic Typing</h3>
                     <p>Python is dynamically typed, meaning you don't declare variable types:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">x = 10        # x is an integer
 x = "Hello"    # Now x is a string</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
@@ -258,7 +273,8 @@ x = "Hello"    # Now x is a string</code></pre>
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea class="code-input" placeholder="Experiment with different data types..."></textarea>
+                            <textarea id="codeInput2" class="code-input" placeholder="Experiment with different data types..." spellcheck="false"></textarea>
+                            <div id="codePreview2" class="code-preview"></div>
                         </div>
                         <div class="output-container">
                             <div class="output-header">Output</div>
@@ -282,16 +298,16 @@ else:
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Example</h3>
+                <div class="example-box featured-example">
+                    <h3>🎯 Example</h3>
                     <p>An example that checks if a number is positive:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">number = 5
 if number > 0:
     print("Positive number")
 else:
     print("Negative number or zero")</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
@@ -303,7 +319,8 @@ else:
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea class="code-input" placeholder="Write an if...else statement to check even or odd..."></textarea>
+                            <textarea id="codeInput3" class="code-input" placeholder="Write an if...else statement..." spellcheck="false"></textarea>
+                            <div id="codePreview3" class="code-preview"></div>
                         </div>
                         <div class="output-container">
                             <div class="output-header">Output</div>
@@ -325,15 +342,15 @@ else:
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Example</h3>
+                <div class="example-box featured-example">
+                    <h3>🔄 Example</h3>
                     <p>An example that prints numbers 1 to 5:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">count = 1
 while count &lt;= 5:
     print(count)
     count += 1</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
@@ -345,7 +362,8 @@ while count &lt;= 5:
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea class="code-input" placeholder="Write a loop that counts down from 10 to 1..."></textarea>
+                            <textarea id="codeInput4" class="code-input" placeholder="Write a loop that counts down from 10 to 1..." spellcheck="false"></textarea>
+                            <div id="codePreview4" class="code-preview"></div>
                         </div>
                         <div class="output-container">
                             <div class="output-header">Output</div>
@@ -367,14 +385,14 @@ while count &lt;= 5:
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Example</h3>
+                <div class="example-box featured-example">
+                    <h3>🚀 Example</h3>
                     <p>An example that prints each fruit in a list:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">fruits = ["apple", "banana", "cherry"]
 for fruit in fruits:
     print(fruit)</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
@@ -386,7 +404,8 @@ for fruit in fruits:
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea class="code-input" placeholder="Write a for loop that prints each letter in 'Hello'..."></textarea>
+                            <textarea id="codeInput5" class="code-input" placeholder="Write a for loop that prints each letter in 'Hello'..." spellcheck="false"></textarea>
+                            <div id="codePreview5" class="code-preview"></div>
                         </div>
                         <div class="output-container">
                             <div class="output-header">Output</div>
@@ -399,25 +418,25 @@ for fruit in fruits:
             <section id="functions" class="tutorial-section">
                 <h1>Python Functions</h1>
 
-                <div class="example-box">
-                    <h3>Defining a Function</h3>
+                <div class="example-box featured-example">
+                    <h3>🎯 Defining a Function</h3>
                     <p>Use the <code>def</code> keyword to define a function:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">def my_function():
     print("Hello from a function!")</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Function Parameters</h3>
+                <div class="example-box featured-example">
+                    <h3>🔧 Function Parameters</h3>
                     <p>Functions can take parameters:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">def greet(name):
     print(f"Hello, {name}!")
 
 greet("Alice")</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
@@ -429,7 +448,8 @@ greet("Alice")</code></pre>
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea class="code-input" placeholder="Define a function that takes two numbers and prints their sum..."></textarea>
+                            <textarea id="codeInput6" class="code-input" placeholder="Define a function that takes two numbers and prints their sum..." spellcheck="false"></textarea>
+                            <div id="codePreview6" class="code-preview"></div>
                         </div>
                         <div class="output-container">
                             <div class="output-header">Output</div>
@@ -442,27 +462,27 @@ greet("Alice")</code></pre>
             <section id="arguments" class="tutorial-section">
                 <h1>Function Arguments</h1>
 
-                <div class="example-box">
-                    <h3>Positional Arguments</h3>
+                <div class="example-box featured-example">
+                    <h3>📊 Positional Arguments</h3>
                     <p>Arguments are passed to functions in the order they are defined:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">def add(a, b):
     return a + b
 
 result = add(3, 5)  # 3 and 5 are positional arguments</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Keyword Arguments</h3>
+                <div class="example-box featured-example">
+                    <h3>🏷️ Keyword Arguments</h3>
                     <p>Arguments can also be passed by keyword:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">def describe_pet(name, animal_type="dog"):
     print(f"{name} is a {animal_type}")
 
 describe_pet("Buddy")  # animal_type defaults to "dog"</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
@@ -474,7 +494,8 @@ describe_pet("Buddy")  # animal_type defaults to "dog"</code></pre>
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea class="code-input" placeholder="Experiment with functions that have different types of arguments..."></textarea>
+                            <textarea id="codeInput7" class="code-input" placeholder="Experiment with functions that have different types of arguments..." spellcheck="false"></textarea>
+                            <div id="codePreview7" class="code-preview"></div>
                         </div>
                         <div class="output-container">
                             <div class="output-header">Output</div>
@@ -487,24 +508,24 @@ describe_pet("Buddy")  # animal_type defaults to "dog"</code></pre>
             <section id="scope" class="tutorial-section">
                 <h1>Variable Scope</h1>
 
-                <div class="example-box">
-                    <h3>Local and Global Scope</h3>
+                <div class="example-box featured-example">
+                    <h3>🌐 Local and Global Scope</h3>
                     <p>Variables defined inside a function are in the local scope and cannot be accessed outside:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">def my_function():
     x = 10  # Local variable
     print(x)
 
 my_function()
 print(x)  # This will cause an error</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Global Variables</h3>
+                <div class="example-box featured-example">
+                    <h3>🔧 Global Variables</h3>
                     <p>Variables can be declared global using the <code>global</code> keyword:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">x = "global"
 
 def my_function():
@@ -513,129 +534,178 @@ def my_function():
 
 my_function()
 print(x)  # This will print "modified inside function"</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
             </section>
 
             <section id="modules" class="tutorial-section">
-                <h1>Python Modules</h1>
+                <h1>📦 Python Modules</h1>
 
-                <div class="example-box">
-                    <h3>Importing Modules</h3>
+                <div class="example-box featured-example">
+                    <h3>📥 Importing Modules</h3>
                     <p>Modules can be imported using the <code>import</code> statement:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">import math
 
 print(math.pi)  # Accessing a variable from the math module</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Creating a Module</h3>
+                <div class="example-box featured-example">
+                    <h3>🛠️ Creating a Module</h3>
                     <p>You can create your own modules by saving Python code in a .py file. For example, create a file named <code>mymodule.py</code>:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python"># mymodule.py
 def greet(name):
     return f"Hello, {name}!"</code></pre>
                     </div>
                     <p>Then import and use it in another file:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">import mymodule
 
 print(mymodule.greet("Alice"))</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
             </section>
 
             <section id="exceptions" class="tutorial-section">
-                <h1>Exception Handling</h1>
+                <h1>⚠️ Exception Handling</h1>
 
-                <div class="example-box">
-                    <h3>Try and Except</h3>
+                <div class="example-box featured-example">
+                    <h3>🛡️ Try and Except</h3>
                     <p>Exceptions can be handled using the <code>try</code> and <code>except</code> blocks:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">try:
     # code that may cause an exception
-except SomeException:
-    # code to handle the exception</code></pre>
+    x = 10 / 0
+except ZeroDivisionError:
+    # code to handle the exception
+    print("Cannot divide by zero!")</code></pre>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Finally Block</h3>
+                <div class="example-box featured-example">
+                    <h3>🔒 Finally Block</h3>
                     <p>The <code>finally</code> block always executes, regardless of an exception occurring or not:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">try:
     x = 1 / 0
 except ZeroDivisionError:
     print("Cannot divide by zero")
 finally:
     print("This will execute no matter what")</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
             </section>
 
             <section id="file-handling" class="tutorial-section">
-                <h1>File Handling</h1>
+                <h1>📁 File Handling</h1>
 
-                <div class="example-box">
-                    <h3>Opening and Closing Files</h3>
+                <div class="example-box featured-example">
+                    <h3>📖 Opening and Closing Files</h3>
                     <p>Files are opened using the <code>open()</code> function and closed using the <code>close()</code> method:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">file = open("myfile.txt", "r")
 content = file.read()
+print(content)
 file.close()</code></pre>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>With Statement</h3>
+                <div class="example-box featured-example">
+                    <h3>🔐 With Statement</h3>
                     <p>The <code>with</code> statement simplifies file handling by automatically closing the file:</p>
-                    <div class="code-demo">
+                    <div class="code-demo highlight-demo">
                         <pre><code class="language-python">with open("myfile.txt", "r") as file:
-    content = file.read()</code></pre>
-                        <button class="try-it-btn">Try it Yourself →</button>
+    content = file.read()
+    print(content)
+# File is automatically closed here</code></pre>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
             </section>
 
             <section id="practice-projects" class="tutorial-section">
-                <h1>Practice Projects</h1>
+                <h1>🏗️ Practice Projects</h1>
 
-                <div class="example-box">
-                    <h3>Project 1: Calculator</h3>
+                <div class="example-box featured-example">
+                    <h3>🔢 Project 1: Calculator</h3>
                     <p>Build a simple calculator that can add, subtract, multiply, and divide.</p>
-                    <div class="code-demo">
-                        <pre><code class="language-python"># Simple calculator project</code></pre>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-python"># Simple calculator project
+def add(x, y):
+    return x + y
+
+def subtract(x, y):
+    return x - y
+
+def multiply(x, y):
+    return x * y
+
+def divide(x, y):
+    if y != 0:
+        return x / y
+    else:
+        return "Cannot divide by zero!"
+
+# Example usage
+print(add(5, 3))      # Output: 8
+print(subtract(10, 4)) # Output: 6</code></pre>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>Project 2: To-Do List</h3>
+                <div class="example-box featured-example">
+                    <h3>📝 Project 2: To-Do List</h3>
                     <p>Create a command-line to-do list application.</p>
-                    <div class="code-demo">
-                        <pre><code class="language-python"># To-Do list project</code></pre>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-python"># To-Do list project
+tasks = []
+
+def add_task(task):
+    tasks.append(task)
+    print(f"Added: {task}")
+
+def show_tasks():
+    if tasks:
+        for i, task in enumerate(tasks, 1):
+            print(f"{i}. {task}")
+    else:
+        print("No tasks yet!")
+
+def remove_task(index):
+    if 0 <= index < len(tasks):
+        removed = tasks.pop(index)
+        print(f"Removed: {removed}")
+
+# Example usage
+add_task("Learn Python")
+add_task("Build a project")
+show_tasks()</code></pre>
+                        <button class="try-it-btn">✨ Try it Yourself →</button>
                     </div>
                 </div>
             </section>
 
             <section id="resources" class="tutorial-section">
-                <h1>Additional Resources</h1>
+                <h1>📚 Additional Resources</h1>
 
-                <div class="example-box">
-                    <h3>Official Python Documentation</h3>
-                    <p>Access the official Python documentation for in-depth understanding.</p>
-                    <a href="https://docs.python.org/3/" target="_blank" class="resource-link">View Documentation</a>
+                <div class="example-box featured-example">
+                    <h3>📖 Official Python Documentation</h3>
+                    <p class="highlight-text">Access the official Python documentation for in-depth understanding.</p>
+                    <a href="https://docs.python.org/3/" target="_blank" class="try-it-btn">✨ View Documentation →</a>
                 </div>
 
-                <div class="example-box">
-                    <h3>Python Package Index (PyPI)</h3>
-                    <p>Explore thousands of third-party Python packages.</p>
-                    <a href="https://pypi.org/" target="_blank" class="resource-link">Visit PyPI</a>
+                <div class="example-box featured-example">
+                    <h3>📦 Python Package Index (PyPI)</h3>
+                    <p class="highlight-text">Explore thousands of third-party Python packages.</p>
+                    <a href="https://pypi.org/" target="_blank" class="try-it-btn">✨ Visit PyPI →</a>
                 </div>
             </section>
         </main>
@@ -648,5 +718,160 @@ file.close()</code></pre>
     </footer>
 
     <script src="scripts/python-tutorial.js"></script>
+    <script src="scripts/header-auth.js"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    
+    <script>
+        // Enhanced code editor with colorful syntax highlighting
+        class CodeEditor {
+            constructor(textarea, preview) {
+                this.textarea = textarea;
+                this.preview = preview;
+                
+                if (!this.textarea || !this.preview) {
+                    console.warn('CodeEditor: Invalid textarea or preview element provided');
+                    return;
+                }
+                
+                this.init();
+            }
+
+            init() {
+                // Add event listeners
+                this.textarea.addEventListener('input', () => this.updateHighlighting());
+                this.textarea.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                this.textarea.addEventListener('scroll', () => this.syncScroll());
+                
+                // Initial highlighting
+                this.updateHighlighting();
+            }
+
+            updateHighlighting() {
+                const code = this.textarea.value;
+                this.preview.innerHTML = this.highlightPython(code);
+                this.syncScroll();
+            }
+
+            syncScroll() {
+                this.preview.scrollTop = this.textarea.scrollTop;
+                this.preview.scrollLeft = this.textarea.scrollLeft;
+            }
+
+            handleKeyDown(e) {
+                // Handle Tab key for indentation
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    this.insertTab();
+                }
+                // Handle Enter key for auto-indentation
+                else if (e.key === 'Enter') {
+                    this.handleEnter(e);
+                }
+            }
+
+            insertTab() {
+                const start = this.textarea.selectionStart;
+                const end = this.textarea.selectionEnd;
+                const text = this.textarea.value;
+                const before = text.substring(0, start);
+                const after = text.substring(end);
+
+                this.textarea.value = before + '    ' + after;
+                this.textarea.selectionStart = this.textarea.selectionEnd = start + 4;
+                this.updateHighlighting();
+            }
+
+            handleEnter(e) {
+                const start = this.textarea.selectionStart;
+                const text = this.textarea.value;
+                const lines = text.substring(0, start).split('\n');
+                const currentLine = lines[lines.length - 1];
+                
+                // Calculate indentation
+                const indent = currentLine.match(/^(\s*)/)[1];
+                let newIndent = indent;
+                
+                // Add extra indentation after colons
+                if (currentLine.trim().endsWith(':')) {
+                    newIndent += '    ';
+                }
+
+                setTimeout(() => {
+                    const newStart = this.textarea.selectionStart;
+                    const newText = this.textarea.value;
+                    const beforeCursor = newText.substring(0, newStart);
+                    const afterCursor = newText.substring(newStart);
+                    
+                    this.textarea.value = beforeCursor + newIndent + afterCursor;
+                    this.textarea.selectionStart = this.textarea.selectionEnd = newStart + newIndent.length;
+                    this.updateHighlighting();
+                }, 0);
+            }
+
+            highlightPython(code) {
+                if (!code.trim()) return code;
+                
+                // Escape HTML characters first
+                let highlighted = code
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                
+                // Apply syntax highlighting with proper order to avoid conflicts
+                
+                // 1. Comments (highest priority to avoid conflicts)
+                highlighted = highlighted.replace(/(#.*$)/gm, '<span class="comment">$1</span>');
+                
+                // 2. Strings (triple quotes first, then single/double)
+                highlighted = highlighted.replace(/("""[\s\S]*?""")/g, '<span class="string">$1</span>');
+                highlighted = highlighted.replace(/('''[\s\S]*?''')/g, '<span class="string">$1</span>');
+                highlighted = highlighted.replace(/"(?:[^"\\]|\\.)*"/g, '<span class="string">$&</span>');
+                highlighted = highlighted.replace(/'(?:[^'\\]|\\.)*'/g, '<span class="string">$&</span>');
+                
+                // 3. Numbers
+                highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g, '<span class="number">$1</span>');
+                
+                // 4. Keywords
+                const keywords = ['def', 'class', 'if', 'elif', 'else', 'for', 'while', 'try', 'except', 'finally', 
+                                'with', 'import', 'from', 'as', 'return', 'yield', 'break', 'continue', 'pass', 
+                                'lambda', 'and', 'or', 'not', 'in', 'is', 'True', 'False', 'None', 'self'];
+                
+                keywords.forEach(keyword => {
+                    const regex = new RegExp(`\\b(${keyword})\\b`, 'g');
+                    highlighted = highlighted.replace(regex, '<span class="keyword">$1</span>');
+                });
+                
+                // 5. Built-in functions
+                const builtins = ['print', 'len', 'range', 'str', 'int', 'float', 'list', 'dict', 'set', 'tuple', 
+                                'type', 'input', 'open', 'abs', 'all', 'any', 'enumerate', 'zip', 'map', 'filter'];
+                
+                builtins.forEach(builtin => {
+                    const regex = new RegExp(`\\b(${builtin})(?=\\s*\\()`, 'g');
+                    highlighted = highlighted.replace(regex, '<span class="builtin">$1</span>');
+                });
+                
+                // 6. Function definitions and calls
+                highlighted = highlighted.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g, 
+                    '<span class="function">$1</span>');
+                
+                return highlighted;
+            }
+        }
+        
+        // Initialize enhanced editors when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 1; i <= 7; i++) {
+                const textareaId = `codeInput${i}`;
+                const previewId = `codePreview${i}`;
+                const textarea = document.getElementById(textareaId);
+                const preview = document.getElementById(previewId);
+                if (textarea && preview) {
+                    new CodeEditor(textarea, preview);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

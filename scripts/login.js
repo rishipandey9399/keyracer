@@ -293,8 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('typingTestUserData', JSON.stringify(userData));
         localStorage.setItem('typingTestUser', username); // Ensure this is set for header auth
         
-        // Redirect to home page
-        window.location.href = 'index.html';
+        // Redirect to preference page first
+        window.location.href = 'preference.html';
     }
 
     // Set the current year in footer

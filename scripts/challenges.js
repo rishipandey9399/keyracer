@@ -202,7 +202,8 @@ class ChallengeManager {
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
     // Check if we're on the challenge selection page or a specific challenge page
-    const isChallengePage = window.location.pathname.includes('python-challenges.html');
+    const isChallengePage = window.location.pathname.includes('python-challenges.html') || 
+                           window.location.pathname.includes('python-challenges-enhanced.html');
     
     if (isChallengePage) {
         const challengeManager = new ChallengeManager();

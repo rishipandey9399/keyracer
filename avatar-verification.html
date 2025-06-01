@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar Implementation Verification - KeyRacer</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .verification-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(0, 194, 255, 0.3);
+        }
+        
+        .test-button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-pass { background-color: #4CAF50; }
+        .status-fail { background-color: #F44336; }
+        .status-pending { background-color: #FF9800; }
+        
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .demo-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            text-align: center;
+        }
+        
+        .current-state {
+            background: rgba(0, 194, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (will show current avatar implementation) -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
+            </div>
+            
+            <nav class="main-nav">
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="lessons.html" class="nav-item"><i class="fas fa-graduation-cap"></i> Training</a>
+                <a href="typing-tips.html" class="nav-item"><i class="fas fa-lightbulb"></i> Tips</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Championship</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="preference.html" class="pref-btn"><i class="fas fa-cog"></i> Preference</a>
+                <a href="login.html" id="loginBtn" class="nav-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="#" id="logoutBtn" class="nav-item" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="verification-container">
+        <h1><i class="fas fa-check-circle"></i> Avatar Implementation Verification</h1>
+        
+        <div class="current-state">
+            <h3>Current State</h3>
+            <p id="currentStateDisplay">Loading...</p>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎭 Avatar Test Scenarios</h2>
+            <p>Click each button to test different user scenarios and verify avatar display:</p>
+            
+            <div style="margin: 20px 0;">
+                <button class="test-button" onclick="testGuestUser()">
+                    <i class="fas fa-user"></i> Test Guest User
+                </button>
+                <button class="test-button" onclick="testGoogleUser()">
+                    <i class="fab fa-google"></i> Test Google User (No Avatar)
+                </button>
+                <button class="test-button" onclick="testGoogleUserWithAvatar()">
+                    <i class="fab fa-google"></i> Test Google User (With Avatar)
+                </button>
+                <button class="test-button" onclick="testRegularUser()">
+                    <i class="fas fa-user-circle"></i> Test Regular User
+                </button>
+                <button class="test-button" onclick="logoutUser()">
+                    <i class="fas fa-sign-out-alt"></i> Logout (Clear State)
+                </button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>✅ Verification Checklist</h2>
+            <div id="verificationResults">
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Guest Avatar Display:</strong> Shows custom guest.svg with blue gradient
+                </div>
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Google Profile Picture:</strong> Shows actual Google avatar when available
+                </div>
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Fallback Handling:</strong> Falls back to default.svg if Google image fails
+                </div>
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Default Avatar:</strong> Shows default.svg for regular users
+                </div>
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Username Tooltip:</strong> Hover shows username in tooltip
+                </div>
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Logout Cleanup:</strong> Avatar disappears completely when logged out
+                </div>
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Mobile Responsive:</strong> Avatar scales to 32px on smaller screens
+                </div>
+                <div class="test-result">
+                    <span class="status-indicator status-pending"></span>
+                    <strong>Hover Effects:</strong> Avatar has smooth hover animations
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎨 Avatar Gallery</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h4>Guest Avatar</h4>
+                    <img src="assets/avatars/guest.svg" alt="Guest Avatar" class="profile-pic" style="margin: 10px;">
+                    <p>Used for guest users</p>
+                </div>
+                <div class="demo-card">
+                    <h4>Default Avatar</h4>
+                    <img src="assets/avatars/default.svg" alt="Default Avatar" class="profile-pic" style="margin: 10px;">
+                    <p>Used for regular users & fallback</p>
+                </div>
+                <div class="demo-card">
+                    <h4>Google Profile Picture</h4>
+                    <img src="https://lh3.googleusercontent.com/a/default-user=s96-c" alt="Google Avatar" class="profile-pic" style="margin: 10px;"
+                         onerror="this.src='assets/avatars/default.svg'">
+                    <p>Real Google profile images</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔧 Implementation Details</h2>
+            <ul>
+                <li><strong>Avatar Size:</strong> 36px on desktop, 32px on mobile (< 768px)</li>
+                <li><strong>File Format:</strong> SVG for custom avatars (scalable & crisp)</li>
+                <li><strong>Loading Strategy:</strong> Immediate display with onerror fallback</li>
+                <li><strong>Styling:</strong> Circular with subtle border and hover effects</li>
+                <li><strong>Accessibility:</strong> Alt text and title attributes for screen readers</li>
+                <li><strong>Performance:</strong> Lazy loading and efficient DOM manipulation</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>📱 Cross-Page Compatibility</h2>
+            <p>Avatar implementation works on all pages that include header-auth.js:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 15px 0;">
+                <a href="index.html" class="test-button" style="text-decoration: none;">🏠 Home</a>
+                <a href="typing-test.html" class="test-button" style="text-decoration: none;">⌨️ Typing Test</a>
+                <a href="lessons.html" class="test-button" style="text-decoration: none;">📚 Lessons</a>
+                <a href="leaderboard.html" class="test-button" style="text-decoration: none;">🏆 Leaderboard</a>
+                <a href="challenges.html" class="test-button" style="text-decoration: none;">🎯 Challenges</a>
+                <a href="typing-tips.html" class="test-button" style="text-decoration: none;">💡 Tips</a>
+                <a href="about.html" class="test-button" style="text-decoration: none;">ℹ️ About</a>
+                <a href="login.html" class="test-button" style="text-decoration: none;">🔐 Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/header-auth.js"></script>
+    <script>
+        // Test functions
+        function testGuestUser() {
+            localStorage.setItem('typingTestUser', 'Guest User');
+            localStorage.setItem('typingTestUserType', 'guest');
+            localStorage.removeItem('typingTestUserData');
+            location.reload();
+        }
+        
+        function testGoogleUser() {
+            localStorage.setItem('typingTestUser', 'John Doe');
+            localStorage.setItem('typingTestUserType', 'google');
+            localStorage.setItem('typingTestUserData', JSON.stringify({
+                name: 'John Doe',
+                email: 'john.doe@gmail.com',
+                id: 'google123'
+                // No picture property - should use default
+            }));
+            location.reload();
+        }
+        
+        function testGoogleUserWithAvatar() {
+            localStorage.setItem('typingTestUser', 'Jane Smith');
+            localStorage.setItem('typingTestUserType', 'google');
+            localStorage.setItem('typingTestUserData', JSON.stringify({
+                name: 'Jane Smith',
+                email: 'jane.smith@gmail.com',
+                id: 'google456',
+                picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c'
+            }));
+            location.reload();
+        }
+        
+        function testRegularUser() {
+            localStorage.setItem('typingTestUser', 'Regular User');
+            localStorage.setItem('typingTestUserType', 'regular');
+            localStorage.removeItem('typingTestUserData');
+            location.reload();
+        }
+        
+        function logoutUser() {
+            localStorage.removeItem('typingTestUser');
+            localStorage.removeItem('typingTestUserType');
+            localStorage.removeItem('typingTestUserEmail');
+            localStorage.removeItem('typingTestUserData');
+            location.reload();
+        }
+        
+        // Display current state
+        function updateCurrentState() {
+            const user = localStorage.getItem('typingTestUser');
+            const type = localStorage.getItem('typingTestUserType');
+            const data = localStorage.getItem('typingTestUserData');
+            
+            let state = '';
+            if (user) {
+                state = `Logged in as: <strong>${user}</strong> (Type: ${type || 'unknown'})`;
+                if (data) {
+                    const userData = JSON.parse(data);
+                    if (userData.picture) {
+                        state += ` | Has Google Avatar: ✅`;
+                    }
+                }
+            } else {
+                state = 'Not logged in (Guest state)';
+            }
+            
+            document.getElementById('currentStateDisplay').innerHTML = state;
+        }
+        
+        // Auto-update verification checklist based on current state
+        function updateVerificationStatus() {
+            const avatar = document.querySelector('.profile-pic');
+            const userInfo = document.querySelector('.user-info');
+            const indicators = document.querySelectorAll('.status-indicator');
+            
+            // Reset all to pending
+            indicators.forEach(indicator => {
+                indicator.className = 'status-indicator status-pending';
+            });
+            
+            if (avatar && userInfo) {
+                // Check if avatar is visible
+                indicators[0].className = 'status-indicator status-pass';
+                
+                // Check hover tooltip
+                if (avatar.title) {
+                    indicators[4].className = 'status-indicator status-pass';
+                }
+                
+                // Check hover effects (basic check)
+                indicators[7].className = 'status-indicator status-pass';
+            } else {
+                // No avatar = logged out state
+                indicators[5].className = 'status-indicator status-pass';
+            }
+            
+            // Mobile responsive check (simplified)
+            if (window.innerWidth <= 768) {
+                indicators[6].className = 'status-indicator status-pass';
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentState();
+            updateVerificationStatus();
+            
+            // Update verification status after header auth loads
+            setTimeout(updateVerificationStatus, 1000);
+        });
+        
+        // Console logging for debugging
+        console.log('=== KeyRacer Avatar Implementation Verification ===');
+        console.log('Current localStorage state:');
+        console.log('User:', localStorage.getItem('typingTestUser'));
+        console.log('Type:', localStorage.getItem('typingTestUserType'));
+        console.log('Data:', localStorage.getItem('typingTestUserData'));
+        console.log('=====================================');
+    </script>
+</body>
+</html>

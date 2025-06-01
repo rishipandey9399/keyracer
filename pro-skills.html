@@ -3,169 +3,1093 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Key Racer - Professional Skills Lab</title>
+    <title>Professional Skills Lab - KeyRacer</title>
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
-            min-height: 100vh;
-            margin: 0;
-            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+        :root {
+            --primary-bg: #0a0f1a;
+            --secondary-bg: #0e1e38;
+            --card-bg: rgba(14, 30, 56, 0.95);
+            --accent-color: #00C2FF;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b8d0;
+            --border-color: rgba(0, 194, 255, 0.3);
+            --gradient-primary: linear-gradient(135deg, #00C2FF 0%, #667eea 50%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            --glow-primary: 0 0 20px rgba(0, 194, 255, 0.3);
+            --glow-secondary: 0 0 30px rgba(102, 126, 234, 0.2);
         }
-        .pro-skills-container {
-            max-width: 900px;
-            margin: 40px auto 0 auto;
-            background: rgba(14, 30, 56, 0.98);
-            border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            border: 2px solid var(--accent-color, #00FFDD);
-            padding: 36px 32px 32px 32px;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--primary-bg);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(0, 194, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 64, 129, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, rgba(10, 15, 26, 0.9) 0%, rgba(14, 30, 56, 0.7) 100%);
+            min-height: 100vh;
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Particles */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) translateX(200px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(14, 30, 56, 0.95);
+            backdrop-filter: blur(30px);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--box-shadow);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
         }
-        .brand-section {
-            margin-bottom: 30px;
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            filter: drop-shadow(var(--glow-primary));
+            transition: all 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 25px rgba(0, 194, 255, 0.8));
+        }
+
+        .brand-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-accent);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-link:hover::before {
+            left: 0;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            border-color: var(--accent-color);
+            box-shadow: var(--glow-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2.5rem;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Skills Sidebar */
+        .skills-sidebar {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 2px solid var(--border-color);
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(30px);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+            overflow: hidden;
+        }
+
+        .skills-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .sidebar-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: var(--glow-primary);
+            font-weight: 700;
+        }
+
+        .skill-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .skill-category {
+            padding: 1.2rem 1.8rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-accent);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .skill-category:hover::before {
+            left: 0;
+        }
+
+        .skill-category:hover {
+            border-color: var(--accent-color);
+            transform: translateX(8px) scale(1.02);
+            box-shadow: var(--glow-primary);
+            color: var(--text-primary);
+        }
+
+        .skill-category.active {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 30px rgba(0, 194, 255, 0.4);
+            transform: translateX(5px);
+        }
+
+        .skill-category-icon {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+            filter: drop-shadow(0 0 5px rgba(0, 194, 255, 0.5));
+        }
+
+        .difficulty-selector {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .difficulty-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            display: block;
+            font-weight: 600;
             text-align: center;
         }
-        .pro-skills-title {
-            color: var(--accent-color, #00FFDD);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 18px;
-            letter-spacing: 2px;
+
+        .difficulty-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
         }
-        .selectors {
-            display: flex;
-            gap: 24px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .selectors select {
-            font-size: 1.1rem;
-            padding: 10px 18px;
-            border-radius: 8px;
-            border: 1px solid #00FFDD;
-            background: #0e1e38;
-            color: #00FFDD;
-            font-family: 'Rajdhani', sans-serif;
-            margin-bottom: 8px;
-        }
-        .template-area {
-            width: 100%;
-            background: #181f2e;
+
+        .difficulty-btn {
+            padding: 0.8rem 0.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--border-color);
             border-radius: 10px;
-            padding: 22px 18px;
-            margin-bottom: 18px;
-            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
-            font-size: 1.08rem;
-            color: #b8eaff;
-            min-height: 90px;
-            white-space: pre-wrap;
-            box-shadow: 0 2px 12px #00ffdd11;
-            border: 1.5px solid #00FFDD33;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
         }
-        .pro-input-area {
-            width: 100%;
-            margin-bottom: 18px;
+
+        .difficulty-btn:hover {
+            background: rgba(0, 194, 255, 0.15);
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
         }
-        .pro-input-area textarea {
-            width: 100%;
-            min-height: 90px;
-            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
-            font-size: 1.08rem;
-            border-radius: 10px;
-            border: 1.5px solid #00FFDD99;
-            background: #0e1e38;
-            color: #fff;
-            padding: 16px;
-            resize: vertical;
-            outline: none;
-            transition: border 0.2s;
+
+        .difficulty-btn.active {
+            background: var(--gradient-accent);
+            color: var(--text-primary);
+            border-color: var(--accent-color);
+            box-shadow: var(--glow-secondary);
         }
-        .pro-input-area textarea:focus {
-            border-color: #FFC700;
+
+        .stats-summary {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
         }
-        .stats {
-            display: flex;
-            gap: 32px;
-            justify-content: center;
-            margin-bottom: 18px;
+
+        .stats-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-secondary);
+            border-radius: 15px 15px 0 0;
         }
-        .stat {
-            background: #181f2e;
-            border-radius: 8px;
-            padding: 12px 24px;
-            color: #00FFDD;
+
+        .stats-title {
             font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(0, 194, 255, 0.1);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
             font-family: 'Orbitron', sans-serif;
-            box-shadow: 0 2px 8px #00ffdd11;
+            font-size: 1.4rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
         }
-        .pro-skills-actions {
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Main Practice Area */
+        .practice-area {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 2px solid var(--border-color);
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(30px);
             display: flex;
-            gap: 18px;
-            justify-content: center;
-            margin-top: 10px;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
-        .pro-skills-actions a {
-            color: #00FFDD;
-            text-decoration: none;
+
+        .practice-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-secondary);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .practice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        .practice-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-primary);
+            font-weight: 700;
+        }
+
+        .timer-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            background: var(--gradient-accent);
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--accent-color);
+            box-shadow: var(--glow-secondary);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
+        }
+
+        .session-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .session-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .session-stat:hover {
+            background: rgba(0, 194, 255, 0.1);
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .session-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .session-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .template-section {
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .template-title {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .template-tools {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .template-tool-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(0, 194, 255, 0.2);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            color: var(--accent-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .template-tool-btn:hover {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            transform: translateY(-2px);
+        }
+
+        .template-display {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 1rem;
-            transition: color 0.2s;
+            line-height: 1.8;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            max-height: 350px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        .pro-skills-actions a:hover {
-            color: #FFC700;
+
+        .template-display::-webkit-scrollbar {
+            width: 8px;
         }
-        @media (max-width: 600px) {
-            .pro-skills-container {
-                padding: 18px 4vw;
+
+        .template-display::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .template-display::-webkit-scrollbar-thumb {
+            background: var(--gradient-accent);
+            border-radius: 4px;
+        }
+
+        .input-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-secondary);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-title {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .word-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            background: rgba(0, 194, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent-color);
+        }
+
+        .input-area {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            padding: 2rem;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+            min-height: 250px;
+            line-height: 1.8;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-area:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 30px rgba(0, 194, 255, 0.3), inset 0 2px 10px rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .input-area:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Real-time Stats */
+        .live-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .live-stat {
+            text-align: center;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .live-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .live-stat-value.wpm {
+            color: var(--accent-color);
+        }
+
+        .live-stat-value.accuracy {
+            color: var(--success-color);
+        }
+
+        .live-stat-value.errors {
+            color: var(--error-color);
+        }
+
+        .live-stat-value.time {
+            color: var(--warning-color);
+        }
+
+        .live-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-start {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            box-shadow: 0 5px 20px rgba(0, 194, 255, 0.3);
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 194, 255, 0.4);
+        }
+
+        .btn-reset {
+            background: rgba(255, 152, 0, 0.8);
+            color: var(--text-primary);
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.2);
+        }
+
+        .btn-reset:hover {
+            background: rgba(255, 152, 0, 1);
+            transform: translateY(-2px);
+        }
+
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
+            height: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 25px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
-            .selectors {
+
+            .skills-sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .practice-area {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content {
                 flex-direction: column;
-                gap: 12px;
+                gap: 1rem;
             }
-            .stats {
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .practice-header {
                 flex-direction: column;
-                gap: 12px;
+                gap: 1rem;
+                align-items: flex-start;
             }
+
+            .live-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Character highlighting */
+        .char-correct {
+            background-color: rgba(76, 175, 80, 0.3);
+            color: var(--success-color);
+        }
+
+        .char-incorrect {
+            background-color: rgba(244, 67, 54, 0.3);
+            color: var(--error-color);
+        }
+
+        .char-current {
+            background-color: rgba(0, 194, 255, 0.5);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
         }
     </style>
 </head>
 <body>
-    <div class="brand-section">
-        <a href="index.html" class="brand">
-            <img src="assets/images/logo.png" alt="Key Racer Logo" class="brand-logo">
-            <h2 class="brand-tagline">Professional Skills Lab</h2>
-        </a>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
     </div>
-    <div class="pro-skills-container">
-        <div class="pro-skills-title"><i class="fas fa-user-tie"></i> Professional Skills Lab</div>
-        <div class="pro-skills-card">
-            <div class="selectors">
-                <label for="pro-skill-select">Skill:</label>
-                <select id="pro-skill-select">
-                    <option value="resume">Resume</option>
-                    <option value="cover-letter">Cover Letter</option>
-                    <option value="email">Email</option>
-                    <option value="report">Report</option>
-                    <option value="linkedin">LinkedIn Bio</option>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
+                <h1 class="brand-title">Professional Skills Lab</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="preference.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="python-challenges-enhanced.html" class="nav-link">
+                    <i class="fas fa-code"></i> Challenges
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Skills Sidebar -->
+        <aside class="skills-sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">
+                    <i class="fas fa-user-tie"></i>
+                    Professional Skills
+                </h2>
+                <p class="sidebar-subtitle">Master workplace typing skills</p>
+            </div>
+
+            <div class="skill-selector">
+                <label for="pro-skill-select" class="selector-label">
+                    <i class="fas fa-briefcase"></i>
+                    Choose Document Type
+                </label>
+                <select id="pro-skill-select" class="skill-select">
+                    <option value="resume">📄 Resume</option>
+                    <option value="cover-letter">💼 Cover Letter</option>
+                    <option value="email">📧 Professional Email</option>
+                    <option value="report">📊 Business Report</option>
+                    <option value="linkedin">💼 LinkedIn Profile</option>
                 </select>
             </div>
-            <pre id="template-area" class="template-area"></pre>
-            <textarea id="pro-input" class="pro-input" rows="8" placeholder="Type the template above..."></textarea>
-            <div class="pro-stats">
-                <span>WPM: <span id="wpm">0</span></span>
-                <span>Accuracy: <span id="accuracy">100</span>%</span>
-                <span>Errors: <span id="errors">0</span></span>
+
+            <div class="skill-info">
+                <h3 class="info-title">
+                    <i class="fas fa-info-circle"></i>
+                    Tips for Success
+                </h3>
+                <ul class="tips-list">
+                    <li><i class="fas fa-check"></i> Maintain steady rhythm</li>
+                    <li><i class="fas fa-check"></i> Focus on accuracy first</li>
+                    <li><i class="fas fa-check"></i> Use proper formatting</li>
+                    <li><i class="fas fa-check"></i> Practice professional tone</li>
+                </ul>
             </div>
-            <button id="start-pro-skill" class="auth-btn">Start Practice</button>
-            <a href="preference.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Preferences</a>
-        </div>
+
+            <div class="achievements">
+                <h3 class="achievements-title">
+                    <i class="fas fa-trophy"></i>
+                    Your Progress
+                </h3>
+                <div class="achievement-badges">
+                    <div class="badge-item">
+                        <i class="fas fa-medal"></i>
+                        <span>Beginner</span>
+                    </div>
+                    <div class="badge-item locked">
+                        <i class="fas fa-lock"></i>
+                        <span>Professional</span>
+                    </div>
+                    <div class="badge-item locked">
+                        <i class="fas fa-crown"></i>
+                        <span>Expert</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Practice Area -->
+        <main class="practice-area">
+            <div class="practice-header">
+                <h2 class="practice-title">
+                    <i class="fas fa-keyboard"></i>
+                    Professional Practice
+                </h2>
+                <div class="timer-display" id="timer-display">
+                    <i class="fas fa-stopwatch"></i>
+                    00:00
+                </div>
+            </div>
+
+            <!-- Session Statistics -->
+            <div class="session-stats">
+                <div class="session-stat">
+                    <div class="session-stat-label">Words Per Minute</div>
+                    <div class="session-stat-value" id="wpm">0</div>
+                </div>
+                <div class="session-stat">
+                    <div class="session-stat-label">Accuracy</div>
+                    <div class="session-stat-value" id="accuracy">100%</div>
+                </div>
+                <div class="session-stat">
+                    <div class="session-stat-label">Errors</div>
+                    <div class="session-stat-value" id="errors">0</div>
+                </div>
+                <div class="session-stat">
+                    <div class="session-stat-label">Progress</div>
+                    <div class="session-stat-value" id="progress">0%</div>
+                </div>
+            </div>
+
+            <!-- Template Section -->
+            <div class="template-section">
+                <div class="template-header">
+                    <div>
+                        <h3 class="template-title">
+                            <i class="fas fa-file-alt"></i>
+                            Template to Type
+                        </h3>
+                    </div>
+                    <div class="template-tools">
+                        <button class="template-tool-btn" id="zoom-btn">
+                            <i class="fas fa-search-plus"></i> Zoom
+                        </button>
+                        <button class="template-tool-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="template-tool-btn" id="highlight-btn">
+                            <i class="fas fa-highlighter"></i> Highlight
+                        </button>
+                    </div>
+                </div>
+                <div class="template-display" id="template-area">
+                    Select a document type to begin practicing...
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="input-header">
+                    <h3 class="input-title">
+                        <i class="fas fa-edit"></i>
+                        Your Typing Area
+                    </h3>
+                    <div class="word-count" id="word-count">
+                        Words: 0 / 0
+                    </div>
+                </div>
+
+                <textarea 
+                    id="pro-input" 
+                    class="input-area" 
+                    placeholder="Select a template and click 'Start Practice' to begin typing..."
+                    disabled
+                ></textarea>
+
+                <!-- Real-time Statistics -->
+                <div class="live-stats">
+                    <div class="live-stat">
+                        <div class="live-stat-value wpm" id="live-wpm">0</div>
+                        <div class="live-stat-label">WPM</div>
+                    </div>
+                    <div class="live-stat">
+                        <div class="live-stat-value accuracy" id="live-accuracy">100</div>
+                        <div class="live-stat-label">Accuracy %</div>
+                    </div>
+                    <div class="live-stat">
+                        <div class="live-stat-value errors" id="live-errors">0</div>
+                        <div class="live-stat-label">Errors</div>
+                    </div>
+                    <div class="live-stat">
+                        <div class="live-stat-value time" id="live-time">00:00</div>
+                        <div class="live-stat-label">Time</div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="start-pro-skill" class="action-btn btn-start">
+                        <i class="fas fa-play"></i>
+                        Start Practice
+                    </button>
+                    <button id="reset-practice" class="action-btn btn-reset">
+                        <i class="fas fa-redo"></i>
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </main>
     </div>
+
     <script src="scripts/pro-skills.js"></script>
 </body>
 </html> 
