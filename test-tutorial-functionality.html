@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Tutorial Functionality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #fff;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .pass { background: #4CAF50; }
+        .fail { background: #f44336; }
+        .warn { background: #ff9800; }
+    </style>
+</head>
+<body>
+    <h1>Python Tutorial Functionality Test</h1>
+    <div id="results"></div>
+
+    <script>
+        function runTests() {
+            const results = [];
+            
+            // Test 1: Check if all 18 code editors exist
+            let allEditorsExist = true;
+            for (let i = 1; i <= 18; i++) {
+                const textarea = document.getElementById(`codeInput${i}`);
+                const preview = document.getElementById(`codePreview${i}`);
+                if (!textarea || !preview) {
+                    allEditorsExist = false;
+                    break;
+                }
+            }
+            results.push({
+                test: "All 18 Code Editors Present",
+                status: allEditorsExist ? "PASS" : "FAIL",
+                details: allEditorsExist ? "All editors found" : "Some editors missing"
+            });
+
+            // Test 2: Check navigation menu
+            const menuItems = document.querySelectorAll('.menu-item');
+            results.push({
+                test: "Navigation Menu",
+                status: menuItems.length > 0 ? "PASS" : "FAIL",
+                details: `${menuItems.length} menu items found`
+            });
+
+            // Test 3: Check sections
+            const sections = document.querySelectorAll('.tutorial-section');
+            results.push({
+                test: "Tutorial Sections",
+                status: sections.length > 0 ? "PASS" : "FAIL",
+                details: `${sections.length} sections found`
+            });
+
+            // Test 4: Check if JavaScript file is loaded
+            const pythonTutorialScript = document.querySelector('script[src*="python-tutorial.js"]');
+            results.push({
+                test: "JavaScript File Loading",
+                status: pythonTutorialScript ? "PASS" : "WARN",
+                details: pythonTutorialScript ? "Script tag found" : "Script tag not detected"
+            });
+
+            // Test 5: Check CSS file
+            const cssLink = document.querySelector('link[href*="python-tutorial.css"]');
+            results.push({
+                test: "CSS File Loading",
+                status: cssLink ? "PASS" : "WARN",
+                details: cssLink ? "CSS link found" : "CSS link not detected"
+            });
+
+            // Display results
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const container = document.getElementById('results');
+            container.innerHTML = '';
+            
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `test-result ${result.status.toLowerCase()}`;
+                div.innerHTML = `
+                    <strong>${result.test}:</strong> ${result.status}<br>
+                    <small>${result.details}</small>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 1000); // Wait a bit for everything to load
+        });
+    </script>
+</body>
+</html>

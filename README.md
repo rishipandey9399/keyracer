@@ -1,6 +1,60 @@
 # Key Racer - Typing Test Application
 
-A web application for practicing and improving typing speed with user authentication.
+A comprehensive web application for practicing typing speed and solving coding challenges with user authentication and competitive leaderboards.
+
+## 🚀 Features
+
+### Typing Practice
+- Multiple typing test modes and difficulties
+- Real-time WPM and accuracy tracking
+- User progress monitoring
+- Custom text challenges
+
+### CodeRacer Challenge System
+- **Programming Challenges**: Solve coding problems in multiple languages
+- **Real-time Leaderboard**: Compete with other developers
+- **Comprehensive Scoring**: Points based on difficulty, time, accuracy, and streaks
+- **Achievement System**: Earn badges for various accomplishments
+- **Multi-language Support**: Python, JavaScript, Java, C++, C#, Go, Rust
+
+## 🏁 Quick Start - CodeRacer
+
+### One-Command Setup
+```bash
+./setup-coderacer.sh
+```
+
+### Manual Setup
+```bash
+# Install dependencies
+npm install
+
+# Seed database with challenges
+npm run seed
+
+# Start the server
+npm start
+```
+
+### Access Points
+- **Main App**: http://localhost:3000/code-racer.html
+- **Code Challenges**: http://localhost:3000/coderacer-challenges.html  
+- **Leaderboard**: http://localhost:3000/coderacer-leaderboard.html
+- **API**: http://localhost:3000/api/leaderboard
+
+### System Status Check
+```bash
+./check-coderacer.sh
+```
+
+## 📊 CodeRacer Scoring System
+
+- **Base Points**: Easy (10pts), Medium (30pts), Hard (50pts), Expert (100pts)
+- **Time Bonuses**: Top 10% (+50%), Top 25% (+25%), Top 50% (+10%)
+- **Attempt Multipliers**: 1st (+100%), 2nd (-10%), 3rd (-20%), 4+ (-30%)
+- **Streak Bonuses**: 3-day (+10pts), 7-day (+30pts), 30-day (+100pts)
+
+For detailed CodeRacer documentation, see [CODERACER-README.md](CODERACER-README.md)
 
 ## Setup Instructions
 

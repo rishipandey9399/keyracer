@@ -7,27 +7,67 @@ class CodeExecutor {
     constructor() {
         this.API_URL = 'https://emkc.org/api/v2/piston/';
         this.runtimeVersions = {
-            'python': '3.10'
+            'python': '3.10',
+            'java': '15.0.2'
+        };
+        this.fileExtensions = {
+            'python': '.py',
+            'java': '.java'
+        };
+        this.mainFileNames = {
+            'python': 'main.py',
+            'java': 'Main.java'
         };
     }
 
     /**
-     * Execute code and return the result
-     * @param {string} code - The code to execute
+     * Wrap code with test harness based on language
+     * @param {string} code - The code to wrap
      * @param {string} language - The programming language
-     * @param {string} input - Optional input for the program
-     * @returns {Promise<{output: string, error: string}>}
+     * @param {string} input - The input for the test
+     * @returns {string} - The wrapped code
      */
-    _wrapCodeWithTestHarness(code, input) {
-        // Check if the code contains a function definition
-        if (code.includes('def ')) {
-            // Extract the function name from the code
-            const funcMatch = code.match(/def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/);
-            if (funcMatch) {
-                const functionName = funcMatch[1];
-                // Add test code that calls the function with the input
-                return `${code}\n\n# Test code\nresult = ${functionName}(${input})\nprint(result)`;
+    _wrapCodeWithTestHarness(code, language, input) {
+        if (language === 'python') {
+            // Check if the code contains a function definition
+            if (code.includes('def ')) {
+                // Extract the function name from the code
+                const funcMatch = code.match(/def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/);
+                if (funcMatch) {
+                    const functionName = funcMatch[1];
+                    // Add test code that calls the function with the input
+                    return `${code}\n\n# Test code\nresult = ${functionName}(${input})\nprint(result)`;
+                }
             }
+            return code;
+        } else if (language === 'java') {
+            // For Java, wrap the method in a Main class if it's not already wrapped
+            if (!code.includes('class ') && !code.includes('public class ')) {
+                // Check if the code contains a method definition
+                if (code.includes('public static')) {
+                    // Extract the method name and parameters
+                    const methodMatch = code.match(/public\s+static\s+\w+\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)/);
+                    if (methodMatch) {
+                        const methodName = methodMatch[1];
+                        // Wrap in a Main class and add test code
+                        return `public class Main {
+    ${code}
+    
+    public static void main(String[] args) {
+        // Test code
+        System.out.println(${methodName}(${input}));
+    }
+}`;
+                    }
+                }
+                // If no method found, assume it's a complete main method
+                return `public class Main {
+    public static void main(String[] args) {
+        ${code}
+    }
+}`;
+            }
+            return code;
         }
         return code;
     }
@@ -40,13 +80,16 @@ class CodeExecutor {
             
             if (Array.isArray(input)) {
                 formattedInput = input.join(' ');
-                wrappedCode = this._wrapCodeWithTestHarness(code, formattedInput);
+                wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
             } else if (typeof input === 'object' && input !== null) {
                 formattedInput = JSON.stringify(input);
-                wrappedCode = this._wrapCodeWithTestHarness(code, formattedInput);
+                wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
             } else if (input) {
                 formattedInput = input;
-                wrappedCode = this._wrapCodeWithTestHarness(code, formattedInput);
+                wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
+            } else {
+                // For code without specific input, still wrap it properly
+                wrappedCode = this._wrapCodeWithTestHarness(code, language, '');
             }
 
             // First, validate the language runtime
@@ -61,6 +104,9 @@ class CodeExecutor {
                 throw new Error(`Language ${language} is not supported`);
             }
 
+            // Get the appropriate filename based on language
+            const fileName = this.mainFileNames[language] || 'main.txt';
+
             // Execute the code
             const response = await fetch(this.API_URL + 'execute', {
                 method: 'POST',
@@ -72,10 +118,10 @@ class CodeExecutor {
                     language: language,
                     version: this.runtimeVersions[language] || languageRuntime.version,
                     files: [{
-                        name: 'main.py',
-                        content: code
+                        name: fileName,
+                        content: wrappedCode
                     }],
-                    stdin: input,
+                    stdin: formattedInput,
                     args: [],
                     compile_timeout: 10000,
                     run_timeout: 3000,

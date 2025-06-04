@@ -29,6 +29,8 @@ const Session = require('./models/Session');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
+const challengeRoutes = require('./routes/challengeRoutes');
+const leaderboardRoutes = require('./routes/leaderboardRoutes');
 
 // Import middleware
 const { authenticate } = require('./middleware/authMiddleware');
@@ -167,6 +169,8 @@ app.use(express.static(path.join(__dirname, '../')));
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api', challengeRoutes);
+app.use('/api', leaderboardRoutes);
 
 // Add rate limiting for auth routes
 const authLimiter = rateLimit({

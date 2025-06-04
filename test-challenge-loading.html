@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Challenge Loading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #0a0f1c;
+            color: white;
+        }
+        .test-item {
+            background: #1a1a2e;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .test-link {
+            color: #00ffdd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .test-link:hover {
+            text-decoration: underline;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .loading { background: #f59e0b; color: black; }
+        .success { background: #22c55e; color: black; }
+        .error { background: #ef4444; color: white; }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #2a2a3e;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Challenge Loading Test</h1>
+    <p>Testing if all challenges load correctly from the JSON file:</p>
+    
+    <div id="tests-container">
+        <div class="test-item">
+            <span class="status loading">Loading...</span>
+            Testing JSON file load...
+            <div class="result" id="json-result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testChallengeLoading() {
+            const jsonResult = document.getElementById('json-result');
+            const testsContainer = document.getElementById('tests-container');
+            
+            try {
+                console.log('Testing JSON file load...');
+                const response = await fetch('./scripts/challenges.json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('JSON loaded successfully:', data);
+                
+                jsonResult.innerHTML = `✅ JSON loaded successfully!<br>
+                    Found ${data.challenges.length} challenges<br>
+                    Challenge IDs: ${data.challenges.map(c => c._id).join(', ')}`;
+                
+                // Update status
+                const loadingStatus = document.querySelector('.status.loading');
+                loadingStatus.className = 'status success';
+                loadingStatus.textContent = 'Success';
+                
+                // Test each challenge
+                data.challenges.forEach((challenge, index) => {
+                    const testDiv = document.createElement('div');
+                    testDiv.className = 'test-item';
+                    testDiv.innerHTML = `
+                        <a href="solve-challenge.html?challenge=${challenge._id}" class="test-link" target="_blank">
+                            Challenge ${challenge._id}: ${challenge.title}
+                        </a>
+                        <span class="status success">Ready</span>
+                        <div class="result">
+                            ID: ${challenge._id} (${typeof challenge._id})<br>
+                            Title: ${challenge.title}<br>
+                            Difficulty: ${challenge.difficulty}<br>
+                            Points: ${challenge.points}
+                        </div>
+                    `;
+                    testsContainer.appendChild(testDiv);
+                });
+                
+            } catch (error) {
+                console.error('Error loading challenges:', error);
+                jsonResult.innerHTML = `❌ Error: ${error.message}`;
+                
+                // Update status
+                const loadingStatus = document.querySelector('.status.loading');
+                loadingStatus.className = 'status error';
+                loadingStatus.textContent = 'Error';
+            }
+        }
+        
+        // Run test when page loads
+        document.addEventListener('DOMContentLoaded', testChallengeLoading);
+    </script>
+</body>
+</html>

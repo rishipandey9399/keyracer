@@ -12,24 +12,57 @@ function setupNavigation() {
     
     console.log('Setting up navigation with', menuItems.length, 'menu items and', sections.length, 'sections');
     
-    // Initially hide all sections except the first one
-    sections.forEach((section, index) => {
-        if (index === 0) {
-            section.classList.add('active');
-            section.style.display = 'block';
-            section.style.opacity = '1';
-        } else {
-            section.classList.remove('active');
-            section.style.display = 'none';
-            section.style.opacity = '0';
-        }
+    // Initially hide all sections
+    sections.forEach(section => {
+        section.classList.remove('active');
+        section.style.display = 'none';
+        section.style.opacity = '0';
     });
+
+    // Check for hash in URL and navigate to that section, or show first section
+    const hash = window.location.hash;
+    let targetSectionId = null;
+    
+    if (hash && hash.startsWith('#')) {
+        targetSectionId = hash.substring(1);
+        const targetSection = document.getElementById(targetSectionId);
+        if (targetSection && targetSection.classList.contains('tutorial-section')) {
+            console.log('Found hash navigation to:', targetSectionId);
+            switchToSection(targetSectionId);
+            // Update active menu item
+            const correspondingMenuItem = document.querySelector(`a[href="#${targetSectionId}"]`);
+            if (correspondingMenuItem) {
+                updateActiveStates(correspondingMenuItem);
+            }
+        } else {
+            // Hash doesn't correspond to a valid section, show first section
+            if (sections.length > 0) {
+                sections[0].classList.add('active');
+                sections[0].style.display = 'block';
+                sections[0].style.opacity = '1';
+                // Update active menu item to first
+                if (menuItems.length > 0) {
+                    updateActiveStates(menuItems[0]);
+                }
+            }
+        }
+    } else {
+        // No hash, show first section
+        if (sections.length > 0) {
+            sections[0].classList.add('active');
+            sections[0].style.display = 'block';
+            sections[0].style.opacity = '1';
+            // Update active menu item to first
+            if (menuItems.length > 0) {
+                updateActiveStates(menuItems[0]);
+            }
+        }
+    }
 
     // Setup menu item clicks
     menuItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // Prevent event bubbling
             
             const href = item.getAttribute('href');
             if (href && href.startsWith('#')) {
@@ -37,38 +70,26 @@ function setupNavigation() {
                 console.log('Menu item clicked:', targetId);
                 switchToSection(targetId);
                 updateActiveStates(item);
+                // Update URL hash
+                window.history.pushState(null, null, href);
             }
         });
     });
 
-    // Also handle submenu items (subsection navigation)
-    const subsectionItems = document.querySelectorAll('.submenu-items a');
-    subsectionItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const href = item.getAttribute('href');
-            if (href && href.startsWith('#')) {
-                const subsectionId = href.substring(1);
-                // Find the parent section
-                const parentMenuItem = item.closest('.submenu').querySelector('.menu-item');
-                if (parentMenuItem) {
-                    const parentHref = parentMenuItem.getAttribute('href');
-                    if (parentHref && parentHref.startsWith('#')) {
-                        const parentSectionId = parentHref.substring(1);
-                        switchToSection(parentSectionId);
-                        updateActiveStates(parentMenuItem);
-                        
-                        // Scroll to subsection after section is loaded
-                        setTimeout(() => {
-                            const subsectionElement = document.getElementById(subsectionId);
-                            if (subsectionElement) {
-                                subsectionElement.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        }, 100);
-                    }
+    // Handle browser back/forward navigation
+    window.addEventListener('popstate', () => {
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#')) {
+            const targetId = hash.substring(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection && targetSection.classList.contains('tutorial-section')) {
+                switchToSection(targetId);
+                const correspondingMenuItem = document.querySelector(`a[href="#${targetId}"]`);
+                if (correspondingMenuItem) {
+                    updateActiveStates(correspondingMenuItem);
                 }
             }
-        });
+        }
     });
 }
 

@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="CodeRacer Challenge Leaderboard - See top programming challenge performers, their points, completion times, and rankings. Compete to reach the top of our coding leaderboard.">
+    <meta name="keywords" content="coding leaderboard, programming challenge rankings, code challenge standings, developer rankings, coderacer leaderboard, programming competitions">
+    <meta name="author" content="KeyRacer">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://keyracer.in/coderacer-leaderboard.html">
+    <meta property="og:title" content="CodeRacer Challenge Leaderboard - KeyRacer">
+    <meta property="og:description" content="See top programming challenge performers and compete to reach the top of our coding leaderboard.">
+    <meta property="og:image" content="https://keyracer.in/assets/images/logo.png">
+    <meta property="og:site_name" content="KeyRacer">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://keyracer.in/coderacer-leaderboard.html">
+    <meta property="twitter:title" content="CodeRacer Challenge Leaderboard - KeyRacer">
+    <meta property="twitter:description" content="See top programming challenge performers and compete to reach the top of our coding leaderboard.">
+    <meta property="twitter:image" content="https://keyracer.in/assets/images/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" href="/assets/images/logo.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://keyracer.in/coderacer-leaderboard.html" />
+    
+    <!-- Structured Data for CodeRacer Leaderboard -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "CodeRacer Challenge Leaderboard",
+        "url": "https://keyracer.in/coderacer-leaderboard.html",
+        "description": "See top programming challenge performers, their points, completion times, and rankings. Compete to reach the top of our coding leaderboard.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "KeyRacer",
+            "url": "https://keyracer.in/"
+        },
+        "mainEntity": {
+            "@type": "ItemList",
+            "name": "CodeRacer Challenge Leaderboard",
+            "description": "Global rankings of top programming challenge performers",
+            "numberOfItems": 100,
+            "itemListElement": {
+                "@type": "Person",
+                "name": "Challenge Participants",
+                "description": "Competitive programmers ranked by challenge points and performance"
+            }
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://keyracer.in/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "CodeRacer",
+                    "item": "https://keyracer.in/code-racer.html"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Challenge Leaderboard",
+                    "item": "https://keyracer.in/coderacer-leaderboard.html"
+                }
+            ]
+        }
+    }
+    </script>
+
+    <title>CodeRacer Challenge Leaderboard - KeyRacer | Top Programming Challenge Rankings</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/code-racer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        .leaderboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .leaderboard-header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .leaderboard-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0;
+        }
+
+        .scoring-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .scoring-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scoring-card h3 {
+            color: #64ffda;
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .scoring-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .scoring-card li {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .scoring-card li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #64ffda;
+        }
+
+        .filters-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            color: #64ffda;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .filter-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+        }
+
+        .filter-control:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+
+        .leaderboard-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: grid;
+            grid-template-columns: 60px 1fr 100px 100px 100px 120px 100px 80px;
+            gap: 1rem;
+            padding: 1rem;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .leaderboard-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 100px 100px 100px 120px 100px 80px;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .leaderboard-row:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .rank {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            color: #64ffda;
+        }
+
+        .rank.top-3 {
+            font-size: 1.5rem;
+        }
+
+        .rank.rank-1 { color: #ffd700; }
+        .rank.rank-2 { color: #c0c0c0; }
+        .rank.rank-3 { color: #cd7f32; }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .player-details h4 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .player-details .player-level {
+            color: #64ffda;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .points {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #64ffda;
+        }
+
+        .challenges-completed {
+            color: #fff;
+        }
+
+        .avg-time {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .accuracy {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .streak {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .streak.high-streak {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            color: #000;
+        }
+
+        .badges {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: #64ffda;
+            color: #000;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge.gold { background: #ffd700; }
+        .badge.silver { background: #c0c0c0; }
+        .badge.bronze { background: #cd7f32; }
+
+        @media (max-width: 768px) {
+            .leaderboard-container {
+                padding: 1rem;
+            }
+
+            .leaderboard-header h1 {
+                font-size: 2rem;
+            }
+
+            .table-header,
+            .leaderboard-row {
+                grid-template-columns: 50px 1fr 80px 80px;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .table-header :nth-child(n+5),
+            .leaderboard-row :nth-child(n+5) {
+                display: none;
+            }
+
+            .scoring-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="coderacer-challenges.html" class="nav-item"><i class="fas fa-code"></i> Code Challenges</a>
+                <a href="coderacer-leaderboard.html" class="nav-item active"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="preference.html" class="pref-btn" id="prefBtn">
+                        <i class="fas fa-cog"></i> Preference
+                    </a>
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="leaderboard-container">
+        <div class="leaderboard-header">
+            <h1><i class="fas fa-trophy"></i> CodeRacer Challenge Leaderboard</h1>
+            <p>Elite rankings of the top programming challenge performers</p>
+        </div>
+
+        <!-- Scoring System Information -->
+        <div class="scoring-info">
+            <h2 style="text-align: center; color: #64ffda; font-family: 'Orbitron', monospace; margin-bottom: 2rem;">
+                <i class="fas fa-chart-line"></i> Ranking System
+            </h2>
+            <div class="scoring-grid">
+                <div class="scoring-card">
+                    <h3><i class="fas fa-star"></i> Challenge Points</h3>
+                    <ul>
+                        <li>Easy: 10 points</li>
+                        <li>Medium: 30 points</li>
+                        <li>Hard: 50 points</li>
+                        <li>Expert: 100 points</li>
+                    </ul>
+                </div>
+                <div class="scoring-card">
+                    <h3><i class="fas fa-clock"></i> Time Bonuses</h3>
+                    <ul>
+                        <li>Top 10%: +50% points</li>
+                        <li>Top 25%: +25% points</li>
+                        <li>Top 50%: +10% points</li>
+                        <li>Personal best: +5% points</li>
+                    </ul>
+                </div>
+                <div class="scoring-card">
+                    <h3><i class="fas fa-redo"></i> Attempt Multipliers</h3>
+                    <ul>
+                        <li>1st attempt: +100% points</li>
+                        <li>2nd attempt: -10% points</li>
+                        <li>3rd attempt: -20% points</li>
+                        <li>4+ attempts: -30% points</li>
+                    </ul>
+                </div>
+                <div class="scoring-card">
+                    <h3><i class="fas fa-fire"></i> Streak Bonuses</h3>
+                    <ul>
+                        <li>3-day streak: +10 points</li>
+                        <li>7-day streak: +30 points</li>
+                        <li>30-day streak: +100 points</li>
+                        <li>Perfect week: +50 points</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="time-filter"><i class="fas fa-calendar"></i> Time Period</label>
+                    <select id="time-filter" class="filter-control">
+                        <option value="all-time">All Time</option>
+                        <option value="monthly">This Month</option>
+                        <option value="weekly">This Week</option>
+                        <option value="daily">Today</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="language-filter"><i class="fas fa-code"></i> Language</label>
+                    <select id="language-filter" class="filter-control">
+                        <option value="all">All Languages</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="cpp">C++</option>
+                        <option value="csharp">C#</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="difficulty-filter"><i class="fas fa-layer-group"></i> Difficulty</label>
+                    <select id="difficulty-filter" class="filter-control">
+                        <option value="all">All Difficulties</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="expert">Expert</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="category-filter"><i class="fas fa-tags"></i> Category</label>
+                    <select id="category-filter" class="filter-control">
+                        <option value="all">All Categories</option>
+                        <option value="algorithms">Algorithms</option>
+                        <option value="data-structures">Data Structures</option>
+                        <option value="dynamic-programming">Dynamic Programming</option>
+                        <option value="graphs">Graphs</option>
+                        <option value="strings">Strings</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="leaderboard-table">
+            <div class="table-header">
+                <div>Rank</div>
+                <div>Player</div>
+                <div><i class="fas fa-star"></i> Points</div>
+                <div><i class="fas fa-code"></i> Solved</div>
+                <div><i class="fas fa-clock"></i> Avg Time</div>
+                <div><i class="fas fa-bullseye"></i> Accuracy</div>
+                <div><i class="fas fa-fire"></i> Streak</div>
+                <div><i class="fas fa-medal"></i> Badges</div>
+            </div>
+
+            <!-- Dynamic leaderboard content will be loaded here -->
+            <div class="loading-placeholder" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #64ffda;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <p>Loading champion rankings...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-code"></i> CodeRacer</h3>
+                <p>Master programming through interactive challenges and real-time competitions.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="code-racer.html">Home</a></li>
+                    <li><a href="coderacer-challenges.html">Code Challenges</a></li>
+                    <li><a href="coderacer-leaderboard.html">Leaderboard</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Languages</h4>
+                <ul>
+                    <li><a href="python-tutorial.html">Python</a></li>
+                    <li><a href="java-tutorial.html">Java</a></li>
+                    <li><a href="#">JavaScript</a></li>
+                    <li><a href="#">C++</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Bug Reports</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 KeyRacer. All rights reserved. | Built with ❤️ for developers</p>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+    <script>
+        // Leaderboard functionality with real API integration
+        class LeaderboardManager {
+            constructor() {
+                this.currentPage = 1;
+                this.filters = {
+                    time: document.getElementById('time-filter'),
+                    language: document.getElementById('language-filter'),
+                    difficulty: document.getElementById('difficulty-filter'),
+                    category: document.getElementById('category-filter')
+                };
+                this.leaderboardContainer = document.querySelector('.leaderboard-table');
+                this.init();
+            }
+
+            init() {
+                // Add filter event listeners
+                Object.values(this.filters).forEach(filter => {
+                    filter.addEventListener('change', () => this.loadLeaderboard());
+                });
+
+                // Load initial leaderboard data
+                this.loadLeaderboard();
+
+                // Refresh leaderboard every 30 seconds
+                setInterval(() => this.loadLeaderboard(), 30000);
+            }
+
+            async loadLeaderboard(page = 1) {
+                try {
+                    this.showLoading();
+                    
+                    const params = new URLSearchParams({
+                        timeFilter: this.filters.time.value,
+                        language: this.filters.language.value,
+                        difficulty: this.filters.difficulty.value,
+                        category: this.filters.category.value,
+                        page: page,
+                        limit: 50
+                    });
+
+                    const response = await fetch(`/api/leaderboard?${params}`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.renderLeaderboard(data.data.leaderboard);
+                        this.updateGlobalStats(data.data.globalStats);
+                        this.currentPage = page;
+                    } else {
+                        console.error('Failed to load leaderboard:', data.message);
+                        this.showError('Failed to load leaderboard data');
+                    }
+                } catch (error) {
+                    console.error('Error loading leaderboard:', error);
+                    this.showError('Network error while loading leaderboard');
+                }
+            }
+
+            renderLeaderboard(leaderboardData) {
+                const tableContainer = document.querySelector('.leaderboard-table');
+                
+                if (!leaderboardData || leaderboardData.length === 0) {
+                    this.showEmpty();
+                    return;
+                }
+
+                // Keep the header and rebuild rows
+                const header = tableContainer.querySelector('.table-header');
+                tableContainer.innerHTML = '';
+                tableContainer.appendChild(header);
+
+                leaderboardData.forEach(entry => {
+                    const row = this.createLeaderboardRow(entry);
+                    tableContainer.appendChild(row);
+                });
+
+                // Animate rank numbers
+                this.animateRanks();
+            }
+
+            createLeaderboardRow(entry) {
+                const row = document.createElement('div');
+                row.className = 'leaderboard-row';
+                
+                const rankClass = entry.rank <= 3 ? `rank top-3 rank-${entry.rank}` : 'rank';
+                const streakClass = entry.stats.currentStreak >= 7 ? 'streak high-streak' : 'streak';
+                
+                // Format time display
+                const timeDisplay = this.formatTime(entry.stats.averageTime);
+                
+                // Create avatar initials
+                const avatarInitials = this.getAvatarInitials(entry.user.name);
+                
+                // Format badges
+                const badgesHtml = entry.badges.map(badge => 
+                    `<span class="badge ${this.getBadgeClass(badge.type)}">${badge.icon}</span>`
+                ).join('');
+
+                row.innerHTML = `
+                    <div class="${rankClass}">${entry.rank}</div>
+                    <div class="player-info">
+                        <div class="player-avatar">${avatarInitials}</div>
+                        <div class="player-details">
+                            <h4>${this.escapeHtml(entry.user.name)}</h4>
+                            <p class="player-level">${this.capitalizeFirst(entry.user.level)}</p>
+                        </div>
+                    </div>
+                    <div class="points">${entry.stats.totalPoints.toLocaleString()}</div>
+                    <div class="challenges-completed">${entry.stats.challengesCompleted}</div>
+                    <div class="avg-time">${timeDisplay}</div>
+                    <div class="accuracy">${entry.stats.accuracy}%</div>
+                    <div class="${streakClass}">${entry.stats.currentStreak}${entry.stats.currentStreak > 0 ? '🔥' : ''}</div>
+                    <div class="badges">${badgesHtml}</div>
+                `;
+
+                return row;
+            }
+
+            formatTime(seconds) {
+                if (seconds < 60) {
+                    return `${seconds}s`;
+                } else if (seconds < 3600) {
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+                } else {
+                    const hours = Math.floor(seconds / 3600);
+                    const minutes = Math.floor((seconds % 3600) / 60);
+                    return `${hours}h ${minutes}m`;
+                }
+            }
+
+            getAvatarInitials(name) {
+                return name.split(' ').map(word => word[0]).join('').toUpperCase().slice(0, 2);
+            }
+
+            getBadgeClass(badgeType) {
+                const badgeClasses = {
+                    'first_solve': 'badge',
+                    'speed_demon': 'gold',
+                    'perfectionist': 'gold',
+                    'streak_master': 'silver',
+                    'python_specialist': 'badge',
+                    'java_specialist': 'badge',
+                    'javascript_specialist': 'badge'
+                };
+                return badgeClasses[badgeType] || 'badge';
+            }
+
+            capitalizeFirst(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            updateGlobalStats(stats) {
+                // Update global statistics display if needed
+                console.log('Global Stats:', stats);
+            }
+
+            showLoading() {
+                const tableContainer = document.querySelector('.leaderboard-table');
+                const header = tableContainer.querySelector('.table-header');
+                tableContainer.innerHTML = '';
+                tableContainer.appendChild(header);
+                
+                const loadingRow = document.createElement('div');
+                loadingRow.className = 'leaderboard-row';
+                loadingRow.innerHTML = `
+                    <div colspan="8" style="text-align: center; padding: 2rem; color: #64ffda; grid-column: 1 / -1;">
+                        <i class="fas fa-spinner fa-spin"></i> Loading leaderboard...
+                    </div>
+                `;
+                tableContainer.appendChild(loadingRow);
+            }
+
+            showError(message) {
+                const tableContainer = document.querySelector('.leaderboard-table');
+                const header = tableContainer.querySelector('.table-header');
+                tableContainer.innerHTML = '';
+                tableContainer.appendChild(header);
+                
+                const errorRow = document.createElement('div');
+                errorRow.className = 'leaderboard-row';
+                errorRow.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #ff6b6b; grid-column: 1 / -1;">
+                        <i class="fas fa-exclamation-triangle"></i> ${message}
+                    </div>
+                `;
+                tableContainer.appendChild(errorRow);
+            }
+
+            showEmpty() {
+                const tableContainer = document.querySelector('.leaderboard-table');
+                const header = tableContainer.querySelector('.table-header');
+                tableContainer.innerHTML = '';
+                tableContainer.appendChild(header);
+                
+                const emptyRow = document.createElement('div');
+                emptyRow.className = 'leaderboard-row';
+                emptyRow.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #b3b8d0; grid-column: 1 / -1;">
+                        <i class="fas fa-trophy"></i> No participants yet. Be the first to compete!
+                    </div>
+                `;
+                tableContainer.appendChild(emptyRow);
+            }
+
+            animateRanks() {
+                setTimeout(() => {
+                    document.querySelectorAll('.rank').forEach(rank => {
+                        rank.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            rank.style.transform = 'scale(1)';
+                        }, 200);
+                    });
+                }, 100);
+            }
+        }
+
+        // Initialize leaderboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const leaderboard = new LeaderboardManager();
+            
+            // Make leaderboard globally accessible for debugging
+            window.leaderboard = leaderboard;
+        });
+    </script>
+</body>
+</html>

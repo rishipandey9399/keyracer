@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn Java programming with interactive tutorials at KeyRacer. Master Java basics, syntax, and programming concepts through hands-on coding exercises.">
+    <meta name="keywords" content="java tutorial, learn java, java programming, java basics, java course, coding tutorial, programming education, java syntax">
+    <meta name="author" content="KeyRacer">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://keyracer.in/java-tutorial.html">
+    <meta property="og:title" content="Java Tutorial - KeyRacer Learning Hub">
+    <meta property="og:description" content="Learn Java programming with interactive tutorials. Master Java basics, syntax, and programming concepts through hands-on coding exercises.">
+    <meta property="og:image" content="https://keyracer.in/assets/images/logo.png">
+    <meta property="og:site_name" content="KeyRacer">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://keyracer.in/java-tutorial.html">
+    <meta property="twitter:title" content="Java Tutorial - KeyRacer Learning Hub">
+    <meta property="twitter:description" content="Learn Java programming with interactive tutorials and hands-on coding exercises.">
+    <meta property="twitter:image" content="https://keyracer.in/assets/images/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" href="/assets/images/logo.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://keyracer.in/java-tutorial.html" />
+    
+    <!-- Structured Data for Java Tutorial -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Java Tutorial",
+        "url": "https://keyracer.in/java-tutorial.html",
+        "description": "Learn Java programming with interactive tutorials at KeyRacer. Master Java basics, syntax, and programming concepts through hands-on coding exercises.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "KeyRacer",
+            "url": "https://keyracer.in/"
+        },
+        "mainEntity": {
+            "@type": "Course",
+            "name": "Interactive Java Programming Tutorial",
+            "description": "Comprehensive Java tutorial with hands-on coding exercises",
+            "provider": {
+                "@type": "Organization",
+                "name": "KeyRacer"
+            },
+            "courseMode": "online",
+            "programmingLanguage": "Java",
+            "educationalLevel": ["Beginner", "Intermediate"],
+            "teaches": ["Java Syntax", "Programming Fundamentals", "Data Types", "Control Structures", "Functions", "Object-Oriented Programming"],
+            "hasCourseInstance": [
+                {
+                    "@type": "CourseInstance",
+                    "name": "Java Basics",
+                    "description": "Learn fundamental Java concepts and syntax"
+                },
+                {
+                    "@type": "CourseInstance",
+                    "name": "Advanced Java",
+                    "description": "Master advanced Java programming techniques"
+                }
+            ],
+            "coursePrerequisites": "Basic computer literacy"
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://keyracer.in/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Java Tutorial",
+                    "item": "https://keyracer.in/java-tutorial.html"
+                }
+            ]
+        }
+    }
+    </script>
+    
+    <title>Java Tutorial - KeyRacer Learning Hub | Interactive Java Programming</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/python-tutorial.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-vs-dark.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="tutorial-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="challenges.html" class="nav-item"><i class="fas fa-code"></i> Challenges</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="preference.html" class="pref-btn" id="prefBtn">
+                        <i class="fas fa-cog"></i> Preference
+                    </a>
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="tutorial-container">
+        <aside class="tutorial-sidebar">
+            <div class="tutorial-nav">
+                <h3>Java Tutorial</h3>
+                <div class="tutorial-menu">
+                    <a href="#introduction" class="menu-item active">
+                        <i class="fas fa-book"></i>
+                        Introduction
+                    </a>
+                    <a href="#getting-started" class="menu-item">
+                        <i class="fas fa-rocket"></i>
+                        Getting Started
+                    </a>
+                    <a href="#syntax" class="menu-item">
+                        <i class="fas fa-code"></i>
+                        Java Syntax
+                    </a>
+                    <a href="#variables" class="menu-item">
+                        <i class="fas fa-box"></i>
+                        Variables
+                    </a>
+                    <a href="#data-types" class="menu-item">
+                        <i class="fas fa-list"></i>
+                        Data Types
+                    </a>
+                    <a href="#operators" class="menu-item">
+                        <i class="fas fa-calculator"></i>
+                        Operators
+                    </a>
+                    <a href="#control-flow" class="menu-item">
+                        <i class="fas fa-route"></i>
+                        Control Flow
+                    </a>
+                    <a href="#methods" class="menu-item">
+                        <i class="fas fa-function"></i>
+                        Methods
+                    </a>
+                    <a href="#classes-objects" class="menu-item">
+                        <i class="fas fa-cube"></i>
+                        Classes & Objects
+                    </a>
+                    <a href="#arrays" class="menu-item">
+                        <i class="fas fa-list-ul"></i>
+                        Arrays
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Tutorial Content -->
+        <main class="tutorial-content">
+            <!-- Introduction Section -->
+            <section id="introduction" class="tutorial-section active">
+                <h1>☕ What is Java?</h1>
+                
+                <div class="example-box featured-example">
+                    <h3>📌 1. About Java</h3>
+                    <p>Java is a powerful, object-oriented programming language that is:</p>
+                    <ul>
+                        <li><strong>Platform Independent:</strong> "Write Once, Run Anywhere" (WORA)</li>
+                        <li><strong>Object-Oriented:</strong> Everything is an object</li>
+                        <li><strong>Secure:</strong> Built-in security features</li>
+                        <li><strong>Robust:</strong> Strong memory management</li>
+                        <li><strong>Multi-threaded:</strong> Supports concurrent programming</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 2. Java is Used For</h3>
+                    <ul>
+                        <li>🌐 <strong>Web Development:</strong> Spring, JSP, Servlets</li>
+                        <li>📱 <strong>Mobile Apps:</strong> Android development</li>
+                        <li>🏢 <strong>Enterprise Applications:</strong> Large-scale systems</li>
+                        <li>🖥️ <strong>Desktop Apps:</strong> Swing, JavaFX</li>
+                        <li>☁️ <strong>Cloud Applications:</strong> Microservices</li>
+                        <li>🎮 <strong>Games:</strong> Minecraft was built in Java!</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 3. Why Learn Java?</h3>
+                    <ul>
+                        <li>💼 <strong>High Demand:</strong> One of the most popular languages</li>
+                        <li>💰 <strong>Great Salary:</strong> Well-paying career opportunities</li>
+                        <li>🌍 <strong>Large Community:</strong> Huge support and resources</li>
+                        <li>📚 <strong>Rich Libraries:</strong> Extensive built-in functionality</li>
+                        <li>🔄 <strong>Regular Updates:</strong> Constantly evolving</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 4. Java vs Other Languages</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                        <tr style="background-color: rgba(0, 255, 221, 0.1);">
+                            <th style="padding: 0.5rem; border: 1px solid var(--border-color);">Feature</th>
+                            <th style="padding: 0.5rem; border: 1px solid var(--border-color);">Java</th>
+                            <th style="padding: 0.5rem; border: 1px solid var(--border-color);">Python</th>
+                            <th style="padding: 0.5rem; border: 1px solid var(--border-color);">C++</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Learning Curve</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Moderate</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Easy</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Hard</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Performance</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Fast</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Slower</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Very Fast</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Platform</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Cross-platform</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Cross-platform</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">Platform-specific</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 5. Java Versions</h3>
+                    <ul>
+                        <li><strong>Java 8 (LTS):</strong> Lambda expressions, Stream API</li>
+                        <li><strong>Java 11 (LTS):</strong> Local variable type inference</li>
+                        <li><strong>Java 17 (LTS):</strong> Records, sealed classes</li>
+                        <li><strong>Java 21 (LTS):</strong> Latest long-term support version</li>
+                    </ul>
+                    <p>💡 <strong>LTS</strong> = Long Term Support (recommended for production)</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 6. Java Architecture</h3>
+                    <p>Java follows the <strong>"Write Once, Run Anywhere"</strong> principle:</p>
+                    <ul>
+                        <li>📝 <strong>Source Code (.java)</strong> → Written by developers</li>
+                        <li>⚙️ <strong>Bytecode (.class)</strong> → Compiled by javac</li>
+                        <li>🔄 <strong>JVM (Java Virtual Machine)</strong> → Executes bytecode</li>
+                        <li>💻 <strong>Any Platform</strong> → Windows, Linux, macOS</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 7. Popular Java Frameworks</h3>
+                    <ul>
+                        <li>🌱 <strong>Spring Boot:</strong> Enterprise applications</li>
+                        <li>🅰️ <strong>Android SDK:</strong> Mobile app development</li>
+                        <li>🏗️ <strong>Hibernate:</strong> Database operations</li>
+                        <li>🔧 <strong>Apache Maven:</strong> Project management</li>
+                        <li>🐘 <strong>Apache Kafka:</strong> Streaming platform</li>
+                    </ul>
+                </div>
+
+                <div class="example-box featured-example">
+                    <h3>📌 8. First Java Program Example</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}</code></pre>
+                    </div>
+                    <p>This simple program prints "Hello, World!" to the console!</p>
+                </div>
+
+                <div class="practice-section">
+                    <h3>Practice Editor</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>Java Editor</span>
+                            <button class="run-btn">▶ Run</button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea id="codeInput1" class="code-input" placeholder="Type your Java code here..." spellcheck="false"></textarea>
+                            <div id="codePreview1" class="code-preview"></div>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-header">Output</div>
+                            <div class="output-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Getting Started Section -->
+            <section id="getting-started" class="tutorial-section">
+                <h1>☕ Getting Started with Java</h1>
+                
+                <div class="example-box featured-example">
+                    <h3>📌 1. What You Need to Begin</h3>
+                    <ul>
+                        <li>A computer (Windows, macOS, or Linux)</li>
+                        <li>Internet connection (for downloading JDK)</li>
+                        <li>A text editor or IDE (like IntelliJ IDEA, Eclipse, or VS Code)</li>
+                        <li>Java Development Kit (JDK)</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 2. Installing Java Development Kit (JDK)</h3>
+                    <h4>✅ Official Website:</h4>
+                    <p>Download JDK from: 👉 <a href="https://www.oracle.com/java/technologies/downloads/" target="_blank">Oracle JDK</a> or <a href="https://adoptium.net/" target="_blank">Eclipse Temurin</a></p>
+                    
+                    <h4>📦 Steps:</h4>
+                    <ol>
+                        <li>Choose the latest LTS version (Java 21 recommended)</li>
+                        <li>Select your operating system</li>
+                        <li>Download and run the installer</li>
+                        <li>Follow the installation wizard</li>
+                    </ol>
+                    
+                    <h4>✅ Verify Installation:</h4>
+                    <p>Open your terminal (CMD, PowerShell, or Bash):</p>
+                    <div class="code-demo">
+                        <pre><code class="language-bash">java --version</code></pre>
+                    </div>
+                    <p>and</p>
+                    <div class="code-demo">
+                        <pre><code class="language-bash">javac --version</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 3. Setting up JAVA_HOME (Important!)</h3>
+                    <h4>🪟 Windows:</h4>
+                    <ol>
+                        <li>Right-click "This PC" → Properties</li>
+                        <li>Advanced System Settings → Environment Variables</li>
+                        <li>New System Variable: JAVA_HOME</li>
+                        <li>Value: Path to JDK (e.g., C:\Program Files\Java\jdk-21)</li>
+                    </ol>
+                    
+                    <h4>🐧 Linux/macOS:</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-bash">export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH=$JAVA_HOME/bin:$PATH</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box featured-example">
+                    <h3>📌 4. Your First Java Program</h3>
+                    <h4>✅ Create a file named HelloWorld.java:</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java World!");
+    }
+}</code></pre>
+                    </div>
+                    
+                    <h4>✅ Compile and Run:</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-bash"># Compile
+javac HelloWorld.java
+
+# Run
+java HelloWorld</code></pre>
+                    </div>
+                    <p>💡 <strong>Important:</strong> File name must match the class name!</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 5. Java Development Tools</h3>
+                    <h4>🔧 IDEs (Integrated Development Environments):</h4>
+                    <ul>
+                        <li><strong>IntelliJ IDEA:</strong> Most popular, excellent features</li>
+                        <li><strong>Eclipse:</strong> Free, widely used in enterprise</li>
+                        <li><strong>VS Code:</strong> Lightweight with Java extensions</li>
+                        <li><strong>NetBeans:</strong> Official Oracle IDE</li>
+                    </ul>
+                    
+                    <h4>📝 Text Editors:</h4>
+                    <ul>
+                        <li>Sublime Text, Atom, Vim, Emacs</li>
+                    </ul>
+                    
+                    <h4>🌐 Online Compilers:</h4>
+                    <ul>
+                        <li>repl.it, codepen.io, jdoodle.com</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 6. Java File Structure</h3>
+                    <ul>
+                        <li>Java files end with <code>.java</code></li>
+                        <li>Compiled files end with <code>.class</code></li>
+                        <li>Each public class must be in its own file</li>
+                        <li>File name must match the public class name</li>
+                        <li>Java is case-sensitive</li>
+                    </ul>
+                </div>
+
+                <div class="example-box featured-example">
+                    <h3>📌 7. Understanding the Hello World Program</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class HelloWorld {           // Class declaration
+    public static void main(String[] args) {  // Main method
+        System.out.println("Hello, World!");  // Print statement
+    }                                   // End of main method
+}                                      // End of class</code></pre>
+                    </div>
+                    
+                    <h4>🔍 Breakdown:</h4>
+                    <ul>
+                        <li><code>public class HelloWorld</code> - Defines a public class</li>
+                        <li><code>main</code> - Entry point of the program</li>
+                        <li><code>String[] args</code> - Command-line arguments</li>
+                        <li><code>System.out.println()</code> - Prints text to console</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Syntax Section -->
+            <section id="syntax" class="tutorial-section">
+                <h1>☕ Java Syntax: The Basics</h1>
+                
+                <div class="example-box featured-example">
+                    <h3>📌 1. Java is Case Sensitive</h3>
+                    <p>Java is case-sensitive, meaning <code>myVariable</code> and <code>MyVariable</code> are different!</p>
+                    
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class CaseSensitive {
+    public static void main(String[] args) {
+        int myVariable = 10;
+        int MyVariable = 20;  // Different variable!
+        
+        System.out.println(myVariable);  // Prints: 10
+        System.out.println(MyVariable);  // Prints: 20
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 2. Comments</h3>
+                    <p>Used to explain code. They are ignored by the compiler.</p>
+                    <div class="code-demo">
+                        <pre><code class="language-java">// This is a single-line comment
+
+/*
+ * This is a 
+ * multi-line comment
+ */
+
+/**
+ * This is a JavaDoc comment
+ * Used for documentation
+ */</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 3. Print Statements</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">System.out.println("Hello World!");  // With new line
+System.out.print("Hello ");           // Without new line
+System.out.print("World!");           // Continues on same line</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 4. Variables Declaration</h3>
+                    <p>Java is statically typed - you must declare variable types.</p>
+                    <div class="code-demo">
+                        <pre><code class="language-java">int age = 25;              // Integer
+double price = 19.99;      // Double (decimal)
+String name = "John";      // String
+boolean isValid = true;    // Boolean
+char grade = 'A';          // Character</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 5. String Formatting</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">String name = "Alice";
+int age = 30;
+
+// Concatenation
+System.out.println("Hello " + name + ", you are " + age);
+
+// printf style
+System.out.printf("Hello %s, you are %d%n", name, age);
+
+// String.format
+String message = String.format("Hello %s, you are %d", name, age);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 6. Basic Input (Scanner)</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">import java.util.Scanner;
+
+public class InputExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        
+        System.out.print("Enter your age: ");
+        int age = scanner.nextInt();
+        
+        System.out.println("Hello " + name + ", age " + age);
+        scanner.close();
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 7. Conditional Statements</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int score = 85;
+
+if (score >= 90) {
+    System.out.println("Grade: A");
+} else if (score >= 80) {
+    System.out.println("Grade: B");
+} else if (score >= 70) {
+    System.out.println("Grade: C");
+} else {
+    System.out.println("Grade: F");
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 8. Loops</h3>
+                    <h4>🔹 for Loop</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-java">for (int i = 0; i < 5; i++) {
+    System.out.println("Count: " + i);
+}</code></pre>
+                    </div>
+                    
+                    <h4>🔹 while Loop</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-java">int i = 0;
+while (i < 5) {
+    System.out.println("Count: " + i);
+    i++;
+}</code></pre>
+                    </div>
+                    
+                    <h4>🔹 Enhanced for Loop (for-each)</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-java">int[] numbers = {1, 2, 3, 4, 5};
+for (int num : numbers) {
+    System.out.println(num);
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 9. Switch Statement</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int day = 3;
+String dayName;
+
+switch (day) {
+    case 1:
+        dayName = "Monday";
+        break;
+    case 2:
+        dayName = "Tuesday";
+        break;
+    case 3:
+        dayName = "Wednesday";
+        break;
+    default:
+        dayName = "Unknown";
+}
+
+System.out.println("Day: " + dayName);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>📌 10. Basic Math Operations</h3>
+                    <div class="code-demo">
+                        <pre><code class="language-java">int a = 10;
+int b = 3;
+
+System.out.println("Addition: " + (a + b));        // 13
+System.out.println("Subtraction: " + (a - b));     // 7
+System.out.println("Multiplication: " + (a * b));  // 30
+System.out.println("Division: " + (a / b));        // 3 (integer)
+System.out.println("Modulus: " + (a % b));         // 1</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Variables Section -->
+            <section id="variables" class="tutorial-section">
+                <h1>📝 Java Variables</h1>
+                
+                <div class="example-box featured-example">
+                    <h3>✅ What is a Variable?</h3>
+                    <p>A variable is a container that holds data. In Java, you must specify the type of data it will hold.</p>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int age = 25;           // Integer variable
+String name = "John";   // String variable
+double height = 5.9;    // Double variable
+boolean isStudent = true; // Boolean variable</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 1. Variable Naming Rules</h3>
+                    <h4>✅ Valid names:</h4>
+                    <ul>
+                        <li>Must start with a letter, underscore (_), or dollar sign ($)</li>
+                        <li>Can contain letters, digits, underscores, and dollar signs</li>
+                        <li>Cannot be a Java keyword</li>
+                        <li>Case-sensitive</li>
+                    </ul>
+                    
+                    <h4>❌ Invalid names:</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-java">int 2name = 10;      // ❌ Cannot start with digit
+int user-name = 10;  // ❌ Hyphens not allowed
+int class = 10;      // ❌ 'class' is a keyword</code></pre>
+                    </div>
+                    
+                    <h4>✅ Valid examples:</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int userName = 10;
+int _age = 25;
+int $price = 100;
+int name2 = 5;</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 2. Variable Types</h3>
+                    <h4>🔸 Primitive Types:</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-java">byte smallNumber = 127;        // 8-bit integer
+short mediumNumber = 32000;    // 16-bit integer
+int number = 2000000000;       // 32-bit integer
+long bigNumber = 9000000000L;  // 64-bit integer
+
+float decimal = 3.14f;         // 32-bit decimal
+double preciseDecimal = 3.14159; // 64-bit decimal
+
+char letter = 'A';             // Single character
+boolean flag = true;           // true or false</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Reference Types:</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-java">String text = "Hello World";
+int[] numbers = {1, 2, 3, 4, 5};
+Scanner input = new Scanner(System.in);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 3. Variable Declaration and Initialization</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Declaration only
+int age;
+String name;
+
+// Declaration with initialization
+int score = 95;
+String city = "New York";
+
+// Multiple declarations
+int x, y, z;
+int a = 1, b = 2, c = 3;</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 4. Constants (final keyword)</h3>
+                    <div class="code-demo">
+                        <pre><code class="language-java">final int MAX_SCORE = 100;
+final double PI = 3.14159;
+final String COMPANY_NAME = "TechCorp";
+
+// MAX_SCORE = 200; // ❌ Error: cannot reassign</code></pre>
+                    </div>
+                    <p>🔒 Constants cannot be changed once assigned. Use UPPER_CASE naming convention.</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 5. Type Casting</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Implicit casting (automatic)
+int intValue = 100;
+double doubleValue = intValue;  // int to double
+
+// Explicit casting (manual)
+double bigDecimal = 9.87;
+int wholeNumber = (int) bigDecimal;  // 9 (loses decimal part)
+
+// String to primitive
+String numberText = "123";
+int parsedNumber = Integer.parseInt(numberText);
+double parsedDecimal = Double.parseDouble("45.67");</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 6. Variable Scope</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class VariableScope {
+    static int globalVar = 100;  // Class variable
+    
+    public static void main(String[] args) {
+        int localVar = 50;       // Local variable
+        
+        if (true) {
+            int blockVar = 25;   // Block variable
+            System.out.println(globalVar); // ✅ Accessible
+            System.out.println(localVar);  // ✅ Accessible
+            System.out.println(blockVar);  // ✅ Accessible
+        }
+        
+        // System.out.println(blockVar); // ❌ Error: out of scope
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 7. Default Values</h3>
+                    <div class="code-demo">
+                        <pre><code class="language-java">public class DefaultValues {
+    // Instance variables have default values
+    int number;        // 0
+    double decimal;    // 0.0
+    boolean flag;      // false
+    String text;       // null
+    
+    public static void main(String[] args) {
+        DefaultValues obj = new DefaultValues();
+        System.out.println(obj.number);   // Prints: 0
+        System.out.println(obj.flag);     // Prints: false
+        
+        // Local variables must be initialized before use
+        int localVar;
+        // System.out.println(localVar); // ❌ Error: not initialized
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Types Section -->
+            <section id="data-types" class="tutorial-section">
+                <h1>📊 Java Data Types</h1>
+                
+                <div class="example-box featured-example">
+                    <h3>✅ Java Data Types Overview</h3>
+                    <p>Java has two categories of data types:</p>
+                    <ul>
+                        <li><strong>Primitive Types:</strong> Store simple values directly</li>
+                        <li><strong>Reference Types:</strong> Store references to objects</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 1. Primitive Data Types</h3>
+                    
+                    <h4>🔸 Integer Types</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">byte smallInt = 127;           // 8-bit: -128 to 127
+short mediumInt = 32000;       // 16-bit: -32,768 to 32,767
+int regularInt = 2000000000;   // 32-bit: -2^31 to 2^31-1
+long bigInt = 9000000000L;     // 64-bit: -2^63 to 2^63-1
+
+System.out.println("byte: " + smallInt);
+System.out.println("short: " + mediumInt);
+System.out.println("int: " + regularInt);
+System.out.println("long: " + bigInt);</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Floating-Point Types</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">float singlePrecision = 3.14f;      // 32-bit decimal
+double doublePrecision = 3.14159;    // 64-bit decimal (more precise)
+
+System.out.println("float: " + singlePrecision);
+System.out.println("double: " + doublePrecision);</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Character Type</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">char letter = 'A';           // Single character
+char unicode = '\u0041';     // Unicode for 'A'
+char number = '7';           // Character '7', not number 7
+
+System.out.println("char: " + letter);
+System.out.println("unicode: " + unicode);</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Boolean Type</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">boolean isTrue = true;
+boolean isFalse = false;
+boolean result = (5 > 3);    // true
+
+System.out.println("boolean: " + isTrue);
+System.out.println("comparison: " + result);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 2. Reference Data Types</h3>
+                    
+                    <h4>🔸 String</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">String greeting = "Hello World";
+String name = "Java";
+String empty = "";
+String nullString = null;
+
+System.out.println("greeting: " + greeting);
+System.out.println("length: " + greeting.length());
+System.out.println("uppercase: " + greeting.toUpperCase());</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Arrays</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int[] numbers = {1, 2, 3, 4, 5};
+String[] names = {"Alice", "Bob", "Charlie"};
+double[] prices = new double[3];  // Creates array of size 3
+
+System.out.println("first number: " + numbers[0]);
+System.out.println("array length: " + numbers.length);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 3. Data Type Sizes and Ranges</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                        <tr style="background-color: rgba(0, 255, 221, 0.1);">
+                            <th style="padding: 0.5rem; border: 1px solid var(--border-color);">Type</th>
+                            <th style="padding: 0.5rem; border: 1px solid var(--border-color);">Size</th>
+                            <th style="padding: 0.5rem; border: 1px solid var(--border-color);">Range</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">byte</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">8 bits</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">-128 to 127</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">short</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">16 bits</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">-32,768 to 32,767</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">int</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">32 bits</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">-2,147,483,648 to 2,147,483,647</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">long</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">64 bits</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">float</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">32 bits</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">±3.4e−038 to ±3.4e+038</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">double</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">64 bits</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">±1.7e−308 to ±1.7e+308</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">char</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">16 bits</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">0 to 65,535 (Unicode)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">boolean</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">1 bit</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border-color);">true or false</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 4. Type Conversion</h3>
+                    
+                    <h4>🔸 Automatic (Implicit) Conversion</h4>
+                    <div class="code-demo">
+                        <pre><code class="language-java">byte b = 10;
+short s = b;    // byte → short
+int i = s;      // short → int
+long l = i;     // int → long
+float f = l;    // long → float
+double d = f;   // float → double
+
+System.out.println("Automatic conversion: " + d);</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Manual (Explicit) Conversion</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">double largeNumber = 123.456;
+int wholeNumber = (int) largeNumber;  // 123 (loses decimal)
+
+long bigValue = 1000L;
+int smallValue = (int) bigValue;      // Possible data loss
+
+System.out.println("Explicit conversion: " + wholeNumber);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 5. Wrapper Classes</h3>
+                    <p>Each primitive type has a corresponding wrapper class:</p>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Primitive → Wrapper (Boxing)
+int primitive = 10;
+Integer wrapper = Integer.valueOf(primitive);
+
+// Wrapper → Primitive (Unboxing)
+Integer wrapperObj = 20;
+int primitiveValue = wrapperObj.intValue();
+
+// Autoboxing (automatic conversion)
+Integer auto = 30;           // int → Integer
+int autoValue = auto;        // Integer → int
+
+System.out.println("Wrapper methods:");
+System.out.println("Max int: " + Integer.MAX_VALUE);
+System.out.println("Parse string: " + Integer.parseInt("123"));</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 6. Common Type Operations</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Math operations
+int a = 15, b = 4;
+System.out.println("Addition: " + (a + b));        // 19
+System.out.println("Division: " + (a / b));        // 3 (integer)
+System.out.println("Division: " + (a / 4.0));      // 3.75 (double)
+System.out.println("Modulus: " + (a % b));         // 3
+
+// Boolean operations
+boolean x = true, y = false;
+System.out.println("AND: " + (x && y));            // false
+System.out.println("OR: " + (x || y));             // true
+System.out.println("NOT: " + (!x));                // false
+
+// Character operations
+char ch = 'A';
+System.out.println("ASCII value: " + (int) ch);    // 65
+System.out.println("Next char: " + (char)(ch + 1)); // B</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional sections would continue here... -->
+            <!-- For brevity, I'll add the basic structure for the remaining sections -->
+
+            <section id="operators" class="tutorial-section">
+                <h1>🔢 Java Operators</h1>
+                <div class="example-box featured-example">
+                    <h3>📌 Coming Soon</h3>
+                    <p>This section will cover arithmetic, logical, comparison, and assignment operators in Java.</p>
+                </div>
+            </section>
+
+            <section id="control-flow" class="tutorial-section">
+                <h1>🔄 Control Flow</h1>
+                <div class="example-box featured-example">
+                    <h3>📌 Coming Soon</h3>
+                    <p>This section will cover if-else statements, switch statements, and loops in detail.</p>
+                </div>
+            </section>
+
+            <section id="methods" class="tutorial-section">
+                <h1>⚙️ Methods</h1>
+                <div class="example-box featured-example">
+                    <h3>📌 Coming Soon</h3>
+                    <p>This section will cover method declaration, parameters, return types, and method overloading.</p>
+                </div>
+            </section>
+
+            <section id="classes-objects" class="tutorial-section">
+                <h1>🏗️ Classes & Objects</h1>
+                <div class="example-box featured-example">
+                    <h3>📌 Coming Soon</h3>
+                    <p>This section will cover object-oriented programming concepts in Java.</p>
+                </div>
+            </section>
+
+            <section id="arrays" class="tutorial-section">
+                <h1>📋 Arrays</h1>
+                <div class="example-box featured-example">
+                    <h3>📌 Coming Soon</h3>
+                    <p>This section will cover array declaration, initialization, and manipulation.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="tutorial-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>KeyRacer</h3>
+                <p>Learn programming through interactive typing exercises.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="code-racer.html">Home</a></li>
+                    <li><a href="python-tutorial.html">Python Tutorial</a></li>
+                    <li><a href="challenges.html">Challenges</a></li>
+                    <li><a href="leaderboard.html">Leaderboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="terms-conditions.html">Terms</a></li>
+                    <li><a href="privacy-policy.html">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Code Racer Learning Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="scripts/header-auth.js"></script>
+    <script src="scripts/python-tutorial.js"></script>
+</body>
+</html>

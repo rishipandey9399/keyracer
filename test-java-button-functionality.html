@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Challenge Button Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(20, 27, 45, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .java-logo {
+            font-size: 3rem;
+            color: #f89820;
+            margin-bottom: 15px;
+        }
+        
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .challenge-card {
+            background: rgba(30, 40, 60, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 194, 255, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 194, 255, 0.15);
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .difficulty-easy { background: #4CAF50; color: white; }
+        .difficulty-medium { background: #FF9800; color: white; }
+        .difficulty-hard { background: #F44336; color: white; }
+        .difficulty-expert { background: #9C27B0; color: white; }
+        
+        .challenge-title {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #00C2FF;
+        }
+        
+        .challenge-description {
+            color: #b3b8d0;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .challenge-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #8892b0;
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #00C2FF, #00FFDD);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 194, 255, 0.4);
+        }
+        
+        .status-panel {
+            background: rgba(0, 194, 255, 0.1);
+            border: 1px solid #00C2FF;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .test-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 8px;
+            border: 1px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="header">
+            <div class="java-logo">☕</div>
+            <h1>Java Challenge Test Interface</h1>
+            <p>Testing Java challenges implementation and button functionality</p>
+        </div>
+        
+        <div class="status-panel">
+            <h3>🔧 Test Status</h3>
+            <div id="test-status">Initializing test environment...</div>
+        </div>
+        
+        <div class="challenge-grid" id="challenge-grid">
+            <!-- Java challenges will be loaded here -->
+        </div>
+        
+        <div class="test-results" id="test-results" style="display: none;">
+            <h3>📊 Test Results</h3>
+            <div id="results-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Java challenges data (matching the implementation in challenges.html)
+        const javaChallenges = [
+            // Beginner (1-10)
+            { _id: 'java1', title: 'Hello World', description: 'Write a Java program to print "Hello, World!" on the screen.', difficulty: 'easy', points: 10, category: 'Basics' },
+            { _id: 'java2', title: 'Even or Odd', description: 'Check whether a number is even or odd.', difficulty: 'easy', points: 10, category: 'Conditionals' },
+            { _id: 'java3', title: 'Sum of N Numbers', description: 'Take input n and print the sum from 1 to n.', difficulty: 'easy', points: 10, category: 'Loops' },
+            { _id: 'java4', title: 'Factorial Calculator', description: 'Write a function to calculate the factorial of a number.', difficulty: 'easy', points: 10, category: 'Functions' },
+            { _id: 'java5', title: 'Reverse a Number', description: 'Input a number and print its reverse.', difficulty: 'easy', points: 10, category: 'Math' },
+            { _id: 'java6', title: 'Palindrome Number', description: 'Check whether a number is a palindrome or not.', difficulty: 'easy', points: 10, category: 'Math' },
+            { _id: 'java7', title: 'Fibonacci Series', description: 'Print the first n Fibonacci numbers.', difficulty: 'easy', points: 10, category: 'Sequences' },
+            { _id: 'java8', title: 'Find Largest of Three Numbers', description: 'Use conditional statements to find the largest among three inputs.', difficulty: 'easy', points: 10, category: 'Conditionals' },
+            { _id: 'java9', title: 'Check Prime', description: 'Check if a number is prime.', difficulty: 'easy', points: 10, category: 'Math' },
+            { _id: 'java10', title: 'Count Digits', description: 'Count the number of digits in a number.', difficulty: 'easy', points: 10, category: 'Math' },
+            
+            // Intermediate (11-20)
+            { _id: 'java11', title: 'Armstrong Number', description: 'Check whether a number is an Armstrong number.', difficulty: 'medium', points: 30, category: 'Math' },
+            { _id: 'java12', title: 'Print a Pattern', description: 'Print a pattern like: *, * *, * * *', difficulty: 'medium', points: 30, category: 'Patterns' },
+            { _id: 'java13', title: 'Sum of Digits', description: 'Find the sum of all digits of a given number.', difficulty: 'medium', points: 30, category: 'Math' },
+            { _id: 'java14', title: 'Swap Two Numbers Without 3rd Variable', description: 'Write a program to swap two numbers without using a temporary variable.', difficulty: 'medium', points: 30, category: 'Math' },
+            { _id: 'java15', title: 'Check Leap Year', description: 'Determine if a given year is a leap year.', difficulty: 'medium', points: 30, category: 'Conditionals' },
+            { _id: 'java16', title: 'Find GCD and LCM', description: 'Take two numbers as input and find their GCD and LCM.', difficulty: 'medium', points: 30, category: 'Math' },
+            { _id: 'java17', title: 'Binary to Decimal Conversion', description: 'Convert a binary number to decimal.', difficulty: 'medium', points: 30, category: 'Number Systems' },
+            { _id: 'java18', title: 'Check Vowel or Consonant', description: 'Check whether a given character is a vowel or consonant.', difficulty: 'medium', points: 30, category: 'Strings' },
+            { _id: 'java19', title: 'Count Words in a Sentence', description: 'Take a sentence as input and count the number of words.', difficulty: 'medium', points: 30, category: 'Strings' },
+            { _id: 'java20', title: 'Array Reverse', description: 'Reverse an array without using built-in methods.', difficulty: 'medium', points: 30, category: 'Arrays' },
+            
+            // Advanced (21-25)
+            { _id: 'java21', title: 'Find Duplicate Elements in Array', description: 'Detect duplicates in an integer array.', difficulty: 'hard', points: 50, category: 'Arrays' },
+            { _id: 'java22', title: 'Check if a String is a Palindrome', description: 'Input a string and check whether it is a palindrome.', difficulty: 'hard', points: 50, category: 'Strings' },
+            { _id: 'java23', title: 'Matrix Multiplication', description: 'Multiply two matrices and print the result.', difficulty: 'hard', points: 50, category: 'Arrays' },
+            { _id: 'java24', title: 'Sort an Array (Bubble/Selection/Insertion Sort)', description: 'Implement any one sorting algorithm from scratch.', difficulty: 'hard', points: 50, category: 'Algorithms' },
+            { _id: 'java25', title: 'String Anagram Checker', description: 'Check if two strings are anagrams of each other.', difficulty: 'hard', points: 50, category: 'Strings' },
+            
+            // Expert (26-30)
+            { _id: 'java26', title: 'Sudoku Validator', description: 'Write a program that checks whether a 9x9 Sudoku is valid.', difficulty: 'expert', points: 100, category: 'Algorithms' },
+            { _id: 'java27', title: 'LRU Cache Implementation', description: 'Build an LRU Cache using LinkedHashMap or custom logic.', difficulty: 'expert', points: 100, category: 'Data Structures' },
+            { _id: 'java28', title: 'Multithreading Example', description: 'Demonstrate basic multithreading using Thread class or Runnable.', difficulty: 'expert', points: 100, category: 'Concurrency' },
+            { _id: 'java29', title: 'Custom Exception Handling', description: 'Create and use a custom Java exception.', difficulty: 'expert', points: 100, category: 'Exception Handling' },
+            { _id: 'java30', title: 'Mini Library Management System', description: 'A system to add, delete, and search books with OOPs concepts like inheritance and abstraction.', difficulty: 'expert', points: 100, category: 'OOP' }
+        ];
+        
+        // Mock challenges manager
+        const challengesManager = {
+            challenges: javaChallenges,
+            startChallenge: function(challengeId) {
+                console.log('startChallenge called with:', challengeId, typeof challengeId);
+                const challenge = this.challenges.find(c => c._id == challengeId);
+                
+                if (challenge) {
+                    console.log('Found challenge:', challenge);
+                    // Show success message
+                    showTestResult(`✅ Challenge "${challenge.title}" button works!<br>Would navigate to: solve-challenge.html?challenge=${challengeId}`);
+                    return true;
+                } else {
+                    console.error(`Challenge ${challengeId} not found`);
+                    showTestResult(`❌ Challenge ${challengeId} not found!`);
+                    return false;
+                }
+            }
+        };
+        
+        // Make it globally available (like in the actual implementation)
+        window.challengesManager = challengesManager;
+        
+        function createChallengeCard(challenge) {
+            return `
+                <div class="challenge-card">
+                    <div class="difficulty-badge difficulty-${challenge.difficulty}">
+                        ${challenge.difficulty.toUpperCase()} (${challenge.points}pts)
+                    </div>
+                    <div class="challenge-title">${challenge.title}</div>
+                    <div class="challenge-description">${challenge.description}</div>
+                    <div class="challenge-meta">
+                        <span>📂 ${challenge.category}</span>
+                        <span>🆔 ${challenge._id}</span>
+                    </div>
+                    <button class="start-btn" onclick="challengesManager.startChallenge('${challenge._id}')">
+                        🚀 Start Challenge
+                    </button>
+                </div>
+            `;
+        }
+        
+        function showTestResult(message) {
+            const resultsDiv = document.getElementById('test-results');
+            const contentDiv = document.getElementById('results-content');
+            
+            contentDiv.innerHTML = message;
+            resultsDiv.style.display = 'block';
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                resultsDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        function loadJavaChallenges() {
+            const statusDiv = document.getElementById('test-status');
+            const gridDiv = document.getElementById('challenge-grid');
+            
+            statusDiv.innerHTML = `
+                ✅ Java challenges loaded successfully!<br>
+                📊 Total: ${javaChallenges.length} challenges<br>
+                🎯 Click any "Start Challenge" button to test functionality
+            `;
+            
+            // Display first 6 challenges as examples
+            const sampleChallenges = javaChallenges.slice(0, 6);
+            gridDiv.innerHTML = sampleChallenges.map(createChallengeCard).join('');
+        }
+        
+        // Initialize the test
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Java Challenge Button Test Loaded');
+            console.log('Total Java challenges:', javaChallenges.length);
+            
+            setTimeout(loadJavaChallenges, 500);
+        });
+    </script>
+</body>
+</html>

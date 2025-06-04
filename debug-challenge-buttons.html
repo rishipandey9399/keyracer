@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Challenge Buttons - KeyRacer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0f1c;
+            color: white;
+        }
+        .debug-section {
+            background: #1a1a1a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .test-button {
+            background: #00ffdd;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #00e6c7;
+        }
+        .challenge-card {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        .success { color: #22c55e; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug Challenge Buttons</h1>
+    
+    <div class="debug-section">
+        <h2>📊 System Status</h2>
+        <div id="system-status">Loading...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🧪 Manual Tests</h2>
+        <button class="test-button" onclick="testChallengeManager()">Test Challenge Manager</button>
+        <button class="test-button" onclick="testNavigation()">Test Navigation</button>
+        <button class="test-button" onclick="loadTestChallenges()">Load Test Challenges</button>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🎯 Sample Challenge Cards</h2>
+        <div id="sample-challenges">Loading...</div>
+    </div>
+
+    <script>
+        let challenges = [];
+        let challengesManager = null;
+
+        // Enhanced Challenges Manager (simplified version for testing)
+        class TestChallengesManager {
+            constructor() {
+                this.challenges = [];
+                this.init();
+            }
+
+            async init() {
+                await this.loadChallenges();
+            }
+
+            async loadChallenges() {
+                try {
+                    const response = await fetch('./scripts/challenges.json');
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.challenges = data.challenges || data;
+                        console.log('Loaded challenges:', this.challenges.length);
+                        return true;
+                    } else {
+                        throw new Error('Failed to load challenges');
+                    }
+                } catch (error) {
+                    console.error('Error loading challenges:', error);
+                    return false;
+                }
+            }
+
+            startChallenge(challengeId) {
+                console.log(`Starting challenge: ${challengeId}`);
+                const challenge = this.challenges.find(c => c._id == challengeId);
+                if (!challenge) {
+                    alert(`Challenge ${challengeId} not found!`);
+                    return;
+                }
+                
+                alert(`🚀 Starting Challenge: ${challenge.title}\nDifficulty: ${challenge.difficulty}\nPoints: ${challenge.points}`);
+                
+                // For testing, just alert instead of navigate
+                const proceed = confirm(`Navigate to solve-challenge.html?challenge=${challengeId}?`);
+                if (proceed) {
+                    window.location.href = `solve-challenge.html?challenge=${challengeId}`;
+                }
+            }
+
+            createChallengeCard(challenge) {
+                const card = document.createElement('div');
+                card.className = 'challenge-card';
+                
+                card.innerHTML = `
+                    <h3>${challenge.title}</h3>
+                    <p><strong>Difficulty:</strong> ${challenge.difficulty} (${challenge.points} pts)</p>
+                    <p><strong>Category:</strong> ${challenge.category}</p>
+                    <p>${challenge.description.substring(0, 100)}...</p>
+                    <button class="test-button" onclick="challengesManager.startChallenge(${challenge._id})">
+                        Start Challenge #${challenge._id}
+                    </button>
+                    <button class="test-button" onclick="directNavigate(${challenge._id})">
+                        Direct Navigate
+                    </button>
+                `;
+
+                return card;
+            }
+        }
+
+        // Test functions
+        async function testChallengeManager() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<div class="info">Testing challenge manager...</div>';
+            
+            try {
+                if (!challengesManager) {
+                    results.innerHTML += '<div class="error">❌ Challenge manager not found</div>';
+                    return;
+                }
+
+                results.innerHTML += '<div class="success">✅ Challenge manager exists</div>';
+                results.innerHTML += `<div class="info">📊 Loaded ${challengesManager.challenges.length} challenges</div>`;
+                
+                if (challengesManager.challenges.length > 0) {
+                    const firstChallenge = challengesManager.challenges[0];
+                    results.innerHTML += `<div class="success">✅ First challenge: ${firstChallenge.title} (ID: ${firstChallenge._id})</div>`;
+                    
+                    // Test startChallenge method
+                    results.innerHTML += '<div class="info">🧪 Testing startChallenge method...</div>';
+                    if (typeof challengesManager.startChallenge === 'function') {
+                        results.innerHTML += '<div class="success">✅ startChallenge method exists</div>';
+                    } else {
+                        results.innerHTML += '<div class="error">❌ startChallenge method missing</div>';
+                    }
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        function testNavigation() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<div class="info">Testing navigation...</div>';
+            
+            // Test direct navigation
+            const testId = 1;
+            const url = `solve-challenge.html?challenge=${testId}`;
+            results.innerHTML += `<div class="info">🔗 Test URL: ${url}</div>`;
+            
+            const proceed = confirm(`Test navigation to: ${url}?`);
+            if (proceed) {
+                window.location.href = url;
+            }
+        }
+
+        function directNavigate(challengeId) {
+            console.log(`Direct navigate to challenge ${challengeId}`);
+            window.location.href = `solve-challenge.html?challenge=${challengeId}`;
+        }
+
+        async function loadTestChallenges() {
+            const container = document.getElementById('sample-challenges');
+            container.innerHTML = '<div class="info">Loading sample challenges...</div>';
+            
+            if (!challengesManager || challengesManager.challenges.length === 0) {
+                container.innerHTML = '<div class="error">❌ No challenges loaded</div>';
+                return;
+            }
+
+            // Show first 3 challenges
+            const sampleChallenges = challengesManager.challenges.slice(0, 3);
+            container.innerHTML = '<h3>First 3 Challenges:</h3>';
+            
+            sampleChallenges.forEach(challenge => {
+                const card = challengesManager.createChallengeCard(challenge);
+                container.appendChild(card);
+            });
+        }
+
+        async function updateSystemStatus() {
+            const statusDiv = document.getElementById('system-status');
+            
+            try {
+                // Test JSON loading
+                const response = await fetch('./scripts/challenges.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    const challengeCount = data.challenges ? data.challenges.length : 0;
+                    
+                    statusDiv.innerHTML = `
+                        <div class="success">✅ challenges.json loaded successfully</div>
+                        <div class="info">📊 Found ${challengeCount} challenges</div>
+                        <div class="info">🌐 Current URL: ${window.location.href}</div>
+                        <div class="info">🔧 Challenge manager: ${challengesManager ? 'Loaded' : 'Not loaded'}</div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = '<div class="error">❌ Failed to load challenges.json</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Initializing debug page...');
+            await updateSystemStatus();
+            
+            challengesManager = new TestChallengesManager();
+            window.challengesManager = challengesManager; // Make globally accessible
+            
+            // Wait a bit for challenges to load
+            setTimeout(() => {
+                updateSystemStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

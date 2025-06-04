@@ -8,7 +8,11 @@
     "dev": "nodemon server/server.js",
     "setup-google": "node setup-google-auth.js",
     "start-with-google": "node start-with-google-auth.js",
-    "build": "echo 'No build step required'"
+    "build": "echo 'No build step required'",
+    "seed": "node server/seeds/index.js",
+    "seed:challenges": "node server/seeds/seedChallenges.js",
+    "seed:users": "node server/seeds/seedUserData.js",
+    "seed:activity": "node server/seeds/generateDemoActivity.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",

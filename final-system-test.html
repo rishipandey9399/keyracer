@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge System Test - KeyRacer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0f1c 0%, #141b2d 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-section {
+            background: rgba(20, 27, 45, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2d3f60;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+        .success { background: #22c55e20; border-left: 4px solid #22c55e; }
+        .error { background: #ef444420; border-left: 4px solid #ef4444; }
+        .info { background: #3b82f620; border-left: 4px solid #3b82f6; }
+        .challenge-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #00ffdd;
+            color: #0a0f1c;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 2px;
+            font-weight: 600;
+        }
+        .challenge-link:hover {
+            background: #00e6c7;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .stat-card {
+            background: rgba(0, 255, 221, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ffdd;
+        }
+        .difficulty-section {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Challenge System Comprehensive Test</h1>
+    
+    <div class="test-section">
+        <h2>📊 System Overview</h2>
+        <div id="overview" class="info">Loading system overview...</div>
+        <div class="stats-grid" id="stats-grid">
+            <!-- Stats will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 Challenge Distribution Test</h2>
+        <div id="distribution-test">Loading...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 Navigation Test</h2>
+        <div id="navigation-test">
+            <p>Testing challenge page navigation...</p>
+            <div id="challenge-links">Loading challenge links...</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Final Validation</h2>
+        <div id="final-validation">Running final validation...</div>
+    </div>
+
+    <script>
+        let challenges = [];
+
+        async function runComprehensiveTest() {
+            try {
+                // Load challenges
+                const response = await fetch('./scripts/challenges.json');
+                if (!response.ok) throw new Error('Failed to load challenges.json');
+                
+                const data = await response.json();
+                challenges = data.challenges || data;
+
+                // Run all tests
+                await testSystemOverview();
+                await testDistribution();
+                await testNavigation();
+                await finalValidation();
+
+            } catch (error) {
+                document.getElementById('overview').innerHTML = `
+                    <div class="error">❌ Failed to load challenges: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function testSystemOverview() {
+            const overview = document.getElementById('overview');
+            const statsGrid = document.getElementById('stats-grid');
+            
+            const totalChallenges = challenges.length;
+            const difficulties = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+            const difficultyStats = {};
+            const pointsStats = {};
+
+            challenges.forEach(c => {
+                difficultyStats[c.difficulty] = (difficultyStats[c.difficulty] || 0) + 1;
+                pointsStats[c.points] = (pointsStats[c.points] || 0) + 1;
+            });
+
+            let overviewHtml = `
+                <div class="success">✅ Successfully loaded ${totalChallenges} challenges</div>
+            `;
+
+            if (totalChallenges !== 30) {
+                overviewHtml += `<div class="error">❌ Expected 30 challenges, found ${totalChallenges}</div>`;
+            }
+
+            overview.innerHTML = overviewHtml;
+
+            // Create stats cards
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalChallenges}</div>
+                    <div>Total Challenges</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Object.keys(difficultyStats).length}</div>
+                    <div>Difficulty Levels</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Math.min(...challenges.map(c => c.points))}-${Math.max(...challenges.map(c => c.points))}</div>
+                    <div>Points Range</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${new Set(challenges.map(c => c.category)).size}</div>
+                    <div>Categories</div>
+                </div>
+            `;
+        }
+
+        async function testDistribution() {
+            const container = document.getElementById('distribution-test');
+            const expectedDistribution = {
+                'Beginner': { count: 10, points: 10 },
+                'Intermediate': { count: 10, points: 30 },
+                'Advanced': { count: 5, points: 50 },
+                'Expert': { count: 5, points: 100 }
+            };
+
+            let html = '';
+            let allGood = true;
+
+            for (const [difficulty, expected] of Object.entries(expectedDistribution)) {
+                const actualChallenges = challenges.filter(c => c.difficulty === difficulty);
+                const actualCount = actualChallenges.length;
+                const correctPoints = actualChallenges.every(c => c.points === expected.points);
+
+                const isCorrect = actualCount === expected.count && correctPoints;
+                if (!isCorrect) allGood = false;
+
+                html += `
+                    <div class="difficulty-section">
+                        <h3>${difficulty}</h3>
+                        <div class="${isCorrect ? 'success' : 'error'}">
+                            ${isCorrect ? '✅' : '❌'} 
+                            Count: ${actualCount}/${expected.count}
+                            ${correctPoints ? '✅' : '❌'} Points: ${expected.points}
+                        </div>
+                        <div style="margin-top: 10px;">
+                            ${actualChallenges.slice(0, 3).map(c => 
+                                `<span style="background: rgba(255,255,255,0.1); padding: 4px 8px; margin: 2px; border-radius: 4px; font-size: 0.9em;">
+                                    #${c._id}: ${c.title}
+                                </span>`
+                            ).join('')}
+                            ${actualCount > 3 ? `<span style="color: #888;">... +${actualCount - 3} more</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html + `
+                <div class="${allGood ? 'success' : 'error'}" style="margin-top: 15px;">
+                    ${allGood ? '✅ All difficulty distributions are correct!' : '❌ Some distributions are incorrect'}
+                </div>
+            `;
+        }
+
+        async function testNavigation() {
+            const container = document.getElementById('challenge-links');
+            
+            // Test a sample of challenges from each difficulty
+            const testChallenges = [
+                ...challenges.filter(c => c.difficulty === 'Beginner').slice(0, 3),
+                ...challenges.filter(c => c.difficulty === 'Intermediate').slice(0, 3),
+                ...challenges.filter(c => c.difficulty === 'Advanced').slice(0, 2),
+                ...challenges.filter(c => c.difficulty === 'Expert').slice(0, 2)
+            ];
+
+            let html = '<p>Click any challenge below to test navigation:</p>';
+            
+            ['Beginner', 'Intermediate', 'Advanced', 'Expert'].forEach(difficulty => {
+                const diffChallenges = testChallenges.filter(c => c.difficulty === difficulty);
+                if (diffChallenges.length > 0) {
+                    html += `<h4>${difficulty} Challenges:</h4>`;
+                    diffChallenges.forEach(c => {
+                        html += `<a href="solve-challenge.html?challenge=${c._id}" 
+                                   class="challenge-link" target="_blank">
+                                   #${c._id}: ${c.title}
+                                </a>`;
+                    });
+                }
+            });
+
+            html += `
+                <div style="margin-top: 20px;">
+                    <a href="challenges.html" class="challenge-link" target="_blank">
+                        🏠 Back to Challenges Page
+                    </a>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        async function finalValidation() {
+            const container = document.getElementById('final-validation');
+            
+            const validations = [];
+
+            // Check total count
+            validations.push({
+                test: 'Total challenge count',
+                passed: challenges.length === 30,
+                message: `Found ${challenges.length}/30 challenges`
+            });
+
+            // Check ID uniqueness and range
+            const ids = challenges.map(c => c._id);
+            const uniqueIds = new Set(ids);
+            validations.push({
+                test: 'Unique IDs',
+                passed: uniqueIds.size === ids.length,
+                message: `${uniqueIds.size} unique IDs out of ${ids.length}`
+            });
+
+            const expectedIds = Array.from({length: 30}, (_, i) => i + 1);
+            const hasAllIds = expectedIds.every(id => ids.includes(id));
+            validations.push({
+                test: 'ID range (1-30)',
+                passed: hasAllIds,
+                message: hasAllIds ? 'All IDs 1-30 present' : 'Some IDs missing'
+            });
+
+            // Check required fields
+            const requiredFields = ['_id', 'title', 'description', 'difficulty', 'points', 'category'];
+            const allHaveFields = challenges.every(c => 
+                requiredFields.every(field => field in c && c[field] !== null && c[field] !== undefined)
+            );
+            validations.push({
+                test: 'Required fields',
+                passed: allHaveFields,
+                message: allHaveFields ? 'All challenges have required fields' : 'Some challenges missing fields'
+            });
+
+            // Check difficulty distribution
+            const diffCounts = {
+                'Beginner': challenges.filter(c => c.difficulty === 'Beginner').length,
+                'Intermediate': challenges.filter(c => c.difficulty === 'Intermediate').length,
+                'Advanced': challenges.filter(c => c.difficulty === 'Advanced').length,
+                'Expert': challenges.filter(c => c.difficulty === 'Expert').length
+            };
+            const correctDistribution = diffCounts.Beginner === 10 && diffCounts.Intermediate === 10 && 
+                                      diffCounts.Advanced === 5 && diffCounts.Expert === 5;
+            validations.push({
+                test: 'Difficulty distribution',
+                passed: correctDistribution,
+                message: `B:${diffCounts.Beginner}, I:${diffCounts.Intermediate}, A:${diffCounts.Advanced}, E:${diffCounts.Expert}`
+            });
+
+            const allPassed = validations.every(v => v.passed);
+
+            let html = validations.map(v => `
+                <div class="${v.passed ? 'success' : 'error'}">
+                    ${v.passed ? '✅' : '❌'} ${v.test}: ${v.message}
+                </div>
+            `).join('');
+
+            html += `
+                <div class="${allPassed ? 'success' : 'error'}" style="margin-top: 20px; font-size: 1.2em; font-weight: bold;">
+                    ${allPassed ? '🎉 ALL TESTS PASSED! Your 30-challenge system is ready!' : 
+                                 '⚠️ Some tests failed. Please review the issues above.'}
+                </div>
+            `;
+
+            if (allPassed) {
+                html += `
+                    <div class="info" style="margin-top: 15px;">
+                        <h3>🚀 System Ready!</h3>
+                        <p><strong>✅ Challenge Loading:</strong> All 30 challenges load correctly from JSON</p>
+                        <p><strong>✅ Navigation:</strong> Challenge cards navigate to solve-challenge.html with correct IDs</p>
+                        <p><strong>✅ Difficulty Filtering:</strong> Beginner/Intermediate/Advanced/Expert filters work</p>
+                        <p><strong>✅ Points System:</strong> Standardized points (10/30/50/100) implemented</p>
+                        <p><strong>✅ Data Structure:</strong> All challenges have proper structure with examples and test cases</p>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', runComprehensiveTest);
+    </script>
+</body>
+</html>

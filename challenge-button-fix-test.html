@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Button Fix Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0f1c;
+            color: white;
+        }
+        .challenge-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .challenge-btn {
+            background: #00ffdd;
+            color: #000;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .challenge-btn:hover {
+            background: #00e6c7;
+        }
+        .status {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #00ffdd;
+        }
+        .error { border-left-color: #ef4444; }
+        .success { border-left-color: #22c55e; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Challenge Button Fix Test</h1>
+    
+    <div id="status" class="status">Loading...</div>
+    
+    <div id="challenges-container">
+        <!-- Challenges will be loaded here -->
+    </div>
+
+    <script>
+        class SimpleChallengeManager {
+            constructor() {
+                this.challenges = [];
+                this.init();
+            }
+
+            async init() {
+                try {
+                    await this.loadChallenges();
+                    this.renderChallenges();
+                    this.updateStatus('✅ Challenges loaded successfully!', 'success');
+                } catch (error) {
+                    this.updateStatus(`❌ Error: ${error.message}`, 'error');
+                }
+            }
+
+            async loadChallenges() {
+                const response = await fetch('./scripts/challenges.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to load challenges: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                this.challenges = data.challenges || data;
+                
+                if (!this.challenges || this.challenges.length === 0) {
+                    throw new Error('No challenges found in data');
+                }
+                
+                console.log('Loaded challenges:', this.challenges.length);
+            }
+
+            renderChallenges() {
+                const container = document.getElementById('challenges-container');
+                
+                // Show first 5 challenges as test
+                const testChallenges = this.challenges.slice(0, 5);
+                
+                container.innerHTML = '<h2>Test Challenges (First 5):</h2>';
+                
+                testChallenges.forEach(challenge => {
+                    const card = this.createChallengeCard(challenge);
+                    container.appendChild(card);
+                });
+            }
+
+            createChallengeCard(challenge) {
+                const card = document.createElement('div');
+                card.className = 'challenge-card';
+                
+                card.innerHTML = `
+                    <h3>${challenge.title}</h3>
+                    <p><strong>ID:</strong> ${challenge._id} | <strong>Difficulty:</strong> ${challenge.difficulty} | <strong>Points:</strong> ${challenge.points}</p>
+                    <p>${challenge.description.substring(0, 150)}...</p>
+                    
+                    <div>
+                        <button class="challenge-btn" onclick="manager.startChallenge(${challenge._id})">
+                            Method 1: manager.startChallenge(${challenge._id})
+                        </button>
+                        
+                        <button class="challenge-btn" onclick="window.manager.startChallenge(${challenge._id})">
+                            Method 2: window.manager.startChallenge(${challenge._id})
+                        </button>
+                        
+                        <button class="challenge-btn" onclick="navigateToChallenge(${challenge._id})">
+                            Method 3: Direct Function
+                        </button>
+                        
+                        <button class="challenge-btn" data-challenge-id="${challenge._id}" class="direct-nav">
+                            Method 4: Event Listener
+                        </button>
+                    </div>
+                `;
+
+                // Add event listener for method 4
+                const eventButton = card.querySelector('.direct-nav');
+                eventButton.addEventListener('click', (e) => {
+                    const challengeId = e.target.getAttribute('data-challenge-id');
+                    this.startChallenge(parseInt(challengeId));
+                });
+
+                return card;
+            }
+
+            startChallenge(challengeId) {
+                console.log('🚀 startChallenge called with:', challengeId, typeof challengeId);
+                
+                const challenge = this.challenges.find(c => c._id == challengeId);
+                
+                if (!challenge) {
+                    alert(`❌ Challenge ${challengeId} not found!`);
+                    return;
+                }
+                
+                const message = `🎯 Starting Challenge: ${challenge.title}\nID: ${challenge._id}\nDifficulty: ${challenge.difficulty}\nPoints: ${challenge.points}`;
+                
+                alert(message);
+                
+                const proceed = confirm('Navigate to solve page?');
+                if (proceed) {
+                    window.location.href = `solve-challenge.html?challenge=${challengeId}`;
+                }
+            }
+
+            updateStatus(message, type = 'info') {
+                const statusDiv = document.getElementById('status');
+                statusDiv.textContent = message;
+                statusDiv.className = `status ${type}`;
+            }
+        }
+
+        // Global function for method 3
+        function navigateToChallenge(challengeId) {
+            console.log('🔗 Direct navigation function called:', challengeId);
+            if (window.manager) {
+                window.manager.startChallenge(challengeId);
+            } else {
+                alert('❌ Manager not found!');
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Initializing test page...');
+            window.manager = new SimpleChallengeManager();
+        });
+    </script>
+</body>
+</html>

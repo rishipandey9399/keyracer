@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Lists Section</title>
+    <script>
+        function testListsSection() {
+            // Navigate to the tutorial page and test Lists section
+            window.location.href = 'http://localhost:8080/python-tutorial.html#lists';
+        }
+        
+        function checkElementsExist() {
+            const iframe = document.createElement('iframe');
+            iframe.src = 'http://localhost:8080/python-tutorial.html';
+            iframe.style.width = '100%';
+            iframe.style.height = '600px';
+            document.body.appendChild(iframe);
+            
+            iframe.onload = function() {
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                const listsSection = doc.getElementById('lists');
+                const menuItem = doc.querySelector('a[href="#lists"]');
+                
+                console.log('Lists section found:', !!listsSection);
+                console.log('Menu item found:', !!menuItem);
+                
+                if (listsSection) {
+                    console.log('Lists section classes:', listsSection.className);
+                    console.log('Lists section display:', getComputedStyle(listsSection).display);
+                    console.log('Lists section opacity:', getComputedStyle(listsSection).opacity);
+                }
+                
+                // Try clicking the menu item
+                if (menuItem) {
+                    menuItem.click();
+                    setTimeout(() => {
+                        console.log('After click - Lists section display:', getComputedStyle(listsSection).display);
+                        console.log('After click - Lists section opacity:', getComputedStyle(listsSection).opacity);
+                    }, 100);
+                }
+            };
+        }
+    </script>
+</head>
+<body>
+    <h1>Debug Lists Section</h1>
+    <button onclick="testListsSection()">Test Lists Section Direct Link</button>
+    <button onclick="checkElementsExist()">Check Elements in iFrame</button>
+    <div id="results"></div>
+</body>
+</html>

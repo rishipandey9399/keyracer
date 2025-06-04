@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Navigation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .test-card {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #444;
+            transition: all 0.3s ease;
+        }
+        .test-card:hover {
+            border-color: #00c2ff;
+            transform: translateY(-2px);
+        }
+        .test-link {
+            display: inline-block;
+            margin: 0.5rem 1rem 0.5rem 0;
+            padding: 0.5rem 1rem;
+            background: #00c2ff;
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .test-link:hover {
+            background: #00ffdd;
+        }
+        h1 { color: #00ffdd; }
+        h3 { color: #00c2ff; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Challenge System Test</h1>
+    
+    <div class="test-grid">
+        <div class="test-card">
+            <h3>Challenge 1: Hello World</h3>
+            <p>Test the basic "Hello, World!" challenge.</p>
+            <a href="solve-challenge.html?challenge=1" class="test-link" target="_blank">
+                Solve Challenge
+            </a>
+        </div>
+        
+        <div class="test-card">
+            <h3>Challenge 2: Even Numbers</h3>
+            <p>Print all even numbers from 1 to 100.</p>
+            <a href="solve-challenge.html?challenge=2" class="test-link" target="_blank">
+                Solve Challenge
+            </a>
+        </div>
+        
+        <div class="test-card">
+            <h3>Challenge 3: Prime Number Checker</h3>
+            <p>Write a function to check if a number is prime.</p>
+            <a href="solve-challenge.html?challenge=3" class="test-link" target="_blank">
+                Solve Challenge
+            </a>
+        </div>
+        
+        <div class="test-card">
+            <h3>Challenge 4: Number Swapper</h3>
+            <p>Swap two numbers without using a third variable.</p>
+            <a href="solve-challenge.html?challenge=4" class="test-link" target="_blank">
+                Solve Challenge
+            </a>
+        </div>
+    </div>
+    
+    <h3>🔗 Navigation Test</h3>
+    <p>Test the main challenges page navigation:</p>
+    <a href="challenges.html" class="test-link">
+        Go to Challenges Page
+    </a>
+    
+    <h3>✅ Expected Behavior</h3>
+    <ul>
+        <li>Each challenge link opens a dedicated solving page</li>
+        <li>The challenge details load correctly from challenges.json</li>
+        <li>Code can be written and tested</li>
+        <li>Upon successful submission, user is redirected back to challenges.html</li>
+        <li>Timer tracks completion time</li>
+        <li>Back button returns to challenges.html</li>
+    </ul>
+    
+    <h3>📝 Test Solutions</h3>
+    <div style="background: #333; padding: 1rem; border-radius: 5px; margin: 1rem 0;">
+        <strong>Challenge 1 Solution:</strong><br>
+        <code>print("Hello, World!")</code>
+    </div>
+    
+    <div style="background: #333; padding: 1rem; border-radius: 5px; margin: 1rem 0;">
+        <strong>Challenge 2 Solution:</strong><br>
+        <code>for i in range(2, 101, 2):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code>
+    </div>
+    
+    <div style="background: #333; padding: 1rem; border-radius: 5px; margin: 1rem 0;">
+        <strong>Challenge 3 Solution:</strong><br>
+        <code>def is_prime(n):<br>&nbsp;&nbsp;&nbsp;&nbsp;if n <= 1:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return False<br>&nbsp;&nbsp;&nbsp;&nbsp;for i in range(2, int(n**0.5) + 1):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if n % i == 0:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return False<br>&nbsp;&nbsp;&nbsp;&nbsp;return True<br><br>print(is_prime(17))<br>print(is_prime(4))</code>
+    </div>
+</body>
+</html>

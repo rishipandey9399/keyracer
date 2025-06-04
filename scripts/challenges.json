@@ -1,9 +1,9 @@
 {
     "challenges": [
         {
-            "id": 1,
-            "title": "Hello World",
-            "description": "Write a program that prints \"Hello, World!\" to the console. This is traditionally the first program you write when learning a new programming language.",
+            "_id": 1,
+            "title": "Hello, World!",
+            "description": "Write a program that prints \"Hello, World!\" to the console.",
             "examples": {
                 "output": "Hello, World!"
             },
@@ -17,80 +17,74 @@
                     "input": "",
                     "expectedOutput": "Hello, World!"
                 }
-            ]
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Basics"
         },
         {
-            "id": 2,
-            "title": "Even Numbers",
-            "description": "Write a program that prints all even numbers from 1 to 100, each on a new line.",
+            "_id": 2,
+            "title": "Even or Odd",
+            "description": "Write a program that checks if a number is even or odd. Take user input and print 'Even' or 'Odd'.",
             "examples": {
-                "output": "2\n4\n6\n...\n98\n100"
+                "output": "Enter a number: 4\nEven"
             },
             "notes": [
-                "Print each number on a new line",
-                "Only print even numbers",
-                "Include both 2 and 100 in the output"
+                "Use the modulo operator (%) to check if a number is divisible by 2",
+                "Print 'Even' for even numbers, 'Odd' for odd numbers",
+                "Handle user input properly"
             ],
             "testCases": [
-                {
-                    "input": "",
-                    "expectedOutput": "2\n4\n6\n8\n10\n12\n14\n16\n18\n20\n22\n24\n26\n28\n30\n32\n34\n36\n38\n40\n42\n44\n46\n48\n50\n52\n54\n56\n58\n60\n62\n64\n66\n68\n70\n72\n74\n76\n78\n80\n82\n84\n86\n88\n90\n92\n94\n96\n98\n100"
-                }
-            ]
-        },
-        {
-            "id": 3,
-            "title": "Prime Number Checker",
-            "description": "Write a function is_prime(n) that takes a number n and returns True if it's prime, False otherwise.",
-            "examples": {
-                "output": "True\nFalse"
-            },
-            "notes": [
-                "A prime number is a number greater than 1 that is only divisible by 1 and itself",
-                "Return True for prime numbers, False for non-prime numbers",
-                "Handle numbers up to 1000"
-            ],
-            "testCases": [
-                {
-                    "input": "17",
-                    "expectedOutput": "True"
-                },
                 {
                     "input": "4",
-                    "expectedOutput": "False"
+                    "expectedOutput": "Even"
+                },
+                {
+                    "input": "7",
+                    "expectedOutput": "Odd"
                 }
-            ]
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Basics"
         },
         {
-            "id": 4,
-            "title": "Number Swapper",
-            "description": "Write a program that swaps two numbers without using a third variable. Take two numbers as input and print them after swapping.",
+            "_id": 3,
+            "title": "Sum of Numbers",
+            "description": "Write a program that calculates the sum of all numbers from 1 to n (where n is user input).",
             "examples": {
-                "output": "After swap: a = 20, b = 10"
+                "output": "Enter a number: 5\nSum: 15"
             },
             "notes": [
-                "Don't use a temporary variable",
-                "Use arithmetic operations to swap",
-                "Print the result in the exact format shown"
+                "Use a loop or mathematical formula",
+                "Handle positive integers only",
+                "Display the result clearly"
             ],
             "testCases": [
                 {
-                    "input": "10 20",
-                    "expectedOutput": "After swap: a = 20, b = 10"
+                    "input": "5",
+                    "expectedOutput": "15"
+                },
+                {
+                    "input": "10",
+                    "expectedOutput": "55"
                 }
-            ]
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Loops"
         },
         {
-            "id": 5,
+            "_id": 4,
             "title": "Factorial Calculator",
-            "description": "Write a function factorial(n) that returns the factorial of a given number n.",
+            "description": "Write a function factorial(n) that calculates the factorial of a number.",
             "examples": {
                 "output": "120"
             },
             "notes": [
-                "Handle numbers from 0 to 10",
-                "Return the result as a number",
-                "Remember that 0! = 1"
+                "factorial(5) = 5 × 4 × 3 × 2 × 1 = 120",
+                "factorial(0) = 1 by definition",
+                "Handle negative numbers appropriately"
             ],
             "testCases": [
                 {
@@ -101,19 +95,22 @@
                     "input": "0",
                     "expectedOutput": "1"
                 }
-            ]
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Functions"
         },
         {
-            "id": 6,
-            "title": "String Reverser",
+            "_id": 5,
+            "title": "Reverse String",
             "description": "Write a function reverse_string(s) that returns the reverse of a given string.",
             "examples": {
                 "output": "olleh"
             },
             "notes": [
-                "Don't use the built-in reverse function",
-                "Handle strings of any length",
-                "Preserve case of letters"
+                "Input: 'hello', Output: 'olleh'",
+                "Can use slicing or loops",
+                "Preserve original string case"
             ],
             "testCases": [
                 {
@@ -124,19 +121,96 @@
                     "input": "Python",
                     "expectedOutput": "nohtyP"
                 }
-            ]
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Strings"
         },
         {
-            "id": 7,
+            "_id": 6,
+            "title": "Count Vowels",
+            "description": "Write a function count_vowels(s) that counts the number of vowels in a string.",
+            "examples": {
+                "output": "3"
+            },
+            "notes": [
+                "Vowels are: a, e, i, o, u (case insensitive)",
+                "Count both uppercase and lowercase vowels",
+                "Return the count as an integer"
+            ],
+            "testCases": [
+                {
+                    "input": "hello",
+                    "expectedOutput": "2"
+                },
+                {
+                    "input": "Education",
+                    "expectedOutput": "5"
+                }
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Strings"
+        },
+        {
+            "_id": 7,
+            "title": "Multiplication Table",
+            "description": "Write a program that prints the multiplication table for a given number up to 10.",
+            "examples": {
+                "output": "5 x 1 = 5\n5 x 2 = 10\n...\n5 x 10 = 50"
+            },
+            "notes": [
+                "Print in the format: 'n x i = result'",
+                "Go from 1 to 10",
+                "Each line on a new line"
+            ],
+            "testCases": [
+                {
+                    "input": "3",
+                    "expectedOutput": "3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30"
+                }
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Loops"
+        },
+        {
+            "_id": 8,
+            "title": "Find Maximum",
+            "description": "Write a function find_max(numbers) that finds the maximum number in a list.",
+            "examples": {
+                "output": "9"
+            },
+            "notes": [
+                "Don't use built-in max() function",
+                "Handle empty lists appropriately",
+                "Return the largest number"
+            ],
+            "testCases": [
+                {
+                    "input": "[3, 7, 2, 9, 1]",
+                    "expectedOutput": "9"
+                },
+                {
+                    "input": "[-1, -5, -3]",
+                    "expectedOutput": "-1"
+                }
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Lists"
+        },
+        {
+            "_id": 9,
             "title": "Palindrome Checker",
-            "description": "Write a function is_palindrome(s) that returns True if the string is a palindrome, False otherwise.",
+            "description": "Write a function is_palindrome(s) that checks if a string is a palindrome.",
             "examples": {
                 "output": "True"
             },
             "notes": [
                 "A palindrome reads the same forwards and backwards",
-                "Ignore case when checking",
-                "Ignore spaces and punctuation"
+                "Ignore case and spaces",
+                "Return True or False"
             ],
             "testCases": [
                 {
@@ -147,270 +221,792 @@
                     "input": "hello",
                     "expectedOutput": "False"
                 }
-            ]
+            ],
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Strings"
         },
         {
-            "id": 8,
-            "title": "Largest of Three",
-            "description": "Write a program that finds the largest among three numbers. Take three numbers as input and print the largest one.",
+            "_id": 10,
+            "title": "Simple Calculator",
+            "description": "Write a function calculator(a, b, operation) that performs basic arithmetic operations.",
             "examples": {
-                "output": "30"
+                "output": "8"
             },
             "notes": [
-                "Handle negative numbers",
-                "Handle equal numbers",
-                "Print only the largest number"
+                "Support +, -, *, / operations",
+                "Handle division by zero",
+                "Return the result as a number"
             ],
             "testCases": [
                 {
-                    "input": "10 30 20",
-                    "expectedOutput": "30"
+                    "input": "5, 3, '+'",
+                    "expectedOutput": "8"
                 },
                 {
-                    "input": "-5 0 -10",
-                    "expectedOutput": "0"
+                    "input": "10, 2, '/'",
+                    "expectedOutput": "5"
                 }
-            ]
-        },
-        {
-            "id": 9,
-            "title": "Vowel Counter",
-            "description": "Write a program that counts vowels and consonants in a string. Print the counts on separate lines.",
-            "examples": {
-                "output": "Vowels: 2\nConsonants: 3"
-            },
-            "notes": [
-                "Consider a, e, i, o, u as vowels",
-                "Ignore case when counting",
-                "Ignore spaces and special characters"
             ],
-            "testCases": [
-                {
-                    "input": "hello",
-                    "expectedOutput": "Vowels: 2\nConsonants: 3"
-                }
-            ]
+            "difficulty": "Beginner",
+            "points": 10,
+            "category": "Functions"
         },
         {
-            "id": 10,
-            "title": "Fibonacci Series",
-            "description": "Write a program that prints the Fibonacci series up to n terms. Take n as input.",
+            "_id": 11,
+            "title": "Prime Number Checker",
+            "description": "Write a function is_prime(n) that checks if a number is prime.",
             "examples": {
-                "output": "0 1 1 2 3 5 8"
+                "output": "True"
             },
             "notes": [
-                "Start with 0 and 1",
-                "Print numbers space-separated",
-                "Handle n up to 20"
+                "A prime number is only divisible by 1 and itself",
+                "Handle edge cases (numbers less than 2)",
+                "Optimize for efficiency"
             ],
             "testCases": [
                 {
                     "input": "7",
-                    "expectedOutput": "0 1 1 2 3 5 8"
+                    "expectedOutput": "True"
+                },
+                {
+                    "input": "8",
+                    "expectedOutput": "False"
                 }
-            ]
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Algorithms"
         },
         {
-            "id": 11,
-            "title": "Digit Sum",
-            "description": "Write a function digit_sum(n) that calculates the sum of digits in a number.",
+            "_id": 12,
+            "title": "Fibonacci Sequence",
+            "description": "Write a function fibonacci(n) that returns the nth Fibonacci number.",
             "examples": {
-                "output": "6"
+                "output": "13"
             },
             "notes": [
-                "Handle positive integers",
-                "Return the sum as a number",
-                "Handle numbers up to 1000000"
+                "Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13, ...",
+                "Can use recursion or iteration",
+                "Handle n = 0 and n = 1 cases"
             ],
             "testCases": [
                 {
-                    "input": "123",
-                    "expectedOutput": "6"
+                    "input": "7",
+                    "expectedOutput": "13"
+                },
+                {
+                    "input": "0",
+                    "expectedOutput": "0"
                 }
-            ]
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Recursion"
         },
         {
-            "id": 12,
-            "title": "List Duplicates Remover",
-            "description": "Write a function remove_duplicates(lst) that removes duplicates from a list without using set().",
+            "_id": 13,
+            "title": "List Comprehension",
+            "description": "Write a function squares_of_evens(numbers) that returns squared values of even numbers using list comprehension.",
             "examples": {
-                "output": "[1, 2, 3, 4]"
+                "output": "[4, 16, 36]"
             },
             "notes": [
-                "Don't use set()",
-                "Preserve the order of first occurrence",
-                "Return the modified list"
+                "Use list comprehension syntax",
+                "Filter even numbers first, then square them",
+                "Return as a list"
             ],
             "testCases": [
                 {
-                    "input": "[1, 2, 2, 3, 4, 3]",
-                    "expectedOutput": "[1, 2, 3, 4]"
+                    "input": "[1, 2, 3, 4, 5, 6]",
+                    "expectedOutput": "[4, 16, 36]"
                 }
-            ]
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Data Structures"
         },
         {
-            "id": 13,
-            "title": "List Sorter",
-            "description": "Write a function sort_list(lst) that sorts a list in ascending order without using the built-in sort() or sorted() functions.",
+            "_id": 14,
+            "title": "Dictionary Operations",
+            "description": "Write a function word_frequency(text) that counts the frequency of each word in a text.",
             "examples": {
-                "output": "[1, 2, 3, 4, 5]"
+                "output": "{'hello': 2, 'world': 1, 'python': 1}"
             },
             "notes": [
-                "Don't use built-in sorting functions",
-                "Use any sorting algorithm",
-                "Return the sorted list"
+                "Split text into words",
+                "Count occurrences of each word",
+                "Return as a dictionary"
             ],
             "testCases": [
                 {
-                    "input": "[5, 2, 1, 4, 3]",
-                    "expectedOutput": "[1, 2, 3, 4, 5]"
+                    "input": "hello world hello python",
+                    "expectedOutput": "{'hello': 2, 'world': 1, 'python': 1}"
                 }
-            ]
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Data Structures"
         },
         {
-            "id": 14,
-            "title": "Prime Range Finder",
-            "description": "Write a function find_primes(start, end) that finds all prime numbers in a given range.",
+            "_id": 15,
+            "title": "Sorting Algorithm",
+            "description": "Implement bubble sort algorithm to sort a list of numbers.",
             "examples": {
-                "output": "[2, 3, 5, 7]"
+                "output": "[1, 2, 3, 5, 7]"
             },
             "notes": [
-                "Include both start and end in the range",
-                "Return the list of prime numbers",
-                "Handle ranges up to 1000"
+                "Implement bubble sort from scratch",
+                "Don't use built-in sort functions",
+                "Compare adjacent elements and swap if necessary"
             ],
             "testCases": [
                 {
-                    "input": "1 10",
-                    "expectedOutput": "[2, 3, 5, 7]"
+                    "input": "[7, 2, 5, 1, 3]",
+                    "expectedOutput": "[1, 2, 3, 5, 7]"
                 }
-            ]
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Sorting"
         },
         {
-            "id": 15,
+            "_id": 16,
+            "title": "String Anagrams",
+            "description": "Write a function are_anagrams(str1, str2) that checks if two strings are anagrams.",
+            "examples": {
+                "output": "True"
+            },
+            "notes": [
+                "Anagrams contain the same characters in different order",
+                "Ignore case and spaces",
+                "Compare character frequencies"
+            ],
+            "testCases": [
+                {
+                    "input": "listen, silent",
+                    "expectedOutput": "True"
+                },
+                {
+                    "input": "hello, world",
+                    "expectedOutput": "False"
+                }
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Strings"
+        },
+        {
+            "_id": 17,
+            "title": "Number Pattern",
+            "description": "Write a function print_pyramid(n) that prints a number pyramid of height n.",
+            "examples": {
+                "output": "    1\n   123\n  12345\n 1234567\n123456789"
+            },
+            "notes": [
+                "Each row has odd number of digits",
+                "Center align the pyramid",
+                "Use spaces for alignment"
+            ],
+            "testCases": [
+                {
+                    "input": "3",
+                    "expectedOutput": "  1\n 123\n12345"
+                }
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Patterns"
+        },
+        {
+            "_id": 18,
+            "title": "Binary Search",
+            "description": "Implement binary search algorithm to find an element in a sorted list.",
+            "examples": {
+                "output": "3"
+            },
+            "notes": [
+                "List must be sorted",
+                "Return index of element if found, -1 if not found",
+                "Use divide and conquer approach"
+            ],
+            "testCases": [
+                {
+                    "input": "[1, 3, 5, 7, 9], 7",
+                    "expectedOutput": "3"
+                },
+                {
+                    "input": "[1, 3, 5, 7, 9], 4",
+                    "expectedOutput": "-1"
+                }
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Search"
+        },
+        {
+            "_id": 19,
+            "title": "Class Design",
+            "description": "Create a Student class with name, age, and grades attributes, and methods to add grades and calculate average.",
+            "examples": {
+                "output": "Average grade: 85.0"
+            },
+            "notes": [
+                "Include constructor (__init__)",
+                "Add method to add new grades",
+                "Add method to calculate average grade"
+            ],
+            "testCases": [
+                {
+                    "input": "Student operations",
+                    "expectedOutput": "All methods implemented correctly"
+                }
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Object-Oriented Programming"
+        },
+        {
+            "_id": 20,
+            "title": "File Processing",
+            "description": "Write a function process_csv_data(data) that processes CSV-like data and returns summary statistics.",
+            "examples": {
+                "output": "{'count': 3, 'sum': 60, 'average': 20.0}"
+            },
+            "notes": [
+                "Parse CSV format data",
+                "Calculate count, sum, and average",
+                "Handle numeric data"
+            ],
+            "testCases": [
+                {
+                    "input": "10,20,30",
+                    "expectedOutput": "{'count': 3, 'sum': 60, 'average': 20.0}"
+                }
+            ],
+            "difficulty": "Intermediate",
+            "points": 30,
+            "category": "Data Processing"
+        },
+        {
+            "_id": 21,
+            "title": "Advanced Recursion",
+            "description": "Write a function solve_hanoi(n, source, destination, auxiliary) that solves the Tower of Hanoi problem.",
+            "examples": {
+                "output": "Move disk 1 from A to C\nMove disk 2 from A to B\n..."
+            },
+            "notes": [
+                "Classic Tower of Hanoi recursive solution",
+                "Print each move step by step",
+                "Handle base case and recursive case"
+            ],
+            "testCases": [
+                {
+                    "input": "2, 'A', 'C', 'B'",
+                    "expectedOutput": "Move disk 1 from A to B\nMove disk 2 from A to C\nMove disk 1 from B to C"
+                }
+            ],
+            "difficulty": "Advanced",
+            "points": 50,
+            "category": "Recursion"
+        },
+        {
+            "_id": 22,
+            "title": "Dynamic Programming",
+            "description": "Implement a function longest_common_subsequence(s1, s2) using dynamic programming.",
+            "examples": {
+                "output": "3"
+            },
+            "notes": [
+                "Find the length of longest common subsequence",
+                "Use dynamic programming table",
+                "Handle empty strings"
+            ],
+            "testCases": [
+                {
+                    "input": "'ABCDGH', 'AEDFHR'",
+                    "expectedOutput": "3"
+                }
+            ],
+            "difficulty": "Advanced",
+            "points": 50,
+            "category": "Dynamic Programming"
+        },
+        {
+            "_id": 23,
+            "title": "Graph Traversal",
+            "description": "Implement depth-first search (DFS) for a graph represented as an adjacency list.",
+            "examples": {
+                "output": "['A', 'B', 'D', 'C', 'E']"
+            },
+            "notes": [
+                "Use recursion or stack for DFS",
+                "Handle visited nodes",
+                "Return nodes in DFS order"
+            ],
+            "testCases": [
+                {
+                    "input": "{'A': ['B', 'C'], 'B': ['D'], 'C': ['E'], 'D': [], 'E': []}, 'A'",
+                    "expectedOutput": "['A', 'B', 'D', 'C', 'E']"
+                }
+            ],
+            "difficulty": "Advanced",
+            "points": 50,
+            "category": "Graph Algorithms"
+        },
+        {
+            "_id": 24,
+            "title": "Advanced Data Structure",
+            "description": "Implement a MinHeap class with insert, extract_min, and heapify operations.",
+            "examples": {
+                "output": "Min element: 1"
+            },
+            "notes": [
+                "Maintain heap property",
+                "Implement heapify up and down",
+                "Handle edge cases"
+            ],
+            "testCases": [
+                {
+                    "input": "Heap operations",
+                    "expectedOutput": "All operations working correctly"
+                }
+            ],
+            "difficulty": "Advanced",
+            "points": 50,
+            "category": "Data Structures"
+        },
+        {
+            "_id": 25,
+            "title": "Algorithm Optimization",
+            "description": "Optimize a function to find all prime numbers up to n using the Sieve of Eratosthenes.",
+            "examples": {
+                "output": "[2, 3, 5, 7, 11, 13, 17, 19]"
+            },
+            "notes": [
+                "More efficient than checking each number individually",
+                "Use boolean array to mark primes",
+                "Handle edge cases"
+            ],
+            "testCases": [
+                {
+                    "input": "20",
+                    "expectedOutput": "[2, 3, 5, 7, 11, 13, 17, 19]"
+                }
+            ],
+            "difficulty": "Advanced",
+            "points": 50,
+            "category": "Optimization"
+        },
+        {
+            "_id": 26,
+            "title": "Design Patterns",
+            "description": "Implement the Singleton design pattern for a database connection class.",
+            "examples": {
+                "output": "Same instance: True"
+            },
+            "notes": [
+                "Ensure only one instance exists",
+                "Thread-safe implementation",
+                "Lazy initialization"
+            ],
+            "testCases": [
+                {
+                    "input": "Singleton pattern test",
+                    "expectedOutput": "Singleton working correctly"
+                }
+            ],
+            "difficulty": "Expert",
+            "points": 100,
+            "category": "Design Patterns"
+        },
+        {
+            "_id": 27,
+            "title": "Concurrent Programming",
+            "description": "Create a thread-safe counter class using threading locks.",
+            "examples": {
+                "output": "Final count: 1000"
+            },
+            "notes": [
+                "Use threading.Lock for synchronization",
+                "Handle multiple threads safely",
+                "Prevent race conditions"
+            ],
+            "testCases": [
+                {
+                    "input": "Concurrent operations",
+                    "expectedOutput": "Thread-safe operations completed"
+                }
+            ],
+            "difficulty": "Expert",
+            "points": 100,
+            "category": "Concurrency"
+        },
+        {
+            "_id": 28,
+            "title": "Algorithm Complexity",
+            "description": "Implement a function that finds the kth largest element in an array with O(n) average complexity.",
+            "examples": {
+                "output": "5"
+            },
+            "notes": [
+                "Use quickselect algorithm",
+                "Better than sorting entire array",
+                "Handle edge cases"
+            ],
+            "testCases": [
+                {
+                    "input": "[3, 2, 1, 5, 6, 4], 2",
+                    "expectedOutput": "5"
+                }
+            ],
+            "difficulty": "Expert",
+            "points": 100,
+            "category": "Advanced Algorithms"
+        },
+        {
+            "_id": 29,
+            "title": "System Design",
+            "description": "Design a simple cache system with LRU (Least Recently Used) eviction policy.",
+            "examples": {
+                "output": "Cache hit: value1"
+            },
+            "notes": [
+                "Use combination of dictionary and doubly linked list",
+                "O(1) get and put operations",
+                "Handle capacity limits"
+            ],
+            "testCases": [
+                {
+                    "input": "LRU Cache operations",
+                    "expectedOutput": "All LRU operations working"
+                }
+            ],
+            "difficulty": "Expert",
+            "points": 100,
+            "category": "System Design"
+        },
+        {
+            "_id": 30,
+            "title": "Advanced OOP",
+            "description": "Create a complete library management system with classes for Book, Library, and Member with full CRUD operations.",
+            "examples": {
+                "output": "Library system operational"
+            },
+            "notes": [
+                "Multiple interacting classes",
+                "Inheritance and composition",
+                "Complete system functionality"
+            ],
+            "testCases": [
+                {
+                    "input": "Library system test",
+                    "expectedOutput": "All library operations successful"
+                }
+            ],
+            "difficulty": "Expert",
+            "points": 100,
+            "category": "Object-Oriented Programming"
+        },
+        {
+            "_id": "java1",
+            "title": "Hello World",
+            "description": "Write a Java program to print \"Hello, World!\" on the screen.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Basics",
+            "examples": { "output": "Hello, World!" },
+            "notes": ["Use System.out.println() method", "Remember the main method signature", "Class name should match filename"]
+        },
+        {
+            "_id": "java2",
+            "title": "Even or Odd",
+            "description": "Check whether a number is even or odd.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Conditionals",
+            "examples": { "output": "Even" },
+            "notes": ["Use modulo operator (%)", "Use if-else statement", "Handle both positive and negative numbers"]
+        },
+        {
+            "_id": "java3",
+            "title": "Sum of N Numbers",
+            "description": "Take input n and print the sum from 1 to n.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Loops",
+            "examples": { "output": "55" },
+            "notes": ["Use for loop or while loop", "Handle edge case n = 0", "Use Scanner for input"]
+        },
+        {
+            "_id": "java4",
+            "title": "Factorial Calculator",
+            "description": "Write a function to calculate the factorial of a number.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Functions",
+            "examples": { "output": "120" },
+            "notes": ["Use recursion or iteration", "Handle factorial of 0", "Consider using long for large numbers"]
+        },
+        {
+            "_id": "java5",
+            "title": "Reverse a Number",
+            "description": "Input a number and print its reverse.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Math",
+            "examples": { "output": "321" },
+            "notes": ["Use while loop with modulo and division", "Handle negative numbers", "Avoid using String reversal"]
+        },
+        {
+            "_id": "java6",
+            "title": "Palindrome Number",
+            "description": "Check whether a number is a palindrome or not.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Math",
+            "examples": { "output": "true" },
+            "notes": ["Compare original with reversed number", "Handle single digits", "Consider negative numbers (not palindromes)"]
+        },
+        {
+            "_id": "java7",
+            "title": "Fibonacci Series",
+            "description": "Print the first n Fibonacci numbers.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Sequences",
+            "examples": { "output": "0 1 1 2 3 5 8" },
+            "notes": ["Start with 0 and 1", "Use iteration for efficiency", "Handle n = 0 and n = 1 cases"]
+        },
+        {
+            "_id": "java8",
+            "title": "Find Largest of Three Numbers",
+            "description": "Use conditional statements to find the largest among three inputs.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Conditionals",
+            "examples": { "output": "15" },
+            "notes": ["Use nested if-else or Math.max()", "Handle equal numbers", "Consider all possible cases"]
+        },
+        {
+            "_id": "java9",
+            "title": "Check Prime",
+            "description": "Check if a number is prime.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Math",
+            "examples": { "output": "true" },
+            "notes": ["Check divisibility up to square root", "Handle 0, 1, 2 as special cases", "Optimize by checking only odd divisors"]
+        },
+        {
+            "_id": "java10",
+            "title": "Count Digits",
+            "description": "Count the number of digits in a number.",
+            "difficulty": "easy",
+            "points": 10,
+            "category": "Math",
+            "examples": { "output": "4" },
+            "notes": ["Use division by 10 in loop", "Handle negative numbers", "Consider using String.valueOf().length() alternative"]
+        },
+        {
+            "_id": "java11",
             "title": "Armstrong Number",
-            "description": "Write a function is_armstrong(n) that checks if a number is an Armstrong number.",
-            "examples": {
-                "output": "True"
-            },
-            "notes": [
-                "An Armstrong number is a number that equals the sum of its own digits raised to the number of digits",
-                "Return True or False",
-                "Handle numbers up to 1000"
-            ],
-            "testCases": [
-                {
-                    "input": "153",
-                    "expectedOutput": "True"
-                },
-                {
-                    "input": "123",
-                    "expectedOutput": "False"
-                }
-            ]
+            "description": "Check whether a number is an Armstrong number.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Math",
+            "examples": { "output": "true" },
+            "notes": ["Sum of digits raised to power of number of digits", "Count digits first, then calculate", "Examples: 153, 9474, 54748"]
         },
         {
-            "id": 16,
-            "title": "Simple Calculator",
-            "description": "Write a calculator program that can perform basic arithmetic operations (+, -, *, /).",
-            "examples": {
-                "output": "15.0"
-            },
-            "notes": [
-                "Support +, -, *, / operations",
-                "Handle floating point numbers",
-                "Handle division by zero"
-            ],
-            "testCases": [
-                {
-                    "input": "10 + 5",
-                    "expectedOutput": "15.0"
-                },
-                {
-                    "input": "10 * 3",
-                    "expectedOutput": "30.0"
-                }
-            ]
+            "_id": "java12",
+            "title": "Print a Pattern",
+            "description": "Print a pattern like: *, * *, * * *",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Patterns",
+            "examples": { "output": "*\\n* *\\n* * *" },
+            "notes": ["Use nested loops", "Outer loop for rows, inner for columns", "Add space between stars"]
         },
         {
-            "id": 17,
-            "title": "Character Frequency",
-            "description": "Write a function char_frequency(s) that counts the frequency of each character in a string.",
-            "examples": {
-                "output": "{'h': 1, 'e': 1, 'l': 2, 'o': 1}"
-            },
-            "notes": [
-                "Return a dictionary with character counts",
-                "Consider case sensitivity",
-                "Include all characters, not just letters"
-            ],
-            "testCases": [
-                {
-                    "input": "hello",
-                    "expectedOutput": "{'h': 1, 'e': 1, 'l': 2, 'o': 1}"
-                }
-            ]
+            "_id": "java13",
+            "title": "Sum of Digits",
+            "description": "Find the sum of all digits of a given number.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Math",
+            "examples": { "output": "15" },
+            "notes": ["Use modulo and division operations", "Handle negative numbers by taking absolute value", "Can also convert to string and iterate"]
         },
         {
-            "id": 18,
-            "title": "Merge Sorted Lists",
-            "description": "Write a function merge_lists(lst1, lst2) that merges two sorted lists into a single sorted list.",
-            "examples": {
-                "output": "[1, 2, 3, 4, 5, 6]"
-            },
-            "notes": [
-                "Both input lists are already sorted",
-                "Don't use sort() after merging",
-                "Return the merged sorted list"
-            ],
-            "testCases": [
-                {
-                    "input": "[1, 3, 5], [2, 4, 6]",
-                    "expectedOutput": "[1, 2, 3, 4, 5, 6]"
-                }
-            ]
+            "_id": "java14",
+            "title": "Swap Two Numbers Without 3rd Variable",
+            "description": "Write a program to swap two numbers without using a temporary variable.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Math",
+            "examples": { "output": "a=10, b=5" },
+            "notes": ["Use arithmetic operations: a=a+b, b=a-b, a=a-b", "Or XOR operations: a=a^b, b=a^b, a=a^b", "Be careful with overflow in arithmetic method"]
         },
         {
-            "id": 19,
-            "title": "Anagram Checker",
-            "description": "Write a function are_anagrams(s1, s2) that checks if two strings are anagrams.",
-            "examples": {
-                "output": "True"
-            },
-            "notes": [
-                "Ignore case",
-                "Ignore spaces and punctuation",
-                "Return True or False"
-            ],
-            "testCases": [
-                {
-                    "input": "listen silent",
-                    "expectedOutput": "True"
-                },
-                {
-                    "input": "hello world",
-                    "expectedOutput": "False"
-                }
-            ]
+            "_id": "java15",
+            "title": "Check Leap Year",
+            "description": "Determine if a given year is a leap year.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Conditionals",
+            "examples": { "output": "true" },
+            "notes": ["Divisible by 4 but not by 100, OR divisible by 400", "Handle century years correctly", "Examples: 2000 (leap), 1900 (not leap), 2024 (leap)"]
         },
         {
-            "id": 20,
-            "title": "Second Largest",
-            "description": "Write a function find_second_largest(lst) that finds the second largest number in a list.",
-            "examples": {
-                "output": "4"
-            },
-            "notes": [
-                "Handle duplicates",
-                "Return None if list has fewer than 2 unique elements",
-                "Consider edge cases"
-            ],
-            "testCases": [
-                {
-                    "input": "[1, 5, 3, 4, 2]",
-                    "expectedOutput": "4"
-                }
-            ]
+            "_id": "java16",
+            "title": "Find GCD and LCM",
+            "description": "Take two numbers as input and find their GCD and LCM.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Math",
+            "examples": { "output": "GCD: 6, LCM: 60" },
+            "notes": ["Use Euclidean algorithm for GCD", "LCM = (a * b) / GCD(a, b)", "Handle edge cases like 0"]
+        },
+        {
+            "_id": "java17",
+            "title": "Binary to Decimal Conversion",
+            "description": "Convert a binary number to decimal.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Number Systems",
+            "examples": { "output": "13" },
+            "notes": ["Use powers of 2", "Can use Integer.parseInt(binary, 2)", "Or implement manual conversion with loops"]
+        },
+        {
+            "_id": "java18",
+            "title": "Check Vowel or Consonant",
+            "description": "Check whether a given character is a vowel or consonant.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Strings",
+            "examples": { "output": "Vowel" },
+            "notes": ["Check for a, e, i, o, u (both cases)", "Handle non-alphabetic characters", "Use switch or if-else statements"]
+        },
+        {
+            "_id": "java19",
+            "title": "Count Words in a Sentence",
+            "description": "Take a sentence as input and count the number of words.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Strings",
+            "examples": { "output": "5" },
+            "notes": ["Use split() method or manual counting", "Handle multiple spaces between words", "Trim leading/trailing spaces"]
+        },
+        {
+            "_id": "java20",
+            "title": "Array Reverse",
+            "description": "Reverse an array without using built-in methods.",
+            "difficulty": "medium",
+            "points": 30,
+            "category": "Arrays",
+            "examples": { "output": "[5, 4, 3, 2, 1]" },
+            "notes": ["Use two pointers approach", "Swap elements from start and end", "Or create new array and fill in reverse order"]
+        },
+        {
+            "_id": "java21",
+            "title": "Find Duplicate Elements in Array",
+            "description": "Detect duplicates in an integer array.",
+            "difficulty": "hard",
+            "points": 50,
+            "category": "Arrays",
+            "examples": { "output": "[2, 3]" },
+            "notes": ["Use HashSet for O(n) solution", "Or nested loops for O(n²)", "Can also sort array first"]
+        },
+        {
+            "_id": "java22",
+            "title": "Check if a String is a Palindrome",
+            "description": "Input a string and check whether it is a palindrome.",
+            "difficulty": "hard",
+            "points": 50,
+            "category": "Strings",
+            "examples": { "output": "true" },
+            "notes": ["Compare characters from both ends", "Ignore case and spaces for practical palindromes", "Use two pointers or reverse and compare"]
+        },
+        {
+            "_id": "java23",
+            "title": "Matrix Multiplication",
+            "description": "Multiply two matrices and print the result.",
+            "difficulty": "hard",
+            "points": 50,
+            "category": "Arrays",
+            "examples": { "output": "[[19, 22], [43, 50]]" },
+            "notes": ["Check if multiplication is possible (columns of A = rows of B)", "Use three nested loops", "Result matrix dimensions: A.rows × B.columns"]
+        },
+        {
+            "_id": "java24",
+            "title": "Sort an Array (Bubble/Selection/Insertion Sort)",
+            "description": "Implement any one sorting algorithm from scratch.",
+            "difficulty": "hard",
+            "points": 50,
+            "category": "Algorithms",
+            "examples": { "output": "[1, 2, 3, 4, 5]" },
+            "notes": ["Bubble Sort: compare adjacent elements", "Selection Sort: find minimum and place at start", "Insertion Sort: insert each element at correct position"]
+        },
+        {
+            "_id": "java25",
+            "title": "String Anagram Checker",
+            "description": "Check if two strings are anagrams of each other.",
+            "difficulty": "hard",
+            "points": 50,
+            "category": "Strings",
+            "examples": { "output": "true" },
+            "notes": ["Sort both strings and compare", "Or count frequency of each character", "Ignore case and spaces"]
+        },
+        {
+            "_id": "java26",
+            "title": "Sudoku Validator",
+            "description": "Write a program that checks whether a 9x9 Sudoku is valid.",
+            "difficulty": "expert",
+            "points": 100,
+            "category": "Algorithms",
+            "examples": { "output": "true" },
+            "notes": ["Check rows, columns, and 3x3 sub-grids", "Use HashSet to track seen numbers", "Handle empty cells (0 or .)"]
+        },
+        {
+            "_id": "java27",
+            "title": "LRU Cache Implementation",
+            "description": "Build an LRU Cache using LinkedHashMap or custom logic.",
+            "difficulty": "expert",
+            "points": 100,
+            "category": "Data Structures",
+            "examples": { "output": "Cache operations performed" },
+            "notes": ["Use LinkedHashMap with access order", "Or implement with HashMap + Doubly Linked List", "Override removeEldestEntry() for LinkedHashMap"]
+        },
+        {
+            "_id": "java28",
+            "title": "Multithreading Example",
+            "description": "Demonstrate basic multithreading using Thread class or Runnable.",
+            "difficulty": "expert",
+            "points": 100,
+            "category": "Concurrency",
+            "examples": { "output": "Multiple threads executed" },
+            "notes": ["Extend Thread or implement Runnable", "Use thread synchronization if needed", "Handle thread lifecycle properly"]
+        },
+        {
+            "_id": "java29",
+            "title": "Custom Exception Handling",
+            "description": "Create and use a custom Java exception.",
+            "difficulty": "expert",
+            "points": 100,
+            "category": "Exception Handling",
+            "examples": { "output": "Custom exception handled" },
+            "notes": ["Extend Exception or RuntimeException", "Create meaningful exception messages", "Use try-catch blocks properly"]
+        },
+        {
+            "_id": "java30",
+            "title": "Mini Library Management System",
+            "description": "A system to add, delete, and search books with OOPs concepts like inheritance and abstraction.",
+            "difficulty": "expert",
+            "points": 100,
+            "category": "OOP",
+            "examples": { "output": "Library system operational" },
+            "notes": ["Use classes for Book, Library, Member", "Implement inheritance and abstraction", "Include CRUD operations for books"]
         }
     ]
 }

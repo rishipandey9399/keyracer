@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+    <!-- Homepage -->
+    <url>
+        <loc>https://keyracer.in/</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Typing Test -->
+    <url>
+        <loc>https://keyracer.in/typing-test.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Professional Skills Challenges -->
+    <url>
+        <loc>https://keyracer.in/pro-skills-challenges.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Professional Skills -->
+    <url>
+        <loc>https://keyracer.in/pro-skills.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Challenges -->
+    <url>
+        <loc>https://keyracer.in/challenges.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Leaderboard -->
+    <url>
+        <loc>https://keyracer.in/leaderboard.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Lessons -->
+    <url>
+        <loc>https://keyracer.in/lessons.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <!-- About -->
+    <url>
+        <loc>https://keyracer.in/about.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+    <!-- Code Racer -->
+    <url>
+        <loc>https://keyracer.in/code-racer.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <!-- Python Tutorial -->
+    <url>
+        <loc>https://keyracer.in/python-tutorial.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <!-- Typing Tips -->
+    <url>
+        <loc>https://keyracer.in/typing-tips.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+    <!-- Privacy Policy -->
+    <url>
+        <loc>https://keyracer.in/privacy-policy.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <!-- Terms and Conditions -->
+    <url>
+        <loc>https://keyracer.in/terms-conditions.html</loc>
+        <lastmod>2025-06-01</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+</urlset>

@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://keyracer.in/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /server/
+Disallow: /client/api/
+Disallow: /*.log$
+
+# Allow important pages
+Allow: /index.html
+Allow: /typing-test.html
+Allow: /pro-skills-challenges.html
+Allow: /pro-skills.html
+Allow: /challenges.html
+Allow: /leaderboard.html
+Allow: /lessons.html
+Allow: /about.html
+Allow: /assets/
+Allow: /styles/
+Allow: /scripts/
+
+# Crawl delay
+Crawl-delay: 1

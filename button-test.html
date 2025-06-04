@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Button Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0a0f1c;
+            color: white;
+        }
+        .test-button {
+            background: #00ffdd;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .test-button:hover {
+            background: #00e6c7;
+        }
+        .result {
+            background: #1a1a1a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #00ffdd;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Button Click Test</h1>
+    
+    <div class="result">
+        <h3>Testing different button click methods:</h3>
+    </div>
+
+    <!-- Test 1: Simple onclick -->
+    <button class="test-button" onclick="testFunction1()">
+        Test 1: Simple Function Call
+    </button>
+
+    <!-- Test 2: Object method call -->
+    <button class="test-button" onclick="testManager.startChallenge(1)">
+        Test 2: Object Method Call
+    </button>
+
+    <!-- Test 3: Window object method -->
+    <button class="test-button" onclick="window.testManager.startChallenge(2)">
+        Test 3: Window Object Method
+    </button>
+
+    <!-- Test 4: Event listener -->
+    <button class="test-button" id="test4">
+        Test 4: Event Listener
+    </button>
+
+    <!-- Test 5: Actual challenge navigation -->
+    <button class="test-button" onclick="navigateToChallenge(1)">
+        Test 5: Navigate to Challenge 1
+    </button>
+
+    <div id="results" class="result">
+        <h3>Results:</h3>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        // Simple test manager
+        class TestManager {
+            constructor() {
+                this.challenges = [
+                    { _id: 1, title: "Hello World", difficulty: "Beginner" },
+                    { _id: 2, title: "Variables", difficulty: "Beginner" }
+                ];
+            }
+
+            startChallenge(challengeId) {
+                log(`✅ startChallenge called with ID: ${challengeId}`);
+                const challenge = this.challenges.find(c => c._id == challengeId);
+                if (challenge) {
+                    log(`✅ Found challenge: ${challenge.title}`);
+                    const proceed = confirm(`Navigate to solve-challenge.html?challenge=${challengeId}?`);
+                    if (proceed) {
+                        window.location.href = `solve-challenge.html?challenge=${challengeId}`;
+                    }
+                } else {
+                    log(`❌ Challenge ${challengeId} not found`);
+                }
+            }
+        }
+
+        // Initialize test manager
+        const testManager = new TestManager();
+        window.testManager = testManager;
+
+        // Logging function
+        function log(message) {
+            console.log(message);
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+        }
+
+        // Test functions
+        function testFunction1() {
+            log('✅ Test 1: Simple function call works!');
+        }
+
+        function navigateToChallenge(challengeId) {
+            log(`🚀 Direct navigation to challenge ${challengeId}`);
+            window.location.href = `solve-challenge.html?challenge=${challengeId}`;
+        }
+
+        // Event listener test
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🌟 Page loaded, setting up event listeners...');
+            
+            document.getElementById('test4').addEventListener('click', () => {
+                log('✅ Test 4: Event listener works!');
+            });
+
+            // Test if testManager is accessible
+            if (window.testManager) {
+                log('✅ testManager is accessible globally');
+            } else {
+                log('❌ testManager is NOT accessible globally');
+            }
+        });
+    </script>
+</body>
+</html>
