@@ -524,28 +524,6 @@ try {
             return false;
         }
     };
-    
-    // Expose a test function
-    window.testDB = async function() {
-        try {
-            if (!window.typingDB) {
-                throw new Error('Database instance not found');
-            }
-            
-            // Try to register a test user
-            await window.typingDB.registerUser('test_user', 'test_password');
-            console.log('Test user registered successfully');
-            
-            // Try to login with test user
-            const user = await window.typingDB.loginUser('test_user', 'test_password');
-            console.log('Test login successful', user);
-            
-            return 'Database test successful';
-        } catch (error) {
-            console.error('Database test failed:', error);
-            return 'Database test failed: ' + error;
-        }
-    };
 } catch (error) {
     console.error('Failed to create database instance:', error);
 }

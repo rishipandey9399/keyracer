@@ -161,9 +161,6 @@
                     <a href="realtime-dashboard.html" class="admin-btn" target="_blank">
                         <i class="fas fa-chart-line"></i> Dashboard
                     </a>
-                    <a href="realtime-leaderboard-test.html" class="admin-btn" target="_blank">
-                        <i class="fas fa-vial"></i> Tests
-                    </a>
                 </div>
             </div>
             <div class="admin-stats">
@@ -185,169 +182,36 @@
         </div>
                 
         <div class="podium-section">
-            <div class="podium-container">
-                <div class="podium-place second">
-                    <div class="podium-avatar">
-                        <img src="assets/avatars/avatar2.png" alt="Second Place">
-                        <div class="medal silver"><i class="fas fa-medal"></i></div>
-                    </div>
-                    <div class="podium-info">
-                        <div class="podium-name">SpeedTyper92</div>
-                        <div class="podium-score">98 WPM</div>
-                        <div class="podium-position">2</div>
-                    </div>
-                </div>
-                
-                <div class="podium-place first">
-                    <div class="podium-avatar">
-                        <img src="assets/avatars/avatar1.png" alt="First Place">
-                        <div class="medal gold"><i class="fas fa-medal"></i></div>
-                        <div class="crown"><i class="fas fa-crown"></i></div>
-                    </div>
-                    <div class="podium-info">
-                        <div class="podium-name">KeyboardWizard</div>
-                        <div class="podium-score">112 WPM</div>
-                        <div class="podium-position">1</div>
-                    </div>
-                </div>
-                
-                <div class="podium-place third">
-                    <div class="podium-avatar">
-                        <img src="assets/avatars/avatar3.png" alt="Third Place">
-                        <div class="medal bronze"><i class="fas fa-medal"></i></div>
-                    </div>
-                    <div class="podium-info">
-                        <div class="podium-name">SwiftFingers</div>
-                        <div class="podium-score">91 WPM</div>
-                        <div class="podium-position">3</div>
-                    </div>
+            <div class="podium-container" id="podium-container">
+                <!-- Podium will be populated dynamically -->
+                <div class="loading-podium">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading top performers...</p>
                 </div>
             </div>
-                </div>
+        </div>
                 
         <div class="leaderboard-section">
-            <div class="table-container">
-                <table class="rankings-table">
+            <div class="table-container">                    <table class="rankings-table">
                         <thead>
                             <tr>
-                            <th>Rank</th>
-                            <th>Racer</th>
-                            <th>Speed <i class="fas fa-sort-down"></i></th>
+                                <th>Rank</th>
+                                <th>Racer</th>
+                                <th>Speed <i class="fas fa-sort-down"></i></th>
                                 <th>Accuracy</th>
-                            <th>Division</th>
+                                <th>Division</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        <tr class="highlighted">
-                            <td>1</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar1.png" alt="KeyboardWizard" class="racer-avatar">
-                                <span class="racer-name">KeyboardWizard</span>
-                            </td>
-                            <td>112 WPM</td>
-                            <td>98.5%</td>
-                            <td>Elite</td>
-                            <td>Today</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar2.png" alt="SpeedTyper92" class="racer-avatar">
-                                <span class="racer-name">SpeedTyper92</span>
-                            </td>
-                            <td>98 WPM</td>
-                            <td>97.2%</td>
-                            <td>Elite</td>
-                            <td>Yesterday</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar3.png" alt="SwiftFingers" class="racer-avatar">
-                                <span class="racer-name">SwiftFingers</span>
-                            </td>
-                            <td>91 WPM</td>
-                            <td>99.1%</td>
-                            <td>Pro</td>
-                            <td>2 days ago</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar4.png" alt="RacingTypist" class="racer-avatar">
-                                <span class="racer-name">RacingTypist</span>
-                            </td>
-                            <td>87 WPM</td>
-                            <td>96.8%</td>
-                            <td>Pro</td>
-                            <td>2 days ago</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar5.png" alt="KeyMaster55" class="racer-avatar">
-                                <span class="racer-name">KeyMaster55</span>
-                            </td>
-                            <td>85 WPM</td>
-                            <td>95.5%</td>
-                            <td>Elite</td>
-                            <td>3 days ago</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar6.png" alt="FastFingers" class="racer-avatar">
-                                <span class="racer-name">FastFingers</span>
+                        <tbody id="leaderboard-tbody">
+                            <!-- Leaderboard data will be populated dynamically -->
+                            <tr class="loading-row">
+                                <td colspan="6">
+                                    <div class="loading-content">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <span>Loading championship standings...</span>
+                                    </div>
                                 </td>
-                            <td>82 WPM</td>
-                            <td>93.7%</td>
-                            <td>Pro</td>
-                            <td>4 days ago</td>
-                            </tr>
-                        <tr>
-                            <td>7</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar7.png" alt="TypeRunner" class="racer-avatar">
-                                <span class="racer-name">TypeRunner</span>
-                            </td>
-                            <td>78 WPM</td>
-                            <td>97.3%</td>
-                            <td>Pro</td>
-                            <td>5 days ago</td>
-                            </tr>
-                        <tr>
-                            <td>8</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar8.png" alt="KeyboardNinja" class="racer-avatar">
-                                <span class="racer-name">KeyboardNinja</span>
-                                </td>
-                            <td>75 WPM</td>
-                            <td>98.8%</td>
-                            <td>Rookie</td>
-                            <td>6 days ago</td>
-                            </tr>
-                        <tr>
-                            <td>9</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar9.png" alt="TypingPro" class="racer-avatar">
-                                <span class="racer-name">TypingPro</span>
-                            </td>
-                            <td>72 WPM</td>
-                            <td>96.2%</td>
-                            <td>Rookie</td>
-                            <td>1 week ago</td>
-                            </tr>
-                        <tr>
-                            <td>10</td>
-                            <td class="racer-cell">
-                                <img src="assets/avatars/avatar10.png" alt="SpeedDemon" class="racer-avatar">
-                                <span class="racer-name">SpeedDemon</span>
-                                </td>
-                            <td>70 WPM</td>
-                            <td>94.5%</td>
-                            <td>Rookie</td>
-                            <td>1 week ago</td>
                             </tr>
                         </tbody>
                     </table>

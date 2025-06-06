@@ -334,7 +334,7 @@
                     <i class="fas fa-sync-alt"></i> Refresh Stats
                 </button>
                 <button class="btn success" onclick="testUpdate()">
-                    <i class="fas fa-play"></i> Test Update
+                    <i class="fas fa-play"></i> Demo Update
                 </button>
                 <button class="btn" onclick="forceProcessQueue()">
                     <i class="fas fa-fast-forward"></i> Process Queue
@@ -345,9 +345,6 @@
                 <button class="btn danger" onclick="resetStats()">
                     <i class="fas fa-undo"></i> Reset Stats
                 </button>
-                <a href="realtime-leaderboard-test.html" class="btn">
-                    <i class="fas fa-vial"></i> Run Tests
-                </a>
             </div>
         </div>
 
@@ -482,24 +479,24 @@
         // Control functions
         function testUpdate() {
             if (!window.realTimeLeaderboard) {
-                addActivity('Cannot test - real-time system not available', 'error');
+                addActivity('Cannot send demo update - real-time system not available', 'error');
                 return;
             }
 
             const testRecord = {
-                username: localStorage.getItem('typingTestUser') || 'TestUser',
+                username: localStorage.getItem('typingTestUser') || 'DemoUser',
                 wpm: Math.floor(Math.random() * 50) + 70,
                 accuracy: Math.floor(Math.random() * 15) + 85,
                 errors: Math.floor(Math.random() * 5),
                 charsTyped: Math.floor(Math.random() * 200) + 300,
                 completionTime: Math.floor(Math.random() * 60) + 60,
                 difficulty: 'medium',
-                challenge: 'Dashboard Test',
+                challenge: 'Dashboard Demo',
                 timestamp: new Date().toISOString()
             };
 
             window.realTimeLeaderboard.triggerUpdate(testRecord);
-            addActivity(`Test update sent: ${testRecord.wpm} WPM, ${testRecord.accuracy}% accuracy`, 'success');
+            addActivity(`Demo update sent: ${testRecord.wpm} WPM, ${testRecord.accuracy}% accuracy`, 'success');
         }
 
         function forceProcessQueue() {
