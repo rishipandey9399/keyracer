@@ -449,14 +449,22 @@ function updateTimer() {
     console.log('Test completed:', testRecord);
         
     // Save test record if database is available
-        if (window.typingDB) {
-            window.typingDB.saveTypingRecord(testRecord)
-            .then(id => {
-                console.log('Test record saved with ID:', id);
-                        })
-                        .catch(error => {
-                console.error('Error saving test record:', error);
-                        });
+    if (window.typingDB) {
+        window.typingDB.saveTypingRecord(testRecord)
+        .then(id => {
+            console.log('Test record saved with ID:', id);
+            
+            // Trigger real-time leaderboard update using the new system
+            if (window.realTimeLeaderboard) {
+                window.realTimeLeaderboard.triggerUpdate(testRecord);
+            } else if (window.updateLeaderboardRealTime) {
+                // Fallback to old method
+                window.updateLeaderboardRealTime(testRecord);
+            }
+        })
+        .catch(error => {
+            console.error('Error saving test record:', error);
+        });
     }
     
     // Show test results

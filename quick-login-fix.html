@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Login Fix - KeyRacer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #070B18;
+            color: #E1E6F2;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(30, 39, 97, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 221, 0.2);
+        }
+        .btn {
+            background: linear-gradient(135deg, #00FFDD, #0099CC);
+            color: #070B18;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 221, 0.3);
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: rgba(0, 255, 221, 0.1);
+            border: 1px solid rgba(0, 255, 221, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Quick Login Button Fix</h1>
+        <p>If the login button is not taking you to the login page, try these solutions:</p>
+        
+        <div class="status" id="authStatus">
+            <strong>Checking your authentication status...</strong>
+        </div>
+
+        <h3>Quick Fixes:</h3>
+        
+        <button class="btn" onclick="clearAllAuth()">1. Clear Authentication & Try Again</button>
+        <button class="btn" onclick="directLogin()">2. Go Directly to Login Page</button>
+        <button class="btn" onclick="testRedirect()">3. Test What's Happening</button>
+
+        <div id="results" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        function showResult(message, isSuccess = true) {
+            const results = document.getElementById('results');
+            results.innerHTML += `<div style="padding: 10px; margin: 5px 0; background: ${isSuccess ? 'rgba(0,255,0,0.1)' : 'rgba(255,0,0,0.1)'}; border-radius: 5px;">${message}</div>`;
+        }
+
+        function checkAuthStatus() {
+            const user = localStorage.getItem('typingTestUser');
+            const preferences = localStorage.getItem('preferencesComplete');
+            
+            const statusDiv = document.getElementById('authStatus');
+            
+            if (user) {
+                statusDiv.innerHTML = `
+                    <strong>Issue Found:</strong> You are currently logged in as "${user}"<br>
+                    <strong>Preferences:</strong> ${preferences ? 'Complete' : 'Incomplete'}<br>
+                    <strong>Problem:</strong> The system may be redirecting you to preferences or main app instead of login page.
+                `;
+                statusDiv.style.background = 'rgba(255, 193, 7, 0.1)';
+                statusDiv.style.borderColor = 'rgba(255, 193, 7, 0.3)';
+            } else {
+                statusDiv.innerHTML = `
+                    <strong>Status:</strong> Not currently logged in<br>
+                    <strong>Expected:</strong> Login button should work normally
+                `;
+            }
+        }
+
+        function clearAllAuth() {
+            localStorage.removeItem('typingTestUser');
+            localStorage.removeItem('typingTestUserType');
+            localStorage.removeItem('typingTestUserEmail');
+            localStorage.removeItem('typingTestUserData');
+            localStorage.removeItem('preferencesComplete');
+            
+            showResult('✅ Cleared all authentication data. Now try clicking the login button on code-racer.html');
+            checkAuthStatus();
+        }
+
+        function directLogin() {
+            showResult('🚀 Redirecting to login page...');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
+        }
+
+        function testRedirect() {
+            const user = localStorage.getItem('typingTestUser');
+            const preferences = localStorage.getItem('preferencesComplete');
+            
+            if (user && !preferences) {
+                showResult('🔍 Detected: You are logged in but preferences incomplete. System will redirect to preference.html', false);
+            } else if (user && preferences) {
+                showResult('🔍 Detected: You are fully logged in. System may redirect to main app instead of login page', false);
+            } else {
+                showResult('🔍 No authentication issues detected. Login button should work normally.');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', checkAuthStatus);
+    </script>
+</body>
+</html>

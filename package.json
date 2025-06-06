@@ -37,8 +37,27 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "private": true,
-  "keywords": ["typing", "test", "google-oauth"],
-  "author": "",
-  "license": "ISC"
+  "private": false,
+  "keywords": [
+    "typing-test",
+    "coding-challenges", 
+    "competitive-programming",
+    "web-application",
+    "nodejs",
+    "mongodb",
+    "google-oauth",
+    "educational-game",
+    "typing-speed",
+    "programming-practice"
+  ],
+  "author": "Key Racer Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/key-racer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/key-racer/issues"
+  },
+  "homepage": "https://keyracer.in"
 } 

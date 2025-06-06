@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Leaderboard Dashboard - KeyRacer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .health-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .health-excellent { background: #4CAF50; }
+        .health-good { background: #8BC34A; }
+        .health-warning { background: #FF9800; }
+        .health-critical { background: #f44336; }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn.danger {
+            background: #e53e3e;
+        }
+
+        .btn.danger:hover {
+            background: #c53030;
+        }
+
+        .btn.success {
+            background: #38a169;
+        }
+
+        .btn.success:hover {
+            background: #2f855a;
+        }
+
+        .live-updates {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .update-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            font-size: 0.9rem;
+        }
+
+        .update-item.success {
+            border-left-color: #4CAF50;
+        }
+
+        .update-item.error {
+            border-left-color: #f44336;
+        }
+
+        .update-item.warning {
+            border-left-color: #FF9800;
+        }
+
+        .timestamp {
+            color: #666;
+            font-size: 0.8rem;
+            float: right;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .recommendations {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .recommendations h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .recommendations ul {
+            color: #856404;
+            padding-left: 20px;
+        }
+
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: #ccc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle.active {
+            background: #667eea;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(25px);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Real-time Leaderboard Dashboard</h1>
+            <p>Monitor and manage the real-time leaderboard system performance</p>
+        </div>
+
+        <!-- System Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3><i class="fas fa-heartbeat"></i> System Health</h3>
+                <div class="stat-value" id="health-status">
+                    <span class="health-indicator health-excellent"></span>Excellent
+                </div>
+                <div class="stat-label" id="health-details">All systems operational</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-chart-bar"></i> Total Updates</h3>
+                <div class="stat-value" id="total-updates">0</div>
+                <div class="stat-label">Since last reset</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-check-circle"></i> Success Rate</h3>
+                <div class="stat-value" id="success-rate">100%</div>
+                <div class="stat-label" id="success-details">0 failed updates</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-clock"></i> Avg Processing Time</h3>
+                <div class="stat-value" id="avg-time">0ms</div>
+                <div class="stat-label">Per update</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-list"></i> Queue Length</h3>
+                <div class="stat-value" id="queue-length">0</div>
+                <div class="stat-label" id="queue-details">0 pending</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3><i class="fas fa-users"></i> Active Users</h3>
+                <div class="stat-value" id="active-users">0</div>
+                <div class="stat-label">Currently online</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="section">
+            <h2><i class="fas fa-cogs"></i> System Controls</h2>
+            
+            <div class="auto-refresh">
+                <label>Auto-refresh:</label>
+                <div class="toggle active" id="auto-refresh-toggle"></div>
+                <span>Every 5 seconds</span>
+            </div>
+            
+            <div class="controls">
+                <button class="btn" onclick="refreshStats()">
+                    <i class="fas fa-sync-alt"></i> Refresh Stats
+                </button>
+                <button class="btn success" onclick="testUpdate()">
+                    <i class="fas fa-play"></i> Test Update
+                </button>
+                <button class="btn" onclick="forceProcessQueue()">
+                    <i class="fas fa-fast-forward"></i> Process Queue
+                </button>
+                <button class="btn danger" onclick="flushQueue()">
+                    <i class="fas fa-trash"></i> Flush Queue
+                </button>
+                <button class="btn danger" onclick="resetStats()">
+                    <i class="fas fa-undo"></i> Reset Stats
+                </button>
+                <a href="realtime-leaderboard-test.html" class="btn">
+                    <i class="fas fa-vial"></i> Run Tests
+                </a>
+            </div>
+        </div>
+
+        <!-- Live Updates -->
+        <div class="section">
+            <h2><i class="fas fa-stream"></i> Live Activity Feed</h2>
+            <div class="live-updates" id="activity-feed">
+                <div class="update-item">
+                    <span class="timestamp">Just now</span>
+                    Dashboard initialized and ready for monitoring
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="section" id="recommendations-section" style="display: none;">
+            <h2><i class="fas fa-lightbulb"></i> System Recommendations</h2>
+            <div class="recommendations" id="recommendations">
+                <!-- Dynamic recommendations will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Required Scripts -->
+    <script src="scripts/database.js"></script>
+    <script src="scripts/realtime-leaderboard.js"></script>
+
+    <script>
+        // Dashboard functionality
+        let autoRefresh = true;
+        let refreshInterval;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            addActivity('Dashboard initialized', 'success');
+            startAutoRefresh();
+            refreshStats();
+        });
+
+        // Auto-refresh toggle
+        document.getElementById('auto-refresh-toggle').addEventListener('click', function() {
+            autoRefresh = !autoRefresh;
+            this.classList.toggle('active');
+            
+            if (autoRefresh) {
+                startAutoRefresh();
+                addActivity('Auto-refresh enabled', 'success');
+            } else {
+                stopAutoRefresh();
+                addActivity('Auto-refresh disabled', 'warning');
+            }
+        });
+
+        function startAutoRefresh() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(refreshStats, 5000);
+        }
+
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+
+        // Refresh statistics
+        function refreshStats() {
+            if (!window.realTimeLeaderboard) {
+                addActivity('Real-time system not available', 'error');
+                return;
+            }
+
+            const stats = window.realTimeLeaderboard.getUpdateStats();
+            
+            // Update stat cards
+            document.getElementById('total-updates').textContent = stats.statistics.totalUpdates;
+            document.getElementById('queue-length').textContent = stats.queueLength;
+            document.getElementById('queue-details').textContent = `${stats.unprocessedUpdates} pending`;
+            
+            // Calculate and update success rate
+            const successRate = stats.statistics.totalUpdates > 0 ? 
+                ((stats.statistics.successfulUpdates / stats.statistics.totalUpdates) * 100).toFixed(1) : 100;
+            document.getElementById('success-rate').textContent = `${successRate}%`;
+            document.getElementById('success-details').textContent = `${stats.statistics.failedUpdates} failed updates`;
+            
+            // Update processing time
+            const avgTime = Math.round(stats.statistics.averageProcessingTime);
+            document.getElementById('avg-time').textContent = `${avgTime}ms`;
+            
+            // Update health status
+            const health = stats.systemHealth;
+            updateHealthStatus(health);
+            
+            // Show recommendations if needed
+            showRecommendations(health.recommendations);
+            
+            // Update active users (simulate for now)
+            const activeUsers = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('active-users').textContent = activeUsers;
+
+            addActivity(`Stats refreshed - ${stats.queueLength} in queue, ${successRate}% success rate`);
+        }
+
+        function updateHealthStatus(health) {
+            const statusElement = document.getElementById('health-status');
+            const detailsElement = document.getElementById('health-details');
+            
+            // Clear previous classes
+            const indicator = statusElement.querySelector('.health-indicator');
+            indicator.className = `health-indicator health-${health.status}`;
+            
+            // Update text
+            statusElement.innerHTML = `<span class="health-indicator health-${health.status}"></span>${health.status.charAt(0).toUpperCase() + health.status.slice(1)}`;
+            detailsElement.textContent = `${health.successRate}% success rate`;
+        }
+
+        function showRecommendations(recommendations) {
+            const section = document.getElementById('recommendations-section');
+            const container = document.getElementById('recommendations');
+            
+            if (recommendations.length > 1 || !recommendations[0].includes('normally')) {
+                section.style.display = 'block';
+                container.innerHTML = `
+                    <h4>System Recommendations:</h4>
+                    <ul>${recommendations.map(rec => `<li>${rec}</li>`).join('')}</ul>
+                `;
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        // Control functions
+        function testUpdate() {
+            if (!window.realTimeLeaderboard) {
+                addActivity('Cannot test - real-time system not available', 'error');
+                return;
+            }
+
+            const testRecord = {
+                username: localStorage.getItem('typingTestUser') || 'TestUser',
+                wpm: Math.floor(Math.random() * 50) + 70,
+                accuracy: Math.floor(Math.random() * 15) + 85,
+                errors: Math.floor(Math.random() * 5),
+                charsTyped: Math.floor(Math.random() * 200) + 300,
+                completionTime: Math.floor(Math.random() * 60) + 60,
+                difficulty: 'medium',
+                challenge: 'Dashboard Test',
+                timestamp: new Date().toISOString()
+            };
+
+            window.realTimeLeaderboard.triggerUpdate(testRecord);
+            addActivity(`Test update sent: ${testRecord.wpm} WPM, ${testRecord.accuracy}% accuracy`, 'success');
+        }
+
+        function forceProcessQueue() {
+            if (!window.realTimeLeaderboard) {
+                addActivity('Cannot process queue - real-time system not available', 'error');
+                return;
+            }
+
+            window.realTimeLeaderboard.forceProcessAllUpdates();
+            addActivity('Force processing all pending updates', 'warning');
+            setTimeout(refreshStats, 1000);
+        }
+
+        function flushQueue() {
+            if (!window.realTimeLeaderboard) {
+                addActivity('Cannot flush queue - real-time system not available', 'error');
+                return;
+            }
+
+            if (confirm('Are you sure you want to flush the update queue? This will remove all pending updates.')) {
+                const flushed = window.realTimeLeaderboard.flushUpdateQueue();
+                addActivity(`Flushed ${flushed} items from update queue`, 'warning');
+                refreshStats();
+            }
+        }
+
+        function resetStats() {
+            if (!window.realTimeLeaderboard) {
+                addActivity('Cannot reset stats - real-time system not available', 'error');
+                return;
+            }
+
+            if (confirm('Are you sure you want to reset all statistics? This action cannot be undone.')) {
+                window.realTimeLeaderboard.resetStatistics();
+                addActivity('Statistics reset', 'warning');
+                refreshStats();
+            }
+        }
+
+        // Activity feed
+        function addActivity(message, type = 'info') {
+            const feed = document.getElementById('activity-feed');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const item = document.createElement('div');
+            item.className = `update-item ${type}`;
+            item.innerHTML = `
+                <span class="timestamp">${timestamp}</span>
+                ${message}
+            `;
+            
+            feed.insertBefore(item, feed.firstChild);
+            
+            // Keep only last 50 items
+            while (feed.children.length > 50) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        // Listen for real-time updates
+        if (window.addEventListener) {
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'leaderboard-update') {
+                    try {
+                        const data = JSON.parse(e.newValue);
+                        addActivity(`Cross-tab update detected: ${data.username} - ${data.wpm} WPM`, 'info');
+                    } catch (error) {
+                        addActivity('Invalid cross-tab update received', 'error');
+                    }
+                }
+            });
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            stopAutoRefresh();
+        });
+    </script>
+</body>
+</html>

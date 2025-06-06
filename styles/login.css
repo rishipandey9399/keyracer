@@ -26,57 +26,44 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 30px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
     z-index: 10;
+    min-height: 100vh;
 }
 
-/* Brand section */
-.brand-section {
-    margin-bottom: 40px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+/* Corner logo */
+.corner-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
 }
 
-.brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
+.logo-link {
+    display: block;
     transition: all 0.3s ease;
 }
 
-.brand:hover {
-    transform: translateY(-5px);
+.logo-link:hover {
+    transform: scale(1.05);
 }
 
-.brand-logo {
-    height: 120px;
-    max-width: 240px;
+.corner-logo-img {
+    height: 80px;
     width: auto;
     display: block;
     object-fit: contain;
-    margin-bottom: 18px;
-    filter: drop-shadow(0 0 20px rgba(0, 194, 255, 0.8));
+    filter: drop-shadow(0 0 15px rgba(0, 194, 255, 0.6));
+    transition: all 0.3s ease;
 }
 
-.brand-tagline {
-    color: var(--accent-color);
-    font-family: var(--heading-font);
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.9;
-    margin-left: 0;
-    margin-top: 0;
+.corner-logo-img:hover {
+    filter: drop-shadow(0 0 20px rgba(0, 194, 255, 0.9));
 }
 
 /* Authentication container */
@@ -133,7 +120,7 @@ body {
 /* Form styles */
 .auth-forms {
     position: relative;
-    padding: 40px 30px;
+    padding: 30px 25px;
 }
 
 .auth-form {
@@ -329,13 +316,13 @@ body {
 
 /* Social login */
 .social-login {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .social-divider {
     text-align: center;
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .social-divider:before {
@@ -363,27 +350,39 @@ body {
 }
 
 .social-btn {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(7, 11, 24, 0.6);
+    background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(0, 194, 255, 0.2);
     color: var(--text-color);
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .social-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .social-btn.google {
     color: #ea4335;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(234, 67, 53, 0.3);
+    font-size: 1.4rem;
+}
+
+.social-btn.google:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(234, 67, 53, 0.5);
+    color: #ff5722;
+    transform: translateY(-3px) scale(1.05);
 }
 
 .social-btn.facebook {
@@ -396,7 +395,7 @@ body {
 
 /* Footer */
 .login-footer {
-    margin-top: 30px;
+    margin-top: 20px;
     text-align: center;
 }
 
@@ -600,7 +599,7 @@ body {
 /* Responsive styles */
 @media (max-width: 768px) {
     .login-page {
-        padding: 20px;
+        padding: 15px;
         max-width: 100%;
     }
     
@@ -609,40 +608,71 @@ body {
         max-width: 400px;
     }
     
-    .brand-logo {
-        height: 90px;
-        max-width: 160px;
-        margin-bottom: 14px;
+    .corner-logo {
+        top: 15px;
+        left: 15px;
     }
     
-    .brand-tagline {
-        font-size: 1.1rem;
+    .corner-logo-img {
+        height: 65px;
     }
     
-    .brand-section {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .brand {
-        flex-direction: column;
-    align-items: center;
-    }
-    
-    .brand-tagline {
-        margin-left: 0;
-        margin-top: 10px;
+    .auth-forms {
+        padding: 25px 20px;
     }
 }
 
 @media (max-width: 480px) {
     .auth-forms {
-        padding: 30px 20px;
+        padding: 25px 20px;
     }
     
     .form-options {
         flex-direction: column;
         align-items: flex-start;
+    }
+    
+    .corner-logo {
+        top: 10px;
+        left: 10px;
+    }
+    
+    .corner-logo-img {
+        height: 55px;
+    }
+}
+
+/* Optimize for single-screen viewing on desktop */
+@media (min-height: 800px) {
+    .login-page {
+        padding: 20px;
+        justify-content: center;
+    }
+    
+    .login-footer {
+        margin-top: 25px;
+    }
+}
+
+@media (max-height: 700px) {
+    .login-page {
+        padding: 10px;
+    }
+    
+    .corner-logo {
+        top: 10px;
+        left: 10px;
+    }
+    
+    .corner-logo-img {
+        height: 60px;
+    }
+    
+    .auth-forms {
+        padding: 20px 25px;
+    }
+    
+    .login-footer {
+        margin-top: 15px;
     }
 }

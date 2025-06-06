@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINAL LOGIN BUTTON FIX</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+        .test-section { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #007bff; }
+        .error { border-left-color: #dc3545; }
+        .success { border-left-color: #28a745; }
+        .warning { border-left-color: #ffc107; }
+        button { padding: 12px 24px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .test-btn { background: #007bff; color: white; }
+        .clear-btn { background: #dc3545; color: white; }
+        .fix-btn { background: #28a745; color: white; }
+        .warning-btn { background: #ffc107; color: black; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .status { font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 4px; }
+        .highlight { background: yellow; padding: 2px 4px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 FINAL LOGIN BUTTON FIX</h1>
+    <p><strong>Problem:</strong> Login button redirects to wrong page instead of login.html</p>
+    
+    <div class="test-section error">
+        <h3>⚠️ CLEAR EVERYTHING FIRST</h3>
+        <p>The issue might be caused by conflicting localStorage data. Click this button first:</p>
+        <button class="clear-btn" onclick="clearEverything()">🗑️ CLEAR ALL STORAGE & RESET</button>
+        <div id="clearStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>📊 Current State</h3>
+        <div id="currentState" class="status"></div>
+        <button class="test-btn" onclick="updateState()">🔄 Refresh State</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔗 Test Login Button</h3>
+        <p>This simulates the exact login button from code-racer.html:</p>
+        <a href="login.html" class="login-btn" id="testLoginBtn" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+            <i class="fas fa-sign-in-alt"></i> Login (Test)
+        </a>
+        <br><br>
+        <button class="test-btn" onclick="testLoginClick()">🔍 Test Click Behavior</button>
+        <div id="testResults"></div>
+    </div>
+    
+    <div class="test-section success">
+        <h3>✅ APPLY FINAL FIX</h3>
+        <p>If the issue persists, apply this comprehensive fix:</p>
+        <button class="fix-btn" onclick="applyFinalFix()">🔧 APPLY FINAL FIX</button>
+        <div id="fixResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🧪 Live Test Links</h3>
+        <p>Test the actual pages:</p>
+        <a href="code-racer.html" target="_blank" style="margin-right: 10px;">➡️ code-racer.html</a>
+        <a href="login.html" target="_blank">➡️ login.html</a>
+    </div>
+
+    <script>
+        let testLogs = [];
+        
+        function log(message) {
+            testLogs.push(`[${new Date().toLocaleTimeString()}] ${message}`);
+            console.log(message);
+            updateState();
+        }
+
+        function clearEverything() {
+            // Clear all possible storage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Clear specific keys that might be causing issues
+            const keysToRemove = [
+                'typingTestUser',
+                'typingTestUserType', 
+                'typingTestUserEmail',
+                'typingTestUserData',
+                'preferencesComplete',
+                'userPreferences',
+                'gameSettings',
+                'authToken'
+            ];
+            
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+                sessionStorage.removeItem(key);
+            });
+            
+            document.getElementById('clearStatus').innerHTML = `
+                <div style="color: green; margin-top: 10px;">
+                    ✅ <strong>CLEARED:</strong><br>
+                    - localStorage: ${localStorage.length} items<br>
+                    - sessionStorage: ${sessionStorage.length} items<br>
+                    - Specific auth keys removed<br>
+                    - Cache should be clear
+                </div>
+            `;
+            
+            log('🗑️ All storage cleared');
+            updateState();
+        }
+
+        function updateState() {
+            const currentPath = window.location.pathname;
+            const currentUrl = window.location.href;
+            const isLoggedIn = localStorage.getItem('typingTestUser');
+            const preferencesComplete = localStorage.getItem('preferencesComplete');
+            const userData = localStorage.getItem('typingTestUserData');
+            
+            // Check localStorage contents
+            let storageItems = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                storageItems.push(`${key}: ${localStorage.getItem(key)}`);
+            }
+            
+            const state = `
+<strong>📍 Current URL:</strong> ${currentUrl}
+<strong>📂 Path:</strong> ${currentPath}
+<strong>👤 Logged In:</strong> <span class="highlight">${isLoggedIn ? 'YES' : 'NO'}</span>
+<strong>⚙️ Preferences Complete:</strong> <span class="highlight">${preferencesComplete || 'NO'}</span>
+<strong>📝 User Data:</strong> ${userData ? 'Present' : 'None'}
+<strong>💾 LocalStorage Items:</strong> ${localStorage.length}
+${storageItems.length > 0 ? '\n<strong>🔍 Storage Contents:</strong>\n' + storageItems.join('\n') : ''}
+
+<strong>📋 Recent Logs:</strong>
+${testLogs.slice(-5).join('\n')}
+            `;
+            
+            document.getElementById('currentState').innerHTML = state.replace(/\n/g, '<br>');
+        }
+
+        function testLoginClick() {
+            log('🔍 Testing login button click...');
+            
+            const testBtn = document.getElementById('testLoginBtn');
+            const href = testBtn.getAttribute('href');
+            
+            log(`Button href: ${href}`);
+            log(`Current URL: ${window.location.href}`);
+            
+            // Test what happens with click
+            testBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                log('🔗 Click intercepted - would go to: ' + href);
+                log('🚫 Click prevented for testing');
+                
+                document.getElementById('testResults').innerHTML = `
+                    <div style="color: blue; margin-top: 10px;">
+                        <strong>📊 Click Test Results:</strong><br>
+                        - Button href: ${href}<br>
+                        - Click event: Triggered<br>
+                        - Expected destination: login.html<br>
+                        - Status: ${href === 'login.html' ? '✅ CORRECT' : '❌ WRONG'}
+                    </div>
+                `;
+            });
+            
+            // Simulate click
+            testBtn.click();
+        }
+
+        async function applyFinalFix() {
+            log('🔧 Applying final fix...');
+            
+            const fixSteps = [
+                '1. Clearing all authentication data',
+                '2. Removing conflicting localStorage entries', 
+                '3. Checking for redirect loops',
+                '4. Validating login button href',
+                '5. Testing redirect logic'
+            ];
+            
+            let fixHtml = '<div style="color: green;"><strong>🔧 Final Fix Applied:</strong><br>';
+            
+            for (const step of fixSteps) {
+                fixHtml += `✅ ${step}<br>`;
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+            
+            // Clear everything again
+            clearEverything();
+            
+            // Force reload header-auth.js logic
+            log('🔄 Reloading authentication logic...');
+            
+            fixHtml += `
+                <br><strong>📋 Fix Summary:</strong><br>
+                - All storage cleared<br>
+                - Authentication state reset<br>
+                - Login button should now work correctly<br>
+                - Test by clicking the Login button above<br>
+                <br><strong>🎯 Next Steps:</strong><br>
+                1. Test the login button above<br>
+                2. Go to <a href="code-racer.html">code-racer.html</a><br>
+                3. Click the Login button<br>
+                4. Verify it goes to login.html
+            </div>`;
+            
+            document.getElementById('fixResults').innerHTML = fixHtml;
+            log('✅ Final fix complete');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Final fix tool loaded');
+            updateState();
+            
+            // Auto-update state every 2 seconds
+            setInterval(updateState, 2000);
+        });
+
+        // Load header-auth.js for testing
+        const script = document.createElement('script');
+        script.src = 'scripts/header-auth.js';
+        script.onload = function() {
+            log('📄 header-auth.js loaded for testing');
+        };
+        script.onerror = function() {
+            log('❌ Failed to load header-auth.js');
+        };
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

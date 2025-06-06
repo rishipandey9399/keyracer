@@ -160,10 +160,10 @@
             </div>
     
     <div class="login-page">
-        <div class="brand-section">
-            <a href="index.html" class="brand">
-                <img src="assets/images/logo.png" alt="Key Racer Logo" class="brand-logo">
-                <h2 class="brand-tagline">The Ultimate Keyboard Racing Championship</h2>
+        <!-- Logo in top-left corner -->
+        <div class="corner-logo">
+            <a href="index.html" class="logo-link">
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="corner-logo-img">
             </a>
         </div>
         
@@ -215,12 +215,6 @@
                         <div class="social-buttons">
                             <button type="button" class="social-btn google">
                                 <i class="fab fa-google"></i>
-                            </button>
-                            <button type="button" class="social-btn facebook">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button type="button" class="social-btn twitter">
-                                <i class="fab fa-twitter"></i>
                             </button>
                     </div>
                     </div>
@@ -280,12 +274,6 @@
                             <button type="button" class="social-btn google">
                                 <i class="fab fa-google"></i>
                             </button>
-                            <button type="button" class="social-btn facebook">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button type="button" class="social-btn twitter">
-                                <i class="fab fa-twitter"></i>
-                            </button>
                 </div>
             </div>
                 </form>
@@ -293,7 +281,6 @@
                 </div>
                 
         <div class="login-footer">
-            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Racing Track</a>
             <p class="copyright">© <span id="current-year"></span> Key Racer - The ultimate keyboard racing championship</p>
                 </div>
             </div>
@@ -335,6 +322,6 @@
     <script src="scripts/database.js"></script>
     <script src="scripts/preloader.js"></script>
     <script src="scripts/login.js"></script>
-    <script src="scripts/header-auth.js"></script>
+    <!-- Removed header-auth.js to prevent redirect loops on login page -->
 </body>
 </html>

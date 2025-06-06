@@ -994,41 +994,2022 @@ System.out.println("Next char: " + (char)(ch + 1)); // B</code></pre>
 
             <section id="operators" class="tutorial-section">
                 <h1>🔢 Java Operators</h1>
+                
                 <div class="example-box featured-example">
-                    <h3>📌 Coming Soon</h3>
-                    <p>This section will cover arithmetic, logical, comparison, and assignment operators in Java.</p>
+                    <h3>✅ What are Operators?</h3>
+                    <p>Operators are symbols that perform operations on variables and values. Java has several types of operators:</p>
+                    <ul>
+                        <li><strong>Arithmetic:</strong> +, -, *, /, %</li>
+                        <li><strong>Assignment:</strong> =, +=, -=, *=, /=</li>
+                        <li><strong>Comparison:</strong> ==, !=, <, >, <=, >=</li>
+                        <li><strong>Logical:</strong> &&, ||, !</li>
+                        <li><strong>Increment/Decrement:</strong> ++, --</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 1. Arithmetic Operators</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int a = 15, b = 4;
+
+System.out.println("Addition: " + (a + b));        // 19
+System.out.println("Subtraction: " + (a - b));     // 11
+System.out.println("Multiplication: " + (a * b));  // 60
+System.out.println("Division: " + (a / b));        // 3 (integer division)
+System.out.println("Modulus: " + (a % b));         // 3 (remainder)
+
+// With floating point
+double x = 15.0, y = 4.0;
+System.out.println("Float Division: " + (x / y));  // 3.75</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 2. Assignment Operators</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int x = 10;
+
+x += 5;    // x = x + 5;  → x becomes 15
+x -= 3;    // x = x - 3;  → x becomes 12
+x *= 2;    // x = x * 2;  → x becomes 24
+x /= 4;    // x = x / 4;  → x becomes 6
+x %= 4;    // x = x % 4;  → x becomes 2
+
+System.out.println("Final value: " + x);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 3. Comparison Operators</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int a = 10, b = 20;
+
+System.out.println("a == b: " + (a == b));  // false
+System.out.println("a != b: " + (a != b));  // true
+System.out.println("a < b: " + (a < b));    // true
+System.out.println("a > b: " + (a > b));    // false
+System.out.println("a <= b: " + (a <= b));  // true
+System.out.println("a >= b: " + (a >= b));  // false
+
+// String comparison
+String name1 = "Java";
+String name2 = "Python";
+System.out.println("Strings equal: " + name1.equals(name2));</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 4. Logical Operators</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">boolean x = true, y = false;
+
+System.out.println("x && y: " + (x && y));  // false (AND)
+System.out.println("x || y: " + (x || y));  // true (OR)
+System.out.println("!x: " + (!x));          // false (NOT)
+
+// Practical example
+int age = 25;
+boolean hasLicense = true;
+boolean canDrive = (age >= 18) && hasLicense;
+System.out.println("Can drive: " + canDrive);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 5. Increment/Decrement Operators</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int count = 5;
+
+// Pre-increment: increment first, then use
+System.out.println("Pre-increment: " + (++count));  // 6
+
+// Post-increment: use first, then increment
+System.out.println("Post-increment: " + (count++)); // 6
+System.out.println("After post-increment: " + count); // 7
+
+// Pre-decrement
+System.out.println("Pre-decrement: " + (--count));  // 6
+
+// Post-decrement
+System.out.println("Post-decrement: " + (count--)); // 6
+System.out.println("Final value: " + count);        // 5</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 6. Ternary Operator (?:)</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int age = 20;
+
+// Traditional if-else
+String message1;
+if (age >= 18) {
+    message1 = "Adult";
+} else {
+    message1 = "Minor";
+}
+
+// Ternary operator (shorter)
+String message2 = (age >= 18) ? "Adult" : "Minor";
+
+System.out.println("Message: " + message2);
+
+// Nested ternary
+int score = 85;
+String grade = (score >= 90) ? "A" : 
+               (score >= 80) ? "B" : 
+               (score >= 70) ? "C" : "F";
+System.out.println("Grade: " + grade);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 7. Operator Precedence</h3>
+                    <div class="code-demo">
+                        <pre><code class="language-java">// Order of operations matters!
+int result1 = 10 + 5 * 2;      // 20 (not 30)
+int result2 = (10 + 5) * 2;    // 30
+
+System.out.println("10 + 5 * 2 = " + result1);
+System.out.println("(10 + 5) * 2 = " + result2);
+
+// Complex expression
+boolean complex = 5 > 3 && 10 < 20 || 2 == 3;
+System.out.println("Complex: " + complex); // true</code></pre>
+                    </div>
+                    <p><strong>Precedence Order (High to Low):</strong></p>
+                    <ol>
+                        <li>Parentheses ()</li>
+                        <li>Unary: ++, --, !</li>
+                        <li>Multiplicative: *, /, %</li>
+                        <li>Additive: +, -</li>
+                        <li>Relational: <, >, <=, >=</li>
+                        <li>Equality: ==, !=</li>
+                        <li>Logical AND: &&</li>
+                        <li>Logical OR: ||</li>
+                        <li>Ternary: ?:</li>
+                        <li>Assignment: =, +=, -=, etc.</li>
+                    </ol>
                 </div>
             </section>
 
             <section id="control-flow" class="tutorial-section">
                 <h1>🔄 Control Flow</h1>
+                
                 <div class="example-box featured-example">
-                    <h3>📌 Coming Soon</h3>
-                    <p>This section will cover if-else statements, switch statements, and loops in detail.</p>
+                    <h3>✅ What is Control Flow?</h3>
+                    <p>Control flow statements determine the order in which code executes. They allow you to make decisions, repeat actions, and branch program execution.</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 1. If-Else Statements</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int temperature = 25;
+
+// Simple if
+if (temperature > 30) {
+    System.out.println("It's hot!");
+}
+
+// If-else
+if (temperature > 30) {
+    System.out.println("It's hot!");
+} else {
+    System.out.println("It's not that hot.");
+}
+
+// If-else if-else
+if (temperature > 35) {
+    System.out.println("Extremely hot!");
+} else if (temperature > 25) {
+    System.out.println("Warm weather");
+} else if (temperature > 15) {
+    System.out.println("Mild weather");
+} else {
+    System.out.println("Cold weather");
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 2. Switch Statement</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int dayOfWeek = 3;
+String dayName;
+
+switch (dayOfWeek) {
+    case 1:
+        dayName = "Monday";
+        break;
+    case 2:
+        dayName = "Tuesday";
+        break;
+    case 3:
+        dayName = "Wednesday";
+        break;
+    case 4:
+        dayName = "Thursday";
+        break;
+    case 5:
+        dayName = "Friday";
+        break;
+    case 6:
+    case 7:
+        dayName = "Weekend";
+        break;
+    default:
+        dayName = "Invalid day";
+}
+
+System.out.println("Day: " + dayName);
+
+// Switch with Strings (Java 7+)
+String grade = "A";
+switch (grade) {
+    case "A":
+        System.out.println("Excellent!");
+        break;
+    case "B":
+        System.out.println("Good job!");
+        break;
+    case "C":
+        System.out.println("Average");
+        break;
+    default:
+        System.out.println("Keep trying!");
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 3. For Loops</h3>
+                    
+                    <h4>🔸 Basic For Loop</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Print numbers 1 to 5
+for (int i = 1; i <= 5; i++) {
+    System.out.println("Count: " + i);
+}
+
+// Countdown
+for (int i = 10; i >= 1; i--) {
+    System.out.println("Countdown: " + i);
+}
+
+// Step by 2
+for (int i = 0; i <= 10; i += 2) {
+    System.out.println("Even: " + i);
+}</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Enhanced For Loop (For-Each)</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Array iteration
+int[] numbers = {1, 2, 3, 4, 5};
+for (int num : numbers) {
+    System.out.println("Number: " + num);
+}
+
+// String array
+String[] names = {"Alice", "Bob", "Charlie"};
+for (String name : names) {
+    System.out.println("Hello, " + name);
+}
+
+// Character iteration
+String text = "Java";
+for (char c : text.toCharArray()) {
+    System.out.println("Character: " + c);
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 4. While Loops</h3>
+                    
+                    <h4>🔸 While Loop</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int count = 1;
+while (count <= 5) {
+    System.out.println("While count: " + count);
+    count++;
+}
+
+// Finding first number divisible by both 3 and 7
+int number = 1;
+while (true) {
+    if (number % 3 == 0 && number % 7 == 0) {
+        System.out.println("First number divisible by 3 and 7: " + number);
+        break;
+    }
+    number++;
+}</code></pre>
+                    </div>
+                    
+                    <h4>🔸 Do-While Loop</h4>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">int num = 1;
+do {
+    System.out.println("Do-while: " + num);
+    num++;
+} while (num <= 3);
+
+// Menu example
+Scanner scanner = new Scanner(System.in);
+int choice;
+do {
+    System.out.println("\n1. Option A");
+    System.out.println("2. Option B");
+    System.out.println("0. Exit");
+    System.out.print("Choose: ");
+    choice = scanner.nextInt();
+    
+    switch (choice) {
+        case 1:
+            System.out.println("You chose A");
+            break;
+        case 2:
+            System.out.println("You chose B");
+            break;
+        case 0:
+            System.out.println("Goodbye!");
+            break;
+        default:
+            System.out.println("Invalid choice");
+    }
+} while (choice != 0);</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 5. Break and Continue</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Break - exits the loop
+System.out.println("Break example:");
+for (int i = 1; i <= 10; i++) {
+    if (i == 6) {
+        break;  // Stop when i equals 6
+    }
+    System.out.print(i + " ");
+}
+System.out.println(); // Output: 1 2 3 4 5
+
+// Continue - skips current iteration
+System.out.println("Continue example:");
+for (int i = 1; i <= 10; i++) {
+    if (i % 2 == 0) {
+        continue;  // Skip even numbers
+    }
+    System.out.print(i + " ");
+}
+System.out.println(); // Output: 1 3 5 7 9
+
+// Labeled break (for nested loops)
+outer: for (int i = 1; i <= 3; i++) {
+    for (int j = 1; j <= 3; j++) {
+        if (i == 2 && j == 2) {
+            break outer;  // Breaks out of both loops
+        }
+        System.out.println("i=" + i + ", j=" + j);
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 6. Nested Loops</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Multiplication table
+System.out.println("Multiplication Table:");
+for (int i = 1; i <= 5; i++) {
+    for (int j = 1; j <= 5; j++) {
+        System.out.printf("%3d ", i * j);
+    }
+    System.out.println();
+}
+
+// Pattern printing
+System.out.println("\nStar Pattern:");
+for (int i = 1; i <= 5; i++) {
+    for (int j = 1; j <= i; j++) {
+        System.out.print("* ");
+    }
+    System.out.println();
+}
+
+// Number pyramid
+System.out.println("\nNumber Pyramid:");
+for (int i = 1; i <= 4; i++) {
+    // Print spaces
+    for (int j = 1; j <= 4 - i; j++) {
+        System.out.print(" ");
+    }
+    // Print numbers
+    for (int j = 1; j <= i; j++) {
+        System.out.print(j + " ");
+    }
+    System.out.println();
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 7. Common Control Flow Patterns</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Input validation
+Scanner scanner = new Scanner(System.in);
+int age;
+while (true) {
+    System.out.print("Enter your age (0-120): ");
+    age = scanner.nextInt();
+    if (age >= 0 && age <= 120) {
+        break;
+    }
+    System.out.println("Invalid age! Please try again.");
+}
+
+// Finding max in array
+int[] scores = {85, 92, 78, 96, 88};
+int maxScore = scores[0];
+for (int score : scores) {
+    if (score > maxScore) {
+        maxScore = score;
+    }
+}
+System.out.println("Highest score: " + maxScore);
+
+// Counting specific elements
+String[] fruits = {"apple", "banana", "apple", "orange", "apple"};
+int appleCount = 0;
+for (String fruit : fruits) {
+    if (fruit.equals("apple")) {
+        appleCount++;
+    }
+}
+System.out.println("Apple count: " + appleCount);</code></pre>
+                    </div>
                 </div>
             </section>
 
             <section id="methods" class="tutorial-section">
                 <h1>⚙️ Methods</h1>
+                
                 <div class="example-box featured-example">
-                    <h3>📌 Coming Soon</h3>
-                    <p>This section will cover method declaration, parameters, return types, and method overloading.</p>
+                    <h3>✅ What are Methods?</h3>
+                    <p>Methods are blocks of code that perform specific tasks. They help organize code, avoid repetition, and make programs more readable and maintainable.</p>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Method syntax
+public static returnType methodName(parameters) {
+    // method body
+    return value; // if not void
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 1. Basic Method Declaration</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class MethodExample {
+    
+    // Method with no parameters and no return value
+    public static void greet() {
+        System.out.println("Hello, World!");
+    }
+    
+    // Method with parameters but no return value
+    public static void greetPerson(String name) {
+        System.out.println("Hello, " + name + "!");
+    }
+    
+    // Method with parameters and return value
+    public static int add(int a, int b) {
+        return a + b;
+    }
+    
+    // Method with multiple parameters
+    public static double calculateArea(double length, double width) {
+        return length * width;
+    }
+    
+    public static void main(String[] args) {
+        greet();                           // Hello, World!
+        greetPerson("Alice");              // Hello, Alice!
+        int sum = add(5, 3);              // 8
+        double area = calculateArea(4.5, 2.0); // 9.0
+        
+        System.out.println("Sum: " + sum);
+        System.out.println("Area: " + area);
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 2. Method Parameters and Arguments</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Method with different parameter types
+public static void displayInfo(String name, int age, boolean isStudent) {
+    System.out.println("Name: " + name);
+    System.out.println("Age: " + age);
+    System.out.println("Student: " + isStudent);
+}
+
+// Method with array parameter
+public static void printArray(int[] numbers) {
+    System.out.print("Array: ");
+    for (int num : numbers) {
+        System.out.print(num + " ");
+    }
+    System.out.println();
+}
+
+// Variable arguments (varargs)
+public static int sum(int... numbers) {
+    int total = 0;
+    for (int num : numbers) {
+        total += num;
+    }
+    return total;
+}
+
+public static void main(String[] args) {
+    displayInfo("Bob", 20, true);
+    
+    int[] scores = {85, 92, 78};
+    printArray(scores);
+    
+    // Varargs can take any number of arguments
+    System.out.println("Sum of 2 numbers: " + sum(5, 3));
+    System.out.println("Sum of 4 numbers: " + sum(1, 2, 3, 4));
+    System.out.println("Sum of 6 numbers: " + sum(10, 20, 30, 40, 50, 60));
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 3. Return Values and Types</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Different return types
+public static boolean isEven(int number) {
+    return number % 2 == 0;
+}
+
+public static String getGrade(int score) {
+    if (score >= 90) return "A";
+    else if (score >= 80) return "B";
+    else if (score >= 70) return "C";
+    else if (score >= 60) return "D";
+    else return "F";
+}
+
+public static double[] getStatistics(int[] numbers) {
+    double sum = 0;
+    int min = numbers[0];
+    int max = numbers[0];
+    
+    for (int num : numbers) {
+        sum += num;
+        if (num < min) min = num;
+        if (num > max) max = num;
+    }
+    
+    double average = sum / numbers.length;
+    return new double[]{sum, average, min, max};
+}
+
+// Early return
+public static String checkAge(int age) {
+    if (age < 0) {
+        return "Invalid age";
+    }
+    if (age < 18) {
+        return "Minor";
+    }
+    if (age < 65) {
+        return "Adult";
+    }
+    return "Senior";
+}
+
+public static void main(String[] args) {
+    System.out.println("Is 4 even? " + isEven(4));
+    System.out.println("Grade for 85: " + getGrade(85));
+    
+    int[] scores = {75, 82, 94, 68, 91};
+    double[] stats = getStatistics(scores);
+    System.out.println("Sum: " + stats[0]);
+    System.out.println("Average: " + stats[1]);
+    System.out.println("Min: " + stats[2]);
+    System.out.println("Max: " + stats[3]);
+    
+    System.out.println("Age category: " + checkAge(25));
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 4. Method Overloading</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class Calculator {
+    
+    // Same method name, different parameters
+    public static int multiply(int a, int b) {
+        return a * b;
+    }
+    
+    public static double multiply(double a, double b) {
+        return a * b;
+    }
+    
+    public static int multiply(int a, int b, int c) {
+        return a * b * c;
+    }
+    
+    // Print methods with different parameter types
+    public static void print(int value) {
+        System.out.println("Integer: " + value);
+    }
+    
+    public static void print(double value) {
+        System.out.println("Double: " + value);
+    }
+    
+    public static void print(String value) {
+        System.out.println("String: " + value);
+    }
+    
+    public static void print(boolean value) {
+        System.out.println("Boolean: " + value);
+    }
+    
+    public static void main(String[] args) {
+        // Java automatically chooses the right method
+        System.out.println(multiply(5, 3));        // Calls int version
+        System.out.println(multiply(2.5, 4.0));    // Calls double version
+        System.out.println(multiply(2, 3, 4));     // Calls 3-parameter version
+        
+        print(42);          // Calls int version
+        print(3.14);        // Calls double version
+        print("Hello");     // Calls String version
+        print(true);        // Calls boolean version
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 5. Scope and Local Variables</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class ScopeExample {
+    static int globalVar = 100; // Class variable (global scope)
+    
+    public static void methodA() {
+        int localVar = 50;  // Local to methodA
+        System.out.println("In methodA:");
+        System.out.println("Global: " + globalVar);
+        System.out.println("Local: " + localVar);
+        
+        // Can modify global variable
+        globalVar = 200;
+    }
+    
+    public static void methodB() {
+        int localVar = 75;  // Different local variable
+        System.out.println("In methodB:");
+        System.out.println("Global: " + globalVar);
+        System.out.println("Local: " + localVar);
+        
+        // System.out.println(localVar from methodA); // ❌ Error: not accessible
+    }
+    
+    public static int processNumber(int input) {
+        int result = input * 2;  // Local to this method
+        
+        if (input > 10) {
+            int bonus = 5;       // Local to this if block
+            result += bonus;
+        }
+        // System.out.println(bonus); // ❌ Error: bonus not accessible here
+        
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("Initial global: " + globalVar);
+        methodA();
+        methodB();
+        
+        int result = processNumber(15);
+        System.out.println("Processed result: " + result);
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 6. Utility Methods</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class Utilities {
+    
+    // String utilities
+    public static boolean isPalindrome(String str) {
+        str = str.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+        int left = 0, right = str.length() - 1;
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+    
+    public static String reverse(String str) {
+        StringBuilder sb = new StringBuilder(str);
+        return sb.reverse().toString();
+    }
+    
+    // Math utilities
+    public static boolean isPrime(int number) {
+        if (number <= 1) return false;
+        if (number <= 3) return true;
+        if (number % 2 == 0 || number % 3 == 0) return false;
+        
+        for (int i = 5; i * i <= number; i += 6) {
+            if (number % i == 0 || number % (i + 2) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static int factorial(int n) {
+        if (n <= 1) return 1;
+        int result = 1;
+        for (int i = 2; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+    
+    // Array utilities
+    public static void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+    
+    public static int findMax(int[] arr) {
+        int max = arr[0];
+        for (int num : arr) {
+            if (num > max) max = num;
+        }
+        return max;
+    }
+    
+    public static void main(String[] args) {
+        // String utilities
+        System.out.println("Is 'radar' palindrome? " + isPalindrome("radar"));
+        System.out.println("Reverse of 'hello': " + reverse("hello"));
+        
+        // Math utilities
+        System.out.println("Is 17 prime? " + isPrime(17));
+        System.out.println("Factorial of 5: " + factorial(5));
+        
+        // Array utilities
+        int[] numbers = {3, 7, 1, 9, 4};
+        printArray(numbers);
+        System.out.println("Max value: " + findMax(numbers));
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 7. Recursive Methods</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class RecursionExample {
+    
+    // Factorial using recursion
+    public static int factorialRecursive(int n) {
+        if (n <= 1) {
+            return 1; // Base case
+        }
+        return n * factorialRecursive(n - 1); // Recursive case
+    }
+    
+    // Fibonacci sequence
+    public static int fibonacci(int n) {
+        if (n <= 1) {
+            return n; // Base cases: fib(0)=0, fib(1)=1
+        }
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+    
+    // Power calculation
+    public static double power(double base, int exponent) {
+        if (exponent == 0) {
+            return 1; // Any number to the power 0 is 1
+        }
+        if (exponent < 0) {
+            return 1 / power(base, -exponent);
+        }
+        return base * power(base, exponent - 1);
+    }
+    
+    // Sum of digits
+    public static int sumOfDigits(int number) {
+        if (number == 0) {
+            return 0; // Base case
+        }
+        return (number % 10) + sumOfDigits(number / 10);
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("Factorial of 5: " + factorialRecursive(5));
+        
+        System.out.print("Fibonacci sequence (first 10): ");
+        for (int i = 0; i < 10; i++) {
+            System.out.print(fibonacci(i) + " ");
+        }
+        System.out.println();
+        
+        System.out.println("2^8 = " + power(2, 8));
+        System.out.println("Sum of digits in 12345: " + sumOfDigits(12345));
+    }
+}</code></pre>
+                    </div>
                 </div>
             </section>
 
             <section id="classes-objects" class="tutorial-section">
                 <h1>🏗️ Classes & Objects</h1>
+                
                 <div class="example-box featured-example">
-                    <h3>📌 Coming Soon</h3>
-                    <p>This section will cover object-oriented programming concepts in Java.</p>
+                    <h3>✅ Object-Oriented Programming (OOP)</h3>
+                    <p>Java is an object-oriented language. Everything in Java is associated with classes and objects. A <strong>class</strong> is a template for creating objects, and an <strong>object</strong> is an instance of a class.</p>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Class definition
+public class Car {
+    // Attributes (fields)
+    String brand;
+    String model;
+    int year;
+    
+    // Method
+    public void start() {
+        System.out.println("The car is starting...");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 1. Creating Classes and Objects</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Student class
+public class Student {
+    // Instance variables (attributes)
+    String name;
+    int age;
+    String major;
+    double gpa;
+    
+    // Method to display student info
+    public void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Major: " + major);
+        System.out.println("GPA: " + gpa);
+    }
+    
+    // Method to study
+    public void study(String subject) {
+        System.out.println(name + " is studying " + subject);
+    }
+    
+    // Method to calculate if honor student
+    public boolean isHonorStudent() {
+        return gpa >= 3.5;
+    }
+}
+
+// Using the class
+public class StudentTest {
+    public static void main(String[] args) {
+        // Creating objects (instances)
+        Student student1 = new Student();
+        Student student2 = new Student();
+        
+        // Setting values
+        student1.name = "Alice";
+        student1.age = 20;
+        student1.major = "Computer Science";
+        student1.gpa = 3.8;
+        
+        student2.name = "Bob";
+        student2.age = 19;
+        student2.major = "Mathematics";
+        student2.gpa = 3.2;
+        
+        // Calling methods
+        System.out.println("Student 1:");
+        student1.displayInfo();
+        student1.study("Java Programming");
+        System.out.println("Honor student: " + student1.isHonorStudent());
+        
+        System.out.println("\nStudent 2:");
+        student2.displayInfo();
+        student2.study("Calculus");
+        System.out.println("Honor student: " + student2.isHonorStudent());
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 2. Constructors</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class Book {
+    // Instance variables
+    private String title;
+    private String author;
+    private int pages;
+    private double price;
+    
+    // Default constructor
+    public Book() {
+        this.title = "Unknown";
+        this.author = "Unknown";
+        this.pages = 0;
+        this.price = 0.0;
+    }
+    
+    // Parameterized constructor
+    public Book(String title, String author, int pages, double price) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.price = price;
+    }
+    
+    // Constructor overloading
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+        this.pages = 100; // Default pages
+        this.price = 9.99; // Default price
+    }
+    
+    // Method to display book info
+    public void displayInfo() {
+        System.out.println("Title: " + title);
+        System.out.println("Author: " + author);
+        System.out.println("Pages: " + pages);
+        System.out.println("Price: $" + price);
+        System.out.println("---");
+    }
+    
+    // Getter methods
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public int getPages() { return pages; }
+    public double getPrice() { return price; }
+    
+    // Setter methods
+    public void setTitle(String title) { this.title = title; }
+    public void setAuthor(String author) { this.author = author; }
+    public void setPages(int pages) { this.pages = pages; }
+    public void setPrice(double price) { this.price = price; }
+}
+
+public class BookTest {
+    public static void main(String[] args) {
+        // Using different constructors
+        Book book1 = new Book(); // Default constructor
+        Book book2 = new Book("1984", "George Orwell", 328, 13.99);
+        Book book3 = new Book("To Kill a Mockingbird", "Harper Lee");
+        
+        System.out.println("Book 1 (default):");
+        book1.displayInfo();
+        
+        System.out.println("Book 2 (full constructor):");
+        book2.displayInfo();
+        
+        System.out.println("Book 3 (partial constructor):");
+        book3.displayInfo();
+        
+        // Using setters to modify book1
+        book1.setTitle("The Hobbit");
+        book1.setAuthor("J.R.R. Tolkien");
+        book1.setPages(310);
+        book1.setPrice(12.50);
+        
+        System.out.println("Book 1 (after modification):");
+        book1.displayInfo();
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 3. Encapsulation (Private Variables and Methods)</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class BankAccount {
+    // Private variables (encapsulated)
+    private String accountNumber;
+    private String ownerName;
+    private double balance;
+    private String accountType;
+    
+    // Constructor
+    public BankAccount(String accountNumber, String ownerName, 
+                      double initialBalance, String accountType) {
+        this.accountNumber = accountNumber;
+        this.ownerName = ownerName;
+        this.balance = initialBalance;
+        this.accountType = accountType;
+    }
+    
+    // Public methods to access private data
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited $" + amount);
+            displayBalance();
+        } else {
+            System.out.println("Invalid deposit amount");
+        }
+    }
+    
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrew $" + amount);
+            displayBalance();
+        } else if (amount > balance) {
+            System.out.println("Insufficient funds");
+        } else {
+            System.out.println("Invalid withdrawal amount");
+        }
+    }
+    
+    public double getBalance() {
+        return balance;
+    }
+    
+    public void displayAccountInfo() {
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Owner: " + ownerName);
+        System.out.println("Account Type: " + accountType);
+        displayBalance();
+        System.out.println("---");
+    }
+    
+    // Private method (can only be used within this class)
+    private void displayBalance() {
+        System.out.println("Current Balance: $" + String.format("%.2f", balance));
+    }
+    
+    // Getters for read-only access
+    public String getAccountNumber() { return accountNumber; }
+    public String getOwnerName() { return ownerName; }
+    public String getAccountType() { return accountType; }
+    
+    // No setters for critical data to maintain security
+}
+
+public class BankTest {
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount("ACC001", "John Doe", 1000.0, "Checking");
+        
+        account.displayAccountInfo();
+        
+        account.deposit(250.50);
+        account.withdraw(100.0);
+        account.withdraw(2000.0); // Should fail
+        account.deposit(-50.0);   // Should fail
+        
+        // Direct access to private variables is not allowed
+        // account.balance = 5000.0; // ❌ Error: balance is private
+        
+        // Must use public methods
+        System.out.println("Final balance: $" + account.getBalance());
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 4. Static vs Instance Members</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class Counter {
+    // Static variable (shared by all instances)
+    private static int totalCount = 0;
+    
+    // Instance variable (unique to each object)
+    private int instanceCount;
+    private String name;
+    
+    // Constructor
+    public Counter(String name) {
+        this.name = name;
+        this.instanceCount = 0;
+        totalCount++; // Increment static counter when object is created
+    }
+    
+    // Instance method
+    public void increment() {
+        instanceCount++;
+        totalCount++;
+        System.out.println(name + " incremented. Instance: " + instanceCount + 
+                          ", Total: " + totalCount);
+    }
+    
+    // Static method (can be called without creating an object)
+    public static int getTotalCount() {
+        return totalCount;
+    }
+    
+    // Static method to reset total count
+    public static void resetTotalCount() {
+        totalCount = 0;
+        System.out.println("Total count reset to 0");
+    }
+    
+    // Instance method
+    public void displayInfo() {
+        System.out.println("Counter: " + name + 
+                          ", Instance count: " + instanceCount +
+                          ", Total count: " + totalCount);
+    }
+    
+    // Static block (executed when class is first loaded)
+    static {
+        System.out.println("Counter class loaded!");
+        totalCount = 0;
+    }
+}
+
+public class CounterTest {
+    public static void main(String[] args) {
+        // Using static method without creating object
+        System.out.println("Initial total count: " + Counter.getTotalCount());
+        
+        // Creating objects
+        Counter counter1 = new Counter("Counter1");
+        Counter counter2 = new Counter("Counter2");
+        Counter counter3 = new Counter("Counter3");
+        
+        System.out.println("After creating 3 counters: " + Counter.getTotalCount());
+        
+        // Using instance methods
+        counter1.increment();
+        counter1.increment();
+        counter2.increment();
+        counter3.increment();
+        counter3.increment();
+        counter3.increment();
+        
+        // Display info for each counter
+        counter1.displayInfo();
+        counter2.displayInfo();
+        counter3.displayInfo();
+        
+        System.out.println("Final total count: " + Counter.getTotalCount());
+        
+        // Reset using static method
+        Counter.resetTotalCount();
+        System.out.println("After reset: " + Counter.getTotalCount());
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 5. Object Interaction</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">// Teacher class
+class Teacher {
+    private String name;
+    private String subject;
+    private int experience;
+    
+    public Teacher(String name, String subject, int experience) {
+        this.name = name;
+        this.subject = subject;
+        this.experience = experience;
+    }
+    
+    public void teach(Student student) {
+        System.out.println(name + " is teaching " + subject + " to " + student.getName());
+    }
+    
+    // Getters
+    public String getName() { return name; }
+    public String getSubject() { return subject; }
+    public int getExperience() { return experience; }
+}
+
+// Updated Student class
+class Student {
+    private String name;
+    private int age;
+    private String major;
+    private double gpa;
+    
+    public Student(String name, int age, String major, double gpa) {
+        this.name = name;
+        this.age = age;
+        this.major = major;
+        this.gpa = gpa;
+    }
+    
+    public void attendClass(Teacher teacher) {
+        System.out.println(name + " is attending " + teacher.getSubject() + 
+                          " class taught by " + teacher.getName());
+    }
+    
+    public void study(String subject) {
+        System.out.println(name + " is studying " + subject);
+        // Simulate GPA improvement
+        if (gpa < 4.0) {
+            gpa += 0.1;
+            System.out.println(name + "'s GPA improved to " + String.format("%.2f", gpa));
+        }
+    }
+    
+    // Getters
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    public String getMajor() { return major; }
+    public double getGpa() { return gpa; }
+}
+
+// Classroom class that manages multiple students and teachers
+class Classroom {
+    private String courseCode;
+    private Teacher teacher;
+    private Student[] students;
+    private int studentCount;
+    
+    public Classroom(String courseCode, Teacher teacher, int maxStudents) {
+        this.courseCode = courseCode;
+        this.teacher = teacher;
+        this.students = new Student[maxStudents];
+        this.studentCount = 0;
+    }
+    
+    public void addStudent(Student student) {
+        if (studentCount < students.length) {
+            students[studentCount] = student;
+            studentCount++;
+            System.out.println(student.getName() + " added to " + courseCode + " class");
+        } else {
+            System.out.println("Classroom is full!");
+        }
+    }
+    
+    public void conductClass() {
+        System.out.println("\n--- " + courseCode + " Class Session ---");
+        System.out.println("Teacher: " + teacher.getName() + " (" + teacher.getSubject() + ")");
+        System.out.println("Students present: " + studentCount);
+        
+        for (int i = 0; i < studentCount; i++) {
+            students[i].attendClass(teacher);
+            teacher.teach(students[i]);
+        }
+        
+        System.out.println("Class session completed!\n");
+    }
+    
+    public void displayClassInfo() {
+        System.out.println("Course: " + courseCode);
+        System.out.println("Teacher: " + teacher.getName());
+        System.out.println("Students enrolled: " + studentCount);
+        for (int i = 0; i < studentCount; i++) {
+            System.out.println("- " + students[i].getName() + " (GPA: " + 
+                             String.format("%.2f", students[i].getGpa()) + ")");
+        }
+    }
+}
+
+public class SchoolTest {
+    public static void main(String[] args) {
+        // Create teacher and students
+        Teacher javaTeacher = new Teacher("Dr. Smith", "Java Programming", 10);
+        
+        Student student1 = new Student("Alice", 20, "Computer Science", 3.5);
+        Student student2 = new Student("Bob", 19, "Information Technology", 3.2);
+        Student student3 = new Student("Carol", 21, "Computer Engineering", 3.8);
+        
+        // Create classroom
+        Classroom javaClass = new Classroom("CS101", javaTeacher, 5);
+        
+        // Add students to classroom
+        javaClass.addStudent(student1);
+        javaClass.addStudent(student2);
+        javaClass.addStudent(student3);
+        
+        // Display initial class info
+        javaClass.displayClassInfo();
+        
+        // Conduct a class session
+        javaClass.conductClass();
+        
+        // Students study after class
+        student1.study("Object-Oriented Programming");
+        student2.study("Data Structures");
+        student3.study("Algorithms");
+        
+        System.out.println("\n--- Updated Class Info ---");
+        javaClass.displayClassInfo();
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>🔹 6. toString() Method</h3>
+                    <div class="code-demo highlight-demo">
+                        <pre><code class="language-java">public class Person {
+    private String firstName;
+    private String lastName;
+    private int age;
+    private String email;
+    
+    public Person(String firstName, String lastName, int age, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+    }
+    
+    // Override toString() method for better object representation
+    @Override
+    public String toString() {
+        return "Person{" +
+               "firstName='" + firstName + '\'' +
+               ", lastName='" + lastName + '\'' +
+               ", age=" + age +
+               ", email='" + email + '\'' +
+               '}';
+    }
+    
+    // Alternative toString() for user-friendly display
+    public String toDisplayString() {
+        return firstName + " " + lastName + " (" + age + " years old) - " + email;
+    }
+    
+    // Getters
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getFullName() { return firstName + " " + lastName; }
+    public int getAge() { return age; }
+    public String getEmail() { return email; }
+}
+
+public class PersonTest {
+    public static void main(String[] args) {
+        Person person1 = new Person("John", "Doe", 30, "john.doe@email.com");
+        Person person2 = new Person("Jane", "Smith", 25, "jane.smith@email.com");
+        
+        // toString() is automatically called when printing objects
+        System.out.println("Using toString():");
+        System.out.println(person1); // Calls person1.toString()
+        System.out.println(person2);
+        
+        // Using custom display method
+        System.out.println("\nUsing custom display:");
+        System.out.println(person1.toDisplayString());
+        System.out.println(person2.toDisplayString());
+        
+        // Array of Person objects
+        Person[] people = {person1, person2, 
+                          new Person("Alice", "Johnson", 28, "alice.j@email.com")};
+        
+        System.out.println("\nArray of people:");
+        for (Person person : people) {
+            System.out.println(person.toDisplayString());
+        }
+    }
+}</code></pre>
+                    </div>
                 </div>
             </section>
 
             <section id="arrays" class="tutorial-section">
                 <h1>📋 Arrays</h1>
-                <div class="example-box featured-example">
-                    <h3>📌 Coming Soon</h3>
-                    <p>This section will cover array declaration, initialization, and manipulation.</p>
+                <p>Arrays are containers that hold multiple values of the same type. They're fundamental data structures in Java that allow you to store and manipulate collections of data efficiently.</p>
+
+                <!-- Array Declaration and Initialization -->
+                <div class="subsection">
+                    <h2>🔸 Array Declaration and Initialization</h2>
+                    <p>Arrays can be declared and initialized in several ways:</p>
+                    
+                    <div class="example-box">
+                        <h3>Basic Array Declaration</h3>
+                        <pre><code>// Declaration syntax
+int[] numbers;           // Preferred way
+int numbers[];          // Alternative way
+
+// Declaration with initialization
+int[] numbers = new int[5];  // Array of 5 integers (default value 0)
+String[] names = new String[3];  // Array of 3 strings (default value null)
+
+// Declaration with values
+int[] scores = {85, 92, 78, 96, 89};
+String[] colors = {"red", "green", "blue", "yellow"};
+
+// Alternative initialization syntax
+int[] grades = new int[]{88, 92, 76, 84, 91};
+</code></pre>
+                    </div>
+
+                    <div class="example-box highlight-demo">
+                        <h3>📋 Featured Example: Student Grades System</h3>
+                        <pre><code>public class StudentGrades {
+    public static void main(String[] args) {
+        // Initialize array with student grades
+        int[] grades = {85, 92, 78, 96, 89, 83, 91};
+        String[] students = {"Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace"};
+        
+        System.out.println("Student Grade Report:");
+        System.out.println("=====================");
+        
+        for (int i = 0; i < students.length; i++) {
+            System.out.println(students[i] + ": " + grades[i] + "%");
+        }
+        
+        System.out.println("\nArray Length: " + grades.length);
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Array Access and Modification -->
+                <div class="subsection">
+                    <h2>🔸 Array Access and Modification</h2>
+                    <p>Elements in arrays are accessed using zero-based indexing:</p>
+                    
+                    <div class="example-box">
+                        <h3>Accessing Array Elements</h3>
+                        <pre><code>int[] numbers = {10, 20, 30, 40, 50};
+
+// Accessing elements (index starts from 0)
+int first = numbers[0];    // Gets 10
+int third = numbers[2];    // Gets 30
+int last = numbers[numbers.length - 1];  // Gets 50
+
+// Modifying elements
+numbers[1] = 25;  // Changes second element from 20 to 25
+numbers[4] = 55;  // Changes last element from 50 to 55
+
+System.out.println("Modified array:");
+for (int num : numbers) {
+    System.out.print(num + " ");  // Output: 10 25 30 40 55
+}
+</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>Array Bounds and Safety</h3>
+                        <pre><code>public class ArraySafety {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        
+        // Safe array access
+        System.out.println("Array length: " + arr.length);
+        
+        // Check bounds before accessing
+        int index = 10;
+        if (index >= 0 && index < arr.length) {
+            System.out.println("Element at index " + index + ": " + arr[index]);
+        } else {
+            System.out.println("Index " + index + " is out of bounds!");
+        }
+        
+        // This would cause ArrayIndexOutOfBoundsException:
+        // System.out.println(arr[10]);  // DON'T DO THIS
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Array Iteration -->
+                <div class="subsection">
+                    <h2>🔸 Array Iteration</h2>
+                    <p>There are multiple ways to iterate through arrays in Java:</p>
+                    
+                    <div class="example-box">
+                        <h3>Different Iteration Methods</h3>
+                        <pre><code>int[] numbers = {15, 23, 8, 42, 16, 31, 7};
+
+// 1. Traditional for loop
+System.out.println("Traditional for loop:");
+for (int i = 0; i < numbers.length; i++) {
+    System.out.println("Index " + i + ": " + numbers[i]);
+}
+
+// 2. Enhanced for loop (for-each)
+System.out.println("\nEnhanced for loop:");
+for (int num : numbers) {
+    System.out.println("Value: " + num);
+}
+
+// 3. While loop
+System.out.println("\nWhile loop:");
+int i = 0;
+while (i < numbers.length) {
+    System.out.println("numbers[" + i + "] = " + numbers[i]);
+    i++;
+}
+</code></pre>
+                    </div>
+
+                    <div class="example-box highlight-demo">
+                        <h3>📋 Featured Example: Array Statistics Calculator</h3>
+                        <pre><code>public class ArrayStats {
+    public static void main(String[] args) {
+        double[] scores = {78.5, 92.3, 85.7, 69.2, 88.9, 94.1, 76.8, 82.4};
+        
+        // Calculate sum and average
+        double sum = 0;
+        double max = scores[0];
+        double min = scores[0];
+        
+        for (double score : scores) {
+            sum += score;
+            if (score > max) max = score;
+            if (score < min) min = score;
+        }
+        
+        double average = sum / scores.length;
+        
+        System.out.println("Array Statistics:");
+        System.out.println("================");
+        System.out.println("Count: " + scores.length);
+        System.out.println("Sum: " + sum);
+        System.out.println("Average: " + String.format("%.2f", average));
+        System.out.println("Maximum: " + max);
+        System.out.println("Minimum: " + min);
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Array Manipulation -->
+                <div class="subsection">
+                    <h2>🔸 Array Manipulation and Operations</h2>
+                    <p>Common operations performed on arrays include searching, sorting, and copying:</p>
+                    
+                    <div class="example-box">
+                        <h3>Basic Array Operations</h3>
+                        <pre><code>import java.util.Arrays;
+
+public class ArrayOperations {
+    public static void main(String[] args) {
+        int[] original = {64, 34, 25, 12, 22, 11, 90};
+        
+        // Display original array
+        System.out.println("Original: " + Arrays.toString(original));
+        
+        // Copy array
+        int[] copy = Arrays.copyOf(original, original.length);
+        
+        // Sort array
+        Arrays.sort(copy);
+        System.out.println("Sorted: " + Arrays.toString(copy));
+        
+        // Search in sorted array
+        int target = 25;
+        int index = Arrays.binarySearch(copy, target);
+        System.out.println("Element " + target + " found at index: " + index);
+        
+        // Fill array with specific value
+        int[] filled = new int[5];
+        Arrays.fill(filled, 42);
+        System.out.println("Filled: " + Arrays.toString(filled));
+    }
+}</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>Manual Array Operations</h3>
+                        <pre><code>public class ManualArrayOps {
+    public static void main(String[] args) {
+        int[] numbers = {5, 2, 8, 1, 9, 3};
+        
+        System.out.println("Original: " + arrayToString(numbers));
+        
+        // Manual reverse
+        reverseArray(numbers);
+        System.out.println("Reversed: " + arrayToString(numbers));
+        
+        // Manual search
+        int searchValue = 8;
+        int position = linearSearch(numbers, searchValue);
+        if (position != -1) {
+            System.out.println("Found " + searchValue + " at index " + position);
+        } else {
+            System.out.println(searchValue + " not found");
+        }
+    }
+    
+    public static void reverseArray(int[] arr) {
+        int start = 0;
+        int end = arr.length - 1;
+        
+        while (start < end) {
+            // Swap elements
+            int temp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = temp;
+            
+            start++;
+            end--;
+        }
+    }
+    
+    public static int linearSearch(int[] arr, int target) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == target) {
+                return i;
+            }
+        }
+        return -1; // Not found
+    }
+    
+    public static String arrayToString(int[] arr) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i]);
+            if (i < arr.length - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Multi-dimensional Arrays -->
+                <div class="subsection">
+                    <h2>🔸 Multi-dimensional Arrays</h2>
+                    <p>Java supports arrays of arrays, commonly used for matrices and tables:</p>
+                    
+                    <div class="example-box">
+                        <h3>2D Array Basics</h3>
+                        <pre><code>// 2D array declaration and initialization
+int[][] matrix = new int[3][4];  // 3 rows, 4 columns
+
+// Initialize with values
+int[][] grid = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+// Jagged array (rows with different lengths)
+int[][] jagged = {
+    {1, 2},
+    {3, 4, 5, 6},
+    {7, 8, 9}
+};
+
+System.out.println("Grid dimensions: " + grid.length + "x" + grid[0].length);
+System.out.println("Element at [1][2]: " + grid[1][2]);  // Output: 6
+</code></pre>
+                    </div>
+
+                    <div class="example-box highlight-demo">
+                        <h3>📋 Featured Example: Tic-Tac-Toe Board</h3>
+                        <pre><code>public class TicTacToe {
+    public static void main(String[] args) {
+        char[][] board = {
+            {'X', 'O', 'X'},
+            {'O', 'X', 'O'},
+            {'X', 'O', 'X'}
+        };
+        
+        System.out.println("Tic-Tac-Toe Board:");
+        printBoard(board);
+        
+        // Check if X wins in first row
+        if (checkRow(board, 0, 'X')) {
+            System.out.println("X wins in the first row!");
+        }
+    }
+    
+    public static void printBoard(char[][] board) {
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                System.out.print(board[row][col]);
+                if (col < board[row].length - 1) {
+                    System.out.print(" | ");
+                }
+            }
+            System.out.println();
+            if (row < board.length - 1) {
+                System.out.println("---------");
+            }
+        }
+    }
+    
+    public static boolean checkRow(char[][] board, int row, char player) {
+        for (int col = 0; col < board[row].length; col++) {
+            if (board[row][col] != player) {
+                return false;
+            }
+        }
+        return true;
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Array Utility Methods -->
+                <div class="subsection">
+                    <h2>🔸 Array Utility Methods</h2>
+                    <p>Creating reusable methods for common array operations:</p>
+                    
+                    <div class="example-box">
+                        <h3>Useful Array Utility Methods</h3>
+                        <pre><code>import java.util.Arrays;
+import java.util.Random;
+
+public class ArrayUtils {
+    public static void main(String[] args) {
+        int[] numbers = generateRandomArray(10, 1, 100);
+        System.out.println("Random array: " + Arrays.toString(numbers));
+        
+        System.out.println("Sum: " + sum(numbers));
+        System.out.println("Average: " + average(numbers));
+        System.out.println("Contains 50? " + contains(numbers, 50));
+        
+        int[] filtered = filterGreaterThan(numbers, 50);
+        System.out.println("Numbers > 50: " + Arrays.toString(filtered));
+    }
+    
+    // Generate random array
+    public static int[] generateRandomArray(int size, int min, int max) {
+        Random random = new Random();
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = random.nextInt(max - min + 1) + min;
+        }
+        return arr;
+    }
+    
+    // Calculate sum
+    public static int sum(int[] arr) {
+        int total = 0;
+        for (int num : arr) {
+            total += num;
+        }
+        return total;
+    }
+    
+    // Calculate average
+    public static double average(int[] arr) {
+        return (double) sum(arr) / arr.length;
+    }
+    
+    // Check if array contains value
+    public static boolean contains(int[] arr, int value) {
+        for (int num : arr) {
+            if (num == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // Filter elements greater than threshold
+    public static int[] filterGreaterThan(int[] arr, int threshold) {
+        // First count how many elements meet criteria
+        int count = 0;
+        for (int num : arr) {
+            if (num > threshold) count++;
+        }
+        
+        // Create result array and fill it
+        int[] result = new int[count];
+        int index = 0;
+        for (int num : arr) {
+            if (num > threshold) {
+                result[index++] = num;
+            }
+        }
+        return result;
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Common Array Patterns -->
+                <div class="subsection">
+                    <h2>🔸 Common Array Patterns and Best Practices</h2>
+                    <p>Frequently used array patterns and programming best practices:</p>
+                    
+                    <div class="example-box">
+                        <h3>Array Processing Patterns</h3>
+                        <pre><code>public class ArrayPatterns {
+    public static void main(String[] args) {
+        int[] data = {3, 7, 1, 9, 4, 6, 8, 2, 5};
+        
+        // Pattern 1: Find maximum and minimum
+        int[] minMax = findMinMax(data);
+        System.out.println("Min: " + minMax[0] + ", Max: " + minMax[1]);
+        
+        // Pattern 2: Count elements meeting condition
+        int evenCount = countEven(data);
+        System.out.println("Even numbers count: " + evenCount);
+        
+        // Pattern 3: Remove duplicates (simplified)
+        int[] unique = {1, 2, 2, 3, 3, 3, 4, 5, 5};
+        int[] noDuplicates = removeDuplicatesSorted(unique);
+        System.out.println("Unique elements: " + Arrays.toString(noDuplicates));
+        
+        // Pattern 4: Rotate array
+        int[] toRotate = {1, 2, 3, 4, 5};
+        rotateLeft(toRotate, 2);
+        System.out.println("Rotated array: " + Arrays.toString(toRotate));
+    }
+    
+    public static int[] findMinMax(int[] arr) {
+        if (arr.length == 0) return new int[]{0, 0};
+        
+        int min = arr[0];
+        int max = arr[0];
+        
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] < min) min = arr[i];
+            if (arr[i] > max) max = arr[i];
+        }
+        
+        return new int[]{min, max};
+    }
+    
+    public static int countEven(int[] arr) {
+        int count = 0;
+        for (int num : arr) {
+            if (num % 2 == 0) count++;
+        }
+        return count;
+    }
+    
+    public static int[] removeDuplicatesSorted(int[] arr) {
+        if (arr.length == 0) return arr;
+        
+        int uniqueCount = 1;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] != arr[i-1]) {
+                uniqueCount++;
+            }
+        }
+        
+        int[] result = new int[uniqueCount];
+        result[0] = arr[0];
+        int resultIndex = 1;
+        
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] != arr[i-1]) {
+                result[resultIndex++] = arr[i];
+            }
+        }
+        
+        return result;
+    }
+    
+    public static void rotateLeft(int[] arr, int positions) {
+        positions = positions % arr.length; // Handle positions > array length
+        reverse(arr, 0, positions - 1);
+        reverse(arr, positions, arr.length - 1);
+        reverse(arr, 0, arr.length - 1);
+    }
+    
+    private static void reverse(int[] arr, int start, int end) {
+        while (start < end) {
+            int temp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = temp;
+            start++;
+            end--;
+        }
+    }
+}</code></pre>
+                    </div>
+
+                    <div class="example-box highlight-demo">
+                        <h3>📋 Featured Example: Grade Book Management System</h3>
+                        <pre><code>public class GradeBook {
+    private String[] studentNames;
+    private double[][] grades; // [student][assignment]
+    private String[] assignmentNames;
+    
+    public GradeBook(String[] names, String[] assignments) {
+        this.studentNames = names.clone();
+        this.assignmentNames = assignments.clone();
+        this.grades = new double[names.length][assignments.length];
+    }
+    
+    public void setGrade(int studentIndex, int assignmentIndex, double grade) {
+        if (isValidIndex(studentIndex, assignmentIndex)) {
+            grades[studentIndex][assignmentIndex] = grade;
+        }
+    }
+    
+    public double getStudentAverage(int studentIndex) {
+        if (studentIndex < 0 || studentIndex >= studentNames.length) {
+            return 0;
+        }
+        
+        double sum = 0;
+        for (int i = 0; i < assignmentNames.length; i++) {
+            sum += grades[studentIndex][i];
+        }
+        return sum / assignmentNames.length;
+    }
+    
+    public double getAssignmentAverage(int assignmentIndex) {
+        if (assignmentIndex < 0 || assignmentIndex >= assignmentNames.length) {
+            return 0;
+        }
+        
+        double sum = 0;
+        for (int i = 0; i < studentNames.length; i++) {
+            sum += grades[i][assignmentIndex];
+        }
+        return sum / studentNames.length;
+    }
+    
+    public void printGradeReport() {
+        System.out.println("Grade Book Report");
+        System.out.println("=================");
+        
+        // Print header
+        System.out.printf("%-12s", "Student");
+        for (String assignment : assignmentNames) {
+            System.out.printf("%8s", assignment);
+        }
+        System.out.printf("%8s%n", "Average");
+        
+        // Print student grades
+        for (int i = 0; i < studentNames.length; i++) {
+            System.out.printf("%-12s", studentNames[i]);
+            for (int j = 0; j < assignmentNames.length; j++) {
+                System.out.printf("%8.1f", grades[i][j]);
+            }
+            System.out.printf("%8.1f%n", getStudentAverage(i));
+        }
+        
+        // Print assignment averages
+        System.out.printf("%-12s", "Average");
+        for (int j = 0; j < assignmentNames.length; j++) {
+            System.out.printf("%8.1f", getAssignmentAverage(j));
+        }
+        System.out.println();
+    }
+    
+    private boolean isValidIndex(int studentIndex, int assignmentIndex) {
+        return studentIndex >= 0 && studentIndex < studentNames.length &&
+               assignmentIndex >= 0 && assignmentIndex < assignmentNames.length;
+    }
+    
+    public static void main(String[] args) {
+        String[] students = {"Alice", "Bob", "Charlie", "Diana"};
+        String[] assignments = {"Quiz1", "Quiz2", "Midterm", "Final"};
+        
+        GradeBook book = new GradeBook(students, assignments);
+        
+        // Add some grades
+        book.setGrade(0, 0, 85); book.setGrade(0, 1, 92); book.setGrade(0, 2, 88); book.setGrade(0, 3, 94);
+        book.setGrade(1, 0, 78); book.setGrade(1, 1, 84); book.setGrade(1, 2, 82); book.setGrade(1, 3, 89);
+        book.setGrade(2, 0, 92); book.setGrade(2, 1, 88); book.setGrade(2, 2, 95); book.setGrade(2, 3, 91);
+        book.setGrade(3, 0, 87); book.setGrade(3, 1, 90); book.setGrade(3, 2, 86); book.setGrade(3, 3, 93);
+        
+        book.printGradeReport();
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="example-box practice-tip">
+                    <h3>💡 Array Best Practices</h3>
+                    <ul>
+                        <li><strong>Always check bounds:</strong> Validate array indices before accessing elements</li>
+                        <li><strong>Use enhanced for loops:</strong> When you don't need the index, use for-each loops</li>
+                        <li><strong>Initialize properly:</strong> Ensure arrays are properly initialized before use</li>
+                        <li><strong>Consider Arrays class:</strong> Use java.util.Arrays for common operations like sorting and searching</li>
+                        <li><strong>Handle empty arrays:</strong> Always check for null or empty arrays in methods</li>
+                        <li><strong>Use meaningful names:</strong> Choose descriptive variable names for arrays</li>
+                        <li><strong>Avoid hardcoded sizes:</strong> Use array.length instead of magic numbers</li>
+                    </ul>
                 </div>
             </section>
         </main>

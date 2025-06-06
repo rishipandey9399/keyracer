@@ -16,6 +16,9 @@ class LeaderboardManager {
         
         // Load initial data
         this.loadLeaderboardData();
+        
+        // Initialize admin panel
+        this.initializeAdminPanel();
     }
 
     // Initialize event listeners
@@ -530,6 +533,187 @@ class LeaderboardManager {
             });
         }
     }
+
+    // Real-time update functionality
+    async updateLeaderboardRealTime(newRecord) {
+        console.log('Updating leaderboard in real-time with new record:', newRecord);
+        
+        // Show a live update notification
+        this.showLiveUpdateNotification(newRecord);
+        
+        // Reload leaderboard data to reflect the new record
+        try {
+            await this.loadLeaderboardData();
+            console.log('Leaderboard updated successfully');
+        } catch (error) {
+            console.error('Error updating leaderboard in real-time:', error);
+        }
+    }
+
+    // Show live update notification
+    showLiveUpdateNotification(record) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'live-update-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-bolt"></i>
+                <span>Leaderboard Updated!</span>
+                <div class="update-details">
+                    <strong>${record.username}</strong> scored ${record.wpm} WPM with ${Math.round(record.accuracy)}% accuracy
+                </div>
+            </div>
+        `;
+        
+        // Add CSS styles if not already present
+        if (!document.getElementById('live-update-styles')) {
+            const style = document.createElement('style');
+            style.id = 'live-update-styles';
+            style.textContent = `
+                .live-update-notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    z-index: 10000;
+                    transform: translateX(400px);
+                    opacity: 0;
+                    transition: all 0.3s ease;
+                    font-family: 'Roboto', sans-serif;
+                    max-width: 350px;
+                }
+                
+                .live-update-notification.show {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                
+                .notification-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+                
+                .notification-content i {
+                    font-size: 20px;
+                    color: #FFD700;
+                    animation: pulse 2s infinite;
+                }
+                
+                .update-details {
+                    font-size: 12px;
+                    margin-top: 5px;
+                    opacity: 0.9;
+                }
+                
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Add to document and show
+        document.body.appendChild(notification);
+        
+        // Trigger show animation
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        // Remove after 4 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 4000);
+    }
+
+    // Check for updates periodically (for multi-user scenarios)
+    startPeriodicUpdates() {
+        // Update leaderboard every 30 seconds to catch updates from other users
+        this.updateInterval = setInterval(() => {
+            // Only update if user is currently viewing the leaderboard page
+            if (window.location.pathname.includes('leaderboard.html')) {
+                this.loadLeaderboardData();
+            }
+        }, 30000); // 30 seconds
+    }
+
+    // Stop periodic updates
+    stopPeriodicUpdates() {
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+            this.updateInterval = null;
+        }
+    }
+
+    // Initialize leaderboard and check for admin access
+    initializeAdminPanel() {
+        // Check if user has admin access (you can customize this logic)
+        const currentUser = localStorage.getItem('typingTestUser');
+        const isAdmin = this.checkAdminAccess(currentUser);
+        
+        if (isAdmin) {
+            const adminPanel = document.getElementById('admin-panel');
+            if (adminPanel) {
+                adminPanel.style.display = 'block';
+                this.updateAdminStats();
+                
+                // Update admin stats every 10 seconds
+                setInterval(() => {
+                    this.updateAdminStats();
+                }, 10000);
+                
+                console.log('Admin panel activated for user:', currentUser);
+            }
+        }
+    }
+
+    // Check if user has admin access (customize this logic as needed)
+    checkAdminAccess(username) {
+        // For now, any authenticated user can see admin panel
+        // In production, you'd check against a list of admin users
+        return username && username !== 'Guest' && username !== null;
+    }
+
+    // Update admin panel statistics
+    updateAdminStats() {
+        if (!window.realTimeLeaderboard) {
+            document.getElementById('admin-status').innerHTML = 
+                '<span class="status-indicator error"></span>System Offline';
+            return;
+        }
+
+        try {
+            const stats = window.realTimeLeaderboard.getUpdateStats();
+            
+            // Update status indicator
+            const healthStatus = stats.systemHealth.status;
+            const statusClass = healthStatus === 'excellent' || healthStatus === 'good' ? '' : healthStatus;
+            document.getElementById('admin-status').innerHTML = 
+                `<span class="status-indicator ${statusClass}"></span>${healthStatus.charAt(0).toUpperCase() + healthStatus.slice(1)}`;
+            
+            // Update queue length
+            document.getElementById('admin-queue').textContent = stats.queueLength;
+            
+            // Update total updates
+            document.getElementById('admin-updates').textContent = stats.statistics.totalUpdates;
+            
+        } catch (error) {
+            console.error('Error updating admin stats:', error);
+            document.getElementById('admin-status').innerHTML = 
+                '<span class="status-indicator error"></span>Error';
+        }
+    }
 }
 
 // Initialize leaderboard when the page loads
@@ -538,8 +722,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.typingDB) {
         window.leaderboardManager = new LeaderboardManager();
         console.log('Leaderboard initialized');
+        
+        // Initialize admin panel
+        window.leaderboardManager.initializeAdminPanel();
+        
+        // Create global function for real-time updates
+        window.updateLeaderboardRealTime = function(newRecord) {
+            if (window.leaderboardManager) {
+                window.leaderboardManager.updateLeaderboardRealTime(newRecord);
+            }
+        };
+        
+        // Start periodic updates for multi-user scenarios
+        if (window.location.pathname.includes('leaderboard.html')) {
+            window.leaderboardManager.startPeriodicUpdates();
+        }
+        
     } else {
         console.error('typingDB not found. Make sure database.js is loaded before leaderboard.js');
         document.body.innerHTML += '<div style="color:red;padding:20px;background:#ffeeee;position:fixed;top:0;left:0;right:0;z-index:9999;">Error: Database not initialized</div>';
     }
-}); 
+});
+
+// Clean up periodic updates when leaving the page
+window.addEventListener('beforeunload', () => {
+    if (window.leaderboardManager) {
+        window.leaderboardManager.stopPeriodicUpdates();
+    }
+});

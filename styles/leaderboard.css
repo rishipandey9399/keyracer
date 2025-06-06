@@ -600,6 +600,132 @@
     font-weight: 500;
 }
 
+/* Real-time Admin Panel Styles */
+.admin-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--accent-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.admin-header h3 {
+    color: var(--accent-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+.admin-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-btn {
+    background: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.admin-btn:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.stat-label {
+    font-weight: 500;
+    color: #666;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    display: inline-block;
+}
+
+.status-indicator.warning {
+    background: #FF9800;
+}
+
+.status-indicator.error {
+    background: #f44336;
+}
+
+.status-indicator.checking {
+    background: #2196F3;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Responsive admin panel */
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .admin-controls {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Responsive styles */
 @media (max-width: 1024px) {
     .standings-stats {
@@ -666,4 +792,4 @@
     .checkpoint-label {
         font-size: 0.7rem;
     }
-} 
+}

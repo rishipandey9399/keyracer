@@ -90,7 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if user is already logged in
         const currentUser = localStorage.getItem('typingTestUser');
         if (currentUser) {
-            redirectToApp(currentUser);
+            // If user is logged in, show them a message and option to continue or logout
+            const preferencesComplete = localStorage.getItem('preferencesComplete');
+            
+            // Create a notification for already logged-in users
+            showMessage(`You're already logged in as ${currentUser}. ${!preferencesComplete ? 'Continue to complete your preferences.' : 'Continue to the app.'}`, 'info');
+            
+            // Add "Continue" and "Logout" buttons to the login form
+            addLoggedInOptions(currentUser, preferencesComplete);
         }
         
         // Google sign-in button handler
@@ -295,6 +302,96 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Redirect to preference page first
         window.location.href = 'preference.html';
+    }
+
+    // Handle already logged-in users
+    function addLoggedInOptions(username, preferencesComplete) {
+        // Find the login form container
+        const authContainer = document.querySelector('.auth-container');
+        if (!authContainer) return;
+
+        // Create logged-in user notification
+        const loggedInNotification = document.createElement('div');
+        loggedInNotification.className = 'logged-in-notification';
+        loggedInNotification.style.cssText = `
+            background: rgba(0, 255, 221, 0.1);
+            border: 2px solid rgba(0, 255, 221, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            color: #00FFDD;
+            font-weight: 600;
+        `;
+
+        loggedInNotification.innerHTML = `
+            <div style="margin-bottom: 15px;">
+                <i class="fas fa-user-check" style="font-size: 24px; margin-bottom: 10px;"></i>
+                <h3 style="margin: 0; color: #00FFDD;">Already Logged In</h3>
+                <p style="margin: 10px 0; color: rgba(255,255,255,0.8);">Welcome back, ${username}!</p>
+            </div>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button id="continueAppBtn" style="
+                    background: linear-gradient(90deg, #00FFDD 0%, #00C2FF 100%);
+                    color: #111827;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <i class="fas fa-arrow-right"></i> ${preferencesComplete ? 'Continue to App' : 'Complete Setup'}
+                </button>
+                <button id="logoutBtn" style="
+                    background: transparent;
+                    color: #ff4444;
+                    border: 2px solid #ff4444;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                ">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        `;
+
+        // Insert the notification at the top of the auth container
+        authContainer.insertBefore(loggedInNotification, authContainer.firstChild);
+
+        // Add event listeners
+        document.getElementById('continueAppBtn').addEventListener('click', function() {
+            if (preferencesComplete) {
+                window.location.href = 'code-racer.html';
+            } else {
+                redirectToApp(username);
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Clear all user data
+            localStorage.removeItem('typingTestUser');
+            localStorage.removeItem('typingTestUserType');
+            localStorage.removeItem('typingTestUserEmail');
+            localStorage.removeItem('typingTestUserData');
+            localStorage.removeItem('preferencesComplete');
+            
+            // Reload the page to show normal login form
+            window.location.reload();
+        });
+
+        // Hide the regular login forms since user is already logged in
+        const authForms = document.querySelector('.auth-forms');
+        if (authForms) {
+            authForms.style.display = 'none';
+        }
+
+        const authTabs = document.querySelector('.auth-tabs');
+        if (authTabs) {
+            authTabs.style.display = 'none';
+        }
     }
 
     // Set the current year in footer

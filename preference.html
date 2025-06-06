@@ -21,10 +21,39 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            position: relative;
         }
-        .brand-section {
-            margin-bottom: 40px;
+        
+        /* Corner logo */
+        .corner-logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
         }
+
+        .logo-link {
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
+        .corner-logo-img {
+            height: 80px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(0, 194, 255, 0.6));
+            transition: all 0.3s ease;
+        }
+
+        .corner-logo-img:hover {
+            filter: drop-shadow(0 0 20px rgba(0, 194, 255, 0.9));
+        }
+        
         .preference-title {
             color: var(--accent-color, #00FFDD);
             font-family: 'Orbitron', sans-serif;
@@ -100,14 +129,39 @@
                 gap: 32px;
             }
         }
+        
+        @media (max-width: 768px) {
+            .corner-logo {
+                top: 15px;
+                left: 15px;
+            }
+            
+            .corner-logo-img {
+                height: 65px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .corner-logo {
+                top: 10px;
+                left: 10px;
+            }
+            
+            .corner-logo-img {
+                height: 55px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="preference-page">
-        <div class="brand-section">
-            <img src="assets/images/logo.png" alt="Key Racer Logo" class="brand-logo">
-            <h2 class="brand-tagline">The Ultimate Keyboard Racing Championship</h2>
+        <!-- Logo in top-left corner -->
+        <div class="corner-logo">
+            <a href="index.html" class="logo-link">
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="corner-logo-img">
+            </a>
         </div>
+        
         <div class="preference-title">What would you like to do today?</div>
         <div class="preference-cards">
             <div class="preference-card">
@@ -128,11 +182,6 @@
                 <div class="card-desc">Enhance your soft skills: practice resumes, cover letters, business emails, and more with real-world templates.</div>
                 <a href="pro-skills.html" class="card-btn" onclick="markPreferencesComplete('professional')">Practice Soft Skills</a>
             </div>
-        </div>
-        <div class="continue-section" style="margin-top: 30px; text-align: center;">
-            <a href="index.html" class="continue-btn" style="background-color: var(--primary-color); color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease;" onclick="markPreferencesComplete('general')">
-                <i class="fas fa-arrow-right"></i> Continue to App
-            </a>
         </div>
     </div>
 

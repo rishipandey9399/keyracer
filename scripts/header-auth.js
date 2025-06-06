@@ -9,20 +9,46 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginBtn = document.querySelector('#loginBtn');
     const logoutBtn = document.querySelector('#logoutBtn');
     
-    // Check if on index.html and not logged in - redirect to login page
-    const isIndexPage = window.location.pathname.endsWith('index.html') || 
-                        window.location.pathname.endsWith('/') ||
-                        window.location.pathname.endsWith('/keyracer/');
+    // Check current page and user authentication status
+    const currentPath = window.location.pathname;
+    const isIndexPage = currentPath.endsWith('index.html') || 
+                        currentPath.endsWith('/') ||
+                        currentPath.endsWith('/keyracer/');
     const isLoggedIn = localStorage.getItem('typingTestUser');
     
+    // Debug logging to help identify issues
+    console.log('Header Auth Debug:', {
+        currentPath,
+        isIndexPage,
+        isLoggedIn: !!isLoggedIn,
+        preferencesComplete: localStorage.getItem('preferencesComplete')
+    });
+    
+    // Never redirect from login.html, preference.html, or registration pages
+    const isAuthPage = currentPath.includes('login.html') || 
+                       currentPath.includes('preference.html') ||
+                       currentPath.includes('register.html') ||
+                       currentPath.includes('forgot-password.html') ||
+                       currentPath.includes('reset-password.html');
+    
+    if (isAuthPage) {
+        console.log('On auth page, skipping redirects');
+        updateUserDisplay();
+        return;
+    }
+    
+    // Only handle redirects for the actual index/home page (not other pages like code-racer.html)
     if (isIndexPage && !isLoggedIn) {
+        console.log('Redirecting to login from index page');
         window.location.href = 'login.html';
         return;
     }
     
     // If user is logged in but hasn't visited preferences page, redirect there first
+    // BUT only from the index page, not from other pages like code-racer.html
     const preferencesComplete = localStorage.getItem('preferencesComplete');
     if (isIndexPage && isLoggedIn && !preferencesComplete) {
+        console.log('Redirecting to preferences from index page');
         window.location.href = 'preference.html';
         return;
     }
@@ -148,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.removeItem('typingTestUserType');
         localStorage.removeItem('typingTestUserEmail');
         localStorage.removeItem('typingTestUserData');
+        localStorage.removeItem('preferencesComplete');
         
         // Update the display
         updateUserDisplay();
@@ -155,9 +182,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show logout message
         showNotification('You have been logged out successfully');
         
-        // Reload the page after a short delay
+        // Redirect to login page after a short delay
         setTimeout(() => {
-            window.location.reload();
+            window.location.href = 'login.html';
         }, 1000);
     }
     
