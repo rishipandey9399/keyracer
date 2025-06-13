@@ -40,74 +40,203 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            color: #B0C4DE;
+        }
+
+        /* Corner logo */
+        .corner-logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .logo-link {
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
+        .corner-logo-img {
+            height: 80px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 221, 0.6));
+            transition: all 0.3s ease;
+        }
+
+        .corner-logo-img:hover {
+            filter: drop-shadow(0 0 20px rgba(0, 255, 221, 0.9));
+        }
+
         .policy-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 30px;
-            background-color: var(--secondary-color);
-            border-radius: 16px;
-            color: var(--text-color);
-            box-shadow: var(--card-shadow);
+            padding: 40px 30px;
             animation: fadeIn 0.6s ease-out;
-            margin-bottom: 40px;
-            border-left: 5px solid var(--racing-stripe-light);
-            border-right: 5px solid var(--racing-stripe-light);
         }
         
         .policy-header {
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--accent-color);
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: rgba(0, 255, 221, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 221, 0.2);
             position: relative;
+            backdrop-filter: blur(10px);
+        }
+        
+        .policy-header::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00FFDD, #00C2FF, #00FFDD);
+            border-radius: 20px;
+            z-index: -1;
+            animation: gradient-border 3s ease infinite;
         }
         
         .policy-header h1 {
-            color: white;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            color: #00FFDD;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0, 255, 221, 0.5);
         }
         
         .policy-header p {
-            color: var(--accent-color);
-            font-size: 1.1rem;
+            color: #000000;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        .policy-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .highlight-card {
+            background: rgba(0, 255, 221, 0.1);
+            padding: 25px;
+            border-radius: 16px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            border: 1px solid rgba(0, 255, 221, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 221, 0.2);
+        }
+
+        .highlight-card i {
+            color: #00FFDD;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .highlight-card h3 {
+            color: #00FFDD;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .highlight-card p {
+            color: #B0C4DE;
+            font-size: 1rem;
         }
         
         .policy-section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            border-left: 3px solid var(--accent-color);
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(16, 24, 42, 0.8);
+            border-radius: 16px;
+            border-left: 4px solid #00FFDD;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .policy-section:hover {
+            border-left-width: 6px;
+            transform: translateX(5px);
         }
         
         .policy-section h2 {
-            color: var(--accent-color);
-            margin-bottom: 15px;
-            font-size: 1.6rem;
+            color: #00FFDD;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px rgba(0, 255, 221, 0.3);
         }
         
         .policy-section p {
             margin-bottom: 15px;
-            line-height: 1.6;
+            line-height: 1.7;
+            color: #B0C4DE;
         }
         
         .policy-section ul {
-            margin-left: 20px;
-            margin-bottom: 15px;
+            margin-left: 0;
+            margin-bottom: 20px;
+            list-style: none;
+            padding: 0;
         }
         
         .policy-section li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             line-height: 1.6;
+            color: #B0C4DE;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .policy-section li::before {
+            content: '▶';
+            color: #00FFDD;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        @keyframes gradient-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .back-button {
             display: inline-block;
-            margin-top: 20px;
-            padding: 12px 25px;
-            background: linear-gradient(135deg, var(--racing-stripe-light), var(--racing-stripe-dark));
-            color: white;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #00FFDD 0%, #00C2FF 100%);
+            color: #0a0f1c;
             border: none;
             border-radius: 30px;
             cursor: pointer;
@@ -115,11 +244,70 @@
             font-weight: 600;
             text-decoration: none;
             text-align: center;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0, 255, 221, 0.3);
         }
         
         .back-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 74, 74, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 255, 221, 0.4);
+        }
+
+        .contact-section {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(0, 255, 221, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 255, 221, 0.1);
+        }
+
+        .contact-section h3 {
+            color: #00FFDD;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-section a {
+            color: #00FFDD;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-section a:hover {
+            text-shadow: 0 0 10px rgba(0, 255, 221, 0.5);
+        }
+
+        .last-updated-badge {
+            margin-top: 25px; 
+            padding: 15px; 
+            background: rgba(0, 255, 221, 0.15); 
+            border-radius: 10px; 
+            border: 1px solid rgba(0, 255, 221, 0.3);
+        }
+
+        .last-updated-text {
+            color: #00FFDD; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+        }
+
+        /* Responsive design for mobile */
+        @media (max-width: 768px) {
+            .last-updated-text {
+                font-size: 1rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .policy-header h1 {
+                font-size: 2.2rem;
+            }
         }
     </style>
 </head>
@@ -129,21 +317,50 @@
         <div class="headlights right"></div>
     </div>
     
+    <!-- Corner logo -->
+    <div class="corner-logo">
+        <a href="index.html" class="logo-link">
+            <img src="assets/images/logo.png" alt="KeyRacer Logo" class="corner-logo-img">
+        </a>
+    </div>
+    
     <div class="container">
-        <header>
-            <h1><i class="fas fa-keyboard"></i> Key Racer <i class="fas fa-flag-checkered"></i></h1>
-        </header>
         
         <main>
             <div class="policy-container">
                 <div class="policy-header">
-                    <h1>Privacy Policy</h1>
-                    <p>Last Updated: May 4, 2025</p>
+                    <h1><i class="fas fa-shield-alt"></i> Privacy Policy</h1>
+                    <p>Your privacy is our priority. We are committed to protecting your personal information and being transparent about how we collect, use, and safeguard your data while you use KeyRacer.</p>
+                    <div class="last-updated-badge">
+                        <div class="last-updated-text">
+                            <i class="fas fa-calendar-alt"></i> 
+                            <span>Last Updated: June 13, 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Highlights -->
+                <div class="policy-highlights">
+                    <div class="highlight-card">
+                        <i class="fas fa-lock"></i>
+                        <h3>Secure Data Storage</h3>
+                        <p>All your typing data and progress are securely encrypted and stored.</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-user-shield"></i>
+                        <h3>No Third-Party Sharing</h3>
+                        <p>We never sell or share your personal information with third parties.</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-eye-slash"></i>
+                        <h3>Minimal Data Collection</h3>
+                        <p>We only collect data necessary to improve your typing experience.</p>
+                    </div>
                 </div>
                 
                 <div class="policy-content">
-                    <h2>Privacy Policy</h2>
-                    <p class="last-updated">Last Updated: May 4, 2025</p>
                     
                     <div class="policy-section">
                         <h3>Introduction</h3>
@@ -277,19 +494,36 @@
                     </div>
                     
                     <div class="policy-section">
-                        <h3>Contact Us</h3>
+                        <h2>Contact Us</h2>
                         <p>If you have any questions about this Privacy Policy, our data practices, or your rights, please contact us at:</p>
-                        <p><strong>Email:</strong> customerkeyracer@gmail.com</p>
+                        <p><strong>Email:</strong> <a href="mailto:privacy@keyracer.in" style="color: #00FFDD;">privacy@keyracer.in</a></p>
+                        <p><strong>General Support:</strong> <a href="mailto:customerkeyracer@gmail.com" style="color: #00FFDD;">customerkeyracer@gmail.com</a></p>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div class="contact-section">
+                        <h3><i class="fas fa-envelope"></i> Questions About Privacy?</h3>
+                        <p style="margin-bottom: 20px;">We're here to help! Contact our privacy team for any questions or concerns.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <a href="mailto:privacy@keyracer.in" style="background: linear-gradient(135deg, #00FFDD 0%, #00C2FF 100%); color: #0a0f1c; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-shield-alt"></i>
+                                Privacy Team
+                            </a>
+                            <a href="mailto:customerkeyracer@gmail.com" style="background: rgba(0, 255, 221, 0.1); color: #00FFDD; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(0, 255, 221, 0.3);">
+                                <i class="fas fa-headset"></i>
+                                General Support
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
-                <a href="index.html" class="back-button">Back to Key Racer</a>
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="index.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i> Back to KeyRacer
+                    </a>
+                </div>
             </div>
         </main>
-        
-        <footer>
-            <p>&copy; 2025 Key Racer</p>
-        </footer>
     </div>
 </body>
 </html> 
