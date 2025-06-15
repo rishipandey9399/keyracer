@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Comprehensive training from beginner to advanced levels. Learn grammar, vocabulary, and professional skills with structured lessons at KeyRacer.">
+    <meta name="keywords" content="training, grammar lessons, beginner training, advanced training, English grammar, vocabulary building, skills, professional training">
+    <meta name="author" content="KeyRacer">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://keyracer.in/training.html">
+    <meta property="og:title" content="Training Academy - KeyRacer">
+    <meta property="og:description" content="Master skills with structured lessons from beginner to advanced levels. Grammar, vocabulary, and professional training.">
+    <meta property="og:image" content="https://keyracer.in/assets/images/logo.png">
+    <meta property="og:site_name" content="KeyRacer">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://keyracer.in/training.html">
+    <meta property="twitter:title" content="Training Academy - KeyRacer">
+    <meta property="twitter:description" content="Comprehensive training with grammar and vocabulary lessons.">
+    <meta property="twitter:image" content="https://keyracer.in/assets/images/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" href="/assets/images/logo.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://keyracer.in/training.html" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "Training Academy",
+        "description": "Comprehensive training from beginner to advanced levels with grammar and vocabulary lessons",
+        "provider": {
+            "@type": "Organization",
+            "name": "KeyRacer",
+            "url": "https://keyracer.in"
+        },
+        "educationalLevel": ["Beginner", "Intermediate", "Advanced"],
+        "courseMode": "online",
+        "teaches": ["Skills", "English Grammar", "Vocabulary", "Professional Writing"],
+        "hasCourseInstance": [
+            {
+                "@type": "CourseInstance",
+                "name": "Beginner Grammar",
+                "description": "Basic English grammar and fundamentals"
+            },
+            {
+                "@type": "CourseInstance", 
+                "name": "Intermediate Skills",
+                "description": "Advanced grammar rules and efficiency"
+            },
+            {
+                "@type": "CourseInstance",
+                "name": "Professional Training",
+                "description": "Business writing and advanced techniques"
+            }
+        ]
+    }
+    </script>
+    
+    <title>Training Academy - KeyRacer | Grammar & Vocabulary Lessons</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: #0a0f1a;
+            --secondary-bg: #0e1e38;
+            --card-bg: rgba(14, 30, 56, 0.95);
+            --accent-color: #00C2FF;
+            --secondary-accent: #00FFDD;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0BEC5;
+            --border-color: rgba(0, 194, 255, 0.3);
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --error-color: #F44336;
+            --gradient-primary: linear-gradient(135deg, #00C2FF 0%, #00FFDD 100%);
+            --gradient-accent: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glow-primary: 0 0 20px rgba(0, 194, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at center, rgba(0, 194, 255, 0.1) 0%, transparent 70%),
+                        radial-gradient(ellipse at 80% 20%, rgba(0, 255, 221, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 20% 80%, rgba(0, 194, 255, 0.05) 0%, transparent 50%);
+        }
+
+        .floating-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .floating-particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 1s; }
+        .floating-particle:nth-child(3) { top: 80%; left: 40%; animation-delay: 2s; }
+        .floating-particle:nth-child(4) { top: 40%; left: 60%; animation-delay: 3s; }
+        .floating-particle:nth-child(5) { top: 10%; left: 80%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--box-shadow);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            box-shadow: var(--glow-primary);
+        }
+
+        .brand-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-accent);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-link:hover::before {
+            left: 0;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            border-color: var(--accent-color);
+            box-shadow: var(--glow-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Preferences button yellow highlighting */
+        .nav-link[href="preference.html"] {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1a1a;
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            font-weight: 700;
+        }
+
+        .nav-link[href="preference.html"]:hover {
+            background: linear-gradient(135deg, #FFED4A 0%, #FFD700 100%);
+            color: #1a1a1a;
+            border-color: #FFED4A;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 4rem 2rem;
+            background: var(--card-bg);
+            border-radius: 25px;
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(30px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: var(--glow-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Training Levels */
+        .training-levels {
+            display: grid;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .level-section {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(30px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 25px 25px 0 0;
+        }
+
+        .level-section.beginner::before {
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+        }
+
+        .level-section.intermediate::before {
+            background: linear-gradient(135deg, #FF9800 0%, #FFC107 100%);
+        }
+
+        .level-section.advanced::before {
+            background: linear-gradient(135deg, #F44336 0%, #E91E63 100%);
+        }
+
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .level-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-icon.beginner {
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+        }
+
+        .level-icon.intermediate {
+            background: linear-gradient(135deg, #FF9800 0%, #FFC107 100%);
+        }
+
+        .level-icon.advanced {
+            background: linear-gradient(135deg, #F44336 0%, #E91E63 100%);
+        }
+
+        .level-info h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .level-info.beginner h2 {
+            color: #4CAF50;
+        }
+
+        .level-info.intermediate h2 {
+            color: #FF9800;
+        }
+
+        .level-info.advanced h2 {
+            color: #F44336;
+        }
+
+        .level-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Lessons Grid */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .lesson-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-card.beginner::before {
+            background: #4CAF50;
+        }
+
+        .lesson-card.intermediate::before {
+            background: #FF9800;
+        }
+
+        .lesson-card.advanced::before {
+            background: #F44336;
+        }
+
+        .lesson-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .lesson-card:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+
+        .lesson-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .lesson-number {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .lesson-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .lesson-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .lesson-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-tag {
+            background: rgba(0, 194, 255, 0.2);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid var(--accent-color);
+        }
+
+        .lesson-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .lesson-duration {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .lesson-difficulty {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-easy {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+
+        .difficulty-medium {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+            border: 1px solid #FF9800;
+        }
+
+        .difficulty-hard {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+            border: 1px solid #F44336;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(30px);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .progress-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .progress-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .progress-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .progress-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        .progress-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .lesson-modal {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(30px);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            animation: modalSlideUp 0.3s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-info h2 {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-meta span {
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .difficulty {
+            border: 1px solid;
+        }
+
+        .difficulty.easy {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .difficulty.medium {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+            border-color: #FF9800;
+        }
+
+        .difficulty.hard {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+            border-color: #F44336;
+        }
+
+        .duration {
+            background: rgba(0, 194, 255, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .level {
+            background: rgba(0, 255, 221, 0.2);
+            color: var(--secondary-accent);
+            border: 1px solid var(--secondary-accent);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .modal-content {
+            overflow-y: auto;
+            max-height: calc(90vh - 100px);
+        }
+
+        .lesson-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem 2rem 0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .explanation-section h3 {
+            color: var(--text-primary);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .explanation-section h4 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .explanation-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .explanation-content {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .explanation-content h4 {
+            color: var(--secondary-accent);
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .explanation-content li {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 0.3rem;
+            list-style: none;
+            position: relative;
+        }
+
+        .explanation-content li:before {
+            content: "•";
+            color: var(--accent-color);
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+        }
+
+        .examples-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .examples-list li {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            color: var(--text-secondary);
+        }
+
+        .topics-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .typing-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .typing-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .text-display {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            min-height: 120px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .char {
+            transition: all 0.1s ease;
+        }
+
+        .char.correct {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4CAF50;
+        }
+
+        .char.incorrect {
+            background: rgba(244, 67, 54, 0.3);
+            color: #F44336;
+        }
+
+        .char.current {
+            background: var(--accent-color);
+            color: var(--text-primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .typing-input, .test-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .typing-input:focus, .test-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(0, 194, 255, 0.3);
+        }
+
+        .practice-controls, .test-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+        }
+
+        .btn.primary {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+        }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn.success {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: var(--text-primary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar-container {
+            background: rgba(0, 0, 0, 0.3);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .test-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .test-text {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            min-height: 120px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .test-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .completed-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #4CAF50;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-size: 1rem;
+        }
+
+        .lesson-card.completed {
+            border-color: #4CAF50 !important;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .achievement-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .achievement-toast.show {
+            transform: translateX(0);
+        }
+
+        .achievement-toast i {
+            font-size: 1.2rem;
+            color: #FFD700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .level-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-link {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .lesson-modal {
+                width: 95%;
+                max-height: 95vh;
+            }
+
+            .modal-header {
+                padding: 1rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .typing-stats, .test-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-controls, .test-controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
+                <h1 class="brand-title">Training Academy</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="pro-skills.html" class="nav-link">
+                    <i class="fas fa-briefcase"></i> Pro Skills
+                </a>
+                <a href="training.html" class="nav-link active">
+                    <i class="fas fa-graduation-cap"></i> Training
+                </a>
+                <a href="preference.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Preferences
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">
+                <i class="fas fa-graduation-cap"></i>
+                Training Academy
+            </h1>
+            <p class="hero-subtitle">
+                Master skills with comprehensive grammar and vocabulary training from beginner to advanced levels
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Grammar Lessons</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">45+</div>
+                    <div class="stat-label">Vocabulary Units</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Skill Levels</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Practice Exercises</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Training Levels -->
+        <div class="training-levels">
+            <!-- Beginner Level -->
+            <section class="level-section beginner">
+                <div class="level-header">
+                    <div class="level-icon beginner">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="level-info beginner">
+                        <h2>Beginner Level</h2>
+                        <p class="level-description">
+                            Start your typing journey with fundamental grammar rules, basic vocabulary, and essential typing techniques. Perfect for beginners who want to build a strong foundation.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lessons-grid">
+                    <div class="lesson-card beginner" onclick="startLesson('beginner', 1)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">1</div>
+                            <h3 class="lesson-title">Articles (A, An, The)</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Learn the proper usage of articles with common nouns. Practice with everyday objects and build your vocabulary.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Basic Articles</span>
+                            <span class="topic-tag">Common Nouns</span>
+                            <span class="topic-tag">Vocabulary</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 15 minutes</span>
+                            <span class="lesson-difficulty difficulty-easy">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card beginner" onclick="startLesson('beginner', 2)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">2</div>
+                            <h3 class="lesson-title">Basic Pronouns</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Master personal pronouns (I, you, he, she, it, we, they) and their proper usage in sentences.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Personal Pronouns</span>
+                            <span class="topic-tag">Sentence Structure</span>
+                            <span class="topic-tag">Grammar Basics</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 20 minutes</span>
+                            <span class="lesson-difficulty difficulty-easy">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card beginner" onclick="startLesson('beginner', 3)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">3</div>
+                            <h3 class="lesson-title">Simple Present Tense</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Learn to form and use simple present tense with regular and irregular verbs in daily conversations.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Present Tense</span>
+                            <span class="topic-tag">Regular Verbs</span>
+                            <span class="topic-tag">Daily Conversations</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 25 minutes</span>
+                            <span class="lesson-difficulty difficulty-easy">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card beginner" onclick="startLesson('beginner', 4)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">4</div>
+                            <h3 class="lesson-title">Common Adjectives</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Expand your vocabulary with essential adjectives for describing people, places, and things.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Descriptive Words</span>
+                            <span class="topic-tag">Vocabulary Building</span>
+                            <span class="topic-tag">Adjective Usage</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 18 minutes</span>
+                            <span class="lesson-difficulty difficulty-easy">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card beginner" onclick="startLesson('beginner', 5)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">5</div>
+                            <h3 class="lesson-title">Question Formation</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Learn to form questions using question words (who, what, where, when, why, how) and auxiliary verbs.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Question Words</span>
+                            <span class="topic-tag">Auxiliary Verbs</span>
+                            <span class="topic-tag">Question Formation</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 22 minutes</span>
+                            <span class="lesson-difficulty difficulty-medium">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card beginner" onclick="startLesson('beginner', 6)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">6</div>
+                            <h3 class="lesson-title">Numbers and Time</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Practice typing numbers, telling time, and using time-related vocabulary in sentences.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Numbers</span>
+                            <span class="topic-tag">Time Expressions</span>
+                            <span class="topic-tag">Date and Time</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 20 minutes</span>
+                            <span class="lesson-difficulty difficulty-easy">Easy</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Intermediate Level -->
+            <section class="level-section intermediate">
+                <div class="level-header">
+                    <div class="level-icon intermediate">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div class="level-info intermediate">
+                        <h2>Intermediate Level</h2>
+                        <p class="level-description">
+                            Advance your skills with complex grammar structures, expanded vocabulary, and professional writing techniques. Build confidence in various writing scenarios.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lessons-grid">
+                    <div class="lesson-card intermediate" onclick="startLesson('intermediate', 1)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">7</div>
+                            <h3 class="lesson-title">Perfect Tenses</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Master present perfect, past perfect, and future perfect tenses with real-world examples and exercises.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Perfect Tenses</span>
+                            <span class="topic-tag">Time Expressions</span>
+                            <span class="topic-tag">Advanced Grammar</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 30 minutes</span>
+                            <span class="lesson-difficulty difficulty-medium">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card intermediate" onclick="startLesson('intermediate', 2)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">8</div>
+                            <h3 class="lesson-title">Conditional Sentences</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Learn first, second, and third conditional structures for expressing possibilities and hypothetical situations.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Conditionals</span>
+                            <span class="topic-tag">If Clauses</span>
+                            <span class="topic-tag">Hypothetical Situations</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 35 minutes</span>
+                            <span class="lesson-difficulty difficulty-medium">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card intermediate" onclick="startLesson('intermediate', 3)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">9</div>
+                            <h3 class="lesson-title">Passive Voice</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Understand when and how to use passive voice effectively in formal and informal writing.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Passive Voice</span>
+                            <span class="topic-tag">Formal Writing</span>
+                            <span class="topic-tag">Voice Transformation</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 28 minutes</span>
+                            <span class="lesson-difficulty difficulty-medium">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card intermediate" onclick="startLesson('intermediate', 4)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">10</div>
+                            <h3 class="lesson-title">Business Vocabulary</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Expand your professional vocabulary with business terms, phrases, and expressions used in workplace communication.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Business Terms</span>
+                            <span class="topic-tag">Professional Language</span>
+                            <span class="topic-tag">Workplace Communication</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 25 minutes</span>
+                            <span class="lesson-difficulty difficulty-medium">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card intermediate" onclick="startLesson('intermediate', 5)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">11</div>
+                            <h3 class="lesson-title">Complex Sentences</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Learn to construct complex sentences using subordinate clauses, conjunctions, and advanced sentence structures.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Complex Sentences</span>
+                            <span class="topic-tag">Subordinate Clauses</span>
+                            <span class="topic-tag">Advanced Writing</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 32 minutes</span>
+                            <span class="lesson-difficulty difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card intermediate" onclick="startLesson('intermediate', 6)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">12</div>
+                            <h3 class="lesson-title">Email Writing</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Master professional email writing including proper formatting, tone, and business correspondence etiquette.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Email Format</span>
+                            <span class="topic-tag">Professional Tone</span>
+                            <span class="topic-tag">Business Correspondence</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 27 minutes</span>
+                            <span class="lesson-difficulty difficulty-medium">Medium</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Level -->
+            <section class="level-section advanced">
+                <div class="level-header">
+                    <div class="level-icon advanced">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <div class="level-info advanced">
+                        <h2>Advanced Level</h2>
+                        <p class="level-description">
+                            Master sophisticated grammar concepts, technical vocabulary, and professional writing skills. Perfect for advanced learners and professionals.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lessons-grid">
+                    <div class="lesson-card advanced" onclick="startLesson('advanced', 1)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">13</div>
+                            <h3 class="lesson-title">Advanced Punctuation</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Master complex punctuation rules including semicolons, colons, em dashes, and advanced comma usage in professional writing.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Complex Punctuation</span>
+                            <span class="topic-tag">Professional Writing</span>
+                            <span class="topic-tag">Style Guidelines</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 40 minutes</span>
+                            <span class="lesson-difficulty difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card advanced" onclick="startLesson('advanced', 2)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">14</div>
+                            <h3 class="lesson-title">Technical Writing</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Learn to write clear, concise technical documentation, reports, and specifications with proper formatting and terminology.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Technical Documentation</span>
+                            <span class="topic-tag">Report Writing</span>
+                            <span class="topic-tag">Technical Terminology</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 45 minutes</span>
+                            <span class="lesson-difficulty difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card advanced" onclick="startLesson('advanced', 3)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">15</div>
+                            <h3 class="lesson-title">Academic Writing</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Master academic writing conventions including thesis statements, citations, and formal academic language structure.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Academic Style</span>
+                            <span class="topic-tag">Thesis Writing</span>
+                            <span class="topic-tag">Citations</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 50 minutes</span>
+                            <span class="lesson-difficulty difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card advanced" onclick="startLesson('advanced', 4)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">16</div>
+                            <h3 class="lesson-title">Creative Writing</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Develop creative writing skills including narrative structure, character development, and descriptive language techniques.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Narrative Structure</span>
+                            <span class="topic-tag">Creative Expression</span>
+                            <span class="topic-tag">Literary Techniques</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 38 minutes</span>
+                            <span class="lesson-difficulty difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card advanced" onclick="startLesson('advanced', 5)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">17</div>
+                            <h3 class="lesson-title">Presentation Skills</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Learn to type and format professional presentations with effective slide content, speaker notes, and visual elements.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Presentation Format</span>
+                            <span class="topic-tag">Visual Content</span>
+                            <span class="topic-tag">Professional Communication</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 35 minutes</span>
+                            <span class="lesson-difficulty difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+
+                    <div class="lesson-card advanced" onclick="startLesson('advanced', 6)">
+                        <div class="lesson-header">
+                            <div class="lesson-number">18</div>
+                            <h3 class="lesson-title">Legal Documents</h3>
+                        </div>
+                        <p class="lesson-content">
+                            Practice typing legal terminology, contracts, and formal legal documents with proper formatting and precision.
+                        </p>
+                        <div class="lesson-topics">
+                            <span class="topic-tag">Legal Terminology</span>
+                            <span class="topic-tag">Contract Writing</span>
+                            <span class="topic-tag">Formal Documents</span>
+                        </div>
+                        <div class="lesson-stats">
+                            <span class="lesson-duration"><i class="fas fa-clock"></i> 42 minutes</span>
+                            <span class="lesson-difficulty difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Progress Section -->
+        <section class="progress-section">
+            <div class="progress-header">
+                <h2 class="progress-title">
+                    <i class="fas fa-chart-line"></i>
+                    Your Learning Progress
+                </h2>
+                <p class="level-description">Track your improvement across all skill levels</p>
+            </div>
+
+            <div class="progress-overview">
+                <div class="progress-card">
+                    <div class="progress-icon" style="color: #4CAF50;">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="progress-value" id="completed-lessons">0</div>
+                    <div class="progress-label">Lessons Completed</div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-icon" style="color: #FF9800;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="progress-value" id="practice-time">0h</div>
+                    <div class="progress-label">Practice Time</div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-icon" style="color: #2196F3;">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="progress-value" id="avg-wpm">0</div>
+                    <div class="progress-label">Average WPM</div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-icon" style="color: #9C27B0;">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="progress-value" id="avg-accuracy">0%</div>
+                    <div class="progress-label">Average Accuracy</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="scripts/training.js"></script>
+
+    <!-- Legal Links Footer -->
+    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
+            <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
+                Privacy Policy
+            </a>
+            <span style="color: #555; font-size: 0.8rem;">|</span>
+            <a href="terms-conditions.html" style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
+                Terms & Conditions
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1407,41 +1407,49 @@ print(f"Low stock items: {low_stock}")</code></pre>
             <section id="dictionaries" class="tutorial-section">
                 <h1>📚 Python Dictionaries</h1>
 
-                <div class="example-box featured-example">
-                    <h3>🗝️ Creating Dictionaries</h3>
-                    <p>Dictionaries store data in key-value pairs:</p>
-                    <div class="code-demo highlight-demo">
-                        <pre><code class="language-python">student = {"name": "Alice", "age": 21, "grade": "A"}
-car = {
-    "brand": "Toyota",
-    "model": "Camry",
-    "year": 2022
+                <div id="dict-create" class="subsection">
+                    <h2>Creating Dictionaries</h2>
+                    <p>Dictionaries store data in key-value pairs and are unordered, changeable, and indexed:</p>
+                    <div class="example-box featured-example">
+                        <h3>🗝️ Dictionary Basics</h3>
+                        <div class="code-demo highlight-demo">
+                            <pre><code class="language-python">person = {
+    "name": "Alice",
+    "age": 30,
+    "city": "New York"
 }
 
-print(student["name"])    # Access by key
-print(car.get("brand"))   # Safe access with get()</code></pre>
+print(person["name"])     # Access by key
+print(person.get("age"))  # Safe access with get()
+
+# Adding new key-value pairs
+person["job"] = "Engineer"
+print(person)</code></pre>
+                        </div>
                     </div>
                 </div>
 
-                <div class="example-box featured-example">
-                    <h3>🔧 Dictionary Methods</h3>
-                    <div class="code-demo highlight-demo">
-                        <pre><code class="language-python">student = {"name": "Alice", "age": 21}
+                <div id="dict-methods" class="subsection">
+                    <h2>Dictionary Methods</h2>
+                    <div class="example-box featured-example">
+                        <h3>🔧 Dictionary Operations</h3>
+                        <div class="code-demo highlight-demo">
+                            <pre><code class="language-python">student = {"name": "Bob", "grade": "A", "age": 20}
 
-# Adding/updating
-student["grade"] = "A"
-student.update({"city": "New York", "age": 22})
-
-# Getting values
+# Get all keys, values, or items
 keys = student.keys()
 values = student.values()
 items = student.items()
 
-# Removing
-age = student.pop("age")
-del student["city"]
+# Update dictionary
+student.update({"subject": "Math", "score": 95})
+
+# Remove items
+removed = student.pop("age")    # Remove and return value
+del student["grade"]            # Remove key-value pair
 
 print(student)</code></pre>
+                        </div>
                     </div>
                 </div>
 
@@ -1453,7 +1461,7 @@ print(student)</code></pre>
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea id="codeInput4" class="code-input" placeholder="Create a dictionary for a book with title, author, and year..." spellcheck="false"></textarea>
+                            <textarea id="codeInput4" class="code-input" placeholder="Create a dictionary to store information about yourself..." spellcheck="false"></textarea>
                             <div id="codePreview4" class="code-preview"></div>
                         </div>
                         <div class="output-container">
@@ -1469,54 +1477,59 @@ print(student)</code></pre>
                 <h1>📦 Python Tuples</h1>
 
                 <div class="example-box featured-example">
-                    <h3>🔒 Creating Tuples</h3>
-                    <p>Tuples are immutable sequences (cannot be changed after creation):</p>
+                    <h3>🔒 Immutable Collections</h3>
+                    <p>Tuples are ordered and unchangeable collections. They allow duplicate values:</p>
                     <div class="code-demo highlight-demo">
                         <pre><code class="language-python">coordinates = (10, 20)
 colors = ("red", "green", "blue")
-mixed = ("hello", 42, True)
 
-print(coordinates[0])  # Access by index
-print(len(colors))     # Length of tuple
+# Accessing tuple items
+print(coordinates[0])   # First item
+print(colors[-1])       # Last item
+
+# Tuples are immutable - this would cause an error:
+# coordinates[0] = 15
 
 # Tuple unpacking
 x, y = coordinates
-print(f"x: {x}, y: {y}")
+print(f"X: {x}, Y: {y}")
 
 # Multiple assignment
-name, age, is_student = ("Alice", 21, True)</code></pre>
+point = (5, 10, 15)
+x, y, z = point</code></pre>
                     </div>
                 </div>
 
-                <div class="example-box">
-                    <h3>🔄 Tuple vs List</h3>
+                <div class="example-box featured-example">
+                    <h3>⚡ When to Use Tuples</h3>
+                    <p>Use tuples for data that shouldn't change:</p>
                     <div class="code-demo highlight-demo">
-                        <pre><code class="language-python"># Lists are mutable
-my_list = [1, 2, 3]
-my_list[0] = 10  # This works
-print(my_list)   # [10, 2, 3]
+                        <pre><code class="language-python"># RGB color values
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
-# Tuples are immutable
-my_tuple = (1, 2, 3)
-# my_tuple[0] = 10  # This would cause an error!
+# Geographic coordinates
+locations = [
+    ("Paris", 48.8566, 2.3522),
+    ("London", 51.5074, -0.1278),
+    ("Tokyo", 35.6762, 139.6503)
+]
 
-# Use tuples for:
-# - Coordinates: (x, y)
-# - RGB colors: (255, 0, 0)
-# - Database records
-# - Function return multiple values</code></pre>
+for city, lat, lon in locations:
+    print(f"{city}: {lat}, {lon}")</code></pre>
                     </div>
                 </div>
 
                 <div class="practice-section">
-                    <h3>Practice: Tuple Unpacking</h3>
+                    <h3>Practice: Working with Tuples</h3>
                     <div class="code-editor">
                         <div class="editor-header">
                             <span>Python Editor</span>
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea id="codeInput5" class="code-input" placeholder="Create tuples for student records and practice unpacking..." spellcheck="false"></textarea>
+                            <textarea id="codeInput5" class="code-input" placeholder="Create a tuple with student information (name, age, grade) and practice tuple operations..." spellcheck="false"></textarea>
                             <div id="codePreview5" class="code-preview"></div>
                         </div>
                         <div class="output-container">
@@ -1532,41 +1545,44 @@ my_tuple = (1, 2, 3)
                 <h1>🎯 Python Sets</h1>
 
                 <div class="example-box featured-example">
-                    <h3>🌟 Creating Sets</h3>
-                    <p>Sets are unordered collections of unique elements:</p>
+                    <h3>🔍 Unique Collections</h3>
+                    <p>Sets are unordered collections of unique items:</p>
                     <div class="code-demo highlight-demo">
-                        <pre><code class="language-python">colors = {"red", "green", "blue"}
+                        <pre><code class="language-python">fruits = {"apple", "banana", "cherry"}
 numbers = {1, 2, 3, 4, 5}
-mixed = {1, "hello", 3.14, True}
 
-# Remove duplicates from a list
-my_list = [1, 2, 2, 3, 3, 3, 4]
-unique_numbers = set(my_list)
-print(unique_numbers)  # {1, 2, 3, 4}</code></pre>
+# Sets automatically remove duplicates
+duplicates = {1, 2, 2, 3, 3, 4}
+print(duplicates)  # {1, 2, 3, 4}
+
+# Adding and removing items
+fruits.add("orange")
+fruits.remove("banana")  # Error if item doesn't exist
+fruits.discard("grape")  # No error if item doesn't exist
+
+print(fruits)</code></pre>
                     </div>
                 </div>
 
                 <div class="example-box featured-example">
-                    <h3>🔧 Set Operations</h3>
+                    <h3>🧮 Set Operations</h3>
+                    <p>Sets support mathematical operations like union, intersection, and difference:</p>
                     <div class="code-demo highlight-demo">
                         <pre><code class="language-python">set1 = {1, 2, 3, 4}
 set2 = {3, 4, 5, 6}
 
-# Adding elements
-set1.add(5)
-set1.update([6, 7])
+# Union - all unique items from both sets
+union = set1 | set2  # or set1.union(set2)
 
-# Removing elements
-set1.remove(7)  # Raises error if not found
-set1.discard(8)  # No error if not found
+# Intersection - items in both sets
+intersection = set1 & set2  # or set1.intersection(set2)
 
-# Set operations
-union = set1 | set2         # Union
-intersection = set1 & set2  # Intersection
-difference = set1 - set2    # Difference
+# Difference - items in set1 but not in set2
+difference = set1 - set2  # or set1.difference(set2)
 
 print(f"Union: {union}")
-print(f"Intersection: {intersection}")</code></pre>
+print(f"Intersection: {intersection}")
+print(f"Difference: {difference}")</code></pre>
                     </div>
                 </div>
 
@@ -1589,6 +1605,7 @@ print(f"Intersection: {intersection}")</code></pre>
                 </div>
             </section>
 
+            <!-- Control Flow Sections -->
             <!-- Conditions Section -->
             <section id="conditions" class="tutorial-section">
                 <h1>🎯 If...Else Statements</h1>
@@ -1600,11 +1617,11 @@ print(f"Intersection: {intersection}")</code></pre>
                         <pre><code class="language-python">age = 18
 
 if age >= 18:
-    print("You can vote!")
+    print("You are an adult")
 else:
-    print("Too young to vote")
+    print("You are a minor")
 
-# Multiple conditions
+# Using elif for multiple conditions
 score = 85
 
 if score >= 90:
@@ -1613,6 +1630,8 @@ elif score >= 80:
     grade = "B"
 elif score >= 70:
     grade = "C"
+elif score >= 60:
+    grade = "D"
 else:
     grade = "F"
 
@@ -1621,27 +1640,30 @@ print(f"Your grade is: {grade}")</code></pre>
                 </div>
 
                 <div class="example-box featured-example">
-                    <h3>🔗 Logical Operators</h3>
+                    <h3>🧮 Comparison and Logical Operators</h3>
+                    <p>Use comparison and logical operators to create complex conditions:</p>
                     <div class="code-demo highlight-demo">
-                        <pre><code class="language-python">age = 25
-has_license = True
-has_insurance = False
+                        <pre><code class="language-python">temperature = 25
+is_sunny = True
 
-# AND operator
-if age >= 18 and has_license:
-    print("Can drive")
+# Comparison operators: ==, !=, <, >, <=, >=
+if temperature > 20:
+    print("It's warm!")
 
-# OR operator
-if has_license or age >= 21:
-    print("Some driving privilege")
+# Logical operators: and, or, not
+if temperature > 20 and is_sunny:
+    print("Perfect weather for a picnic!")
 
-# NOT operator
-if not has_insurance:
-    print("Need insurance!")
+if temperature < 0 or temperature > 35:
+    print("Extreme weather!")
 
-# Complex conditions
-if (age >= 16 and has_license) or age >= 21:
-    print("Driving allowed with conditions")</code></pre>
+if not is_sunny:
+    print("Bring an umbrella!")
+
+# Checking membership with 'in'
+fruits = ["apple", "banana", "cherry"]
+if "apple" in fruits:
+    print("Apple is available!")</code></pre>
                     </div>
                 </div>
 
@@ -1653,7 +1675,7 @@ if (age >= 16 and has_license) or age >= 21:
                             <button class="run-btn">▶ Run</button>
                         </div>
                         <div class="editor-container">
-                            <textarea id="codeInput7" class="code-input" placeholder="Create a program that determines if someone can get a discount based on age and membership..." spellcheck="false"></textarea>
+                            <textarea id="codeInput7" class="code-input" placeholder="Create a program that checks if a number is positive, negative, or zero..." spellcheck="false"></textarea>
                             <div id="codePreview7" class="code-preview"></div>
                         </div>
                         <div class="output-container">
@@ -1667,6 +1689,20 @@ if (age >= 16 and has_license) or age >= 21:
             <!-- While Loops Section -->
             <section id="while-loops" class="tutorial-section">
                 <h1>🔄 While Loops</h1>
+                
+                <div class="example-box featured-example">
+                    <h3>🎯 Understanding While Loops</h3>
+                    <p>While loops repeatedly execute a block of code as long as a specified condition remains true. They're perfect for situations where you don't know exactly how many times you need to repeat something, but you know when to stop.</p>
+                    <div class="highlight-text">
+                        <p><strong>When to use while loops:</strong></p>
+                        <ul>
+                            <li>When the number of iterations is unknown beforehand</li>
+                            <li>When you need to repeat until a specific condition is met</li>
+                            <li>For user input validation and menu systems</li>
+                            <li>For processing data until a sentinel value is encountered</li>
+                        </ul>
+                    </div>
+                </div>
 
                 <div class="example-box featured-example">
                     <h3>🎯 Basic While Loop</h3>
@@ -1675,42 +1711,6 @@ if (age >= 16 and has_license) or age >= 21:
                         <pre><code class="language-python"># Simple countdown
 count = 5
 while count > 0:
-    print(f"Countdown: {count}")
-    count -= 1  # Same as count = count - 1
-
-print("Blast off! 🚀")
-
-# Accumulator pattern
-total = 0
-number = 1
-while number <= 10:
-    total += number
-    number += 1
-print(f"Sum of 1 to 10: {total}")</code></pre>
-                    </div>
-                </div>
-
-                <div class="example-box featured-example">
-                    <h3>🛑 Loop Control with Break and Continue</h3>
-                    <div class="code-demo highlight-demo">
-                        <pre><code class="language-python"># Using break to exit the loop
-password = ""
-attempts = 0
-max_attempts = 3
-
-while attempts < max_attempts:
-    password = input("Enter password: ")
-    attempts += 1
-    
-    if password == "secret123":
-        print("Access granted!")
-        break  # Exit the loop immediately
-    else:
-        print(f"Wrong password. {max_attempts - attempts} attempts left.")
-else:
-    print("Too many failed attempts. Access denied!")
-
-# Using continue to skip iterations
 number = 0
 while number < 10:
     number += 1

@@ -876,11 +876,6 @@
                 <span class="stat-label">Streak</span>
                 <span class="stat-value" id="currentStreak">0</span>
             </div>
-            <div class="stat-item">
-                <i class="fas fa-percent"></i>
-                <span class="stat-label">Accuracy</span>
-                <span class="stat-value" id="overallAccuracy">0%</span>
-            </div>
         </div>
     </section>
 
@@ -940,6 +935,10 @@
                     this.renderChallenges();
                     console.log('✅ Challenges rendered');
                     
+                    console.log('🔍 Checking for completed challenges...');
+                    this.checkForCompletedChallenges();
+                    console.log('✅ Challenge completion check set up');
+                    
                     console.log('🎉 Initialization complete!');
                 } catch (error) {
                     console.error('❌ Initialization failed:', error);
@@ -948,15 +947,23 @@
 
             async loadUserStats() {
                 try {
-                    // Skip API call for local development - just use default stats
-                    console.log('Using default user stats for local development');
-                    this.userStats = {
-                        rank: 'Not Ranked',
-                        totalPoints: 0,
-                        currentStreak: 0,
-                        accuracy: 0
-                    };
+                    // Load stats from localStorage
+                    const savedStats = localStorage.getItem('challengeStats');
+                    if (savedStats) {
+                        this.userStats = JSON.parse(savedStats);
+                    } else {
+                        this.userStats = {
+                            rank: 'Unranked',
+                            totalPoints: 0,
+                            currentStreak: 0,
+                            completedChallenges: []
+                        };
+                    }
+                    
+                    // Calculate rank based on total points
+                    this.updateRank();
                     this.updateStatsDisplay();
+                    console.log('Loaded user stats:', this.userStats);
                 } catch (error) {
                     console.error('Error loading user stats:', error);
                     this.showDefaultStats();
@@ -1790,10 +1797,10 @@
 
             showDefaultStats() {
                 this.userStats = {
-                    rank: 'Not Ranked',
+                    rank: 'Unranked',
                     totalPoints: 0,
                     currentStreak: 0,
-                    accuracy: 0
+                    completedChallenges: []
                 };
                 this.updateStatsDisplay();
             }
@@ -1803,14 +1810,12 @@
                 const elements = {
                     userRank: document.getElementById('userRank'),
                     totalPoints: document.getElementById('totalPoints'),
-                    currentStreak: document.getElementById('currentStreak'),
-                    overallAccuracy: document.getElementById('overallAccuracy')
+                    currentStreak: document.getElementById('currentStreak')
                 };
 
                 if (elements.userRank) elements.userRank.textContent = this.userStats.rank;
                 if (elements.totalPoints) elements.totalPoints.textContent = this.userStats.totalPoints;
                 if (elements.currentStreak) elements.currentStreak.textContent = this.userStats.currentStreak;
-                if (elements.overallAccuracy) elements.overallAccuracy.textContent = this.userStats.accuracy + '%';
                 
                 console.log('Stats display updated:', this.userStats);
             }
@@ -2090,6 +2095,99 @@
                 }
             }
 
+            // Add methods to handle challenge completion and stats updating
+            onChallengeCompleted(challengeId, points) {
+                console.log(`Challenge ${challengeId} completed! Adding ${points} points.`);
+                
+                // Update total points
+                this.userStats.totalPoints += points;
+                
+                // Update completed challenges list
+                if (!this.userStats.completedChallenges.includes(challengeId)) {
+                    this.userStats.completedChallenges.push(challengeId);
+                    
+                    // Update streak
+                    this.userStats.currentStreak += 1;
+                } else {
+                    // If already completed, don't increase streak
+                    console.log('Challenge already completed, no streak increase');
+                }
+                
+                // Update rank based on new points
+                this.updateRank();
+                
+                // Save to localStorage
+                this.saveStatsToStorage();
+                
+                // Update display
+                this.updateStatsDisplay();
+                
+                // Update challenge status in the display
+                this.updateChallengeStatus(challengeId);
+                
+                console.log('Updated stats:', this.userStats);
+            }
+
+            updateRank() {
+                const points = this.userStats.totalPoints;
+                
+                if (points >= 1000) {
+                    this.userStats.rank = 'Grandmaster';
+                } else if (points >= 500) {
+                    this.userStats.rank = 'Expert';
+                } else if (points >= 250) {
+                    this.userStats.rank = 'Advanced';
+                } else if (points >= 100) {
+                    this.userStats.rank = 'Intermediate';
+                } else if (points >= 30) {
+                    this.userStats.rank = 'Beginner';
+                } else if (points > 0) {
+                    this.userStats.rank = 'Novice';
+                } else {
+                    this.userStats.rank = 'Unranked';
+                }
+            }
+
+            saveStatsToStorage() {
+                try {
+                    localStorage.setItem('challengeStats', JSON.stringify(this.userStats));
+                    console.log('Stats saved to localStorage');
+                } catch (error) {
+                    console.error('Error saving stats to localStorage:', error);
+                }
+            }
+
+            updateChallengeStatus(challengeId) {
+                const challenge = this.challenges.find(c => c._id === challengeId);
+                if (challenge) {
+                    challenge.status = 'completed';
+                    this.renderChallenges(); // Re-render to show updated status
+                }
+            }
+
+            // Check for completed challenges when returning from solve page
+            checkForCompletedChallenges() {
+                // Listen for storage events to detect when solve-challenge.html updates completion
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'challengeCompleted') {
+                        const completion = JSON.parse(e.newValue);
+                        if (completion) {
+                            this.onChallengeCompleted(completion.challengeId, completion.points);
+                            // Clear the completion flag
+                            localStorage.removeItem('challengeCompleted');
+                        }
+                    }
+                });
+
+                // Also check on page load for any pending completions
+                const pendingCompletion = localStorage.getItem('challengeCompleted');
+                if (pendingCompletion) {
+                    const completion = JSON.parse(pendingCompletion);
+                    this.onChallengeCompleted(completion.challengeId, completion.points);
+                    localStorage.removeItem('challengeCompleted');
+                }
+            }
+
 
         }
 
@@ -2191,5 +2289,20 @@
             "retina_detect": true
         });
     </script>
+
+    <!-- Legal Links Footer -->
+    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
+            <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
+                Privacy Policy
+            </a>
+            <span style="color: #555; font-size: 0.8rem;">|</span>
+            <a href="terms-conditions.html" style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
+                Terms & Conditions
+            </a>
+        </div>
+    </div>
 </body>
 </html>

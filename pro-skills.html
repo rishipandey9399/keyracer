@@ -257,6 +257,23 @@
             box-shadow: var(--glow-primary);
         }
 
+        /* Preferences button yellow highlighting */
+        .nav-link[href="preference.html"] {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1a1a;
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            font-weight: 700;
+        }
+
+        .nav-link[href="preference.html"]:hover {
+            background: linear-gradient(135deg, #FFED4A 0%, #FFD700 100%);
+            color: #1a1a1a;
+            border-color: #FFED4A;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
         /* Main Container */
         .main-container {
             max-width: 1600px;
@@ -291,6 +308,144 @@
             height: 4px;
             background: var(--gradient-primary);
             border-radius: 25px 25px 0 0;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .sidebar-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .skill-selector {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .selector-label {
+            display: block;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .skill-select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skill-select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(0, 194, 255, 0.3);
+            outline: none;
+        }
+
+        .skill-select option {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        .skill-info {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-title {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tips-list li i {
+            color: var(--success-color);
+            font-size: 0.8rem;
+        }
+
+        .achievements {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .achievements-title {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .achievement-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .badge-item:not(.locked) {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: var(--success-color);
+        }
+
+        .badge-item.locked {
+            opacity: 0.5;
+        }
+
+        .badge-item i {
+            font-size: 1.2rem;
+            color: var(--success-color);
+        }
+
+        .badge-item.locked i {
+            color: var(--text-secondary);
         }
 
         .sidebar-title {
@@ -649,24 +804,91 @@
             line-height: 1.8;
             color: var(--text-primary);
             white-space: pre-wrap;
-            max-height: 350px;
+            max-height: 600px;
             overflow-y: auto;
             position: relative;
             box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .template-display::-webkit-scrollbar {
-            width: 8px;
+            width: 12px;
         }
 
         .template-display::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
         .template-display::-webkit-scrollbar-thumb {
             background: var(--gradient-accent);
-            border-radius: 4px;
+            border-radius: 6px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+        }
+
+        .template-display::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+
+        .template-welcome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 300px;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 194, 255, 0.3);
+        }
+
+        .welcome-icon i {
+            font-size: 2rem;
+            color: var(--text-primary);
+        }
+
+        .template-welcome h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .template-welcome p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .feature-highlights {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .feature i {
+            font-size: 1rem;
         }
 
         .input-section {
@@ -939,6 +1161,231 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Template Welcome Styles */
+        .template-welcome {
+            text-align: center;
+            padding: 2rem;
+            max-height: none;
+        }
+
+        .welcome-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .welcome-header .welcome-icon {
+            background: var(--gradient-primary);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 194, 255, 0.3);
+        }
+
+        .welcome-header .welcome-icon i {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+        }
+
+        .welcome-header h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .document-types-preview, .feature-highlights, .getting-started, .pro-tips {
+            margin-bottom: 2.5rem;
+            text-align: left;
+        }
+
+        .document-types-preview h4, .feature-highlights h4, .getting-started h4, .pro-tips h4 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .doc-type {
+            background: rgba(0, 194, 255, 0.05);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .doc-type:hover {
+            background: rgba(0, 194, 255, 0.1);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .doc-type i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-type span {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .doc-type small {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            border-color: var(--accent-color);
+            background: rgba(0, 194, 255, 0.05);
+        }
+
+        .feature i {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            min-width: 40px;
+        }
+
+        .feature div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .feature strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .feature span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .start-steps {
+            list-style: none;
+            padding: 0;
+            counter-reset: step-counter;
+        }
+
+        .start-steps li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding: 1rem 1rem 1rem 3.5rem;
+            background: rgba(0, 194, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .start-steps li:hover {
+            background: rgba(0, 194, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .start-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .start-steps li strong {
+            color: var(--accent-color);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .tip:hover {
+            border-color: var(--accent-color);
+            background: rgba(0, 194, 255, 0.05);
+        }
+
+        .tip i {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 0.2rem;
+            min-width: 20px;
+        }
+
+        .tip span {
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
         /* Character highlighting */
         .char-correct {
             background-color: rgba(76, 175, 80, 0.3);
@@ -984,14 +1431,14 @@
                 <h1 class="brand-title">Professional Skills Lab</h1>
             </div>
             <nav class="nav-links">
-                <a href="index.html" class="nav-link">
-                    <i class="fas fa-home"></i> Home
+                <a href="training.html" class="nav-link">
+                    <i class="fas fa-graduation-cap"></i> Training
+                </a>
+                <a href="pro-skills.html" class="nav-link active">
+                    <i class="fas fa-briefcase"></i> Pro Skills
                 </a>
                 <a href="preference.html" class="nav-link">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-                <a href="python-challenges-enhanced.html" class="nav-link">
-                    <i class="fas fa-code"></i> Challenges
+                    <i class="fas fa-cog"></i> Preferences
                 </a>
             </nav>
         </div>
@@ -1006,7 +1453,7 @@
                     <i class="fas fa-user-tie"></i>
                     Professional Skills
                 </h2>
-                <p class="sidebar-subtitle">Master workplace typing skills</p>
+                <p class="sidebar-subtitle">Master workplace typing skills with real-world documents</p>
             </div>
 
             <div class="skill-selector">
@@ -1015,44 +1462,54 @@
                     Choose Document Type
                 </label>
                 <select id="pro-skill-select" class="skill-select">
-                    <option value="resume">📄 Resume</option>
+                    <option value="">Select a document type...</option>
+                    <option value="resume">📄 Professional Resume</option>
                     <option value="cover-letter">💼 Cover Letter</option>
-                    <option value="email">📧 Professional Email</option>
+                    <option value="email">📧 Business Email</option>
                     <option value="report">📊 Business Report</option>
+                    <option value="proposal">📋 Project Proposal</option>
                     <option value="linkedin">💼 LinkedIn Profile</option>
+                    <option value="memo">📝 Company Memo</option>
+                    <option value="newsletter">📰 Company Newsletter</option>
                 </select>
             </div>
 
             <div class="skill-info">
                 <h3 class="info-title">
-                    <i class="fas fa-info-circle"></i>
-                    Tips for Success
+                    <i class="fas fa-lightbulb"></i>
+                    Professional Typing Tips
                 </h3>
                 <ul class="tips-list">
-                    <li><i class="fas fa-check"></i> Maintain steady rhythm</li>
-                    <li><i class="fas fa-check"></i> Focus on accuracy first</li>
-                    <li><i class="fas fa-check"></i> Use proper formatting</li>
-                    <li><i class="fas fa-check"></i> Practice professional tone</li>
+                    <li><i class="fas fa-check"></i> Maintain consistent rhythm and pace</li>
+                    <li><i class="fas fa-check"></i> Focus on accuracy over speed initially</li>
+                    <li><i class="fas fa-check"></i> Learn proper business formatting</li>
+                    <li><i class="fas fa-check"></i> Practice professional terminology</li>
+                    <li><i class="fas fa-check"></i> Use keyboard shortcuts efficiently</li>
+                    <li><i class="fas fa-check"></i> Develop muscle memory for common phrases</li>
                 </ul>
             </div>
 
             <div class="achievements">
                 <h3 class="achievements-title">
                     <i class="fas fa-trophy"></i>
-                    Your Progress
+                    Your Progress Badges
                 </h3>
                 <div class="achievement-badges">
-                    <div class="badge-item">
+                    <div class="badge-item" id="beginner-badge">
                         <i class="fas fa-medal"></i>
-                        <span>Beginner</span>
+                        <span>Professional Beginner</span>
                     </div>
-                    <div class="badge-item locked">
-                        <i class="fas fa-lock"></i>
-                        <span>Professional</span>
+                    <div class="badge-item locked" id="intermediate-badge">
+                        <i class="fas fa-star"></i>
+                        <span>Business Writer</span>
                     </div>
-                    <div class="badge-item locked">
+                    <div class="badge-item locked" id="advanced-badge">
                         <i class="fas fa-crown"></i>
-                        <span>Expert</span>
+                        <span>Executive Typist</span>
+                    </div>
+                    <div class="badge-item locked" id="expert-badge">
+                        <i class="fas fa-diamond"></i>
+                        <span>Professional Master</span>
                     </div>
                 </div>
             </div>
@@ -1068,26 +1525,6 @@
                 <div class="timer-display" id="timer-display">
                     <i class="fas fa-stopwatch"></i>
                     00:00
-                </div>
-            </div>
-
-            <!-- Session Statistics -->
-            <div class="session-stats">
-                <div class="session-stat">
-                    <div class="session-stat-label">Words Per Minute</div>
-                    <div class="session-stat-value" id="wpm">0</div>
-                </div>
-                <div class="session-stat">
-                    <div class="session-stat-label">Accuracy</div>
-                    <div class="session-stat-value" id="accuracy">100%</div>
-                </div>
-                <div class="session-stat">
-                    <div class="session-stat-label">Errors</div>
-                    <div class="session-stat-value" id="errors">0</div>
-                </div>
-                <div class="session-stat">
-                    <div class="session-stat-label">Progress</div>
-                    <div class="session-stat-value" id="progress">0%</div>
                 </div>
             </div>
 
@@ -1113,7 +1550,128 @@
                     </div>
                 </div>
                 <div class="template-display" id="template-area">
-                    Select a document type to begin practicing...
+                    <div class="template-welcome">
+                        <div class="welcome-header">
+                            <div class="welcome-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Professional Skills Laboratory</h3>
+                            <p class="welcome-subtitle">Master real-world typing scenarios with authentic business documents</p>
+                        </div>
+
+                        <div class="document-types-preview">
+                            <h4><i class="fas fa-folder-open"></i> Available Document Types</h4>
+                            <div class="document-grid">
+                                <div class="doc-type">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Professional Resume</span>
+                                    <small>Complete CV with modern formatting</small>
+                                </div>
+                                <div class="doc-type">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>Cover Letter</span>
+                                    <small>Compelling job application letter</small>
+                                </div>
+                                <div class="doc-type">
+                                    <i class="fas fa-mail-bulk"></i>
+                                    <span>Business Email</span>
+                                    <small>Professional correspondence</small>
+                                </div>
+                                <div class="doc-type">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Business Report</span>
+                                    <small>Comprehensive quarterly analysis</small>
+                                </div>
+                                <div class="doc-type">
+                                    <i class="fas fa-handshake"></i>
+                                    <span>Project Proposal</span>
+                                    <small>Detailed project planning document</small>
+                                </div>
+                                <div class="doc-type">
+                                    <i class="fab fa-linkedin"></i>
+                                    <span>LinkedIn Profile</span>
+                                    <small>Professional social media presence</small>
+                                </div>
+                                <div class="doc-type">
+                                    <i class="fas fa-sticky-note"></i>
+                                    <span>Company Memo</span>
+                                    <small>Internal communication</small>
+                                </div>
+                                <div class="doc-type">
+                                    <i class="fas fa-newspaper"></i>
+                                    <span>Newsletter</span>
+                                    <small>Company updates and insights</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-highlights">
+                            <h4><i class="fas fa-star"></i> Key Features</h4>
+                            <div class="features-grid">
+                                <div class="feature">
+                                    <i class="fas fa-clock"></i>
+                                    <div>
+                                        <strong>Real-time Analytics</strong>
+                                        <span>Live WPM, accuracy tracking</span>
+                                    </div>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-chart-line"></i>
+                                    <div>
+                                        <strong>Progress Tracking</strong>
+                                        <span>Session history and improvement</span>
+                                    </div>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <div>
+                                        <strong>Professional Formatting</strong>
+                                        <span>Industry-standard templates</span>
+                                    </div>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-trophy"></i>
+                                    <div>
+                                        <strong>Achievement System</strong>
+                                        <span>Unlock professional badges</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="getting-started">
+                            <h4><i class="fas fa-rocket"></i> Getting Started</h4>
+                            <ol class="start-steps">
+                                <li><strong>Choose a document type</strong> from the sidebar dropdown</li>
+                                <li><strong>Click "Start Practice"</strong> to begin your typing session</li>
+                                <li><strong>Type the template</strong> exactly as shown, focusing on accuracy</li>
+                                <li><strong>Track your progress</strong> with real-time statistics</li>
+                                <li><strong>Unlock achievements</strong> as you improve your skills</li>
+                            </ol>
+                        </div>
+
+                        <div class="pro-tips">
+                            <h4><i class="fas fa-lightbulb"></i> Professional Typing Tips</h4>
+                            <div class="tips-grid">
+                                <div class="tip">
+                                    <i class="fas fa-keyboard"></i>
+                                    <span>Use proper finger positioning and touch typing techniques</span>
+                                </div>
+                                <div class="tip">
+                                    <i class="fas fa-target"></i>
+                                    <span>Focus on accuracy first, speed will naturally improve</span>
+                                </div>
+                                <div class="tip">
+                                    <i class="fas fa-business-time"></i>
+                                    <span>Learn common business terminology and phrases</span>
+                                </div>
+                                <div class="tip">
+                                    <i class="fas fa-magic"></i>
+                                    <span>Practice keyboard shortcuts for formatting efficiency</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1177,5 +1735,20 @@
     </div>
 
     <script src="scripts/pro-skills.js"></script>
+
+    <!-- Legal Links Footer -->
+    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
+            <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
+                Privacy Policy
+            </a>
+            <span style="color: #555; font-size: 0.8rem;">|</span>
+            <a href="terms-conditions.html" style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
+                Terms & Conditions
+            </a>
+        </div>
+    </div>
 </body>
 </html>
