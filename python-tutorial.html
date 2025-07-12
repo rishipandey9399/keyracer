@@ -293,9 +293,10 @@
                 <div class="example-box featured-example">
                     <h3>📌 8. Python Syntax Example</h3>
                     <div class="code-demo highlight-demo">
-                        <pre><code class="language-python"># Simple Python program
+                        <pre><code class="language-python" id="code-python-hello"># Simple Python program
 name = input("Enter your name: ")
 print("Hello, " + name)</code></pre>
+                        <button class="try-it-btn" onclick="openRunner('code-python-hello')">Try It</button>
                     </div>
                     <p>This simple program asks for your name and greets you!</p>
                 </div>
@@ -1385,8 +1386,7 @@ print(f"Low stock items: {low_stock}")</code></pre>
                                 <li><code>list.remove(value)</code> - Remove by value</li>
                                 <li><code>list.pop(index)</code> - Remove by index</li>
                                 <li><code>del list[index]</code> - Delete by index</li>
-                                <li><code>list.clear()</code> - Remove all items</li>
-                            </ul>
+                                <li><code>list.clear()</code> - Remove all items
                         </div>
                         <div class="reference-item">
                             <strong>Common Operations:</strong>

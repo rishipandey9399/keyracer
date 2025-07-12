@@ -1,0 +1,1281 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn JavaScript programming with interactive tutorials at KeyRacer. Master JavaScript basics, syntax, and programming concepts through hands-on coding exercises.">
+    <meta name="keywords" content="javascript tutorial, learn javascript, javascript programming, javascript basics, javascript course, coding tutorial, programming education, javascript syntax">
+    <meta name="author" content="KeyRacer">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://keyracer.in/javascript-tutorial.html">
+    <meta property="og:title" content="JavaScript Tutorial - KeyRacer Learning Hub">
+    <meta property="og:description" content="Learn JavaScript programming with interactive tutorials. Master JavaScript basics, syntax, and programming concepts through hands-on coding exercises.">
+    <meta property="og:image" content="https://keyracer.in/assets/images/logo.png">
+    <meta property="og:site_name" content="KeyRacer">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://keyracer.in/javascript-tutorial.html">
+    <meta property="twitter:title" content="JavaScript Tutorial - KeyRacer Learning Hub">
+    <meta property="twitter:description" content="Learn JavaScript programming with interactive tutorials and hands-on coding exercises.">
+    <meta property="twitter:image" content="https://keyracer.in/assets/images/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" href="/assets/images/logo.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://keyracer.in/javascript-tutorial.html" />
+    
+    <!-- Structured Data for JavaScript Tutorial -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "JavaScript Tutorial",
+        "url": "https://keyracer.in/javascript-tutorial.html",
+        "description": "Learn JavaScript programming with interactive tutorials at KeyRacer. Master JavaScript basics, syntax, and programming concepts through hands-on coding exercises.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "KeyRacer",
+            "url": "https://keyracer.in/"
+        },
+        "mainEntity": {
+            "@type": "Course",
+            "name": "Interactive JavaScript Programming Tutorial",
+            "description": "Comprehensive JavaScript tutorial with hands-on coding exercises",
+            "provider": {
+                "@type": "Organization",
+                "name": "KeyRacer"
+            },
+            "courseMode": "online",
+            "programmingLanguage": "JavaScript",
+            "educationalLevel": ["Beginner", "Intermediate"],
+            "teaches": ["JavaScript Syntax", "Programming Fundamentals", "Data Types", "Control Structures", "Functions", "DOM Manipulation"],
+            "hasCourseInstance": [
+                {"@type": "CourseInstance", "name": "JavaScript Basics", "description": "Learn fundamental JavaScript concepts and syntax"},
+                {"@type": "CourseInstance", "name": "Advanced JavaScript", "description": "Master advanced JavaScript programming techniques"}
+            ],
+            "coursePrerequisites": "Basic computer literacy"
+        },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://keyracer.in/"},
+                {"@type": "ListItem", "position": 2, "name": "JavaScript Tutorial", "item": "https://keyracer.in/javascript-tutorial.html"}
+            ]
+        }
+    }
+    </script>
+    
+    <title>JavaScript Tutorial - KeyRacer Learning Hub | Interactive JavaScript Programming</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/python-tutorial.css">
+    <link rel="stylesheet" href="styles/javascript-tutorial.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-vs-dark.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="tutorial-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+            </div>
+            <nav class="main-nav">
+                <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="challenges.html" class="nav-item"><i class="fas fa-code"></i> Challenges</a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="preference.html" class="pref-btn" id="prefBtn">
+                        <i class="fas fa-cog"></i> Preference
+                    </a>
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="tutorial-container">
+        <aside class="tutorial-sidebar">
+            <div class="tutorial-nav">
+                <h3>JavaScript Tutorial</h3>
+                <div class="tutorial-menu">
+                    <a href="#introduction" class="menu-item active">
+                        <i class="fas fa-book"></i> Introduction
+                    </a>
+                    
+                    <a href="#variables" class="menu-item">
+                        <i class="fas fa-box"></i> Variables & Data Types
+                    </a>
+                    
+                    <a href="#functions" class="menu-item">
+                        <i class="fas fa-code"></i> Functions
+                    </a>
+                    
+                    <a href="#arrays-objects" class="menu-item">
+                        <i class="fas fa-list"></i> Arrays & Objects
+                    </a>
+                    
+                    <a href="#conditionals-loops" class="menu-item">
+                        <i class="fas fa-random"></i> Conditionals & Loops
+                    </a>
+                    
+                    <a href="#arrow-functions" class="menu-item">
+                        <i class="fas fa-arrow-right"></i> Arrow Functions
+                    </a>
+                    
+                    <a href="#closures" class="menu-item">
+                        <i class="fas fa-lock"></i> Closures
+                    </a>
+                    
+                    <a href="#async" class="menu-item">
+                        <i class="fas fa-sync"></i> Async & Promises
+                    </a>
+                    
+                    <a href="#error-handling" class="menu-item">
+                        <i class="fas fa-exclamation-triangle"></i> Error Handling
+                    </a>
+                    
+                    <a href="#dom" class="menu-item">
+                        <i class="fas fa-sitemap"></i> DOM Manipulation
+                    </a>
+                    
+                    <a href="#classes-oop" class="menu-item">
+                        <i class="fas fa-user-graduate"></i> Classes & OOP
+                    </a>
+                    
+                    <a href="#localstorage" class="menu-item">
+                        <i class="fas fa-database"></i> LocalStorage
+                    </a>
+                    
+                    <a href="#fetch-api" class="menu-item">
+                        <i class="fas fa-cloud-download-alt"></i> Fetch API
+                    </a>
+                    
+                    <a href="#regex" class="menu-item">
+                        <i class="fas fa-search"></i> Regular Expressions
+                    </a>
+                    
+                    <a href="#projects" class="menu-item">
+                        <i class="fas fa-project-diagram"></i> Projects
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Tutorial Content -->
+        <main class="tutorial-content">
+            <section id="introduction" class="tutorial-section active">
+                <h1>📘 Learn JavaScript</h1>
+                <p>JavaScript is the programming language of the Web. It powers dynamic behavior on most websites and is essential for modern web development.</p>
+                <p><strong>What is JavaScript?</strong><br>
+                JavaScript is a versatile, high-level programming language that runs in web browsers and on servers (Node.js). It was created in 1995 and has become the backbone of interactive web experiences, powering everything from simple animations to complex web applications.</p>
+                <ul>
+                    <li><strong>Client-Side:</strong> JavaScript runs in your browser, allowing you to interact with web pages, validate forms, and create dynamic content.</li>
+                    <li><strong>Server-Side:</strong> With Node.js, JavaScript can build scalable backend services and APIs.</li>
+                    <li><strong>Universal:</strong> JavaScript is used for mobile apps, desktop apps, IoT devices, and more.</li>
+                </ul>
+                <p><strong>Why Learn JavaScript?</strong></p>
+                <ul>
+                    <li>It’s the most popular language for web development.</li>
+                    <li>All major browsers support JavaScript natively.</li>
+                    <li>It’s beginner-friendly and has a huge community.</li>
+                    <li>Learning JavaScript opens doors to frameworks like React, Vue, Angular, and backend development with Node.js.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Quick Facts</h4>
+                    <ul>
+                        <li>JavaScript is not Java! They are different languages.</li>
+                        <li>JavaScript is dynamically typed and interpreted.</li>
+                        <li>It supports object-oriented, functional, and event-driven programming styles.</li>
+                    </ul>
+                </div>
+                <p><strong>Tip for Beginners:</strong> Start by experimenting with small code snippets. Use browser developer tools (F12) to write and test JavaScript live!</p>
+                <div class="example-box">
+                    <h4>How JavaScript Works</h4>
+                    <ul>
+                        <li>JavaScript code is executed line-by-line by the browser’s JavaScript engine.</li>
+                        <li>It can manipulate HTML and CSS to create interactive pages.</li>
+                        <li>Modern JavaScript supports modules, async programming, and advanced features.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="variables" class="tutorial-section">
+                <h2>Variables & Data Types</h2>
+                <p>Variables are containers for storing data values. In JavaScript, you can declare variables using <code>var</code>, <code>let</code>, or <code>const</code>:</p>
+                <ul>
+                    <li><strong>var:</strong> Function-scoped, can be redeclared and updated. <span style="color:#FFC107">(Avoid in modern code)</span></li>
+                    <li><strong>let:</strong> Block-scoped, can be updated but not redeclared in the same scope.</li>
+                    <li><strong>const:</strong> Block-scoped, cannot be updated or redeclared. <strong>Use for values that should not change.</strong></li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-vars">// Variable declarations
+var x = 10; // function-scoped
+let y = 20; // block-scoped
+const z = 30; // block-scoped, cannot be reassigned
+
+// Scope example
+if (true) {
+  var a = 1;
+  let b = 2;
+  const c = 3;
+}
+console.log(a); // 1 (var is accessible)
+// console.log(b); // Error (let is block-scoped)
+// console.log(c); // Error (const is block-scoped)
+
+// Data types
+let score = 99.5; // Number
+let message = "Hello!"; // String
+let isActive = false; // Boolean
+let nothing = null; // Null
+let notDefined; // Undefined
+let person = { name: "Bob", age: 25 }; // Object
+let fruits = ["Apple", "Banana"]; // Array (object)
+let sym = Symbol("id"); // Symbol
+
+console.log(typeof score);      // number
+console.log(typeof message);    // string
+console.log(typeof isActive);   // boolean
+console.log(typeof nothing);    // object (null is a special case)
+console.log(typeof notDefined); // undefined
+console.log(typeof person);     // object
+console.log(typeof fruits);     // object
+console.log(typeof sym);        // symbol
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-vars')">Try It</button>
+                </div>
+                <p><strong>JavaScript Data Types:</strong></p>
+                <ul>
+                    <li><strong>Number:</strong> <code>42</code>, <code>3.14</code></li>
+                    <li><strong>String:</strong> <code>"Hello"</code>, <code>'World'</code></li>
+                    <li><strong>Boolean:</strong> <code>true</code>, <code>false</code></li>
+                    <li><strong>Null:</strong> <code>null</code> (intentional absence of value)</li>
+                    <li><strong>Undefined:</strong> <code>undefined</code> (variable declared but not assigned)</li>
+                    <li><strong>Object:</strong> <code>{ name: "Alice" }</code></li>
+                    <li><strong>Array:</strong> <code>[1, 2, 3]</code> (a type of object)</li>
+                    <li><strong>Symbol:</strong> <code>Symbol("desc")</code> (unique, immutable value)</li>
+                </ul>
+                <p><strong>Type Conversion:</strong> JavaScript automatically converts types when needed (type coercion). Use <code>parseInt()</code>, <code>parseFloat()</code>, <code>String()</code>, <code>Boolean()</code> for explicit conversion.</p>
+                <div class="code-demo">
+                    <pre><code class="language-javascript">let num = "42";
+console.log(typeof num); // string
+let converted = Number(num);
+console.log(typeof converted); // number
+</code></pre>
+                </div>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Hoisting:</strong> <code>var</code> declarations are hoisted to the top of their scope. <code>let</code> and <code>const</code> are not initialized until their definition is evaluated.</li>
+                        <li><strong>Mutability:</strong> <code>const</code> objects and arrays can have their contents changed, but the variable cannot be reassigned.</li>
+                        <li><strong>Dynamic Typing:</strong> Variables can change type at runtime.</li>
+                        <li><strong>Best Practice:</strong> Prefer <code>let</code> and <code>const</code> for modern JavaScript. Use <code>const</code> by default unless you need to reassign.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="functions" class="tutorial-section">
+                <h2>Functions</h2>
+                <p>Functions are reusable blocks of code that help organize logic, avoid repetition, and make your code modular. You can define functions using the <code>function</code> keyword, as function expressions, or as arrow functions.</p>
+                <ul>
+                    <li><strong>Declaration:</strong> <code>function myFunc() { ... }</code></li>
+                    <li><strong>Parameters:</strong> Functions can accept zero or more parameters.</li>
+                    <li><strong>Return Values:</strong> Use <code>return</code> to send a value back to the caller.</li>
+                    <li><strong>Scope:</strong> Variables declared inside a function are local to that function.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-func">// Function declaration
+function greet(name) {
+  return "Hello, " + name;
+}
+console.log(greet("Bob")); // Output: Hello, Bob
+
+// Function expression
+const square = function(x) {
+  return x * x;
+};
+console.log(square(5)); // Output: 25
+
+// Arrow function
+const add = (a, b) => a + b;
+console.log(add(2, 3)); // Output: 5
+
+// Default parameters
+function welcome(name = "Guest") {
+  return `Welcome, ${name}!`;
+}
+console.log(welcome()); // Output: Welcome, Guest!
+
+// Rest parameters
+function sum(...nums) {
+  return nums.reduce((acc, n) => acc + n, 0);
+}
+console.log(sum(1, 2, 3, 4)); // Output: 10
+
+// Recursion
+function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+console.log(factorial(5)); // Output: 120
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-func')">Try It</button>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Functions can be nested and returned from other functions (higher-order functions).</li>
+                    <li>Arrow functions do not have their own <code>this</code> or <code>arguments</code> object.</li>
+                    <li>Use default parameters to make your functions more flexible.</li>
+                    <li>Use recursion for problems that can be broken down into smaller subproblems.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Function Expression vs Declaration:</strong> Declarations are hoisted, expressions are not.</li>
+                        <li><strong>Arrow Functions:</strong> Great for short callbacks, but avoid for object methods or constructors.</li>
+                        <li><strong>Closures:</strong> Functions can "remember" variables from their outer scope.</li>
+                        <li><strong>Best Practice:</strong> Name your functions clearly and keep them focused on a single task.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="arrays-objects" class="tutorial-section">
+                <h2>Arrays and Objects</h2>
+                <p>Arrays and objects are the main ways to store and organize data in JavaScript. Arrays hold ordered lists, while objects store key-value pairs.</p>
+                <h3>Arrays</h3>
+                <ul>
+                    <li>Create with <code>[]</code>: <code>let arr = [1, 2, 3]</code></li>
+                    <li>Access by index: <code>arr[0]</code> is the first element.</li>
+                    <li>Common methods: <code>push</code>, <code>pop</code>, <code>shift</code>, <code>unshift</code>, <code>slice</code>, <code>splice</code>, <code>forEach</code>, <code>map</code>, <code>filter</code>, <code>reduce</code></li>
+                    <li>Arrays can hold any type, including other arrays (multidimensional).</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-arrays">let fruits = ["Apple", "Banana", "Cherry"];
+console.log(fruits[1]); // Output: Banana
+fruits.push("Orange"); // Add to end
+console.log(fruits); // ["Apple", "Banana", "Cherry", "Orange"]
+fruits.pop(); // Remove last
+console.log(fruits); // ["Apple", "Banana", "Cherry"]
+fruits.forEach(fruit => console.log(fruit)); // Iterate
+
+// Multidimensional array
+let matrix = [[1,2],[3,4]];
+console.log(matrix[1][0]); // Output: 3
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-arrays')">Try It</button>
+                </div>
+                <h3>Objects</h3>
+                <ul>
+                    <li>Create with <code>{}</code>: <code>let person = { name: "John", age: 30 }</code></li>
+                    <li>Access properties: <code>person.name</code> or <code>person["age"]</code></li>
+                    <li>Add/update: <code>person.city = "Delhi"</code></li>
+                    <li>Delete: <code>delete person.age</code></li>
+                    <li>Objects can have methods (functions as properties).</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript">let person = {
+  name: "John",
+  age: 30,
+  greet: function() {
+    return `Hi, I'm ${this.name}`;
+  }
+};
+console.log(person.greet()); // Output: Hi, I'm John
+
+// Destructuring
+let { name, age } = person;
+console.log(name, age); // John 30
+
+// Spread operator
+let clone = { ...person, city: "Delhi" };
+console.log(clone);
+</code></pre>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Use <code>Object.keys()</code>, <code>Object.values()</code>, <code>Object.entries()</code> to work with object properties.</li>
+                    <li>Arrays are zero-indexed. Objects are unordered collections.</li>
+                    <li>Use destructuring and spread for cleaner code.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Arrays:</strong> Can be sparse (missing indices), and are objects under the hood.</li>
+                        <li><strong>Objects:</strong> Property names can be strings or symbols. Use computed properties: <code>{ [key]: value }</code></li>
+                        <li><strong>Best Practice:</strong> Use <code>const</code> for arrays/objects unless you need to reassign.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="conditionals-loops" class="tutorial-section">
+                <h2>Conditionals and Loops</h2>
+                <p>Conditionals let you run code based on conditions. Loops let you repeat code. These are essential for controlling program flow.</p>
+                <h3>Conditionals</h3>
+                <ul>
+                    <li><strong>if/else:</strong> Run code if a condition is true, otherwise run alternative code.</li>
+                    <li><strong>else if:</strong> Check multiple conditions.</li>
+                    <li><strong>switch:</strong> Handle multiple possible values for a variable.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-cond">let age = 20;
+if (age > 18) {
+  console.log("Adult");
+} else if (age > 12) {
+  console.log("Teenager");
+} else {
+  console.log("Child");
+}
+
+let fruit = "Banana";
+switch (fruit) {
+  case "Apple":
+    console.log("Apple selected");
+    break;
+  case "Banana":
+    console.log("Banana selected");
+    break;
+  default:
+    console.log("Other fruit");
+}
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-cond')">Try It</button>
+                </div>
+                <h3>Loops</h3>
+                <ul>
+                    <li><strong>for:</strong> Repeat code a set number of times.</li>
+                    <li><strong>while:</strong> Repeat code while a condition is true.</li>
+                    <li><strong>do...while:</strong> Like <code>while</code>, but runs at least once.</li>
+                    <li><strong>for...of:</strong> Loop over iterable objects (arrays, strings).</li>
+                    <li><strong>for...in:</strong> Loop over object properties.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-loops">// for loop
+for (let i = 0; i < 3; i++) {
+  console.log(i);
+}
+
+// while loop
+let j = 0;
+while (j < 3) {
+  console.log(j);
+  j++;
+}
+
+// do...while loop
+let k = 0;
+do {
+  console.log(k);
+  k++;
+} while (k < 3);
+
+// for...of loop
+let arr = ["a", "b", "c"];
+for (let item of arr) {
+  console.log(item);
+}
+
+// for...in loop
+let obj = { x: 1, y: 2 };
+for (let key in obj) {
+  console.log(key, obj[key]);
+}
+
+// Nested loops
+for (let x = 1; x <= 2; x++) {
+  for (let y = 1; y <= 2; y++) {
+    console.log(`x=${x}, y=${y}`);
+  }
+}
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-loops')">Try It</button>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Use <code>break</code> to exit a loop early, <code>continue</code> to skip to the next iteration.</li>
+                    <li>Loops can be nested for complex logic.</li>
+                    <li>Use <code>for...of</code> for arrays, <code>for...in</code> for objects.</li>
+                    <li>Be careful with infinite loops (condition never becomes false).</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Performance:</strong> Prefer <code>for</code> or <code>forEach</code> for large arrays.</li>
+                        <li><strong>Best Practice:</strong> Keep loop logic simple and avoid deeply nested loops when possible.</li>
+                        <li><strong>Switch:</strong> Use <code>switch</code> for multiple discrete values, but avoid fall-through unless needed.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="arrow-functions" class="tutorial-section">
+                <h2>Arrow Functions</h2>
+                <p>Arrow functions (<code>=&gt;</code>) are a modern, concise way to write functions in JavaScript. They are especially useful for short callbacks and functional programming. Arrow functions do <strong>not</strong> have their own <code>this</code>, <code>arguments</code>, <code>super</code>, or <code>new.target</code> bindings.</p>
+                <ul>
+                    <li><strong>Syntax:</strong> <code>(param1, param2) =&gt; expression</code></li>
+                    <li><strong>Implicit Return:</strong> If the body is a single expression, the value is returned automatically.</li>
+                    <li><strong>Single Parameter:</strong> Parentheses can be omitted: <code>x =&gt; x * 2</code></li>
+                    <li><strong>No <code>this</code> binding:</strong> Useful for callbacks, but not for object methods or constructors.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-arrow">// Basic arrow function
+const add = (a, b) => a + b;
+console.log(add(2, 3)); // Output: 5
+
+// Single parameter, implicit return
+const greet = name => `Hi, ${name}`;
+console.log(greet("Sam")); // Output: Hi, Sam
+
+// No parameters
+const getTime = () => new Date().toLocaleTimeString();
+console.log(getTime());
+
+// Multiline body (use curly braces)
+const multiply = (a, b) => {
+  const result = a * b;
+  return result;
+};
+console.log(multiply(4, 5)); // Output: 20
+
+// Arrow function in array methods
+let nums = [1, 2, 3];
+let squares = nums.map(n => n * n);
+console.log(squares); // [1, 4, 9]
+
+// Arrow functions and 'this'
+const person = {
+  name: "Alex",
+  sayHi: function() {
+    setTimeout(() => {
+      console.log(`Hi, I'm ${this.name}`); // 'this' refers to person
+    }, 500);
+  }
+};
+person.sayHi();
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-arrow')">Try It</button>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Use arrow functions for short callbacks (e.g., <code>map</code>, <code>filter</code>, <code>forEach</code>).</li>
+                    <li>Do <strong>not</strong> use arrow functions for object methods or constructors.</li>
+                    <li>Arrow functions cannot use <code>arguments</code> object. Use rest parameters (<code>...args</code>) instead.</li>
+                    <li>Parentheses are required for zero or multiple parameters.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Lexical <code>this</code>:</strong> Arrow functions capture the <code>this</code> value of their enclosing scope.</li>
+                        <li><strong>No <code>prototype</code>:</strong> Arrow functions do not have a <code>prototype</code> property.</li>
+                        <li><strong>Cannot be used as constructors:</strong> You cannot use <code>new</code> with arrow functions.</li>
+                        <li><strong>Best Practice:</strong> Use arrow functions for callbacks and functional code, but use regular functions for object methods and constructors.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="closures" class="tutorial-section">
+                <h2>Closures</h2>
+                <p>A <strong>closure</strong> is a feature in JavaScript where an inner function has access to the outer (enclosing) function’s variables—even after the outer function has finished executing. Closures are fundamental for data privacy, factory functions, and advanced patterns like currying and memoization.</p>
+                <ul>
+                    <li><strong>Scope Chain:</strong> Inner functions remember variables from their parent scope.</li>
+                    <li><strong>Data Privacy:</strong> Closures allow you to create private variables and methods.</li>
+                    <li><strong>Practical Uses:</strong> Event handlers, callbacks, module patterns, and more.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-closure">// Basic closure example
+function outer() {
+  let counter = 0;
+  return function inner() {
+    counter++;
+    console.log(counter);
+  };
+}
+const count = outer();
+count(); // 1
+count(); // 2
+
+// Data privacy with closures
+function makeSecret(secret) {
+  return function reveal() {
+    return secret;
+  };
+}
+const getSecret = makeSecret("hidden value");
+console.log(getSecret()); // "hidden value"
+
+// Factory function using closure
+function multiplier(factor) {
+  return function(x) {
+    return x * factor;
+  };
+}
+const double = multiplier(2);
+console.log(double(5)); // 10
+
+// Closure in event handler
+function setupButton() {
+  let clicks = 0;
+  document.getElementById("myBtn").onclick = function() {
+    clicks++;
+    console.log("Clicked", clicks, "times");
+  };
+}
+// Call setupButton() after page loads and click #myBtn
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-closure')">Try It</button>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Closures are used in callbacks, event handlers, and module patterns.</li>
+                    <li>Use closures to create private state in functions and objects.</li>
+                    <li>Closures are the basis for currying, partial application, and memoization.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Garbage Collection:</strong> Variables in closures are not garbage collected until all references are gone.</li>
+                        <li><strong>Memory Usage:</strong> Be mindful of memory leaks with closures in long-lived objects (e.g., event listeners).</li>
+                        <li><strong>Best Practice:</strong> Use closures for encapsulation and modular code, but avoid excessive nesting for readability.</li>
+                        <li><strong>Debugging:</strong> Use browser dev tools to inspect closure scopes.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="async" class="tutorial-section">
+                <h2>Callbacks, Promises & Async/Await</h2>
+                <p>JavaScript is single-threaded but can handle asynchronous operations using callbacks, promises, and async/await. Asynchronous code is essential for tasks like API calls, timers, file operations, and user interactions. Understanding async patterns helps you write non-blocking, responsive applications.</p>
+                <ul>
+                    <li><strong>Callback:</strong> A function passed as an argument to be executed later (e.g., after a timer or event).</li>
+                    <li><strong>Promise:</strong> An object representing the eventual completion (or failure) of an async operation.</li>
+                    <li><strong>Async/Await:</strong> Syntactic sugar for working with promises, making async code look synchronous.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-async">// Callback example
+setTimeout(() => console.log("Hello after 1 sec"), 1000);
+
+// Callback hell (nesting)
+setTimeout(() => {
+  console.log("Step 1");
+  setTimeout(() => {
+    console.log("Step 2");
+    setTimeout(() => {
+      console.log("Step 3");
+    }, 1000);
+  }, 1000);
+}, 1000);
+
+// Promise example
+const promise = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("Done!"), 1000);
+});
+promise.then(res => console.log(res));
+
+// Chaining promises
+function asyncAdd(a, b) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(a + b), 500);
+  });
+}
+asyncAdd(2, 3)
+  .then(sum => {
+    console.log("Sum:", sum);
+    return asyncAdd(sum, 4);
+  })
+  .then(result => console.log("Result:", result));
+
+// Error handling with promises
+const failPromise = new Promise((_, reject) => {
+  setTimeout(() => reject("Something went wrong!"), 700);
+});
+failPromise.catch(err => console.error("Error:", err));
+
+// Async/Await example
+async function fetchData() {
+  try {
+    let result = await promise;
+    console.log(result);
+    let sum = await asyncAdd(5, 7);
+    console.log("Async sum:", sum);
+  } catch (e) {
+    console.error("Async error:", e);
+  }
+}
+fetchData();
+
+// Parallel async with Promise.all
+async function parallelTasks() {
+  let results = await Promise.all([
+    asyncAdd(1, 2),
+    asyncAdd(3, 4),
+    asyncAdd(5, 6)
+  ]);
+  console.log("Parallel results:", results);
+}
+parallelTasks();
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-async')">Try It</button>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Use <code>try/catch</code> with async/await for error handling.</li>
+                    <li>Chain promises for sequential async operations.</li>
+                    <li>Use <code>Promise.all</code> for running async tasks in parallel.</li>
+                    <li>Callbacks can lead to deeply nested code (callback hell); prefer promises or async/await for complex flows.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Promise States:</strong> pending, fulfilled, rejected.</li>
+                        <li><strong>Async/Await:</strong> Works only inside <code>async</code> functions.</li>
+                        <li><strong>Best Practice:</strong> Always handle errors in async code to avoid silent failures.</li>
+                        <li><strong>Race Conditions:</strong> Use <code>Promise.race</code> to get the result of the fastest promise.</li>
+                        <li><strong>Microtasks:</strong> Promises are scheduled as microtasks, which run after the current script but before rendering.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="error-handling" class="tutorial-section">
+                <h2>Error Handling</h2>
+                <p>Error handling in JavaScript is crucial for building robust applications. Use <code>try</code>, <code>catch</code>, and <code>finally</code> to gracefully handle errors, prevent crashes, and debug issues. You can throw custom errors, catch exceptions, and ensure cleanup code runs regardless of success or failure.</p>
+                <ul>
+                    <li><strong>try/catch:</strong> Wrap risky code to catch exceptions and handle them.</li>
+                    <li><strong>finally:</strong> Runs after <code>try</code> and <code>catch</code>, useful for cleanup.</li>
+                    <li><strong>throw:</strong> Create and throw custom errors.</li>
+                    <li><strong>Custom Error Classes:</strong> Extend <code>Error</code> for better error management.</li>
+                    <li><strong>Async Errors:</strong> Handle errors in promises and async/await using <code>.catch()</code> or <code>try/catch</code>.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-error">// Basic try/catch/finally
+try {
+  throw new Error("Something went wrong");
+} catch (err) {
+  console.error("Caught error:", err.message);
+} finally {
+  console.log("Cleanup code runs here.");
+}
+
+// Throwing custom errors
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Division by zero!");
+  }
+  return a / b;
+}
+try {
+  console.log(divide(10, 0));
+} catch (e) {
+  console.error("Custom error:", e.message);
+}
+
+// Custom error class
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ValidationError";
+  }
+}
+function validateAge(age) {
+  if (age < 0) throw new ValidationError("Age cannot be negative");
+  return age;
+}
+try {
+  validateAge(-5);
+} catch (e) {
+  if (e instanceof ValidationError) {
+    console.error("Validation error:", e.message);
+  } else {
+    console.error("Other error:", e);
+  }
+}
+
+// Error handling in async code
+async function fetchData() {
+  try {
+    await Promise.reject("Async error!");
+  } catch (e) {
+    console.error("Caught async error:", e);
+  }
+}
+fetchData();
+
+// Using .catch() with promises
+Promise.reject("Promise failed!")
+  .catch(err => console.error("Promise error:", err));
+</code></pre>
+fetchData();
+
+// Using .catch() with promises
+Promise.reject("Promise failed!")
+  .catch(err => console.error("Promise error:", err));
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-error')">Try It</button>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Always handle errors in asynchronous code using <code>.catch()</code> or <code>try/catch</code>.</li>
+                    <li>Use custom error classes for better error categorization.</li>
+                    <li>Use <code>finally</code> for cleanup tasks (closing files, releasing resources).</li>
+                    <li>Log errors for debugging and user feedback.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Error Propagation:</strong> Errors bubble up the call stack until caught.</li>
+                        <li><strong>Global Error Handling:</strong> Use <code>window.onerror</code> or <code>process.on('uncaughtException')</code> for global error capture.</li>
+                        <li><strong>Best Practice:</strong> Never silently ignore errors; always log or handle them.</li>
+                        <li><strong>Async/Await:</strong> Use <code>try/catch</code> inside <code>async</code> functions for proper error handling.</li>
+                        <li><strong>Validation:</strong> Validate user input and throw errors for invalid data.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="dom" class="tutorial-section">
+                <h2>DOM Manipulation</h2>
+                <p>The Document Object Model (DOM) lets you interact with HTML elements using JavaScript. You can change content, styles, structure, and respond to user actions. DOM manipulation is essential for building interactive web applications, handling events, and updating the UI dynamically.</p>
+                <ul>
+                    <li><strong>Select Elements:</strong> <code>getElementById</code>, <code>getElementsByClassName</code>, <code>querySelector</code>, <code>querySelectorAll</code></li>
+                    <li><strong>Change Content:</strong> <code>innerText</code>, <code>innerHTML</code>, <code>textContent</code></li>
+                    <li><strong>Change Styles:</strong> <code>element.style</code>, <code>classList</code></li>
+                    <li><strong>Events:</strong> <code>addEventListener</code> for clicks, input, mouse, keyboard, etc.</li>
+                    <li><strong>Create/Remove Elements:</strong> <code>createElement</code>, <code>appendChild</code>, <code>removeChild</code></li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-dom">// Select and change content
+document.getElementById("demo").innerText = "Changed by JavaScript!";
+
+// Change styles
+document.getElementById("demo").style.color = "#00FFDD";
+document.getElementById("demo").classList.add("highlight");
+
+// Add event listener
+const btn = document.getElementById("myBtn");
+btn.addEventListener("click", function() {
+  alert("Button clicked!");
+});
+
+// Create and add new element
+const newDiv = document.createElement("div");
+newDiv.innerText = "I am new!";
+document.body.appendChild(newDiv);
+
+// Remove element
+setTimeout(() => {
+  document.body.removeChild(newDiv);
+}, 2000);
+
+// Query selector for advanced selection
+let firstItem = document.querySelector(".item");
+if (firstItem) firstItem.style.background = "#FFC107";
+
+// Event delegation example
+document.getElementById("list").addEventListener("click", function(e) {
+  if (e.target.tagName === "LI") {
+    alert("List item clicked: " + e.target.innerText);
+  }
+});
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-dom')">Try It</button>
+                <ul>
+                    <li>Use <code>querySelector</code> and <code>classList</code> for advanced DOM operations.</li>
+                    <li>Use event delegation for efficient event handling on lists and dynamic elements.</li>
+                    <li>Always check if an element exists before manipulating it.</li>
+                    <li>Use <code>innerHTML</code> with caution to avoid XSS vulnerabilities.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Performance:</strong> Minimize DOM updates for better performance.</li>
+                        <li><strong>Fragment:</strong> Use <code>DocumentFragment</code> for batch DOM changes.</li>
+                        <li><strong>MutationObserver:</strong> Observe DOM changes for advanced use cases.</li>
+                        <li><strong>Accessibility:</strong> Update ARIA attributes for accessible web apps.</li>
+                        <li><strong>Best Practice:</strong> Separate logic and presentation; avoid inline event handlers.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="classes-oop" class="tutorial-section">
+                <h2>Classes and OOP</h2>
+                <p>JavaScript supports object-oriented programming (OOP) using classes. Classes are blueprints for creating objects with properties and methods. OOP helps organize code, promote reuse, and model real-world entities. Modern JavaScript classes support inheritance, encapsulation, static methods, private fields, and more.</p>
+                <ul>
+                    <li><strong>Class Declaration:</strong> <code>class MyClass { ... }</code></li>
+                    <li><strong>Constructor:</strong> <code>constructor()</code> method for initializing properties.</li>
+                    <li><strong>Methods:</strong> Functions defined inside the class.</li>
+                    <li><strong>Inheritance:</strong> <code>extends</code> keyword to create subclasses.</li>
+                    <li><strong>Static Methods:</strong> <code>static</code> keyword for class-level methods.</li>
+                    <li><strong>Private Fields:</strong> <code>#field</code> syntax for encapsulation.</li>
+                </ul>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-class">// Basic class
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+  greet() {
+    console.log("Hi, I'm " + this.name);
+  }
+}
+const p = new Person("Alice");
+p.greet();
+
+// Inheritance
+class Student extends Person {
+  constructor(name, grade) {
+    super(name);
+    this.grade = grade;
+  }
+  showGrade() {
+    console.log(`${this.name}'s grade: ${this.grade}`);
+  }
+}
+const s = new Student("Bob", "A");
+s.greet();
+s.showGrade();
+
+// Static method
+class MathUtil {
+  static add(a, b) {
+    return a + b;
+  }
+}
+console.log(MathUtil.add(2, 3)); // 5
+
+// Private fields and methods
+class Counter {
+  #count = 0;
+  increment() {
+    this.#count++;
+    return this.#count;
+  }
+  getCount() {
+    return this.#count;
+  }
+}
+const counter = new Counter();
+console.log(counter.increment()); // 1
+console.log(counter.getCount()); // 1
+
+// Class expression
+const Animal = class {
+  speak() {
+    console.log("Animal speaks");
+  }
+};
+const a = new Animal();
+a.speak();
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-class')">Try It</button>
+                </div>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Use inheritance to create subclasses and extend functionality.</li>
+                    <li>Use <code>super()</code> to call parent class methods.</li>
+                    <li>Use private fields (<code>#field</code>) for encapsulation.</li>
+                    <li>Use static methods for utility functions that don't depend on instance data.</li>
+                    <li>Class expressions allow you to define classes anonymously.</li>
+                </ul>
+                <div class="example-box">
+                    <h4>Advanced Notes</h4>
+                    <ul>
+                        <li><strong>Polymorphism:</strong> Subclasses can override parent methods.</li>
+                        <li><strong>Instance vs Static:</strong> Instance methods operate on object data; static methods on class data.</li>
+                        <li><strong>Private Methods:</strong> Use <code>#method()</code> for private logic.</li>
+                        <li><strong>Best Practice:</strong> Keep classes focused, use composition for complex logic.</li>
+                        <li><strong>Mixins:</strong> Use mixins to add reusable functionality to classes.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="localstorage" class="tutorial-section">
+    <h2>LocalStorage</h2>
+    <p>LocalStorage allows you to store key-value data in the browser that persists across sessions and page reloads. It's useful for saving user preferences, app state, and small datasets. Data is stored as strings and is accessible via JavaScript.</p>
+    <ul>
+        <li><strong>Set Item:</strong> <code>localStorage.setItem(key, value)</code></li>
+        <li><strong>Get Item:</strong> <code>localStorage.getItem(key)</code></li>
+        <li><strong>Remove Item:</strong> <code>localStorage.removeItem(key)</code></li>
+        <li><strong>Clear All:</strong> <code>localStorage.clear()</code></li>
+        <li><strong>Storage Event:</strong> Listen for changes with <code>window.addEventListener('storage', ...)</code></li>
+    </ul>
+    <div class="code-demo">
+        <pre><code class="language-javascript" id="code-storage">// Store a string
+localStorage.setItem("username", "Alice");
+let user = localStorage.getItem("username");
+console.log(user); // Output: Alice
+
+// Store an object
+const settings = { theme: "dark", fontSize: 18 };
+localStorage.setItem("settings", JSON.stringify(settings));
+const loaded = JSON.parse(localStorage.getItem("settings"));
+console.log(loaded.theme); // Output: dark
+
+// Remove an item
+localStorage.removeItem("username");
+
+// Clear all data
+// localStorage.clear();
+
+// Listen for changes (in other tabs/windows)
+window.addEventListener('storage', function(e) {
+  console.log('Storage changed:', e.key, e.newValue);
+});
+</code></pre>
+        <button class="try-it-btn" onclick="openRunner('code-storage')">Try It</button>
+    </div>
+    <p><strong>Tips:</strong></p>
+    <ul>
+        <li>Data in localStorage is always stored as strings. Use <code>JSON.stringify</code> and <code>JSON.parse</code> for objects and arrays.</li>
+        <li>localStorage is synchronous; avoid storing large data to prevent UI blocking.</li>
+        <li>Use sessionStorage for data that should only persist for a single tab/session.</li>
+        <li>Check for storage quota limits (usually 5-10MB per origin).</li>
+        <li>Use try/catch for robust error handling when reading/writing storage.</li>
+    </ul>
+    <div class="example-box">
+        <h4>Advanced Notes</h4>
+        <ul>
+            <li><strong>Security:</strong> Data is accessible to any script on the page; do not store sensitive information.</li>
+</section>
+            <section id="fetch-api" class="tutorial-section">
+                <h2>Fetch API (AJAX)</h2>
+                <p>The Fetch API lets you make HTTP requests to servers and APIs. It's promise-based and replaces older AJAX methods.</p>
+                <div class="code-demo">
+                    <pre><code class="language-javascript" id="code-fetch">fetch("https://jsonplaceholder.typicode.com/posts")
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
+</code></pre>
+                    <button class="try-it-btn" onclick="openRunner('code-fetch')">Try It</button>
+                </div>
+                <p><strong>Tip:</strong> Always handle errors with <code>.catch()</code> when using fetch.</p>
+                <div class="example-box">
+                    <h4>Advanced Note</h4>
+                    <ul>
+                        <li>Use <code>async/await</code> for cleaner fetch code.</li>
+                        <li>Handle network errors and invalid responses.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="regex" class="tutorial-section">
+    <h2>Regular Expressions</h2>
+    <p>Regular expressions (regex) are patterns used to match, search, and manipulate strings. They are powerful tools for validation, parsing, and text processing in JavaScript. Regex can be used for simple checks or complex pattern matching.</p>
+    <ul>
+        <li><strong>Creation:</strong> <code>/pattern/flags</code> or <code>new RegExp("pattern", "flags")</code></li>
+        <li><strong>Common Flags:</strong> <code>i</code> (ignore case), <code>g</code> (global), <code>m</code> (multiline)</li>
+        <li><strong>Methods:</strong> <code>.test()</code>, <code>.exec()</code>, <code>.match()</code>, <code>.replace()</code>, <code>.split()</code></li>
+        <li><strong>Character Classes:</strong> <code>\d</code> (digit), <code>\w</code> (word), <code>\s</code> (whitespace)</li>
+        <li><strong>Anchors:</strong> <code>^</code> (start), <code>$</code> (end)</li>
+        <li><strong>Quantifiers:</strong> <code>*</code>, <code>+</code>, <code>?</code>, <code>{n,m}</code></li>
+    </ul>
+    <div class="code-demo">
+        <pre><code class="language-javascript" id="code-regex">// Basic usage
+let pattern = /hello/i;
+console.log(pattern.test("Hello World")); // true
+
+// Match email
+let email = "test@example.com";
+let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+console.log(emailPattern.test(email)); // true
+
+// Extract numbers from string
+let str = "Order #1234, total $56.78";
+let nums = str.match(/\d+/g);
+console.log(nums); // ["1234", "56", "78"]
+
+// Replace all spaces with dashes
+let text = "JavaScript regex is cool!";
+let dashed = text.replace(/\s+/g, "-");
+console.log(dashed); // JavaScript-regex-is-cool!
+
+// Validate phone number (simple)
+let phone = "987-654-3210";
+let phonePattern = /^\d{3}-\d{3}-\d{4}$/;
+console.log(phonePattern.test(phone)); // true
+
+// Split string by commas or spaces
+let data = "apple, banana orange";
+let items = data.split(/[ ,]+/);
+console.log(items); // ["apple", "banana", "orange"]
+
+// Advanced: Named capture groups (ES2018+)
+let date = "2025-07-11";
+let datePattern = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/;
+let match = date.match(datePattern);
+console.log(match.groups); // { year: "2025", month: "07", day: "11" }
+</code></pre>
+        <button class="try-it-btn" onclick="openRunner('code-regex')">Try It</button>
+    </div>
+    <p><strong>Tips:</strong></p>
+    <ul>
+        <li>Use <code>.test()</code> for boolean checks, <code>.match()</code> for extracting matches.</li>
+        <li>Use online regex testers to build and debug patterns.</li>
+        <li>Escape special characters (e.g., <code>\.</code>, <code>\*</code>, <code>\?</code>) in patterns.</li>
+        <li>Use named capture groups for readable extraction (ES2018+).</li>
+        <li>Regex can be hard to read—add comments or break into steps for complex patterns.</li>
+    </ul>
+    <div class="example-box">
+        <h4>Advanced Notes</h4>
+        <ul>
+            <li><strong>Performance:</strong> Complex regex can be slow on large texts; optimize patterns.</li>
+            <li><strong>Unicode:</strong> Use <code>u</code> flag for Unicode support.</li>
+            <li><strong>Lookahead/Lookbehind:</strong> Use <code>(?=...)</code> and <code>(?&lt;=...)</code> for advanced matching.</li>
+            <li><strong>Best Practice:</strong> Validate user input with regex, but also sanitize and check edge cases.</li>
+            <li><strong>Debugging:</strong> Use <code>RegExp.prototype.source</code> to inspect pattern source.</li>
+        </ul>
+    </div>
+</section>
+            <section id="projects" class="tutorial-section">
+                <h2>Mini Projects</h2>
+                <h3>1. Click Counter</h3>
+                <div class="code-demo">
+                    <pre><code class="language-html" id="code-project1">&lt;button onclick="increase()"&gt;Click Me&lt;/button&gt;
+&lt;p id="count"&gt;0&lt;/p&gt;
+&lt;script&gt;
+let count = 0;
+function increase() {
+  count++;
+  document.getElementById("count").innerText = count;
+}
+&lt;/script&gt;
+</code></pre>
+                    <button class="try-it-btn" onclick="openHtmlRunner('code-project1')">Try It</button>
+                </div>
+                <h3>2. To-Do List</h3>
+                <div class="code-demo">
+                    <pre><code class="language-html" id="code-project2">&lt;input id="taskInput"&gt;&lt;button onclick="addTask()"&gt;Add&lt;/button&gt;
+&lt;ul id="taskList"&gt;&lt;/ul&gt;
+&lt;script&gt;
+function addTask() {
+  const input = document.getElementById("taskInput");
+  const li = document.createElement("li");
+  li.innerText = input.value;
+  document.getElementById("taskList").appendChild(li);
+  input.value = "";
+}
+&lt;/script&gt;
+</code></pre>
+                    <button class="try-it-btn" onclick="openHtmlRunner('code-project2')">Try It</button>
+                </div>
+                <h3>3. Light On/Off</h3>
+                <div class="code-demo">
+                    <pre><code class="language-html" id="code-project3">&lt;button onclick="toggle()"&gt;Toggle Light&lt;/button&gt;
+&lt;div id="bulb" style="width:100px;height:100px;background:gray;"&gt;&lt;/div&gt;
+&lt;script&gt;
+let isOn = false;
+function toggle() {
+  isOn = !isOn;
+  document.getElementById("bulb").style.background = isOn ? "yellow" : "gray";
+}
+&lt;/script&gt;
+</code></pre>
+                    <button class="try-it-btn" onclick="openHtmlRunner('code-project3')">Try It</button>
+                </div>
+                <p><strong>Tip:</strong> Try building your own projects by combining these concepts!</p>
+            </section>
+            <div id="code-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(10,14,23,0.95);z-index:9999;align-items:center;justify-content:center;">
+              <div style="background:var(--sidebar-bg);border-radius:12px;padding:2rem;max-width:600px;width:90vw;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;">
+                <button onclick="closeRunner()" style="position:absolute;top:10px;right:10px;background:var(--accent-color);color:#0a0e17;border:none;border-radius:6px;padding:0.5rem 1rem;cursor:pointer;font-weight:600;">Close</button>
+                <h3 style="color:var(--accent-color);margin-top:0;">Try JavaScript Code</h3>
+                <textarea id="runner-input" style="width:100%;height:180px;background:var(--code-bg);color:#fff;font-family:'JetBrains Mono',monospace;font-size:1rem;border-radius:8px;border:1px solid var(--border-color);margin-bottom:1rem;padding:1rem;"></textarea>
+                <button onclick="runCode()" class="try-it-btn" style="margin-bottom:1rem;">Run</button>
+                <pre id="runner-output" style="background:var(--code-bg);color:#00FFDD;padding:1rem;border-radius:8px;min-height:40px;"></pre>
+              </div>
+            </div>
+            </main>
+        </div>
+            <div id="html-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(10,14,23,0.95);z-index:9999;align-items:center;justify-content:center;">
+              <div style="background:var(--sidebar-bg);border-radius:12px;padding:2rem;max-width:700px;width:95vw;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;">
+            <div id="html-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(10,14,23,0.95);z-index:9999;align-items:center;justify-content:center;">
+              <div style="background:var(--sidebar-bg);border-radius:12px;padding:2rem;max-width:700px;width:95vw;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;">
+                <button onclick="closeHtmlRunner()" style="position:absolute;top:10px;right:10px;background:var(--accent-color);color:#0a0e17;border:none;border-radius:6px;padding:0.5rem 1rem;cursor:pointer;font-weight:600;">Close</button>
+                <h3 style="color:var(--accent-color);margin-top:0;">Live HTML/JS Preview</h3>
+                <textarea id="html-input" style="width:100%;height:180px;background:var(--code-bg);color:#fff;font-family:'JetBrains Mono',monospace;font-size:1rem;border-radius:8px;border:1px solid var(--border-color);margin-bottom:1rem;padding:1rem;"></textarea>
+                <button onclick="runHtml()" class="try-it-btn" style="margin-bottom:1rem;">Run</button>
+                <iframe id="html-output" style="width:100%;height:220px;background:#fff;border-radius:8px;border:1px solid var(--border-color);"></iframe>
+              </div>
+            </div>
+            <script>
+            function openRunner(codeId) {
+              var code = document.getElementById(codeId).textContent;
+              document.getElementById('runner-input').value = code;
+              document.getElementById('runner-output').textContent = '';
+              document.getElementById('code-modal').style.display = 'flex';
+            }
+            function closeRunner() {
+              document.getElementById('code-modal').style.display = 'none';
+            }
+            function runCode() {
+              var code = document.getElementById('runner-input').value;
+              var output = '';
+              try {
+                var consoleLog = [];
+                var oldLog = console.log;
+                console.log = function() { consoleLog.push(Array.from(arguments).join(' ')); };
+                eval(code);
+                output = consoleLog.join('\n');
+                console.log = oldLog;
+              } catch(e) {
+                output = 'Error: ' + e.message;
+              }
+              document.getElementById('runner-output').textContent = output;
+            }
+            function openHtmlRunner(codeId) {
+              var code = document.getElementById(codeId).textContent;
+              document.getElementById('html-input').value = code;
+              document.getElementById('html-output').srcdoc = '';
+              document.getElementById('html-modal').style.display = 'flex';
+            }
+            function closeHtmlRunner() {
+              document.getElementById('html-modal').style.display = 'none';
+            }
+            function runHtml() {
+              var code = document.getElementById('html-input').value;
+              document.getElementById('html-output').srcdoc = code;
+            }
+            </script>
+        </main>
+    </div>
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script>
+    // Sidebar navigation logic
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuLinks = document.querySelectorAll('.tutorial-menu .menu-item');
+      const sections = document.querySelectorAll('.tutorial-section');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Remove active from all
+          menuLinks.forEach(l => l.classList.remove('active'));
+          sections.forEach(s => s.classList.remove('active'));
+          // Add active to clicked
+          this.classList.add('active');
+          const target = this.getAttribute('href').replace('#', '');
+          const section = document.getElementById(target);
+          if (section) section.classList.add('active');
+          // Scroll to top of main content
+          document.querySelector('.tutorial-content').scrollTo({top:0, behavior:'smooth'});
+        });
+      });
+    });
+    </script>
+    <script src="scripts/header-auth.js"></script>
+    <!-- Legal Links Footer -->
+    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
+            <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
+                Privacy Policy
+            </a>
+            <span style="color: #555; font-size: 0.8rem;">|</span>
+            <a href="terms-conditions.html" style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
+                Terms & Conditions
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+/* Box style for JavaScript tutorial main content */
+.tutorial-box {
+    background: #181f2a;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 32px 28px;
+    margin: 32px 0;
+    border: 1px solid #232a3a;
+    max-width: 900px;
+    width: 100%;
+    color: #f3f6fa;
+}
+
+@media (max-width: 900px) {
+    .tutorial-box {
+        padding: 18px 8px;
+        margin: 18px 0;
+    }
+}
