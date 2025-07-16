@@ -6,7 +6,7 @@
 
     <!-- Homepage -->
     <url>
-        <loc>https://keyracer.in/preference.html</loc>
+        <loc>https://keyracer.in</loc>
         <lastmod>2025-07-14</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
@@ -19,46 +19,38 @@
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
+     <!-- Code Racer -->
+    <url>
+        <loc>https://keyracer.in/code-racer.html</loc>
+        <lastmod>2025-07-14</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
 
     <!-- Coding Challenges -->
     <url>
         <loc>https://keyracer.in/challenges.html</loc>
         <lastmod>2025-07-14</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
+        <priority>0.7</priority>
     </url>
-
-    <!-- Professional Skills Challenges -->
-    <url>
-        <loc>https://keyracer.in/pro-skills-challenges.html</loc>
-        <lastmod>2025-07-14</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
     <!-- Professional Skills -->
     <url>
         <loc>https://keyracer.in/pro-skills.html</loc>
         <lastmod>2025-07-14</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <!-- Leaderboard -->
-    <url>
-        <loc>https://keyracer.in/leaderboard.html</loc>
-        <lastmod>2025-07-14</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <!-- Lessons -->
-    <url>
-        <loc>https://keyracer.in/lessons.html</loc>
-        <lastmod>2025-07-14</lastmod>
-        <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
+    <!-- Professional Skills Challenges -->
+    <url>
+        <loc>https://keyracer.in/pro-skills-challenges.html</loc>
+        <lastmod>2025-07-14</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+
 
     <!-- About -->
     <url>
@@ -68,14 +60,7 @@
         <priority>0.5</priority>
     </url>
 
-    <!-- Code Racer -->
-    <url>
-        <loc>https://keyracer.in/code-racer.html</loc>
-        <lastmod>2025-07-14</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
+   
     <!-- Python Tutorial -->
     <url>
         <loc>https://keyracer.in/python-tutorial.html</loc>
