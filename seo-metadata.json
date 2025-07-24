@@ -1,0 +1,102 @@
+{
+  "website": {
+    "name": "KeyRacer",
+    "domain": "keyracer.in",
+    "baseUrl": "https://keyracer.in"
+  },
+  "global": {
+    "title": "KeyRacer - The Ultimate Keyboard Racing Championship",
+    "description": "KeyRacer is a comprehensive skill development platform combining typing practice, coding challenges, and professional communication skills training. Improve your typing speed, learn programming through interactive exercises, and enhance your professional skills.",
+    "keywords": "typing test, typing speed, code typing, programming practice, keyboard racing, typing competition, coding challenges, professional skills",
+    "author": "KeyRacer",
+    "robots": "index, follow",
+    "viewport": "width=device-width, initial-scale=1.0",
+    "themeColor": "#070B18",
+    "favicon": "/assets/images/logo.png",
+    "appleTouchIcon": "/assets/images/logo.png"
+  },
+  "openGraph": {
+    "type": "website",
+    "siteName": "KeyRacer",
+    "image": "https://keyracer.in/assets/images/logo.png",
+    "imageWidth": "1200",
+    "imageHeight": "630",
+    "imageAlt": "KeyRacer - The Ultimate Keyboard Racing Championship"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "site": "@keyracer",
+    "creator": "@keyracer"
+  },
+  "pages": {
+    "home": {
+      "path": "/index.html",
+      "title": "KeyRacer - The Ultimate Keyboard Racing Championship",
+      "description": "Improve your typing speed, learn programming, and enhance professional skills with KeyRacer's comprehensive platform. Join the keyboard racing championship today!",
+      "keywords": "typing test, keyboard racing, typing championship, typing competition, typing speed test, wpm test",
+      "priority": 1.0,
+      "changeFrequency": "daily"
+    },
+    "typingTest": {
+      "path": "/typing-test.html",
+      "title": "Typing Test - Improve Your Typing Speed | KeyRacer",
+      "description": "Test and improve your typing speed with KeyRacer's advanced typing test. Get real-time WPM, accuracy metrics, and compete on global leaderboards.",
+      "keywords": "typing test, typing speed test, wpm test, typing practice, keyboard speed, typing accuracy",
+      "priority": 0.9,
+      "changeFrequency": "weekly"
+    },
+    "codeRacer": {
+      "path": "/code-racer.html",
+      "title": "CodeRacer - Learn Programming Through Interactive Typing | KeyRacer",
+      "description": "Master programming languages through interactive typing exercises. Practice Python, JavaScript, HTML, CSS, Java, and more with real-world code examples.",
+      "keywords": "code typing, programming practice, learn coding, interactive programming, code exercises, programming tutorial",
+      "priority": 0.9,
+      "changeFrequency": "weekly"
+    },
+    "challenges": {
+      "path": "/challenges.html",
+      "title": "Coding Challenges - Test Your Programming Skills | KeyRacer",
+      "description": "Challenge yourself with KeyRacer's programming exercises. Solve coding problems, improve your algorithm skills, and track your progress.",
+      "keywords": "coding challenges, programming problems, algorithm practice, coding exercises, programming skills",
+      "priority": 0.8,
+      "changeFrequency": "weekly"
+    },
+    "proSkills": {
+      "path": "/pro-skills.html",
+      "title": "Professional Skills Lab - Business Communication Practice | KeyRacer",
+      "description": "Enhance your professional communication skills with KeyRacer's templates and practice for resumes, cover letters, business emails, and more.",
+      "keywords": "professional skills, business writing, resume practice, cover letter, business email, communication skills",
+      "priority": 0.8,
+      "changeFrequency": "weekly"
+    },
+    "leaderboard": {
+      "path": "/leaderboard.html",
+      "title": "Global Leaderboard - Compete Worldwide | KeyRacer",
+      "description": "See how you rank against typists worldwide on KeyRacer's global leaderboard. Track top performers and challenge yourself to reach the top.",
+      "keywords": "typing leaderboard, global ranking, typing competition, fastest typists, typing championship",
+      "priority": 0.7,
+      "changeFrequency": "daily"
+    },
+    "about": {
+      "path": "/about.html",
+      "title": "About KeyRacer - Our Mission and Team | KeyRacer",
+      "description": "Learn about KeyRacer's mission to improve digital productivity skills worldwide. Meet our team and discover the story behind the ultimate keyboard racing championship.",
+      "keywords": "about keyracer, keyracer team, typing platform, digital skills, productivity improvement",
+      "priority": 0.7,
+      "changeFrequency": "monthly"
+    }
+  },
+  "socialProfiles": {
+    "twitter": "https://twitter.com/keyracer",
+    "facebook": "https://facebook.com/keyracer",
+    "instagram": "https://instagram.com/keyracer",
+    "github": "https://github.com/keyracer"
+  },
+  "organization": {
+    "name": "KeyRacer",
+    "logo": "https://keyracer.in/assets/images/logo.png",
+    "email": "customerkeyracer@gmail.com",
+    "foundingDate": "2023",
+    "description": "KeyRacer is a comprehensive skill development platform that combines typing practice, coding challenges, and professional communication skills training."
+  }
+}

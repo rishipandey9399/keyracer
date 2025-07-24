@@ -1,8 +1,17 @@
+# KeyRacer Robots.txt
+# Updated for improved search engine visibility
+
 User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: https://keyracer.in/sitemap.xml
+# Important pages with high priority
+Allow: /index.html
+Allow: /typing-test.html
+Allow: /code-racer.html
+Allow: /challenges.html
+Allow: /pro-skills.html
+Allow: /about.html
+Allow: /leaderboard.html
 
 # Disallow admin and private areas
 Disallow: /admin/
@@ -10,19 +19,12 @@ Disallow: /private/
 Disallow: /server/
 Disallow: /client/api/
 Disallow: /*.log$
+Disallow: /*.md$
+Disallow: /*.json$
+Disallow: /node_modules/
 
-# Allow important pages
-Allow: /index.html
-Allow: /typing-test.html
-Allow: /pro-skills-challenges.html
-Allow: /pro-skills.html
-Allow: /challenges.html
-Allow: /leaderboard.html
-Allow: /lessons.html
-Allow: /about.html
-Allow: /assets/
-Allow: /styles/
-Allow: /scripts/
-
-# Crawl delay
+# Crawl delay for better server performance
 Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://keyracer.in/sitemap.xml
