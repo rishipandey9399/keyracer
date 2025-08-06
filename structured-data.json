@@ -1,0 +1,67 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "KeyRacer",
+  "alternateName": "KeyRacer - The Ultimate Keyboard Racing Championship",
+  "url": "https://keyracer.in",
+  "description": "KeyRacer is a comprehensive skill development platform combining typing practice, coding challenges, and professional communication skills training. Improve your typing speed, learn programming through interactive exercises, and enhance your professional skills.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://keyracer.in/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "KeyRacer",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://keyracer.in/assets/images/logo.png",
+      "width": 600,
+      "height": 60
+    }
+  },
+  "mainEntity": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "KeyRacer Typing Test",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Improve your typing speed and accuracy with KeyRacer's advanced typing test featuring real-time analytics and adaptive difficulty levels."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "CodeRacer",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Learn programming through interactive typing exercises in multiple languages including Python, JavaScript, HTML, CSS, Java, and C++."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Professional Skills Lab",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Enhance your professional communication skills with templates and practice for resumes, cover letters, business emails, and more."
+    }
+  ],
+  "sameAs": [
+    "https://twitter.com/keyracer",
+    "https://facebook.com/keyracer",
+    "https://instagram.com/keyracer",
+    "https://github.com/keyracer"
+  ]
+}

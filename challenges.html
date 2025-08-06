@@ -982,6 +982,15 @@
                     console.error(`Error loading ${language} challenges:`, error);
                     this.showLanguageSpecificDemoData(language);
                 }
+                
+                // Update challenge status based on completed challenges in localStorage
+                this.updateChallengeStatusFromLocalStorage();
+                
+                // Log the challenges after updating status
+                console.log('Challenges after status update:', this.challenges);
+                
+                // Ensure challenges are rendered after loading and updating status
+                this.renderChallenges();
             }
 
             showLoadingState(language) {
@@ -1559,6 +1568,10 @@
                     console.log('🔄 Falling back to demo data...');
                     this.showDemoData();
                 }
+                
+                // Update challenge status based on completed challenges in localStorage
+                this.updateChallengeStatusFromLocalStorage();
+                console.log('Challenges after status update in loadChallenges:', this.challenges);
             }
 
             showDemoData() {
@@ -2125,7 +2138,12 @@
                 // Update challenge status in the display
                 this.updateChallengeStatus(challengeId);
                 
+                // Log updated stats and challenges
                 console.log('Updated stats:', this.userStats);
+                console.log('Current challenges:', this.challenges);
+                
+                // Force re-render to ensure challenges are displayed
+                this.renderChallenges();
             }
 
             updateRank() {
@@ -2158,10 +2176,28 @@
             }
 
             updateChallengeStatus(challengeId) {
-                const challenge = this.challenges.find(c => c._id === challengeId);
+                const challenge = this.challenges.find(c => c._id == challengeId);
                 if (challenge) {
                     challenge.status = 'completed';
                     this.renderChallenges(); // Re-render to show updated status
+                }
+            }
+            
+            updateChallengeStatusFromLocalStorage() {
+                // Get completed challenges from localStorage
+                const savedStats = localStorage.getItem('challengeStats');
+                if (savedStats) {
+                    const stats = JSON.parse(savedStats);
+                    if (stats.completedChallenges && Array.isArray(stats.completedChallenges)) {
+                        // Update status for each completed challenge
+                        stats.completedChallenges.forEach(challengeId => {
+                            const challenge = this.challenges.find(c => c._id == challengeId);
+                            if (challenge) {
+                                challenge.status = 'completed';
+                            }
+                        });
+                        console.log('Updated challenge status from localStorage:', stats.completedChallenges);
+                    }
                 }
             }
 
@@ -2172,6 +2208,7 @@
                     if (e.key === 'challengeCompleted') {
                         const completion = JSON.parse(e.newValue);
                         if (completion) {
+                            console.log('Storage event detected challenge completion:', completion);
                             this.onChallengeCompleted(completion.challengeId, completion.points);
                             // Clear the completion flag
                             localStorage.removeItem('challengeCompleted');
@@ -2182,9 +2219,14 @@
                 // Also check on page load for any pending completions
                 const pendingCompletion = localStorage.getItem('challengeCompleted');
                 if (pendingCompletion) {
+                    console.log('Found pending challenge completion on page load:', pendingCompletion);
                     const completion = JSON.parse(pendingCompletion);
                     this.onChallengeCompleted(completion.challengeId, completion.points);
                     localStorage.removeItem('challengeCompleted');
+                    
+                    // Force update challenge status and re-render
+                    this.updateChallengeStatusFromLocalStorage();
+                    this.renderChallenges();
                 }
             }
 
@@ -2224,7 +2266,9 @@
                         if (challengesManager) {
                             challengesManager.showLoadingState(language);
                             await challengesManager.loadChallengesForLanguage(language);
+                            // Ensure challenges are rendered after loading and updating status
                             challengesManager.renderChallenges();
+                            console.log('Challenges rendered after language parameter handling');
                         }
                     }, 100); // Small delay to ensure challengesManager is initialized
                 }
