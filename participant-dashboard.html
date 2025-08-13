@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Essential SEO Meta Tags -->
+    <title>KeyRacer | Hackathon Participant Dashboard</title>
+    <meta name="description" content="KeyRacer Hackathon Participant Dashboard - View problem statements, submit your solutions, and track your progress in coding hackathons.">
+    <meta name="keywords" content="hackathon participant, coding challenges, DSA problems, programming competition, KeyRacer">
+    <meta name="author" content="KeyRacer">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://keyracer.in/participant-dashboard.html" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" href="/assets/images/logo.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #00FFDD;
+            --secondary-color: #00C2FF;
+            --accent-color: #00FFDD;
+            --highlight-color: #FFC700;
+            --danger-color: #FF4A4A;
+            --dark-bg: #070b18;
+            --card-bg: rgba(14, 30, 56, 0.95);
+            --conductor-color: #FF6B6B;
+            --participant-color: #4ECDC4;
+        }
+        
+        body {
+            background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            color: #fff;
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        
+        .dashboard-container {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--card-bg);
+            border-right: 1px solid rgba(0, 194, 255, 0.3);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 20px;
+            z-index: 1030;
+            transition: all 0.3s ease;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .sidebar-logo img {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(0, 194, 255, 0.6));
+        }
+        
+        .sidebar-logo span {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar-toggle {
+            background: transparent;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .nav-menu {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+        }
+        
+        .nav-item {
+            margin-bottom: 5px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: #b8eaff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0, 255, 221, 0.1);
+            color: var(--accent-color);
+            border-left-color: var(--accent-color);
+        }
+        
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(0, 194, 255, 0.2);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--participant-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .user-role {
+            color: var(--participant-color);
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 8px;
+            background: rgba(255, 74, 74, 0.1);
+            border: 1px solid rgba(255, 74, 74, 0.3);
+            color: var(--danger-color);
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 74, 74, 0.2);
+            color: var(--danger-color);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        /* Timer */
+        .timer-container {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .timer-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .timer-label {
+            font-size: 1rem;
+            color: #b8eaff;
+            margin-bottom: 5px;
+        }
+        
+        .timer-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--participant-color);
+            margin: 0;
+        }
+        
+        .timer-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--participant-color);
+        }
+        
+        /* Problem Statement */
+        .problem-container {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .problem-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin: 0;
+        }
+        
+        .problem-difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-medium {
+            background: rgba(255, 199, 0, 0.2);
+            color: var(--highlight-color);
+        }
+        
+        .problem-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #fff;
+        }
+        
+        .problem-section {
+            margin-bottom: 20px;
+        }
+        
+        .problem-section-title {
+            font-weight: 600;
+            color: var(--participant-color);
+            margin-bottom: 10px;
+        }
+        
+        .code-example {
+            background: rgba(7, 11, 24, 0.8);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .example-box {
+            background: rgba(7, 11, 24, 0.8);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .example-title {
+            font-weight: 600;
+            color: var(--participant-color);
+            margin-bottom: 10px;
+        }
+        
+        .constraints {
+            background: rgba(7, 11, 24, 0.8);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .constraints ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        /* Submission Section */
+        .submission-container {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .submission-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin: 0;
+        }
+        
+        .code-editor {
+            background: rgba(7, 11, 24, 0.8);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            position: relative;
+        }
+        
+        .code-editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .language-selector {
+            background: rgba(0, 194, 255, 0.1);
+            border: 1px solid rgba(0, 194, 255, 0.3);
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .editor-btn {
+            background: transparent;
+            border: none;
+            color: #b8eaff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .editor-btn:hover {
+            color: var(--accent-color);
+        }
+        
+        .code-textarea {
+            width: 100%;
+            min-height: 300px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            outline: none;
+            padding: 10px;
+            line-height: 1.5;
+        }
+        
+        .submission-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .submission-options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .option-label {
+            color: #b8eaff;
+            font-size: 0.9rem;
+        }
+        
+        .btn-custom {
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(90deg, var(--participant-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            color: #fff;
+        }
+        
+        .btn-primary-custom:hover {
+            background: linear-gradient(90deg, var(--secondary-color) 0%, var(--participant-color) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+        
+        .btn-secondary-custom {
+            background: rgba(0, 194, 255, 0.1);
+            border: 1px solid rgba(0, 194, 255, 0.3);
+            color: var(--secondary-color);
+        }
+        
+        .btn-secondary-custom:hover {
+            background: rgba(0, 194, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 194, 255, 0.2);
+        }
+        
+        /* Submission History */
+        .history-container {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .history-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin: 0;
+        }
+        
+        .submission-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        
+        .submission-table th {
+            color: #b8eaff;
+            font-weight: 600;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+        }
+        
+        .submission-table td {
+            padding: 15px 10px;
+            background: rgba(14, 30, 56, 0.5);
+        }
+        
+        .submission-table tr td:first-child {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+        
+        .submission-table tr td:last-child {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .submission-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-accepted {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--participant-color);
+        }
+        
+        .status-rejected {
+            background: rgba(255, 74, 74, 0.2);
+            color: var(--danger-color);
+        }
+        
+        .status-pending {
+            background: rgba(255, 199, 0, 0.2);
+            color: var(--highlight-color);
+        }
+        
+        /* Chat Support */
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            transform: translateY(calc(100% - 50px));
+        }
+        
+        .chat-container.open {
+            transform: translateY(0);
+        }
+        
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+            cursor: pointer;
+        }
+        
+        .chat-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            font-size: 1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-body {
+            height: 300px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .chat-message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .message-received {
+            align-self: flex-start;
+            background: rgba(0, 194, 255, 0.1);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            color: #fff;
+        }
+        
+        .message-sent {
+            align-self: flex-end;
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid rgba(78, 205, 196, 0.2);
+            color: #fff;
+        }
+        
+        .message-time {
+            font-size: 0.7rem;
+            color: #b8eaff;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .chat-footer {
+            padding: 15px;
+            border-top: 1px solid rgba(0, 194, 255, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: rgba(7, 11, 24, 0.8);
+            border: 1px solid rgba(0, 194, 255, 0.3);
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .chat-send {
+            background: var(--participant-color);
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-send:hover {
+            background: var(--secondary-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 15px 20px;
+                background: var(--card-bg);
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1020;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .mobile-logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                text-decoration: none;
+            }
+            
+            .mobile-logo img {
+                height: 30px;
+                width: auto;
+            }
+            
+            .mobile-logo span {
+                font-family: 'Orbitron', sans-serif;
+                color: var(--accent-color);
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+            
+            .dashboard-container {
+                padding-top: 70px;
+            }
+            
+            .chat-container {
+                width: 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .submission-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .timer-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .submission-actions {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .submission-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #070b18; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;">
+        <div style="text-align: center;">
+            <img src="assets/images/logo.png" alt="KeyRacer Logo" style="height: 100px; width: auto; margin-bottom: 20px; animation: pulse 1.5s infinite alternate;">
+            <div style="width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin: 0 auto;">
+                <div id="loader-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #00FFDD, #00C2FF); border-radius: 2px; transition: width 0.5s ease;"></div>
+            </div>
+            <p style="color: #00FFDD; font-family: 'Orbitron', sans-serif; margin-top: 15px; font-size: 14px;">LOADING...</p>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.05); filter: brightness(1.2); }
+        }
+    </style>
+    
+    <!-- Mobile Header (visible on small screens) -->
+    <div class="mobile-header d-lg-none">
+        <a href="#" class="mobile-logo">
+            <img src="assets/images/logo.png" alt="KeyRacer Logo">
+            <span>KeyRacer</span>
+        </a>
+        <button class="sidebar-toggle" id="mobile-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-logo">
+                <img src="assets/images/logo.png" alt="KeyRacer Logo">
+                <span>KeyRacer</span>
+            </a>
+            <button class="sidebar-toggle d-lg-none" id="sidebar-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="problem">
+                    <i class="fas fa-code"></i>
+                    <span>Problem Statement</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="submission">
+                    <i class="fas fa-file-code"></i>
+                    <span>Submission</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>Submission History</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="rules">
+                    <i class="fas fa-book"></i>
+                    <span>Rules & FAQs</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="participant-name">Participant</p>
+                    <p class="user-role">Hackathon Participant</p>
+                </div>
+            </div>
+            <a href="hackathon.html" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard-container">
+            <!-- Dashboard Page -->
+            <div class="page" id="dashboard-page">
+                <div class="page-header">
+                    <h1 class="page-title">Participant Dashboard</h1>
+                </div>
+                
+                <!-- Timer -->
+                <div class="timer-container">
+                    <div class="timer-info">
+                        <p class="timer-label">Time Remaining</p>
+                        <h2 class="timer-value" id="countdown-timer">02:45:30</h2>
+                    </div>
+                    <div class="timer-status">Hackathon in Progress</div>
+                </div>
+                
+                <!-- Problem Statement -->
+                <div class="problem-container">
+                    <div class="problem-header">
+                        <h2 class="problem-title">Problem Statement</h2>
+                        <span class="problem-difficulty">Difficulty level will appear here</span>
+                    </div>
+                    
+                    <div class="problem-content">
+                        <div class="problem-section">
+                            <p>Problem description will appear here.</p>
+                        </div>
+                        
+                        <!-- Examples and constraints will appear here -->
+                    </div>
+                </div>
+                
+                <!-- Submission Section -->
+                <div class="submission-container">
+                    <div class="submission-header">
+                        <h2 class="submission-title">Submit Your Solution</h2>
+                    </div>
+                    
+                    <div class="code-editor">
+                        <div class="code-editor-header">
+                            <select class="language-selector">
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                            </select>
+                            <div class="editor-actions">
+                                <button class="editor-btn" title="Format Code">
+                                    <i class="fas fa-indent"></i>
+                                </button>
+                                <button class="editor-btn" title="Reset Code">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <textarea class="code-textarea" id="code-editor" placeholder="Write your code here..."></textarea>
+                    </div>
+                    
+                    <div class="submission-actions">
+                        <div class="submission-options">
+                            <div class="option-group">
+                                <input type="checkbox" id="github-link">
+                                <label for="github-link" class="option-label">Add GitHub Link</label>
+                            </div>
+                            <div class="option-group">
+                                <input type="checkbox" id="add-notes">
+                                <label for="add-notes" class="option-label">Add Notes</label>
+                            </div>
+                        </div>
+                        <div class="submission-buttons">
+                            <button class="btn btn-secondary-custom me-2">
+                                <i class="fas fa-save"></i>
+                                <span>Save Draft</span>
+                            </button>
+                            <button class="btn btn-primary-custom">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Submit Solution</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submission History -->
+                <div class="history-container">
+                    <div class="history-header">
+                        <h2 class="history-title">Submission History</h2>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="submission-table">
+                            <thead>
+                                <tr>
+                                    <th>Submission ID</th>
+                                    <th>Problem</th>
+                                    <th>Language</th>
+                                    <th>Submitted At</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Submission entries will appear here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Problem Statement Page -->
+            <div class="page" id="problem-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Problem Statement</h1>
+                </div>
+                
+                <div class="problem-container">
+                    <div class="problem-header">
+                        <h2 class="problem-title">Optimizing Network Traffic</h2>
+                        <span class="problem-difficulty difficulty-medium">Medium</span>
+                    </div>
+                    
+                    <div class="problem-content">
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Description</h3>
+                            <p>You are tasked with optimizing network traffic in a data center. The data center has n servers connected by m bidirectional links. Each link has a bandwidth capacity and a current load. Your goal is to redistribute the network traffic to minimize congestion.</p>
+                        </div>
+                        
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Input Format</h3>
+                            <p>The first line contains two integers n and m, representing the number of servers and links.</p>
+                            <p>The next m lines each contain three integers u, v, and c, indicating a bidirectional link between servers u and v with capacity c.</p>
+                            <p>The next m lines each contain an integer l, representing the current load on each link in the same order as the links were given.</p>
+                        </div>
+                        
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Output Format</h3>
+                            <p>Output m lines, each containing an integer representing the new load assignment for each link. The sum of all loads must remain the same, and no link's load should exceed its capacity.</p>
+                        </div>
+                        
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Example</h3>
+                            <div class="example-box">
+                                <h4 class="example-title">Input:</h4>
+                                <div class="code-example">
+                                    3 3<br>
+                                    1 2 10<br>
+                                    2 3 5<br>
+                                    1 3 8<br>
+                                    8<br>
+                                    4<br>
+                                    6
+                                </div>
+                                
+                                <h4 class="example-title">Output:</h4>
+                                <div class="code-example">
+                                    6<br>
+                                    4<br>
+                                    8
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Constraints</h3>
+                            <div class="constraints">
+                                <ul>
+                                    <li>1 ≤ n ≤ 100</li>
+                                    <li>1 ≤ m ≤ 1000</li>
+                                    <li>1 ≤ u, v ≤ n</li>
+                                    <li>1 ≤ c ≤ 1000</li>
+                                    <li>0 ≤ l ≤ c</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Submission Page -->
+            <div class="page" id="submission-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Submit Your Solution</h1>
+                </div>
+                
+                <div class="submission-container">
+                    <div class="submission-header">
+                        <h2 class="problem-title">Optimizing Network Traffic</h2>
+                        <span class="problem-difficulty difficulty-medium">Medium</span>
+                    </div>
+                    
+                    <div class="code-editor">
+                        <div class="code-editor-header">
+                            <select class="language-selector">
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                            </select>
+                            <div class="editor-actions">
+                                <button class="editor-btn" title="Format Code">
+                                    <i class="fas fa-indent"></i>
+                                </button>
+                                <button class="editor-btn" title="Reset Code">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <textarea class="code-textarea" id="solution-editor" placeholder="Write your code here..."></textarea>
+                    </div>
+                    
+                    <div class="submission-actions">
+                        <div class="submission-options">
+                            <div class="option-group">
+                                <input type="checkbox" id="solution-github-link">
+                                <label for="solution-github-link" class="option-label">Add GitHub Link</label>
+                            </div>
+                            <div class="option-group">
+                                <input type="checkbox" id="solution-add-notes">
+                                <label for="solution-add-notes" class="option-label">Add Notes</label>
+                            </div>
+                        </div>
+                        <div class="submission-buttons">
+                            <button class="btn btn-secondary-custom me-2">
+                                <i class="fas fa-save"></i>
+                                <span>Save Draft</span>
+                            </button>
+                            <button class="btn btn-primary-custom">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Submit Solution</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Submission History Page -->
+            <div class="page" id="history-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Submission History</h1>
+                </div>
+                
+                <div class="history-container">
+                    <div class="history-header">
+                        <h2 class="history-title">Your Previous Submissions</h2>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="submission-table">
+                            <thead>
+                                <tr>
+                                    <th>Submission ID</th>
+                                    <th>Problem</th>
+                                    <th>Language</th>
+                                    <th>Submitted At</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#SUB-001</td>
+                                    <td>Optimizing Network Traffic</td>
+                                    <td>Python</td>
+                                    <td>2023-08-07 14:30</td>
+                                    <td><span class="submission-status status-pending">Pending</span></td>
+                                    <td>
+                                        <button class="btn-sm btn-secondary-custom">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rules & FAQs Page -->
+            <div class="page" id="rules-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Rules & FAQs</h1>
+                </div>
+                
+                <div class="problem-container">
+                    <div class="problem-header">
+                        <h2 class="problem-title">Hackathon Rules</h2>
+                    </div>
+                    
+                    <div class="problem-content">
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">General Rules</h3>
+                            <ul>
+                                <li>All submissions must be your original work.</li>
+                                <li>You may use open-source libraries and frameworks, but you must cite them.</li>
+                                <li>Collaboration with other participants is not allowed unless specified.</li>
+                                <li>You must submit your solution before the deadline.</li>
+                                <li>Your solution will be evaluated based on correctness, efficiency, and code quality.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Submission Guidelines</h3>
+                            <ul>
+                                <li>Your code must compile and run without errors.</li>
+                                <li>Include comments to explain your approach and any assumptions made.</li>
+                                <li>Provide a README file if your solution requires special setup or has dependencies.</li>
+                                <li>You can submit multiple times, but only your last submission will be evaluated.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Frequently Asked Questions</h3>
+                            <div class="example-box">
+                                <h4 class="example-title">Q: Can I use external libraries?</h4>
+                                <p>A: Yes, you can use standard libraries and well-known frameworks. Make sure to cite them in your submission.</p>
+                            </div>
+                            
+                            <div class="example-box">
+                                <h4 class="example-title">Q: How will my submission be evaluated?</h4>
+                                <p>A: Submissions will be evaluated based on correctness (40%), efficiency (30%), code quality (20%), and innovation (10%).</p>
+                            </div>
+                            
+                            <div class="example-box">
+                                <h4 class="example-title">Q: Can I modify my submission after the deadline?</h4>
+                                <p>A: No, submissions after the deadline will not be accepted.</p>
+                            </div>
+                            
+                            <div class="example-box">
+                                <h4 class="example-title">Q: How do I contact the organizers if I have questions?</h4>
+                                <p>A: You can use the chat support feature in the dashboard to contact the organizers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chat Support -->
+    <div class="chat-container" id="chat-container">
+        <div class="chat-header" id="chat-header">
+            <h3 class="chat-title">
+                <i class="fas fa-comments"></i>
+                <span>Chat Support</span>
+            </h3>
+            <i class="fas fa-chevron-up" id="chat-toggle"></i>
+        </div>
+        <div class="chat-body" id="chat-body">
+            <!-- Chat messages will appear here -->
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type your message...">
+            <button class="chat-send" id="chat-send">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Particles.js Container -->
+    <div id="particles-js"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Preloader animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const preloader = document.getElementById('preloader');
+            const loaderBar = document.getElementById('loader-bar');
+            let width = 0;
+            
+            // Dynamic loading messages like in hackathon.html
+            const loadingMessages = [
+                "Loading participant dashboard",
+                "Preparing problem statements",
+                "Setting up code editor",
+                "Configuring submission system",
+                "Ready to code!"
+            ];
+            
+            // Get the existing loading text element
+            let loadingText = preloader.querySelector('p');
+            loadingText.textContent = loadingMessages[0];
+            
+            let messageIndex = 0;
+            
+            // Change loading message periodically
+            const messageInterval = setInterval(function() {
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+                loadingText.textContent = loadingMessages[messageIndex];
+            }, 1500);
+            
+            const interval = setInterval(function() {
+                width += Math.floor(Math.random() * 10) + 1;
+                if (width > 100) width = 100;
+                loaderBar.style.width = width + '%';
+                
+                if (width === 100) {
+                    clearInterval(interval);
+                    clearInterval(messageInterval);
+                    loadingText.textContent = "Launch complete!";
+                    setTimeout(function() {
+                        preloader.style.opacity = '0';
+                        preloader.style.visibility = 'hidden';
+                    }, 800);
+                }
+            }, 100);
+            
+            // Initialize particles.js
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 50,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00FFDD"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.2,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00C2FF",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Sidebar toggle for mobile
+            const sidebar = document.getElementById('sidebar');
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const sidebarClose = document.getElementById('sidebar-close');
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    sidebar.classList.add('show');
+                });
+            }
+            
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', function() {
+                    sidebar.classList.remove('show');
+                });
+            }
+            
+            // Navigation menu
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Hide sidebar on mobile after clicking a link
+                    if (window.innerWidth < 992) {
+                        sidebar.classList.remove('show');
+                    }
+                    
+                    // Get the page name from data-page attribute
+                    const pageName = this.getAttribute('data-page');
+                    console.log(`Navigating to ${pageName} page`);
+                    
+                    // Hide all pages
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.style.display = 'none';
+                    });
+                    
+                    // Show the selected page
+                    const selectedPage = document.getElementById(`${pageName}-page`);
+                    if (selectedPage) {
+                        selectedPage.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Chat functionality
+            const chatContainer = document.getElementById('chat-container');
+            const chatHeader = document.getElementById('chat-header');
+            const chatToggle = document.getElementById('chat-toggle');
+            const chatInput = document.getElementById('chat-input');
+            const chatSend = document.getElementById('chat-send');
+            const chatBody = document.getElementById('chat-body');
+            
+            chatHeader.addEventListener('click', function() {
+                chatContainer.classList.toggle('open');
+                chatToggle.classList.toggle('fa-chevron-up');
+                chatToggle.classList.toggle('fa-chevron-down');
+                
+                if (chatContainer.classList.contains('open')) {
+                    chatInput.focus();
+                }
+            });
+            
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const timeString = `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${hours >= 12 ? 'PM' : 'AM'}`;
+                    
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'chat-message message-sent';
+                    messageElement.innerHTML = `
+                        <div class="message-content">${message}</div>
+                        <div class="message-time">${timeString}</div>
+                    `;
+                    
+                    chatBody.appendChild(messageElement);
+                    chatInput.value = '';
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                    
+                    // Simulate response (in a real app, this would be from the server)
+                    setTimeout(function() {
+                        const responseElement = document.createElement('div');
+                        responseElement.className = 'chat-message message-received';
+                        responseElement.innerHTML = `
+                            <div class="message-content">Thank you for your message. A conductor will respond shortly.</div>
+                            <div class="message-time">${timeString}</div>
+                        `;
+                        
+                        chatBody.appendChild(responseElement);
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    }, 1000);
+                }
+            }
+            
+            chatSend.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Countdown timer
+            function updateTimer() {
+                const timerElement = document.getElementById('countdown-timer');
+                let timeString = timerElement.textContent;
+                let [hours, minutes, seconds] = timeString.split(':').map(Number);
+                
+                let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = '00:00:00';
+                    return;
+                }
+                
+                totalSeconds--;
+                
+                hours = Math.floor(totalSeconds / 3600);
+                minutes = Math.floor((totalSeconds % 3600) / 60);
+                seconds = totalSeconds % 60;
+                
+                timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            const timerInterval = setInterval(updateTimer, 1000);
+            
+            // Set participant name from localStorage
+            const participantName = localStorage.getItem('participantName');
+            if (participantName) {
+                document.getElementById('participant-name').textContent = participantName;
+            }
+            
+            // Load problems from localStorage
+            const problems = JSON.parse(localStorage.getItem('problems')) || [];
+            const publishedProblems = problems.filter(problem => problem.published);
+            
+            // Load submissions from localStorage
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            
+            // Piston API configuration
+            const PISTON_API = 'https://emkc.org/api/v2/piston/execute';
+            
+            // Language versions mapping for Piston API
+            const languageVersions = {
+                'javascript': 'node',
+                'python': 'python3',
+                'java': 'java',
+                'cpp': 'cpp',
+                'c': 'c',
+                'csharp': 'csharp',
+                'go': 'go',
+                'ruby': 'ruby',
+                'rust': 'rust',
+                'php': 'php'
+            };
+            
+            // File extensions for each language
+            const fileExtensions = {
+                'javascript': 'js',
+                'python': 'py',
+                'java': 'java',
+                'cpp': 'cpp',
+                'c': 'c',
+                'csharp': 'cs',
+                'go': 'go',
+                'ruby': 'rb',
+                'rust': 'rs',
+                'php': 'php'
+            };
+            
+            // Display problems in the dashboard
+            function displayProblems() {
+                const problemContainer = document.querySelector('#dashboard-page .problem-container');
+                const problemPage = document.getElementById('problem-page');
+                
+                if (publishedProblems.length === 0) {
+                    // No problems available
+                    problemContainer.querySelector('.problem-content').innerHTML = `
+                        <div class="problem-section">
+                            <p>No problem statements are available yet. Please check back later.</p>
+                        </div>
+                    `;
+                    problemContainer.querySelector('.problem-difficulty').textContent = 'N/A';
+                    return;
+                }
+                
+                // Display the first problem in the dashboard
+                const firstProblem = publishedProblems[0];
+                displayProblemInDashboard(firstProblem);
+                
+                // Display all problems in the problem page
+                displayProblemList(problemPage, publishedProblems);
+                
+                // Display submission history
+                displaySubmissionHistory();
+            }
+            
+            // Display a problem in the dashboard
+            function displayProblemInDashboard(problem) {
+                const problemContainer = document.querySelector('#dashboard-page .problem-container');
+                const difficultyClass = problem.difficulty === 'easy' ? 'bg-success' : 
+                                       problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger';
+                
+                problemContainer.querySelector('.problem-title').textContent = problem.title;
+                problemContainer.querySelector('.problem-difficulty').innerHTML = `
+                    <span class="badge ${difficultyClass}">
+                        ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                    </span>
+                `;
+                
+                problemContainer.querySelector('.problem-content').innerHTML = `
+                    <div class="problem-section">
+                        <p>${problem.description}</p>
+                    </div>
+                    
+                    <div class="problem-section">
+                        <h3 class="problem-section-title">Input Format</h3>
+                        <p>${problem.inputFormat}</p>
+                    </div>
+                    
+                    <div class="problem-section">
+                        <h3 class="problem-section-title">Output Format</h3>
+                        <p>${problem.outputFormat}</p>
+                    </div>
+                    
+                    <div class="problem-section">
+                        <h3 class="problem-section-title">Example</h3>
+                        <div class="example-box">
+                            <h4 class="example-title">Input</h4>
+                            <div class="code-example">${problem.exampleInput}</div>
+                            
+                            <h4 class="example-title">Output</h4>
+                            <div class="code-example">${problem.exampleOutput}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="problem-section">
+                        <h3 class="problem-section-title">Constraints</h3>
+                        <div class="constraints">
+                            <p>${problem.constraints}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="submission-buttons mt-4">
+                        <button class="btn btn-primary-custom solve-problem-btn" data-problem-id="${problem.id}">
+                            <i class="fas fa-code"></i>
+                            <span>Solve This Problem</span>
+                        </button>
+                    </div>
+                `;
+                
+                // Add event listener to solve button
+                const solveBtn = problemContainer.querySelector('.solve-problem-btn');
+                if (solveBtn) {
+                    solveBtn.addEventListener('click', function() {
+                        const problemId = this.getAttribute('data-problem-id');
+                        const problem = publishedProblems.find(p => p.id === problemId);
+                        if (problem) {
+                            // Hide all pages
+                            document.querySelectorAll('.page').forEach(page => {
+                                page.style.display = 'none';
+                            });
+                            
+                            // Show submission page
+                            const submissionPage = document.getElementById('submission-page');
+                            submissionPage.style.display = 'block';
+                            
+                            // Update navigation menu
+                            document.querySelectorAll('.nav-link').forEach(link => {
+                                link.classList.remove('active');
+                                if (link.getAttribute('data-page') === 'submission') {
+                                    link.classList.add('active');
+                                }
+                            });
+                            
+                            // Populate submission page with problem details
+                            populateSubmissionPage(problem);
+                        }
+                    });
+                }
+            }
+            
+            // Display problem list in the problem page
+            function displayProblemList(problemPage, problems) {
+                if (!problemPage) return;
+                
+                let problemListHTML = '';
+                
+                if (problems.length === 0) {
+                    problemListHTML = `
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No problems are available yet. Please check back later.
+                        </div>
+                    `;
+                } else {
+                    problemListHTML = `
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    `;
+                    
+                    problems.forEach(problem => {
+                        const difficultyClass = problem.difficulty === 'easy' ? 'bg-success' : 
+                                              problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger';
+                        
+                        problemListHTML += `
+                            <div class="col">
+                                <div class="card h-100 bg-dark text-white border-secondary">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title mb-0">${problem.title}</h5>
+                                        <span class="badge ${difficultyClass}">
+                                            ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">${problem.description.substring(0, 100)}...</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-secondary">${problem.category}</span>
+                                            <button class="btn btn-sm btn-primary-custom view-problem-btn" data-problem-id="${problem.id}">
+                                                <i class="fas fa-eye me-1"></i> View Problem
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    problemListHTML += `
+                        </div>
+                    `;
+                }
+                
+                // Create problem list container if it doesn't exist
+                let problemListContainer = problemPage.querySelector('.problem-list-container');
+                if (!problemListContainer) {
+                    problemListContainer = document.createElement('div');
+                    problemListContainer.className = 'problem-list-container';
+                    problemPage.appendChild(problemListContainer);
+                }
+                
+                problemListContainer.innerHTML = problemListHTML;
+                
+                // Add event listeners to view problem buttons
+                const viewProblemBtns = problemPage.querySelectorAll('.view-problem-btn');
+                viewProblemBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const problemId = this.getAttribute('data-problem-id');
+                        const problem = problems.find(p => p.id === problemId);
+                        if (problem) {
+                            // Hide all pages
+                            document.querySelectorAll('.page').forEach(page => {
+                                page.style.display = 'none';
+                            });
+                            
+                            // Show submission page
+                            const submissionPage = document.getElementById('submission-page');
+                            submissionPage.style.display = 'block';
+                            
+                            // Update navigation menu
+                            document.querySelectorAll('.nav-link').forEach(link => {
+                                link.classList.remove('active');
+                                if (link.getAttribute('data-page') === 'submission') {
+                                    link.classList.add('active');
+                                }
+                            });
+                            
+                            // Populate submission page with problem details
+                            populateSubmissionPage(problem);
+                        }
+                    });
+                });
+            }
+            
+            // Populate submission page with problem details
+            function populateSubmissionPage(problem) {
+                const submissionPage = document.getElementById('submission-page');
+                const submissionContainer = submissionPage.querySelector('.submission-container');
+                
+                // Update problem title and difficulty
+                const difficultyClass = problem.difficulty === 'easy' ? 'bg-success' : 
+                                       problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger';
+                
+                submissionContainer.querySelector('.problem-title').textContent = problem.title;
+                submissionContainer.querySelector('.problem-difficulty').innerHTML = `
+                    <span class="badge ${difficultyClass}">
+                        ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                    </span>
+                `;
+                
+                // Store current problem ID in the submission button for reference
+                const submitBtn = submissionContainer.querySelector('.btn-primary-custom');
+                if (submitBtn) {
+                    submitBtn.setAttribute('data-problem-id', problem.id);
+                }
+                
+                // Populate language selector based on allowed languages
+                const languageSelector = submissionContainer.querySelector('.language-selector');
+                if (languageSelector) {
+                    languageSelector.innerHTML = '';
+                    
+                    // If problem has allowed languages, use them, otherwise use default languages
+                    const languages = problem.allowedLanguages && problem.allowedLanguages.length > 0 ? 
+                                     problem.allowedLanguages : 
+                                     Object.keys(languageVersions);
+                    
+                    languages.forEach(lang => {
+                        const option = document.createElement('option');
+                        option.value = lang;
+                        option.textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
+                        languageSelector.appendChild(option);
+                    });
+                }
+                
+                // Clear code editor
+                const codeEditor = document.getElementById('solution-editor');
+                if (codeEditor) {
+                    codeEditor.value = '';
+                }
+                
+                // Add event listener to submit button
+                const submitSolutionBtn = submissionContainer.querySelector('.btn-primary-custom');
+                if (submitSolutionBtn) {
+                    // Remove existing event listeners
+                    const newSubmitBtn = submitSolutionBtn.cloneNode(true);
+                    submitSolutionBtn.parentNode.replaceChild(newSubmitBtn, submitSolutionBtn);
+                    
+                    // Add new event listener
+                    newSubmitBtn.addEventListener('click', function() {
+                        const problemId = this.getAttribute('data-problem-id');
+                        submitSolution(problemId);
+                    });
+                }
+            }
+            
+            // Submit solution function
+            function submitSolution(problemId) {
+                const problem = publishedProblems.find(p => p.id === problemId);
+                if (!problem) {
+                    alert('Problem not found!');
+                    return;
+                }
+                
+                const submissionPage = document.getElementById('submission-page');
+                const codeEditor = document.getElementById('solution-editor');
+                const languageSelector = submissionPage.querySelector('.language-selector');
+                
+                const code = codeEditor.value.trim();
+                const language = languageSelector.value;
+                
+                if (!code) {
+                    alert('Please write your code before submitting!');
+                    return;
+                }
+                
+                // Show loading state
+                const submitBtn = submissionPage.querySelector('.btn-primary-custom');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+                
+                // Execute code using Piston API
+                executeCode(code, language, problem.exampleInput)
+                    .then(result => {
+                        // Create submission record
+                        const submission = {
+                            id: 'SUB-' + Date.now(),
+                            problemId: problem.id,
+                            problemTitle: problem.title,
+                            language: language,
+                            code: code,
+                            submittedAt: new Date().toISOString(),
+                            status: result.success ? 'Completed' : 'Error',
+                            output: result.output,
+                            error: result.error
+                        };
+                        
+                        // Save submission to localStorage
+                        submissions.unshift(submission);
+                        localStorage.setItem('submissions', JSON.stringify(submissions));
+                        
+                        // Update submission history
+                        displaySubmissionHistory();
+                        
+                        // Show result
+                        if (result.success) {
+                            alert('Solution submitted successfully!');
+                        } else {
+                            alert('Error executing code: ' + result.error);
+                        }
+                        
+                        // Reset button state
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                        
+                        // Navigate to history page
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.style.display = 'none';
+                        });
+                        
+                        document.getElementById('history-page').style.display = 'block';
+                        
+                        // Update navigation menu
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('data-page') === 'history') {
+                                link.classList.add('active');
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error submitting solution:', error);
+                        alert('Error submitting solution: ' + error.message);
+                        
+                        // Reset button state
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                    });
+            }
+            
+            // Execute code using Piston API
+            async function executeCode(code, language, input) {
+                try {
+                    const version = languageVersions[language] || language;
+                    const fileName = `main.${fileExtensions[language] || 'txt'}`;
+                    
+                    const requestBody = {
+                        language: version,
+                        version: '*',
+                        files: [
+                            {
+                                name: fileName,
+                                content: code
+                            }
+                        ],
+                        stdin: input || ''
+                    };
+                    
+                    const response = await fetch(PISTON_API, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    return {
+                        success: data.run.code === 0,
+                        output: data.run.stdout,
+                        error: data.run.stderr || (data.run.code !== 0 ? `Exit code: ${data.run.code}` : '')
+                    };
+                } catch (error) {
+                    console.error('Error executing code:', error);
+                    return {
+                        success: false,
+                        output: '',
+                        error: error.message
+                    };
+                }
+            }
+            
+            // Display submission history
+            function displaySubmissionHistory() {
+                const historyPage = document.getElementById('history-page');
+                if (!historyPage) return;
+                
+                const historyContainer = historyPage.querySelector('.history-container');
+                const tableBody = historyContainer.querySelector('tbody');
+                
+                if (!tableBody) {
+                    // Create table if it doesn't exist
+                    const tableHTML = `
+                        <div class="table-responsive">
+                            <table class="submission-table">
+                                <thead>
+                                    <tr>
+                                        <th>Submission ID</th>
+                                        <th>Problem</th>
+                                        <th>Language</th>
+                                        <th>Submitted At</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    
+                    historyContainer.innerHTML = `
+                        <div class="history-header">
+                            <h2 class="history-title">Your Previous Submissions</h2>
+                        </div>
+                        ${tableHTML}
+                    `;
+                }
+                
+                // Get table body
+                const tbody = historyContainer.querySelector('tbody');
+                
+                // Clear existing rows
+                tbody.innerHTML = '';
+                
+                if (submissions.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center">No submissions yet</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                // Sort submissions by date (newest first)
+                const sortedSubmissions = [...submissions].sort((a, b) => {
+                    return new Date(b.submittedAt) - new Date(a.submittedAt);
+                });
+                
+                // Add rows for each submission
+                sortedSubmissions.forEach(submission => {
+                    const date = new Date(submission.submittedAt);
+                    const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+                    
+                    const statusClass = submission.status === 'Completed' ? 'status-accepted' : 'status-rejected';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${submission.id}</td>
+                        <td>${submission.problemTitle}</td>
+                        <td>${submission.language}</td>
+                        <td>${formattedDate}</td>
+                        <td><span class="submission-status ${statusClass}">${submission.status}</span></td>
+                        <td>
+                            <button class="btn-sm btn-secondary-custom view-submission-btn" data-submission-id="${submission.id}">
+                                View
+                            </button>
+                        </td>
+                    `;
+                    
+                    tbody.appendChild(row);
+                });
+                
+                // Add event listeners to view buttons
+                const viewButtons = historyContainer.querySelectorAll('.view-submission-btn');
+                viewButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const submissionId = this.getAttribute('data-submission-id');
+                        const submission = submissions.find(s => s.id === submissionId);
+                        
+                        if (submission) {
+                            // Create modal to show submission details
+                            const modalHTML = `
+                                <div class="modal fade" id="submissionModal" tabindex="-1" aria-labelledby="submissionModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content bg-dark text-white">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="submissionModalLabel">Submission Details</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="submission-details">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <p><strong>Problem:</strong> ${submission.problemTitle}</p>
+                                                            <p><strong>Language:</strong> ${submission.language}</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <p><strong>Submitted:</strong> ${new Date(submission.submittedAt).toLocaleString()}</p>
+                                                            <p><strong>Status:</strong> <span class="submission-status ${submission.status === 'Completed' ? 'status-accepted' : 'status-rejected'}">${submission.status}</span></p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="code-section mb-3">
+                                                        <h6>Code</h6>
+                                                        <div class="code-example">${submission.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                                                    </div>
+                                                    
+                                                    <div class="output-section mb-3">
+                                                        <h6>Output</h6>
+                                                        <div class="code-example">${submission.output.replace(/</g, '&lt;').replace(/>/g, '&gt;') || 'No output'}</div>
+                                                    </div>
+                                                    
+                                                    ${submission.error ? `
+                                                        <div class="error-section">
+                                                            <h6>Error</h6>
+                                                            <div class="code-example text-danger">${submission.error.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Remove existing modal if any
+                            const existingModal = document.getElementById('submissionModal');
+                            if (existingModal) {
+                                existingModal.remove();
+                            }
+                            
+                            // Add modal to body
+                            document.body.insertAdjacentHTML('beforeend', modalHTML);
+                            
+                            // Show modal
+                            const modal = new bootstrap.Modal(document.getElementById('submissionModal'));
+                            modal.show();
+                        }
+                    });
+                });
+            }
+            }
+            
+            // Display problem list in the problem page
+            function displayProblemList(problemPage, problems) {
+                // Clear existing content
+                problemPage.innerHTML = `
+                    <div class="page-header">
+                        <h1 class="page-title">Problem Statements</h1>
+                    </div>
+                `;
+                
+                // Create problem list
+                problems.forEach(problem => {
+                    const difficultyClass = problem.difficulty === 'easy' ? 'bg-success' : 
+                                           problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger';
+                    
+                    const problemElement = document.createElement('div');
+                    problemElement.className = 'problem-container';
+                    problemElement.innerHTML = `
+                        <div class="problem-header">
+                            <h2 class="problem-title">${problem.title}</h2>
+                            <span class="problem-difficulty">
+                                <span class="badge ${difficultyClass}">
+                                    ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                                </span>
+                            </span>
+                        </div>
+                        
+                        <div class="problem-content">
+                            <div class="problem-section">
+                                <p>${problem.description}</p>
+                            </div>
+                            
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Input Format</h3>
+                                <p>${problem.inputFormat}</p>
+                            </div>
+                            
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Output Format</h3>
+                                <p>${problem.outputFormat}</p>
+                            </div>
+                            
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Example</h3>
+                                <div class="example-box">
+                                    <h4 class="example-title">Input</h4>
+                                    <div class="code-example">${problem.exampleInput}</div>
+                                    
+                                    <h4 class="example-title">Output</h4>
+                                    <div class="code-example">${problem.exampleOutput}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Constraints</h3>
+                                <div class="constraints">
+                                    <p>${problem.constraints}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="submission-actions">
+                            <button class="btn btn-primary-custom solve-problem" data-problem-id="${problem.id}">
+                                <i class="fas fa-code"></i>
+                                <span>Solve Problem</span>
+                            </button>
+                        </div>
+                    `;
+                    
+                    problemPage.appendChild(problemElement);
+                });
+                
+                // Add event listeners to solve buttons
+                document.querySelectorAll('.solve-problem').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const problemId = this.getAttribute('data-problem-id');
+                        const problem = problems.find(p => p.id === problemId);
+                        
+                        if (problem) {
+                            // Navigate to submission page
+                            document.querySelectorAll('.page').forEach(page => {
+                                page.style.display = 'none';
+                            });
+                            
+                            const submissionPage = document.getElementById('submission-page');
+                            submissionPage.style.display = 'block';
+                            
+                            // Update navigation menu
+                            document.querySelectorAll('.nav-link').forEach(link => {
+                                link.classList.remove('active');
+                                if (link.getAttribute('data-page') === 'submission') {
+                                    link.classList.add('active');
+                                }
+                            });
+                            
+                            // Populate submission page with problem details
+                            populateSubmissionPage(problem);
+                        }
+                    });
+                });
+            }
+            
+            // Populate submission page with problem details
+            function populateSubmissionPage(problem) {
+                const submissionPage = document.getElementById('submission-page');
+                const submissionContainer = submissionPage.querySelector('.submission-container');
+                
+                // Update problem title and difficulty
+                const difficultyClass = problem.difficulty === 'easy' ? 'bg-success' : 
+                                       problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger';
+                
+                submissionContainer.querySelector('.problem-title').textContent = problem.title;
+                submissionContainer.querySelector('.problem-difficulty').className = `problem-difficulty difficulty-${problem.difficulty}`;
+                submissionContainer.querySelector('.problem-difficulty').innerHTML = `
+                    <span class="badge ${difficultyClass}">
+                        ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                    </span>
+                `;
+                
+                // Update language selector with allowed languages
+                const languageSelector = submissionContainer.querySelector('.language-selector');
+                languageSelector.innerHTML = '';
+                
+                if (problem.allowedLanguages && problem.allowedLanguages.length > 0) {
+                    problem.allowedLanguages.forEach(language => {
+                        const option = document.createElement('option');
+                        option.value = language.toLowerCase();
+                        option.textContent = language.charAt(0).toUpperCase() + language.slice(1);
+                        languageSelector.appendChild(option);
+                    });
+                } else {
+                    // Default languages if none specified
+                    const defaultLanguages = ['javascript', 'python', 'java', 'cpp'];
+                    defaultLanguages.forEach(language => {
+                        const option = document.createElement('option');
+                        option.value = language;
+                        option.textContent = language === 'cpp' ? 'C++' : 
+                                            language.charAt(0).toUpperCase() + language.slice(1);
+                        languageSelector.appendChild(option);
+                    });
+                }
+                
+                // Store problem ID in the submission form
+                submissionContainer.setAttribute('data-problem-id', problem.id);
+                
+                // Clear code editor
+                const codeEditor = submissionContainer.querySelector('textarea');
+                if (codeEditor) {
+                    codeEditor.value = '';
+                }
+            }
+            
+            // Call displayProblems on page load
+            displayProblems();
+            
+            // Piston API integration for code compilation
+            const submitSolutionBtn = document.querySelector('#submission-page .btn-primary-custom');
+            if (submitSolutionBtn) {
+                submitSolutionBtn.addEventListener('click', async function() {
+                    const submissionContainer = document.querySelector('#submission-page .submission-container');
+                    const problemId = submissionContainer.getAttribute('data-problem-id');
+                    const problem = problems.find(p => p.id === problemId);
+                    
+                    if (!problem) {
+                        alert('Problem not found!');
+                        return;
+                    }
+                    
+                    const languageSelector = submissionContainer.querySelector('.language-selector');
+                    const language = languageSelector.value;
+                    const code = submissionContainer.querySelector('textarea').value.trim();
+                    
+                    if (!code) {
+                        alert('Please enter your code before submitting!');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    submitSolutionBtn.disabled = true;
+                    submitSolutionBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
+                    
+                    try {
+                        // Use local simulation instead of Piston API
+                        console.log(`Using local simulation for ${language} code execution`);
+                        
+                        // Use the simulateCodeExecution function directly
+                        const result = simulateCodeExecution(code, language, problem.exampleInput || '');
+                        
+                        console.log('Simulation result:', result);
+                        
+                        // Create submission record
+                        const submission = {
+                            id: `#SUB-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+                            problemId: problem.id,
+                            problemTitle: problem.title,
+                            language: language,
+                            code: code,
+                            submittedAt: new Date().toISOString(),
+                            status: result.run.code === 0 ? 'Completed' : 'Error',
+                            output: result.run.output,
+                            stderr: result.run.stderr,
+                            exitCode: result.run.code
+                        };
+                        
+                        // Save submission to localStorage
+                        const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                        submissions.push(submission);
+                        localStorage.setItem('submissions', JSON.stringify(submissions));
+                        
+                        // Show result
+                        let resultMessage = '';
+                        if (result.run.code === 0) {
+                            resultMessage = `Your code executed successfully!\n\nOutput:\n${result.run.output}`;
+                        } else {
+                            resultMessage = `Your code encountered an error!\n\nError:\n${result.run.stderr || result.run.output}`;
+                        }
+                        
+                        alert(resultMessage);
+                        
+                        // Update submission history
+                        updateSubmissionHistory();
+                        
+                        // Navigate to history page
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.style.display = 'none';
+                        });
+                        
+                        document.getElementById('history-page').style.display = 'block';
+                        
+                        // Update navigation menu
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('data-page') === 'history') {
+                                link.classList.add('active');
+                            }
+                        });
+                    } catch (error) {
+                        console.error('Error executing code:', error);
+                        
+                        // Create a more detailed error submission record
+                        const submission = {
+                            id: `#SUB-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+                            problemId: problem.id,
+                            problemTitle: problem.title,
+                            language: language,
+                            code: code,
+                            submittedAt: new Date().toISOString(),
+                            status: 'Error',
+                            output: '',
+                            stderr: `Simulation Error: ${error.message || 'Unknown error occurred'}`,
+                            exitCode: -1
+                        };
+                        
+                        // Save submission to localStorage
+                        const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                        submissions.push(submission);
+                        localStorage.setItem('submissions', JSON.stringify(submissions));
+                        
+                        // Show error message
+                        alert(`Error executing code: ${error.message || 'An error occurred while executing your code. Please try again.'}`);
+                        
+                        // Update submission history
+                        updateSubmissionHistory();
+                        
+                        // Navigate to history page
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.style.display = 'none';
+                        });
+                        
+                        document.getElementById('history-page').style.display = 'block';
+                        
+                        // Update navigation menu
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('data-page') === 'history') {
+                                link.classList.add('active');
+                            }
+                        });
+                        
+                        // End of error handling
+                    } finally {
+                        // Always reset button state
+                        submitSolutionBtn.disabled = false;
+                        submitSolutionBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Submit Solution</span>';
+                    }
+                });
+            }
+            
+            // Update submission history
+            function updateSubmissionHistory() {
+                const historyPage = document.getElementById('history-page');
+                const submissionTable = historyPage.querySelector('.submission-table tbody');
+                
+                // Clear existing entries
+                submissionTable.innerHTML = '';
+                
+                // Get submissions from localStorage
+                const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                
+                if (submissions.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `<td colspan="6" class="text-center">No submissions yet</td>`;
+                    submissionTable.appendChild(emptyRow);
+                    return;
+                }
+                
+                // Sort submissions by date (newest first)
+                submissions.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+                
+                // Add submissions to table
+                submissions.forEach(submission => {
+                    const row = document.createElement('tr');
+                    const submittedDate = new Date(submission.submittedAt);
+                    const formattedDate = `${submittedDate.getFullYear()}-${(submittedDate.getMonth() + 1).toString().padStart(2, '0')}-${submittedDate.getDate().toString().padStart(2, '0')} ${submittedDate.getHours().toString().padStart(2, '0')}:${submittedDate.getMinutes().toString().padStart(2, '0')}`;
+                    
+                    const statusClass = submission.status === 'Completed' ? 'status-success' : 'status-error';
+                    
+                    row.innerHTML = `
+                        <td>${submission.id}</td>
+                        <td>${submission.problemTitle}</td>
+                        <td>${submission.language.charAt(0).toUpperCase() + submission.language.slice(1)}</td>
+                        <td>${formattedDate}</td>
+                        <td><span class="submission-status ${statusClass}">${submission.status}</span></td>
+                        <td>
+                            <button class="btn-sm btn-secondary-custom view-submission" data-submission-id="${submission.id}">View</button>
+                        </td>
+                    `;
+                    
+                    submissionTable.appendChild(row);
+                });
+                
+                // Add event listeners to view buttons
+                document.querySelectorAll('.view-submission').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const submissionId = this.getAttribute('data-submission-id');
+                        const submission = submissions.find(s => s.id === submissionId);
+                        
+                        if (submission) {
+                            // Show submission details in a modal or alert
+                            const details = `
+                                Submission ID: ${submission.id}\n
+                                Problem: ${submission.problemTitle}\n
+                                Language: ${submission.language}\n
+                                Submitted At: ${new Date(submission.submittedAt).toLocaleString()}\n
+                                Status: ${submission.status}\n
+                                Code:\n${submission.code}\n
+                                Output:\n${submission.output || 'No output'}\n
+                                ${submission.stderr ? `Error:\n${submission.stderr}` : ''}
+                            `;
+                            
+                            alert(details);
+                        }
+                    });
+                });
+            }
+            
+            // Helper function to get Piston language version
+            function getPistonLanguageVersion(language) {
+                const versions = {
+                    'javascript': '18.15.0',
+                    'python': '3.10.0',
+                    'java': '15.0.2',
+                    'cpp': '10.2.0',
+                    'c': '10.2.0',
+                    'csharp': '6.12.0',
+                    'go': '1.16.2',
+                    'php': '8.0.2',
+                    'ruby': '3.0.1',
+                    'rust': '1.50.0',
+                    'swift': '5.3.3'
+                };
+                
+                return versions[language] || '3.10.0'; // Default to Python if language not found
+            }
+            
+            // Function to simulate local code execution
+            function simulateCodeExecution(code, language, input = '') {
+                console.log(`Simulating execution of ${language} code locally`);
+                
+                // Basic syntax checking for common languages
+                let syntaxError = null;
+                let output = '';
+                let hasError = false;
+                
+                // Check if code is empty
+                if (!code.trim()) {
+                    return {
+                        run: {
+                            stdout: '',
+                            stderr: 'Error: Empty code submission',
+                            output: 'Error: Empty code submission',
+                            code: 1
+                        }
+                    };
+                }
+                
+                // Perform language-specific checks and simulations
+                switch(language) {
+                    case 'javascript':
+                        try {
+                            // Basic JS syntax validation
+                            new Function(code);
+                            
+                            // Simple simulation for JavaScript
+                            if (code.includes('console.log')) {
+                                output = 'Simulated JavaScript execution:\n';
+                                
+                                // Extract console.log statements for simulation
+                                const logRegex = /console\.log\(([^)]+)\)/g;
+                                const matches = code.match(logRegex);
+                                
+                                if (matches && matches.length > 0) {
+                                    matches.forEach(match => {
+                                        const content = match.substring(12, match.length - 1);
+                                        output += `> ${content.replace(/['"`]/g, '')}\n`;
+                                    });
+                                } else {
+                                    output += '> Code executed without console output\n';
+                                }
+                            } else {
+                                output = 'JavaScript code executed successfully (simulated).\nNo console output detected.';
+                            }
+                        } catch (e) {
+                            syntaxError = e.message;
+                            hasError = true;
+                        }
+                        break;
+                        
+                    case 'python':
+                        // Check for basic Python syntax issues
+                        if (code.includes('import os') && code.includes('system(')) {
+                            syntaxError = 'Potentially unsafe code detected';
+                            hasError = true;
+                        } else if (code.includes('print(')) {
+                            output = 'Simulated Python execution:\n';
+                            
+                            // Extract print statements for simulation
+                            const printRegex = /print\(([^)]+)\)/g;
+                            const matches = code.match(printRegex);
+                            
+                            if (matches && matches.length > 0) {
+                                matches.forEach(match => {
+                                    const content = match.substring(6, match.length - 1);
+                                    output += `> ${content.replace(/['"`]/g, '')}\n`;
+                                });
+                            } else {
+                                output += '> Code executed without print output\n';
+                            }
+                        } else {
+                            output = 'Python code executed successfully (simulated).\nNo print output detected.';
+                        }
+                        break;
+                        
+                    case 'java':
+                        if (code.includes('System.out.println')) {
+                            output = 'Simulated Java execution:\n';
+                            
+                            // Extract print statements for simulation
+                            const printRegex = /System\.out\.println\(([^)]+)\)/g;
+                            const matches = code.match(printRegex);
+                            
+                            if (matches && matches.length > 0) {
+                                matches.forEach(match => {
+                                    const content = match.substring(19, match.length - 1);
+                                    output += `> ${content.replace(/['"`]/g, '')}\n`;
+                                });
+                            } else {
+                                output += '> Code executed without console output\n';
+                            }
+                        } else {
+                            output = 'Java code executed successfully (simulated).\nNo console output detected.';
+                        }
+                        break;
+                        
+                    case 'cpp':
+                        if (code.includes('cout <<') || code.includes('std::cout')) {
+                            output = 'Simulated C++ execution:\n';
+                            output += '> C++ output simulation (simplified)\n';
+                        } else {
+                            output = 'C++ code executed successfully (simulated).\nNo console output detected.';
+                        }
+                        break;
+                        
+                    default:
+                        output = `${language.charAt(0).toUpperCase() + language.slice(1)} code executed successfully (simulated).\nDetailed output simulation not available for this language.`;
+                }
+                
+                if (hasError) {
+                    return {
+                        run: {
+                            stdout: '',
+                            stderr: `Syntax error: ${syntaxError}`,
+                            output: `Syntax error: ${syntaxError}`,
+                            code: 1
+                        }
+                    };
+                }
+                
+                // Add input information if provided
+                if (input && input.trim()) {
+                    output = `Input:\n${input}\n\n${output}`;
+                }
+                
+                // Add simulation notice
+                output += '\n\nNote: This is a simulated response as the Piston API is unavailable.';
+                
+                return {
+                    run: {
+                        stdout: output,
+                        stderr: '',
+                        output: output,
+                        code: 0
+                    }
+                };
+            }
+            
+            // Helper function to get file name based on language
+            function getFileName(language) {
+                const fileNames = {
+                    'javascript': 'main.js',
+                    'python': 'main.py',
+                    'java': 'Main.java',
+                    'cpp': 'main.cpp',
+                    'c': 'main.c',
+                    'csharp': 'Main.cs',
+                    'go': 'main.go',
+                    'php': 'main.php',
+                    'ruby': 'main.rb',
+                    'rust': 'main.rs',
+                    'swift': 'main.swift'
+                };
+                
+                return fileNames[language] || 'main.txt';
+            }
+            
+            // Initialize submission history
+            updateSubmissionHistory();
+        });
+    </script>
+</body>
+</html>

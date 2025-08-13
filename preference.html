@@ -106,12 +106,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #00FFDD;
+            --secondary-color: #00C2FF;
+            --accent-color: #00FFDD;
+            --highlight-color: #FFC700;
+            --danger-color: #FF4A4A;
+            --dark-bg: #070b18;
+            --card-bg: rgba(14, 30, 56, 0.95);
+        }
+        
         body {
             background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
             min-height: 100vh;
             margin: 0;
             font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            position: relative;
         }
+        /* Particle background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        
         .preference-page {
             display: flex;
             flex-direction: column;
@@ -119,6 +141,8 @@
             justify-content: center;
             min-height: 100vh;
             position: relative;
+            z-index: 1;
+            animation: fadeIn 1.2s ease-out;
         }
         
         /* Corner logo */
@@ -145,50 +169,193 @@
             object-fit: contain;
             filter: drop-shadow(0 0 15px rgba(0, 194, 255, 0.6));
             transition: all 0.3s ease;
+            animation: pulseLogo 3s infinite alternate;
         }
 
         .corner-logo-img:hover {
             filter: drop-shadow(0 0 20px rgba(0, 194, 255, 0.9));
+            animation-play-state: paused;
+        }
+        
+        @keyframes pulseLogo {
+            0% {
+                filter: drop-shadow(0 0 15px rgba(0, 194, 255, 0.6));
+                transform: scale(1);
+            }
+            100% {
+                filter: drop-shadow(0 0 25px rgba(0, 255, 221, 0.8));
+                transform: scale(1.05);
+            }
         }
         
         .preference-title {
-            color: var(--accent-color, #00FFDD);
+            color: var(--accent-color);
             font-family: 'Orbitron', sans-serif;
             font-size: 2.2rem;
             text-align: center;
             margin-bottom: 40px;
             letter-spacing: 2px;
+            position: relative;
+            animation: slideDown 0.8s ease-out, title-glow 3s infinite alternate;
+            text-shadow: 0 0 15px rgba(0, 255, 221, 0.5);
+        }
+        
+        .preference-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            animation: expandLine 1.5s ease-out forwards 0.8s, line-pulse 2s infinite 1.5s;
+            border-radius: 3px;
+        }
+        
+        @keyframes title-glow {
+            0% { text-shadow: 0 0 15px rgba(0, 255, 221, 0.5); }
+            100% { text-shadow: 0 0 25px rgba(0, 255, 221, 0.8); }
+        }
+        
+        @keyframes line-pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        @keyframes expandLine {
+            0% { width: 0; }
+            100% { width: 180px; }
+        }
+        
+        @keyframes slideDown {
+            0% { 
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .preference-cards {
             display: flex;
             gap: 40px;
             flex-wrap: wrap;
             justify-content: center;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
         .preference-card {
-            background: rgba(14, 30, 56, 0.95);
+            background: var(--card-bg);
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            border: 2px solid var(--accent-color, #00FFDD);
+            border: 2px solid var(--accent-color);
             width: 340px;
             max-width: 90vw;
             padding: 36px 28px 28px 28px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
         }
+        
+        .preference-card:nth-child(1) { animation: slideUp 0.6s ease-out 0.4s both; }
+        .preference-card:nth-child(2) { animation: slideUp 0.6s ease-out 0.6s both; }
+        .preference-card:nth-child(3) { animation: slideUp 0.6s ease-out 0.8s both; }
+        
+        .preference-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,255,221,0.1) 0%, rgba(0,194,255,0) 70%);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.6s ease-out;
+            z-index: -1;
+        }
+        
         .preference-card:hover {
             transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 16px 48px rgba(0,255,221,0.10);
-            border-color: #FFC700;
+            box-shadow: 0 16px 48px rgba(0,255,221,0.15);
+            border-color: var(--highlight-color);
+        }
+        
+        .preference-card:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .preference-card:hover .icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--highlight-color);
+            text-shadow: 0 0 25px rgba(255, 199, 0, 0.5);
+        }
+        
+        .preference-card:hover .card-title {
+            color: var(--highlight-color);
+            transform: scale(1.05);
+            letter-spacing: 1.5px;
+        }
+        
+        .preference-card:hover .card-desc {
+            color: #ffffff;
+        }
+        
+        @keyframes slideUp {
+            0% { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .preference-card .icon {
             font-size: 3.5rem;
             margin-bottom: 18px;
-            color: var(--accent-color, #00FFDD);
-            text-shadow: 0 0 16px #00FFDD44;
+            color: var(--accent-color);
+            text-shadow: 0 0 16px rgba(0, 255, 221, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .preference-card:hover .icon {
+            color: var(--highlight-color);
+            text-shadow: 0 0 25px rgba(255, 199, 0, 0.5);
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .preference-card .icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle, rgba(0,255,221,0.2) 0%, rgba(0,255,221,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            transform: scale(0);
+            transition: transform 0.4s ease;
+        }
+        
+        .preference-card:hover .icon::after {
+            transform: scale(1.5);
+            background: radial-gradient(circle, rgba(255,199,0,0.2) 0%, rgba(255,199,0,0) 70%);
         }
         .preference-card .card-title {
             font-family: 'Orbitron', sans-serif;
@@ -196,14 +363,46 @@
             color: #fff;
             margin-bottom: 12px;
             letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .preference-card:hover .card-title {
+            color: var(--highlight-color);
+            transform: scale(1.05);
+            letter-spacing: 1.5px;
+        }
+        
+        .preference-card .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--highlight-color), var(--danger-color));
+            transition: width 0.4s ease;
+        }
+        
+        .preference-card:hover .card-title::after {
+            width: 100%;
         }
         .preference-card .card-desc {
             color: #b8eaff;
             font-size: 1.05rem;
             margin-bottom: 24px;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .preference-card:hover .card-desc {
+            color: #ffffff;
         }
         .preference-card .card-btn {
-            background: linear-gradient(90deg, #00FFDD 0%, #00C2FF 100%);
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: #111827;
             border: none;
             border-radius: 8px;
@@ -211,14 +410,68 @@
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-            box-shadow: 0 4px 16px #00ffdd22;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 16px rgba(0, 255, 221, 0.15);
             text-transform: uppercase;
             letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1;
         }
+        
+        .preference-card .card-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--highlight-color) 0%, var(--danger-color) 100%);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+        }
+        
+        .preference-card .card-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            z-index: -1;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.6s ease-out;
+        }
+        
         .preference-card .card-btn:hover {
-            background: linear-gradient(90deg, #FFC700 0%, #FF4A4A 100%);
             color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 199, 0, 0.25);
+            letter-spacing: 1.5px;
+        }
+        
+        .preference-card .card-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .preference-card .card-btn:hover::after {
+            transform: translate(-50%, -50%) scale(50);
+            opacity: 0;
+        }
+        
+        .preference-card .card-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 15px rgba(255, 199, 0, 0.2);
+        }
+        
+        .preference-card .card-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 199, 0, 0.3);
         }
         @media (max-width: 900px) {
             .preference-cards {
@@ -251,6 +504,23 @@
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #070b18; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;">
+        <div style="text-align: center;">
+            <img src="assets/images/logo.png" alt="KeyRacer Logo" style="height: 100px; width: auto; margin-bottom: 20px; animation: pulse 1.5s infinite alternate;">
+            <div style="width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin: 0 auto;">
+                <div id="loader-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #00FFDD, #00C2FF); border-radius: 2px; transition: width 0.5s ease;"></div>
+            </div>
+            <p style="color: #00FFDD; font-family: 'Orbitron', sans-serif; margin-top: 15px; font-size: 14px;">LOADING...</p>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.05); filter: brightness(1.2); }
+        }
+    </style>
     <!-- Hidden anchor tags for sitelink reinforcement -->
     <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
       <a href="/typing-test.html">Typing Test</a>
@@ -287,12 +557,20 @@
                 <div class="card-desc">Enhance your soft skills: practice resumes, cover letters, business emails, and more with real-world templates.</div>
                 <a href="pro-skills.html" class="card-btn" onclick="markPreferencesComplete('professional')">Practice Soft Skills</a>
             </div>
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-trophy"></i></div>
+                <div class="card-title">Hackathon</div>
+                <div class="card-desc">Participate in coding challenges, solve DSA problems, and showcase your skills in competitive hackathons.</div>
+                <a href="hackathon.html" class="card-btn" onclick="markPreferencesComplete('hackathon')">Join Hackathon</a>
+            </div>
         </div>
     </div>
 
 
     <!-- Fixed Legal Footer -->
-    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+
+    <!-- Fixed Legal Footer -->
+    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px); animation: fadeIn 1s ease-out 1.2s both;">
         <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
             <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
                 <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
@@ -305,15 +583,165 @@
             </a>
         </div>
     </div>
+    
+    <!-- Particles.js Container -->
+    <div id="particles-js"></div>
 
+    <!-- Particles.js and other scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Function to mark preferences complete
+        // Preloader animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const preloader = document.getElementById('preloader');
+            const loaderBar = document.getElementById('loader-bar');
+            let width = 0;
+            const interval = setInterval(function() {
+                width += Math.floor(Math.random() * 10) + 1;
+                if (width > 100) width = 100;
+                loaderBar.style.width = width + '%';
+                
+                if (width === 100) {
+                    clearInterval(interval);
+                    setTimeout(function() {
+                        preloader.style.opacity = '0';
+                        preloader.style.visibility = 'hidden';
+                    }, 500);
+                }
+            }, 100);
+            
+            // Initialize particles.js
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00FFDD"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00C2FF",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Initialize particles.js
+        });
+        
+        // Function to mark preferences complete with animation
         function markPreferencesComplete(preferenceType) {
             // Store the user's preference
             localStorage.setItem('userPreference', preferenceType);
             
             // Also mark that preferences have been set
             localStorage.setItem('preferencesComplete', 'true');
+            
+            // Add XP for making a selection
+            const userStats = JSON.parse(localStorage.getItem('userStats')) || {
+                wpm: 0,
+                accuracy: 0,
+                xp: 0,
+                level: 1
+            };
+            
+            userStats.xp = (userStats.xp || 0) + 5;
+            if (userStats.xp >= 100) {
+                userStats.level = (userStats.level || 1) + 1;
+                userStats.xp = userStats.xp - 100;
+            }
+            
+            localStorage.setItem('userStats', JSON.stringify(userStats));
         }
 
         // Check if user is logged in, if not redirect to login
@@ -321,6 +749,45 @@
             const isLoggedIn = localStorage.getItem('typingTestUser');
             if (!isLoggedIn) {
                 window.location.href = 'login.html';
+            }
+        });
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const cards = document.querySelectorAll('.preference-card');
+            let focusedCard = document.activeElement.closest('.preference-card');
+            let focusedIndex = -1;
+            
+            if (focusedCard) {
+                for (let i = 0; i < cards.length; i++) {
+                    if (cards[i] === focusedCard) {
+                        focusedIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    if (focusedIndex > 0) {
+                        cards[focusedIndex - 1].querySelector('.card-btn').focus();
+                    } else if (focusedIndex === -1) {
+                        cards[0].querySelector('.card-btn').focus();
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (focusedIndex < cards.length - 1) {
+                        cards[focusedIndex + 1].querySelector('.card-btn').focus();
+                    } else if (focusedIndex === -1) {
+                        cards[0].querySelector('.card-btn').focus();
+                    }
+                    break;
+                case 'ArrowUp':
+                case 'ArrowDown':
+                    if (focusedIndex === -1) {
+                        cards[0].querySelector('.card-btn').focus();
+                    }
+                    break;
             }
         });
     </script>
