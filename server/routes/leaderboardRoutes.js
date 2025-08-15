@@ -1,5 +1,3 @@
-const express = require('express');
-const router = express.Router();
 const UserStats = require('../models/UserStats');
 const User = require('../models/User');
 const UserChallenge = require('../models/UserChallenge');
