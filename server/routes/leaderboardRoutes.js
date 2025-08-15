@@ -124,6 +124,10 @@ router.get('/leaderboard', async (req, res) => {
           badges: 1,
           languageStats: 1,
           difficultyStats: 1,
+          lastWpm: 1,
+          lastAccuracy: 1,
+          lastDifficulty: 1,
+          lastTimestamp: 1,
           'user.displayName': 1,
           'user.username': 1,
           'user.picture': 1
