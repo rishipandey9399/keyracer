@@ -159,34 +159,6 @@
             </div>
         </div>
         
-        <!-- Real-time System Status Panel (Admin Only) -->
-        <div class="admin-panel" id="admin-panel" style="display: none;">
-            <div class="admin-header">
-                <h3><i class="fas fa-cogs"></i> Real-time System Status</h3>
-                <div class="admin-controls">
-                    <a href="realtime-dashboard.html" class="admin-btn" target="_blank">
-                        <i class="fas fa-chart-line"></i> Dashboard
-                    </a>
-                </div>
-            </div>
-            <div class="admin-stats">
-                <div class="stat-item">
-                    <span class="stat-label">System Status:</span>
-                    <span class="stat-value" id="admin-status">
-                        <span class="status-indicator"></span>Checking...
-                    </span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Queue Length:</span>
-                    <span class="stat-value" id="admin-queue">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Total Updates:</span>
-                    <span class="stat-value" id="admin-updates">0</span>
-                </div>
-            </div>
-        </div>
-                
         <div class="podium-section">
             <div class="podium-container" id="podium-container">
                 <!-- Podium will be populated dynamically -->
@@ -448,6 +420,25 @@
                     }
                 }
             });
+
+            // Listen for real-time leaderboard updates and refresh table
+            if (window.realTimeLeaderboard) {
+                window.realTimeLeaderboardUpdateHandler = function(testRecord) {
+                    // Update leaderboard table in real-time
+                    if (window.leaderboardManager) {
+                        window.leaderboardManager.updateLeaderboardRealTime(testRecord);
+                    }
+                };
+                // Subscribe to BroadcastChannel for cross-tab updates
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const channel = new BroadcastChannel('leaderboard_updates');
+                    channel.addEventListener('message', (event) => {
+                        if (event.data.type === 'leaderboard_update') {
+                            window.realTimeLeaderboardUpdateHandler(event.data.data);
+                        }
+                    });
+                }
+            }
         });
     </script>
     
@@ -535,3 +526,4 @@
       });
     </script>
 </html>
+``` 

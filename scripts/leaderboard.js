@@ -16,9 +16,6 @@ class LeaderboardManager {
         
         // Load initial data
         this.loadLeaderboardData();
-        
-        // Initialize admin panel
-        this.initializeAdminPanel();
     }
 
     // Initialize event listeners
@@ -655,65 +652,6 @@ class LeaderboardManager {
             this.updateInterval = null;
         }
     }
-
-    // Initialize leaderboard and check for admin access
-    initializeAdminPanel() {
-        // Check if user has admin access (you can customize this logic)
-        const currentUser = localStorage.getItem('typingTestUser');
-        const isAdmin = this.checkAdminAccess(currentUser);
-        
-        if (isAdmin) {
-            const adminPanel = document.getElementById('admin-panel');
-            if (adminPanel) {
-                adminPanel.style.display = 'block';
-                this.updateAdminStats();
-                
-                // Update admin stats every 10 seconds
-                setInterval(() => {
-                    this.updateAdminStats();
-                }, 10000);
-                
-                console.log('Admin panel activated for user:', currentUser);
-            }
-        }
-    }
-
-    // Check if user has admin access (customize this logic as needed)
-    checkAdminAccess(username) {
-        // For now, any authenticated user can see admin panel
-        // In production, you'd check against a list of admin users
-        return username && username !== 'Guest' && username !== null;
-    }
-
-    // Update admin panel statistics
-    updateAdminStats() {
-        if (!window.realTimeLeaderboard) {
-            document.getElementById('admin-status').innerHTML = 
-                '<span class="status-indicator error"></span>System Offline';
-            return;
-        }
-
-        try {
-            const stats = window.realTimeLeaderboard.getUpdateStats();
-            
-            // Update status indicator
-            const healthStatus = stats.systemHealth.status;
-            const statusClass = healthStatus === 'excellent' || healthStatus === 'good' ? '' : healthStatus;
-            document.getElementById('admin-status').innerHTML = 
-                `<span class="status-indicator ${statusClass}"></span>${healthStatus.charAt(0).toUpperCase() + healthStatus.slice(1)}`;
-            
-            // Update queue length
-            document.getElementById('admin-queue').textContent = stats.queueLength;
-            
-            // Update total updates
-            document.getElementById('admin-updates').textContent = stats.statistics.totalUpdates;
-            
-        } catch (error) {
-            console.error('Error updating admin stats:', error);
-            document.getElementById('admin-status').innerHTML = 
-                '<span class="status-indicator error"></span>Error';
-        }
-    }
 }
 
 // Initialize leaderboard when the page loads
@@ -722,9 +660,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.typingDB) {
         window.leaderboardManager = new LeaderboardManager();
         console.log('Leaderboard initialized');
-        
-        // Initialize admin panel
-        window.leaderboardManager.initializeAdminPanel();
         
         // Create global function for real-time updates
         window.updateLeaderboardRealTime = function(newRecord) {
