@@ -25,13 +25,19 @@ router.post('/leaderboard/submit', async (req, res) => {
       stats = new UserStats({ userId: user._id });
     }
 
-    // Update stats
-    stats.challengesCompleted += 1;
-    stats.totalAttempts += 1;
-    stats.totalPoints += Math.round(wpm * (accuracy / 100));
-    stats.averageCompletionTime = ((stats.averageCompletionTime * (stats.challengesCompleted - 1)) + (timestamp ? new Date(timestamp).getTime() : Date.now())) / stats.challengesCompleted;
-    stats.overallAccuracy = ((stats.overallAccuracy * (stats.challengesCompleted - 1)) + accuracy) / stats.challengesCompleted;
-    stats.lastActivityDate = new Date(timestamp || Date.now());
+  // Update stats
+  stats.challengesCompleted += 1;
+  stats.totalAttempts += 1;
+  stats.totalPoints += Math.round(wpm * (accuracy / 100));
+  stats.averageCompletionTime = ((stats.averageCompletionTime * (stats.challengesCompleted - 1)) + (timestamp ? new Date(timestamp).getTime() : Date.now())) / stats.challengesCompleted;
+  stats.overallAccuracy = ((stats.overallAccuracy * (stats.challengesCompleted - 1)) + accuracy) / stats.challengesCompleted;
+  stats.lastActivityDate = new Date(timestamp || Date.now());
+
+  // Save most recent test stats
+  stats.lastWpm = wpm;
+  stats.lastAccuracy = accuracy;
+  stats.lastDifficulty = difficulty || 'Standard';
+  stats.lastTimestamp = timestamp ? new Date(timestamp) : new Date();
 
     // Update difficulty stats
     if (difficulty && stats.difficultyStats[difficulty]) {
@@ -138,10 +144,10 @@ router.get('/leaderboard', async (req, res) => {
       return {
         rank: (page - 1) * limit + index + 1,
         username: entry.user.displayName || entry.user.username || 'Anonymous',
-        wpm: entry.totalPoints ? Math.round(entry.totalPoints / entry.challengesCompleted) : 0,
-        accuracy: entry.overallAccuracy ? Math.round(entry.overallAccuracy * 10) / 10 : 0,
-        difficulty: entry.difficultyStats ? Object.keys(entry.difficultyStats).find(d => entry.difficultyStats[d].completed > 0) || 'Standard' : 'Standard',
-        timestamp: entry.lastActivityDate || null,
+        wpm: entry.lastWpm || 0,
+        accuracy: entry.lastAccuracy || 0,
+        difficulty: entry.lastDifficulty || 'Standard',
+        timestamp: entry.lastTimestamp || entry.lastActivityDate || null,
         totalPoints: entry.totalPoints,
         challengesCompleted: entry.challengesCompleted,
         averageTime: entry.averageCompletionTime ? Math.round(entry.averageCompletionTime / 1000) : 0,

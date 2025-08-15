@@ -1,6 +1,23 @@
 const mongoose = require('mongoose');
 
 const userStatsSchema = new mongoose.Schema({
+  // Most recent test stats
+  lastWpm: {
+    type: Number,
+    default: 0
+  },
+  lastAccuracy: {
+    type: Number,
+    default: 0
+  },
+  lastDifficulty: {
+    type: String,
+    default: 'Standard'
+  },
+  lastTimestamp: {
+    type: Date,
+    default: Date.now
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
