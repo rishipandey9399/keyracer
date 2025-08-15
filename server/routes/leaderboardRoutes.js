@@ -1,3 +1,46 @@
+// Submit typing test result for leaderboard
+router.post('/leaderboard/submit', async (req, res) => {
+  try {
+    const { username, wpm, accuracy, difficulty, timestamp } = req.body;
+    if (!username || !wpm || !accuracy) {
+      return res.status(400).json({ success: false, message: 'Missing required fields' });
+    }
+
+    // Find or create user
+    let user = await User.findOne({ username });
+    if (!user) {
+      user = new User({ username, displayName: username, email: `${username}@keyracer.in`, password: 'guest', authMethod: 'local', isVerified: false });
+      await user.save();
+    }
+
+    // Find or create UserStats
+    let stats = await UserStats.findOne({ userId: user._id });
+    if (!stats) {
+      stats = new UserStats({ userId: user._id });
+    }
+
+    // Update stats
+    stats.challengesCompleted += 1;
+    stats.totalAttempts += 1;
+    stats.totalPoints += Math.round(wpm * (accuracy / 100));
+    stats.averageCompletionTime = ((stats.averageCompletionTime * (stats.challengesCompleted - 1)) + (timestamp ? new Date(timestamp).getTime() : Date.now())) / stats.challengesCompleted;
+    stats.overallAccuracy = ((stats.overallAccuracy * (stats.challengesCompleted - 1)) + accuracy) / stats.challengesCompleted;
+    stats.lastActivityDate = new Date(timestamp || Date.now());
+
+    // Update difficulty stats
+    if (difficulty && stats.difficultyStats[difficulty]) {
+      stats.difficultyStats[difficulty].completed += 1;
+      stats.difficultyStats[difficulty].points += Math.round(wpm * (accuracy / 100));
+    }
+
+    await stats.save();
+
+    res.json({ success: true, message: 'Result submitted and leaderboard updated.' });
+  } catch (error) {
+    console.error('Error submitting leaderboard result:', error);
+    res.status(500).json({ success: false, message: 'Server error while submitting result' });
+  }
+});
 const express = require('express');
 const router = express.Router();
 const UserStats = require('../models/UserStats');

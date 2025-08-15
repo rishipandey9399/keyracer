@@ -325,6 +325,30 @@ class CodeRacer {
                 </div>
             `;
         }
+
+            // Send result to backend for global leaderboard
+            const username = localStorage.getItem('username') || 'Anonymous';
+            const accuracy = 100; // You may want to calculate actual accuracy
+            const difficulty = this.currentDifficulty || 'standard';
+            const payload = {
+                username,
+                wpm,
+                accuracy,
+                difficulty,
+                timestamp: new Date().toISOString()
+            };
+            fetch('/api/leaderboard/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Leaderboard submission response:', data);
+            })
+            .catch(err => {
+                console.error('Error submitting leaderboard result:', err);
+            });
     }
 
     resetChallenge() {
