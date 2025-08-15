@@ -292,12 +292,7 @@ class TypingDatabase {
                     if (cursor) {
                         const record = cursor.value;
                         
-                        // Skip records without a username (anonymous/guest users)
-                        // Only include records from authenticated users
-                        if (!record.username || record.username === 'Guest') {
-                            cursor.continue();
-                            return;
-                        }
+                        // Show all users, including guests
                         
                         // Apply difficulty filter if specified
                         if (difficulty && record.difficulty !== difficulty) {
