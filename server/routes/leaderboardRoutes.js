@@ -1,9 +1,3 @@
-const express = require('express');
-const router = express.Router();
-const UserStats = require('../models/UserStats');
-const User = require('../models/User');
-const UserChallenge = require('../models/UserChallenge');
-
 // Submit typing test result for leaderboard
 router.post('/leaderboard/submit', async (req, res) => {
   try {
