@@ -98,13 +98,13 @@ class LeaderboardManager {
             });
             
             // Log data for debugging
-            console.log('Leaderboard data retrieved:', data);
+            console.log('[LeaderboardManager] Data received:', data);
             
             // Update the appropriate table
             this.updateTable(data);
             
         } catch (error) {
-            console.error('Error loading leaderboard data:', error);
+            console.error('[LeaderboardManager] Error loading leaderboard data:', error);
             this.showError('Failed to load leaderboard data: ' + error.message);
         }
     }
@@ -137,89 +137,42 @@ class LeaderboardManager {
 
     // Update the table with filtered data
     updateTable(data) {
-        const tableId = `${this.currentTab}-tab`;
-        const tableElement = document.getElementById(tableId);
-        if (!tableElement) {
-            console.error(`Table element not found: ${tableId}`);
-            return;
-        }
-        
-        const tbody = tableElement.querySelector('tbody');
-        if (!tbody) {
-            console.error(`Table body not found in ${tableId}`);
-            return;
-        }
-        
-        // Clear existing rows
+        // Sort data by highest accuracy, then highest WPM
+        const sortedData = [...data].sort((a, b) => {
+            // Sort by accuracy (descending), then WPM (descending)
+            const accuracyA = typeof a.accuracy === 'number' ? (a.accuracy <= 1 ? a.accuracy * 100 : a.accuracy) : 0;
+            const accuracyB = typeof b.accuracy === 'number' ? (b.accuracy <= 1 ? b.accuracy * 100 : b.accuracy) : 0;
+            if (accuracyB !== accuracyA) return accuracyB - accuracyA;
+            const wpmA = typeof a.wpm === 'number' ? a.wpm : 0;
+            const wpmB = typeof b.wpm === 'number' ? b.wpm : 0;
+            return wpmB - wpmA;
+        });
+        const tbody = document.getElementById('leaderboard-tbody');
         tbody.innerHTML = '';
-        
-        // Check if we have data
-        if (data.length === 0) {
+        if (sortedData.length === 0) {
             const noDataRow = document.createElement('tr');
-            noDataRow.innerHTML = `
-                <td colspan="6" style="text-align: center; padding: 20px;">
-                    No records found for the selected filters.
-                </td>
-            `;
+            noDataRow.innerHTML = '<td colspan="6" style="text-align: center; padding: 20px;">No records found for the selected filters.</td>';
             tbody.appendChild(noDataRow);
             return;
         }
-        
-        // Add rows based on the current tab
-        data.forEach((record, index) => {
+        sortedData.forEach((record, index) => {
             const row = document.createElement('tr');
             const rank = index + 1;
             const rankClass = rank <= 3 ? `rank-${rank}` : '';
-            
-            // Ensure accuracy is properly formatted (handle both decimal and percentage formats)
-            const accuracyValue = typeof record.accuracy === 'number' ? 
-                (record.accuracy <= 1 ? Math.round(record.accuracy * 100) : record.accuracy) : 0;
-                
-            // Ensure WPM is a valid number
+            const accuracyValue = typeof record.accuracy === 'number' ? (record.accuracy <= 1 ? Math.round(record.accuracy * 100) : record.accuracy) : 0;
             const wpmValue = typeof record.wpm === 'number' ? Math.round(record.wpm) : 0;
-            
-            switch (this.currentTab) {
-                case 'wpm':
-                    row.innerHTML = `
-                        <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
-                        <td class="highlight">${wpmValue}</td>
-                        <td>${accuracyValue}%</td>
-                        <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
-                        <td>${this.formatDate(record.timestamp)}</td>
-                    `;
-                    break;
-                    
-                case 'accuracy':
-                    row.innerHTML = `
-                        <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
-                        <td class="highlight">${accuracyValue}%</td>
-                        <td>${wpmValue}</td>
-                        <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
-                        <td>${this.formatDate(record.timestamp)}</td>
-                    `;
-                    break;
-                    
-                case 'time':
-                    row.innerHTML = `
-                        <td class="rank ${rankClass}">${rank}</td>
-                        <td class="username">${this.formatUsername(record.username || 'Anonymous', rank)}</td>
-                        <td class="highlight">${this.formatTime(record.completionTime)}</td>
-                        <td>${wpmValue}</td>
-                        <td>${accuracyValue}%</td>
-                        <td>${this.capitalizeFirst(record.difficulty || 'Standard')}</td>
-                    `;
-                    break;
-            }
-            
+            row.innerHTML = `
+                <td class="rank ${rankClass}">${rank}</td>
+                <td class="username">${record.username || 'Anonymous'}</td>
+                <td class="highlight">${wpmValue}</td>
+                <td>${accuracyValue}%</td>
+                <td>${record.difficulty || 'Standard'}</td>
+                <td>${record.timestamp ? new Date(record.timestamp).toLocaleDateString() : ''}</td>
+            `;
             tbody.appendChild(row);
         });
-        
-        // Add sorting functionality to table headers
-        this.addSortingToTableHeaders(tableElement, data);
     }
-    
+
     // Add sorting functionality to table headers
     addSortingToTableHeaders(tableElement, data) {
         const headers = tableElement.querySelectorAll('thead th');
@@ -685,3 +638,4 @@ window.addEventListener('beforeunload', () => {
         window.leaderboardManager.stopPeriodicUpdates();
     }
 });
+````

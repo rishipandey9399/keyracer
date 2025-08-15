@@ -127,50 +127,8 @@
             <p>Compete against the fastest typists from around the world</p>
         </div>
         
-        <div class="filters-section">
-            <div class="filter-group">
-                <label for="time-filter">Time Period:</label>
-                <select id="time-filter" class="filter-control">
-                    <option value="all-time">All Time</option>
-                    <option value="monthly">This Month</option>
-                    <option value="weekly">This Week</option>
-                    <option value="daily">Today</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label for="division-filter">Division:</label>
-                <select id="division-filter" class="filter-control">
-                    <option value="all">All Divisions</option>
-                    <option value="beginner">Rookie</option>
-                    <option value="intermediate">Pro</option>
-                    <option value="advanced">Elite</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label for="challenge-filter">Challenge Type:</label>
-                <select id="challenge-filter" class="filter-control">
-                    <option value="all">All Challenges</option>
-                    <option value="standard">Standard Race</option>
-                    <option value="timed">Time Trial</option>
-                    <option value="marathon">Marathon</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="podium-section">
-            <div class="podium-container" id="podium-container">
-                <!-- Podium will be populated dynamically -->
-                <div class="loading-podium">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading top performers...</p>
-                </div>
-            </div>
-        </div>
-                
         <div class="leaderboard-section">
-            <div class="table-container">                    <table class="rankings-table">
+            <div class="table-container">                    <table class="rankings-table" id="wpm-tab">
                         <thead>
                             <tr>
                                 <th>Rank</th>
@@ -206,73 +164,6 @@
                                 </div>
                             </div>
                             
-        <div class="your-standings">
-            <h2><i class="fas fa-user-circle"></i> Your Championship Standing</h2>
-            <div class="standings-card">
-                <div class="standings-stats">
-                    <div class="stat-item">
-                        <i class="fas fa-hashtag"></i>
-                        <div class="stat-value">156</div>
-                        <div class="stat-label">Rank</div>
-                            </div>
-                            
-                    <div class="stat-item">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <div class="stat-value">62</div>
-                        <div class="stat-label">WPM</div>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <i class="fas fa-bullseye"></i>
-                        <div class="stat-value">95.2%</div>
-                        <div class="stat-label">Accuracy</div>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <i class="fas fa-layer-group"></i>
-                        <div class="stat-value">Rookie</div>
-                        <div class="stat-label">Division</div>
-                    </div>
-                </div>
-                
-                <div class="progression-path">
-                    <h3>Your Race Path</h3>
-                    <div class="path-track">
-                        <div class="track-progress" style="width: 40%;"></div>
-                        <div class="track-checkpoints">
-                            <div class="checkpoint completed">
-                                <div class="checkpoint-icon"><i class="fas fa-check"></i></div>
-                                <div class="checkpoint-label">50 WPM</div>
-                            </div>
-                            <div class="checkpoint completed">
-                                <div class="checkpoint-icon"><i class="fas fa-check"></i></div>
-                                <div class="checkpoint-label">60 WPM</div>
-                            </div>
-                            <div class="checkpoint current">
-                                <div class="checkpoint-icon"><i class="fas fa-flag"></i></div>
-                                <div class="checkpoint-label">70 WPM</div>
-                            </div>
-                            <div class="checkpoint">
-                                <div class="checkpoint-icon"><i class="fas fa-lock"></i></div>
-                                <div class="checkpoint-label">80 WPM</div>
-                            </div>
-                            <div class="checkpoint">
-                                <div class="checkpoint-icon"><i class="fas fa-lock"></i></div>
-                                <div class="checkpoint-label">90 WPM</div>
-                            </div>
-                            <div class="checkpoint final">
-                                <div class="checkpoint-icon"><i class="fas fa-trophy"></i></div>
-                                <div class="checkpoint-label">100+ WPM</div>
-                            </div>
-                        </div>
-                        <div class="path-car">
-                            <i class="fas fa-car"></i>
-                        </div>
-                    </div>
-                    <p class="progression-message">You're on your way to the Pro division! Just 8 WPM more to reach the next checkpoint.</p>
-                </div>
-            </div>
-        </div>
     </div>
         
     <footer class="site-footer">
@@ -293,7 +184,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
-        // Initialize particles.js
+        // Remove duplicate particles.js initialization to prevent animation override
+        // Only initialize particles.js once
         document.addEventListener('DOMContentLoaded', function() {
             // Current year for copyright
             document.getElementById('current-year').textContent = new Date().getFullYear();
@@ -303,32 +195,33 @@
                 particlesJS('particles-js', {
                     "particles": {
                         "number": {
-                            "value": 50,
-                            "density": {
-                                "enable": true,
-                                "value_area": 800
-                            }
+                            "value": 120,
+                            "density": { "enable": true, "value_area": 900 }
                         },
                         "color": {
-                            "value": "#00C2FF"
+                            "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"]
                         },
                         "shape": {
-                            "type": "circle"
+                            "type": ["circle", "triangle", "edge"],
+                            "stroke": { "width": 0, "color": "#000000" },
+                            "polygon": { "nb_sides": 5 }
                         },
                         "opacity": {
-                            "value": 0.2,
-                            "random": true
+                            "value": 0.6,
+                            "random": true,
+                            "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false }
                         },
                         "size": {
-                            "value": 3,
-                            "random": true
+                            "value": 5,
+                            "random": true,
+                            "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
                         },
                         "line_linked": {
                             "enable": true,
-                            "distance": 150,
+                            "distance": 180,
                             "color": "#00C2FF",
-                            "opacity": 0.1,
-                            "width": 1
+                            "opacity": 0.5,
+                            "width": 1.5
                         },
                         "move": {
                             "enable": true,
@@ -337,21 +230,23 @@
                             "random": true,
                             "straight": false,
                             "out_mode": "out",
-                            "bounce": false
+                            "bounce": false,
+                            "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
                         }
                     },
                     "interactivity": {
                         "detect_on": "canvas",
                         "events": {
-                            "onhover": {
-                                "enable": true,
-                                "mode": "grab"
-                            },
-                            "onclick": {
-                                "enable": true,
-                                "mode": "push"
-                            },
+                            "onhover": { "enable": true, "mode": "grab" },
+                            "onclick": { "enable": true, "mode": "push" },
                             "resize": true
+                        },
+                        "modes": {
+                            "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
+                            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                            "repulse": { "distance": 200, "duration": 0.4 },
+                            "push": { "particles_nb": 6 },
+                            "remove": { "particles_nb": 2 }
                         }
                     },
                     "retina_detect": true
@@ -366,15 +261,6 @@
                     mainNav.classList.toggle('show');
                 });
             }
-            
-            // Filter interactions
-            const filterControls = document.querySelectorAll('.filter-control');
-            filterControls.forEach(control => {
-                control.addEventListener('change', function() {
-                    // This would typically trigger a fetch of new data
-                    console.log('Filter changed:', this.id, 'Value:', this.value);
-                });
-            });
             
             // Pagination interactions
             const pageBtns = document.querySelectorAll('.page-btn:not(.prev-btn):not(.next-btn)');
@@ -462,68 +348,5 @@
         </div>
     </div>
 </body>
-    <!-- Particles.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script>
-      particlesJS('particles-js', {
-        "particles": {
-          "number": {
-            "value": 120,
-            "density": { "enable": true, "value_area": 900 }
-          },
-          "color": {
-            "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"]
-          },
-          "shape": {
-            "type": ["circle", "triangle", "edge"],
-            "stroke": { "width": 0, "color": "#000000" },
-            "polygon": { "nb_sides": 5 }
-          },
-          "opacity": {
-            "value": 0.6,
-            "random": true,
-            "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false }
-          },
-          "size": {
-            "value": 5,
-            "random": true,
-            "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
-          },
-          "line_linked": {
-            "enable": true,
-            "distance": 180,
-            "color": "#00C2FF",
-            "opacity": 0.5,
-            "width": 1.5
-          },
-          "move": {
-            "enable": true,
-            "speed": 2,
-            "direction": "none",
-            "random": true,
-            "straight": false,
-            "out_mode": "out",
-            "bounce": false,
-            "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
-          }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": {
-            "onhover": { "enable": true, "mode": "grab" },
-            "onclick": { "enable": true, "mode": "push" },
-            "resize": true
-          },
-          "modes": {
-            "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
-            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
-            "repulse": { "distance": 200, "duration": 0.4 },
-            "push": { "particles_nb": 6 },
-            "remove": { "particles_nb": 2 }
-          }
-        },
-        "retina_detect": true
-      });
-    </script>
 </html>
 ``` 

@@ -293,6 +293,7 @@ class TypingDatabase {
                         const record = cursor.value;
                         
                         // Show all users, including guests
+                        // Remove any filter that skips guests
                         
                         // Apply difficulty filter if specified
                         if (difficulty && record.difficulty !== difficulty) {
@@ -399,16 +400,20 @@ class TypingDatabase {
                             records: records.slice(0, 3) // Log just the first 3 for brevity
                         });
                         
+                        // Debug log
+                        console.log('[typingDB.getLeaderboardData] Final records:', records);
+                        
                         resolve(records);
                     }
                 };
                 
                 request.onerror = (e) => {
+                    console.error('[typingDB.getLeaderboardData] Error:', e.target.error.message);
                     reject('Error retrieving leaderboard data: ' + e.target.error.message);
                 };
             });
         } catch (error) {
-            console.error('Get leaderboard data error:', error);
+            console.error('[typingDB.getLeaderboardData] Exception:', error);
             throw error;
         }
     }
