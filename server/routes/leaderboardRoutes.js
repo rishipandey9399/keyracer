@@ -133,53 +133,20 @@ router.get('/leaderboard', async (req, res) => {
     // Get total count for pagination
     const totalUsers = await UserStats.countDocuments(matchStage);
     
-    // Format leaderboard data
+    // Format leaderboard data (flattened for frontend compatibility)
     const formattedData = leaderboardData.map((entry, index) => {
-      const actualRank = (page - 1) * limit + index + 1;
-      
-      // Get language-specific data if filter is applied
-      let languageData = {};
-      if (language !== 'all' && entry.languageStats[language]) {
-        languageData = entry.languageStats[language];
-      }
-      
-      // Format badges
-      const badgeIcons = {
-        'first_solve': '🎯',
-        'speed_demon': '⚡',
-        'perfectionist': '💎',
-        'streak_master': '🔥',
-        'python_specialist': '🐍',
-        'java_specialist': '☕',
-        'javascript_specialist': '📜',
-        'cpp_specialist': '⚙️',
-        'csharp_specialist': '🔷'
-      };
-      
-      const badges = entry.badges.map(badge => ({
-        type: badge.type,
-        icon: badgeIcons[badge.type] || '🏅',
-        earnedAt: badge.earnedAt
-      }));
-      
       return {
-        rank: actualRank,
-        user: {
-          id: entry.userId,
-          name: entry.user.displayName || entry.user.username || 'Anonymous',
-          avatar: entry.user.picture || null,
-          level: entry.level
-        },
-        stats: {
-          totalPoints: entry.totalPoints,
-          challengesCompleted: entry.challengesCompleted,
-          averageTime: Math.round(entry.averageCompletionTime / 1000), // Convert to seconds
-          accuracy: Math.round(entry.overallAccuracy * 10) / 10, // Round to 1 decimal
-          currentStreak: entry.currentStreak,
-          longestStreak: entry.longestStreak
-        },
-        badges,
-        languageData
+        rank: (page - 1) * limit + index + 1,
+        username: entry.user.displayName || entry.user.username || 'Anonymous',
+        wpm: entry.totalPoints ? Math.round(entry.totalPoints / entry.challengesCompleted) : 0,
+        accuracy: entry.overallAccuracy ? Math.round(entry.overallAccuracy * 10) / 10 : 0,
+        difficulty: entry.difficultyStats ? Object.keys(entry.difficultyStats).find(d => entry.difficultyStats[d].completed > 0) || 'Standard' : 'Standard',
+        timestamp: entry.lastActivityDate || null,
+        totalPoints: entry.totalPoints,
+        challengesCompleted: entry.challengesCompleted,
+        averageTime: entry.averageCompletionTime ? Math.round(entry.averageCompletionTime / 1000) : 0,
+        currentStreak: entry.currentStreak,
+        longestStreak: entry.longestStreak
       };
     });
     
@@ -195,7 +162,7 @@ router.get('/leaderboard', async (req, res) => {
         }
       }
     ]);
-    
+
     res.json({
       success: true,
       data: {
@@ -219,64 +186,6 @@ router.get('/leaderboard', async (req, res) => {
           averagePoints: 0,
           topScore: 0
         }
-      }
-    });
-    
-  } catch (error) {
-    console.error('Error fetching leaderboard:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error while fetching leaderboard' 
-    });
-  }
-});
-
-// Get user's position in leaderboard
-router.get('/leaderboard/position/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    
-    const userStats = await UserStats.findOne({ userId })
-      .populate('userId', 'displayName username picture');
-    
-    if (!userStats) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'User stats not found' 
-      });
-    }
-    
-    // Get users with higher scores
-    const higherScoreCount = await UserStats.countDocuments({
-      totalPoints: { $gt: userStats.totalPoints }
-    });
-    
-    const position = higherScoreCount + 1;
-    
-    // Get nearby users (5 above and 5 below)
-    const nearbyUsers = await UserStats.find({})
-      .populate('userId', 'displayName username picture')
-      .sort({ totalPoints: -1, challengesCompleted: -1 })
-      .skip(Math.max(0, position - 6))
-      .limit(11);
-    
-    res.json({
-      success: true,
-      data: {
-        position,
-        userStats,
-        nearbyUsers: nearbyUsers.map((user, index) => ({
-          rank: Math.max(1, position - 5) + index,
-          user: user.userId,
-          stats: {
-            totalPoints: user.totalPoints,
-            challengesCompleted: user.challengesCompleted,
-            averageTime: Math.round(user.averageCompletionTime / 1000),
-            accuracy: Math.round(user.overallAccuracy * 10) / 10,
-            currentStreak: user.currentStreak
-          },
-          isCurrentUser: user.userId._id.toString() === userId
-        }))
       }
     });
     
