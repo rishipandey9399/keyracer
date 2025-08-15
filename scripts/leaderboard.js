@@ -1,4 +1,8 @@
-const response = await fetch(`/api/leaderboard?difficulty=${this.currentDifficulty}&timeFilter=${this.currentTimePeriod}`);// Leaderboard functionality
+// Wrap all top-level code in an async IIFE
+(async function() {
+const response = await fetch(`/api/leaderboard?difficulty=${this.currentDifficulty}&timeFilter=${this.currentTimePeriod}`);
+
+// Leaderboard functionality
 class LeaderboardManager {
     constructor() {
         this.db = window.typingDB;
@@ -620,3 +624,5 @@ window.addEventListener('beforeunload', () => {
         window.leaderboardManager.stopPeriodicUpdates();
     }
 });
+
+})();
