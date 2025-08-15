@@ -75,34 +75,16 @@ class LeaderboardManager {
     // Load leaderboard data based on current filters
     async loadLeaderboardData() {
         try {
-            // Show loading state
             this.showLoadingState();
-            
-            // Ensure database is ready
-            await this.db.ensureDbReady();
-            
-            // Map our UI filter terms to database terms
-            const timeRangeMap = {
-                'daily': 'day',
-                'weekly': 'week',
-                'monthly': 'month',
-                'all-time': null
-            };
-            
-            // Get data from database with appropriate filters
-            const data = await this.db.getLeaderboardData({
-                sortBy: this.currentTab,
-                difficulty: this.currentDifficulty === 'all' ? null : this.currentDifficulty,
-                limit: 10,
-                timeRange: timeRangeMap[this.currentTimePeriod]
-            });
-            
-            // Log data for debugging
-            console.log('[LeaderboardManager] Data received:', data);
-            
-            // Update the appropriate table
-            this.updateTable(data);
-            
+            // Fetch leaderboard data from server API
+            const response = await fetch('/api/leaderboard');
+            const result = await response.json();
+            if (result.success && Array.isArray(result.data.leaderboard)) {
+                console.log('[LeaderboardManager] Data received from server:', result.data.leaderboard);
+                this.updateTable(result.data.leaderboard);
+            } else {
+                throw new Error(result.message || 'No leaderboard data received');
+            }
         } catch (error) {
             console.error('[LeaderboardManager] Error loading leaderboard data:', error);
             this.showError('Failed to load leaderboard data: ' + error.message);
