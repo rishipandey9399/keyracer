@@ -97,10 +97,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: var(--background-color);
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 194, 255, 0.05) 0%, transparent 80%),
-                linear-gradient(to bottom, var(--background-color), #0C1222);
+            background: #070B18 !important;
         }
 
         .hero-section {
@@ -446,58 +443,30 @@
     <script src="scripts/code-racer.js"></script>
     <script src="scripts/header-auth.js"></script>
     <script>
+        // Hackathon-style particles.js config
         particlesJS('particles-js', {
             "particles": {
-                "number": {
-                    "value": 80,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#00FFDD"
-                },
-                "shape": {
-                    "type": "circle"
-                },
-                "opacity": {
-                    "value": 0.2,
-                    "random": true
-                },
-                "size": {
-                    "value": 3,
-                    "random": true
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#00FFDD",
-                    "opacity": 0.1,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 2,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false
-                }
+                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"] },
+                "shape": { "type": ["circle", "triangle", "edge"], "polygon": { "nb_sides": 5 } },
+                "opacity": { "value": 0.6, "random": true },
+                "size": { "value": 5, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00C2FF", "opacity": 0.5, "width": 1.5 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 } }
             },
             "interactivity": {
                 "detect_on": "canvas",
                 "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
+                  "onhover": { "enable": true, "mode": "grab" },
+                  "onclick": { "enable": true, "mode": "push" },
+                  "resize": true
+                },
+                "modes": {
+                  "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
+                  "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                  "repulse": { "distance": 200, "duration": 0.4 },
+                  "push": { "particles_nb": 6 },
+                  "remove": { "particles_nb": 2 }
                 }
             },
             "retina_detect": true

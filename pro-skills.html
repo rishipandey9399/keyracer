@@ -95,21 +95,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-bg: #0a0f1a;
+            --primary-bg: #070b18;
             --secondary-bg: #0e1e38;
             --card-bg: rgba(14, 30, 56, 0.95);
-            --accent-color: #00C2FF;
+            --accent-color: #FFC700;
             --success-color: #4caf50;
             --warning-color: #ff9800;
             --error-color: #f44336;
             --text-primary: #ffffff;
             --text-secondary: #b3b8d0;
             --border-color: rgba(0, 194, 255, 0.3);
-            --gradient-primary: linear-gradient(135deg, #00C2FF 0%, #667eea 50%, #764ba2 100%);
+            --gradient-primary: linear-gradient(135deg, #FFC700 0%, #FF4A4A 40%, #00FFDD 70%, #00C2FF 100%);
             --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-accent: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             --box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            --glow-primary: 0 0 20px rgba(0, 194, 255, 0.3);
+            --glow-primary: 0 0 20px rgba(255, 199, 0, 0.3);
             --glow-secondary: 0 0 30px rgba(102, 126, 234, 0.2);
         }
 
@@ -120,7 +120,7 @@
         }
 
         body {
-            background: var(--primary-bg);
+            background: #070b18 !important;
             background-image: 
                 radial-gradient(circle at 20% 20%, rgba(0, 194, 255, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
@@ -1409,19 +1409,9 @@
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg">
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-        <div class="floating-particle"></div>
-    </div>
+    <!-- Hackathon-style Particles.js Background -->
+    <div id="particles-js"></div>
+    <!-- ...existing code... -->
 
     <!-- Header Section -->
     <header class="header">
@@ -1751,4 +1741,68 @@
         </div>
     </div>
 </body>
+    <!-- Particles.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      /* Hackathon-style vibrant multi-color particles config */
+      particlesJS('particles-js', {
+        "particles": {
+          "number": {
+            "value": 120,
+            "density": { "enable": true, "value_area": 900 }
+          },
+          "color": {
+            "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"]
+          },
+          "shape": {
+            "type": ["circle", "triangle", "edge"],
+            "stroke": { "width": 0, "color": "#000000" },
+            "polygon": { "nb_sides": 5 }
+          },
+          "opacity": {
+            "value": 0.6,
+            "random": true,
+            "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false }
+          },
+          "size": {
+            "value": 5,
+            "random": true,
+            "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 180,
+            "color": "#00C2FF",
+            "opacity": 0.5,
+            "width": 1.5
+          },
+          "move": {
+            "enable": true,
+            "speed": 2,
+            "direction": "none",
+            "random": true,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": { "enable": true, "mode": "grab" },
+            "onclick": { "enable": true, "mode": "push" },
+            "resize": true
+          },
+          "modes": {
+            "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
+            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+            "repulse": { "distance": 200, "duration": 0.4 },
+            "push": { "particles_nb": 6 },
+            "remove": { "particles_nb": 2 }
+          }
+        },
+        "retina_detect": true
+      });
+    </script>
 </html>

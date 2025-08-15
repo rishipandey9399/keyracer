@@ -117,7 +117,7 @@
         }
         
         body {
-            background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
+            background: #070B18 !important;
             min-height: 100vh;
             margin: 0;
             font-family: 'Rajdhani', 'Segoe UI', sans-serif;
@@ -127,11 +127,13 @@
         /* Particle background */
         #particles-js {
             position: fixed;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             top: 0;
             left: 0;
             z-index: 0;
+            pointer-events: none;
+            opacity: 0.9;
         }
         
         .preference-page {
@@ -252,7 +254,7 @@
             100% { opacity: 1; }
         }
         .preference-card {
-            background: var(--card-bg);
+            background: var(--card-bg) !important;
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
             border: 2px solid var(--accent-color);
@@ -291,6 +293,7 @@
             transform: translateY(-8px) scale(1.03);
             box-shadow: 0 16px 48px rgba(0,255,221,0.15);
             border-color: var(--highlight-color);
+            background: var(--card-bg) !important;
         }
         
         .preference-card:hover::before {
@@ -505,13 +508,13 @@
 </head>
 <body>
     <!-- Preloader -->
-    <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #070b18; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;">
+    <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #070B18 !important; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;">
         <div style="text-align: center;">
             <img src="assets/images/logo.png" alt="KeyRacer Logo" style="height: 100px; width: auto; margin-bottom: 20px; animation: pulse 1.5s infinite alternate;">
             <div style="width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin: 0 auto;">
-                <div id="loader-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #00FFDD, #00C2FF); border-radius: 2px; transition: width 0.5s ease;"></div>
+                <div id="loader-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #FFC700, #FF4A4A); border-radius: 2px; transition: width 0.5s ease;"></div>
             </div>
-            <p style="color: #00FFDD; font-family: 'Orbitron', sans-serif; margin-top: 15px; font-size: 14px;">LOADING...</p>
+            <p id="loading-text" style="color: #FFC700; font-family: 'Orbitron', sans-serif; margin-top: 15px; font-size: 14px;">Loading your experience...</p>
         </div>
     </div>
     
@@ -529,6 +532,60 @@
       <a href="/privacy-policy.html">Privacy Policy</a>
       <a href="/terms-conditions.html">Terms &amp; Conditions</a>
     </div>
+    <!-- Top-right login button -->
+    <div style="position: fixed; top: 30px; right: 30px; z-index: 101;">
+        <a href="login.html" id="loginBtn" class="nav-item enhanced-login-btn darkred-login-btn">
+            <span class="login-icon"><i class="fas fa-sign-in-alt"></i></span>
+            <span class="login-text">Login</span>
+        </a>
+    </div>
+    <style>
+        .darkred-login-btn {
+            background: #8B0000 !important;
+            color: #fff !important;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            padding: 14px 36px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(139,0,0,0.18), 0 2px 8px rgba(139,0,0,0.12);
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            font-size: 1.18rem;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .darkred-login-btn:hover {
+            background: #a30000 !important;
+            color: #fff !important;
+            box-shadow: 0 12px 36px rgba(139,0,0,0.22), 0 4px 16px rgba(139,0,0,0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .darkred-login-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(139,0,0,0.12);
+        }
+        .login-icon {
+            font-size: 1.3em;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            filter: drop-shadow(0 0 8px rgba(139,0,0,0.4));
+            transition: color 0.3s;
+        }
+        .darkred-login-btn:hover .login-icon {
+            color: #fff;
+            filter: drop-shadow(0 0 12px rgba(139,0,0,0.5));
+        }
+        .login-text {
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(139,0,0,0.12);
+        }
+    </style>
     <div class="preference-page">
         <!-- Logo in top-left corner -->
         <div class="corner-logo">
@@ -590,133 +647,96 @@
     <!-- Particles.js and other scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Preloader animation
+        // Preloader animation with animated loading text
         document.addEventListener('DOMContentLoaded', function() {
             const preloader = document.getElementById('preloader');
             const loaderBar = document.getElementById('loader-bar');
+            const loadingText = document.getElementById('loading-text');
             let width = 0;
+            const loadingMessages = [
+                "Loading your experience...",
+                "Preparing your dashboard...",
+                "Setting up your preferences...",
+                "Almost ready!"
+            ];
+            let messageIndex = 0;
+            const messageInterval = setInterval(function() {
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+                loadingText.textContent = loadingMessages[messageIndex];
+            }, 1200);
             const interval = setInterval(function() {
                 width += Math.floor(Math.random() * 10) + 1;
                 if (width > 100) width = 100;
                 loaderBar.style.width = width + '%';
-                
                 if (width === 100) {
                     clearInterval(interval);
+                    clearInterval(messageInterval);
                     setTimeout(function() {
                         preloader.style.opacity = '0';
                         preloader.style.visibility = 'hidden';
                     }, 500);
                 }
             }, 100);
-            
-            // Initialize particles.js
+            // Hackathon-style particles.js config (updated to match hackathon.html)
             particlesJS("particles-js", {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#00FFDD"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        },
-                        "polygon": {
-                            "nb_sides": 5
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.3,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 2,
-                            "size_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#00C2FF",
-                        "opacity": 0.2,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 1,
-                        "direction": "none",
-                        "random": true,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": false,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
-                    }
+              "particles": {
+                "number": {
+                  "value": 120,
+                  "density": { "enable": true, "value_area": 900 }
                 },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 0.5
-                            }
-                        },
-                        "bubble": {
-                            "distance": 400,
-                            "size": 40,
-                            "duration": 2,
-                            "opacity": 8,
-                            "speed": 3
-                        },
-                        "repulse": {
-                            "distance": 200,
-                            "duration": 0.4
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        },
-                        "remove": {
-                            "particles_nb": 2
-                        }
-                    }
+                "color": {
+                  "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"]
                 },
-                "retina_detect": true
+                "shape": {
+                  "type": ["circle", "triangle", "edge"],
+                  "stroke": { "width": 0, "color": "#000000" },
+                  "polygon": { "nb_sides": 5 }
+                },
+                "opacity": {
+                  "value": 0.6,
+                  "random": true,
+                  "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false }
+                },
+                "size": {
+                  "value": 5,
+                  "random": true,
+                  "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
+                },
+                "line_linked": {
+                  "enable": true,
+                  "distance": 180,
+                  "color": "#00C2FF",
+                  "opacity": 0.5,
+                  "width": 1.5
+                },
+                "move": {
+                  "enable": true,
+                  "speed": 2,
+                  "direction": "none",
+                  "random": true,
+                  "straight": false,
+                  "out_mode": "out",
+                  "bounce": false,
+                  "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
+                }
+              },
+              "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                  "onhover": { "enable": true, "mode": "grab" },
+                  "onclick": { "enable": true, "mode": "push" },
+                  "resize": true
+                },
+                "modes": {
+                  "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
+                  "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                  "repulse": { "distance": 200, "duration": 0.4 },
+                  "push": { "particles_nb": 6 },
+                  "remove": { "particles_nb": 2 }
+                }
+              },
+              "retina_detect": true
             });
-            
-            // Initialize particles.js
         });
         
         // Function to mark preferences complete with animation

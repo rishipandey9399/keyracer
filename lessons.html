@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
+    <style>
+      body { background: #070b18 !important; color: #fff; }
+      #particles-js { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -351,6 +355,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Hackathon-style Particles.js Background -->
+    <div id="particles-js"></div>
     <!-- Preloader -->
     <div id="preloader">
         <div class="loader"></div>
@@ -358,21 +364,6 @@
     
     <!-- Remove the no-js class since JS is working -->
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
-    
-    <!-- Racing cars animation -->
-    <div class="racing-car sports-car">
-        <div class="headlights"></div>
-        <div class="headlights right"></div>
-    </div>
-    <div class="racing-car formula" style="animation-delay: 2s; bottom: 120px;"></div>
-    <div class="racing-car" style="animation-delay: 4s; bottom: 80px;">
-        <div class="headlights"></div>
-        <div class="headlights right"></div>
-    </div>
-    <div class="racing-car sports-car" style="animation-delay: 6s; bottom: 160px;">
-        <div class="headlights"></div>
-        <div class="headlights right"></div>
-    </div>
     
     <!-- Header Section -->
     <header>
@@ -382,7 +373,7 @@
             </div>
             
             <nav class="main-nav">
-                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="typing-test.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
                 <a href="lessons.html" class="nav-item active"><i class="fas fa-graduation-cap"></i> Training</a>
                 <a href="typing-tips.html" class="nav-item"><i class="fas fa-lightbulb"></i> Tips</a>
                 <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Championship</a>
@@ -726,4 +717,25 @@
         </div>
     </div>
 </body>
+    <!-- Particles.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        "particles": {
+          "number": { "value": 120, "density": { "enable": true, "value_area": 900 } },
+          "color": { "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"] },
+          "shape": { "type": ["circle", "triangle", "edge"], "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+          "opacity": { "value": 0.6, "random": true, "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false } },
+          "size": { "value": 5, "random": true, "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false } },
+          "line_linked": { "enable": true, "distance": 180, "color": "#00C2FF", "opacity": 0.5, "width": 1.5 },
+          "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 } }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+          "modes": { "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 6 }, "remove": { "particles_nb": 2 } }
+        },
+        "retina_detect": true
+      });
+    </script>
 </html>
