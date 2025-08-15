@@ -287,14 +287,14 @@ function ensureAuthenticated(req, res, next) {
 
 // Protected route example
 app.get('/dashboard', ensureAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../preference.html'));
 });
 
 // Catch-all route to handle client-side routing
 app.get('*', (req, res) => {
   // Exclude API routes
   if (!req.path.startsWith('/api/')) {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    res.sendFile(path.join(__dirname, '../preference.html'));
   } else {
     res.status(404).json({ error: 'Not found' });
   }
