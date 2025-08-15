@@ -47,9 +47,6 @@ router.post('/leaderboard/submit', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error while submitting result' });
   }
 });
-const UserStats = require('../models/UserStats');
-const User = require('../models/User');
-const UserChallenge = require('../models/UserChallenge');
 
 // Get CodeRacer leaderboard
 router.get('/leaderboard', async (req, res) => {
