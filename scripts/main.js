@@ -467,6 +467,20 @@ function updateTimer() {
         });
     }
     
+    // Submit to server leaderboard
+fetch('/api/leaderboard/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(testRecord)
+})
+.then(res => res.json())
+.then(data => {
+    console.log('Leaderboard submission response:', data);
+})
+.catch(err => {
+    console.error('Error submitting to leaderboard:', err);
+});
+
     // Show test results
     displayResults(testRecord);
 }
@@ -883,4 +897,4 @@ function resetTest() {
     const resetBtn = document.getElementById('reset-btn');
     if (startBtn) startBtn.disabled = false;
     if (resetBtn) resetBtn.disabled = true;
-} 
+}
