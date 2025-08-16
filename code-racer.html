@@ -294,9 +294,175 @@
                             0 0 60px rgba(0, 255, 221, 0.4);
             }
         }
+                body {
+                    background: #070B18 !important;
+                }
 
-        @media (max-width: 768px) {
-            .hero-title {
+                .hero-section {
+                    background: linear-gradient(135deg, #0E1E38 60%, #00C2FF 100%);
+                    box-shadow: 0 8px 32px rgba(0,194,255,0.08);
+                    max-width: 1400px;
+                    margin: 0 auto 4rem auto;
+                    text-align: center;
+                    padding: 40px 0 20px 0;
+                }
+
+                .hero-title {
+                    font-family: 'Orbitron', 'Rajdhani', sans-serif;
+                    font-size: 2.8rem;
+                    color: #00C2FF;
+                    text-shadow: 0 2px 12px #0E1E38;
+                    margin-bottom: 10px;
+                }
+
+                .hero-subtitle {
+                    font-size: 1.25rem;
+                    color: #E1E6F2;
+                    margin-bottom: 28px;
+                }
+
+                .languages-grid {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 32px;
+                    justify-content: center;
+                    min-height: 300px;
+                    margin-bottom: 40px;
+                }
+
+                .language-card {
+                    background: #161b22;
+                    border-radius: 18px;
+                    padding: 28px 24px 22px 24px;
+                    width: 260px;
+                    box-shadow: 0 8px 32px rgba(0,194,255,0.10);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    position: relative;
+                    transition: all 0.3s;
+                    margin-bottom: 0;
+                }
+
+                .language-icon {
+                    font-size: 4rem;
+                    margin-bottom: 2rem;
+                    text-shadow: 0 0 20px rgba(0, 255, 221, 0.3);
+                }
+                .language-card .fa-python.language-icon {
+                    color: #3776AB;
+                }
+                .language-card .fa-js.language-icon {
+                    color: #F7E018;
+                }
+                .language-card .fa-java.language-icon {
+                    color: #E41B17;
+                }
+                }
+
+                .language-name {
+                    font-size: 2rem;
+                    margin-bottom: 1.5rem;
+                    color: #00C2FF;
+                    font-family: 'Orbitron', sans-serif;
+                }
+
+                .language-description {
+                    color: #E1E6F2;
+                    margin-bottom: 2.5rem;
+                    line-height: 1.8;
+                    font-size: 1.1rem;
+                    font-family: 'Rajdhani', sans-serif;
+                }
+
+                .start-learning-btn {
+                    display: inline-block;
+                    padding: 10px 28px;
+                    background: linear-gradient(135deg, #00C2FF, #0E1E38);
+                    color: #fff;
+                }
+                .language-card .fa-python ~ .start-learning-btn {
+                    background: linear-gradient(135deg, #3776AB, #0E1E38);
+                }
+                .language-card .fa-js ~ .start-learning-btn {
+                    background: linear-gradient(135deg, #F7E018, #0E1E38);
+                    color: #222;
+                }
+                .language-card .fa-java ~ .start-learning-btn {
+                    background: linear-gradient(135deg, #E41B17, #0E1E38);
+                    font-weight: 700;
+                    border-radius: 8px;
+                    font-size: 1.08rem;
+                    border: none;
+                    box-shadow: 0 2px 8px rgba(0,194,255,0.12);
+                    transition: background 0.3s, transform 0.2s;
+                    cursor: pointer;
+                    font-family: 'Rajdhani', sans-serif;
+                    margin-top: 10px;
+                }
+                .start-learning-btn:hover {
+                    background: linear-gradient(135deg, #FFC700, #E41B17);
+                }
+
+                .features-section {
+                    padding: 4rem 2rem;
+                    background: rgba(20, 27, 45, 0.7);
+                    backdrop-filter: blur(10px);
+                }
+
+                .features-title {
+                    text-align: center;
+                    font-size: 2.5rem;
+                    margin-bottom: 3rem;
+                    color: #00C2FF;
+                    font-family: 'Orbitron', sans-serif;
+                }
+
+                .features-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 2rem;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
+
+                .feature-card {
+                    background: rgba(10, 14, 23, 0.8);
+                    padding: 2rem;
+                    border-radius: 12px;
+                    text-align: center;
+                    border: 1px solid #00C2FF;
+                    transition: all 0.3s ease;
+                }
+                .feature-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 10px 25px rgba(0, 255, 221, 0.2);
+                    border-color: #FFC700;
+                }
+                .feature-card .fa-graduation-cap.feature-icon {
+                    color: #FFC700;
+                }
+                .feature-card .fa-chart-line.feature-icon {
+                    color: #E41B17;
+                }
+                .feature-card .fa-users.feature-icon {
+                    color: #00C2FF;
+                }
+                }
+                .feature-icon {
+                    font-size: 2.5rem;
+                    color: #00C2FF;
+                    margin-bottom: 1rem;
+                }
+                .feature-title {
+                    font-size: 1.25rem;
+                    color: #00C2FF;
+                    margin-bottom: 1rem;
+                }
+                .feature-description {
+                    color: #E1E6F2;
+                    line-height: 1.6;
+                }
                 font-size: 2.5rem;
             }
             
@@ -401,11 +567,6 @@
     <section class="features-section">
         <h2 class="features-title">Why Code Racer?</h2>
         <div class="features-grid">
-            <div class="feature-card">
-                <i class="fas fa-keyboard feature-icon"></i>
-                <h3 class="feature-title">Learn by Typing</h3>
-                <p class="feature-description">Improve your coding speed and accuracy through interactive typing challenges.</p>
-            </div>
 
             <div class="feature-card">
                 <i class="fas fa-graduation-cap feature-icon"></i>

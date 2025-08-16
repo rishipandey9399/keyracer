@@ -31,6 +31,7 @@ const Session = require('./models/Session');
 const authRoutes = require('./routes/authRoutes');
 const challengeRoutes = require('./routes/challengeRoutes');
 const leaderboardRoutes = require('./routes/leaderboardRoutes');
+const coderacerLeaderboardRoutes = require('./routes/coderacerLeaderboardRoutes');
 
 // Import middleware
 const { authenticate } = require('./middleware/authMiddleware');
@@ -58,6 +59,7 @@ app.use(helmet({
   contentSecurityPolicy: false // Disable for development, enable in production
 }));
 app.use(morgan('dev')); // Logging
+app.use('/api', coderacerLeaderboardRoutes);
 app.use(cookieParser()); // Parse cookies for auth
 
 // Session configuration

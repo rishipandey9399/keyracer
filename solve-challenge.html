@@ -1532,19 +1532,19 @@
                 console.log('Number of challenges:', data.challenges.length);
                 
                 // Log all challenge IDs for debugging
-                console.log('Available challenge IDs:', data.challenges.map(c => c._id));
+                console.log('Available challenge IDs:', data.challenges.map(c => c.id));
                 
                 currentChallenge = data.challenges.find(c => {
-                    console.log(`Comparing: ${c._id} (${typeof c._id}) === ${challengeId} (${typeof challengeId})`);
-                    return String(c._id) === String(challengeId); // Convert both to strings for comparison
+                    console.log(`Comparing: ${c.id} (${typeof c.id}) === ${challengeId} (${typeof challengeId})`);
+                    return String(c.id) === String(challengeId); // Convert both to strings for comparison
                 });
                 
                 console.log('Found challenge:', currentChallenge);
                 
                 if (!currentChallenge) {
                     console.error(`Challenge with ID ${challengeId} not found`);
-                    console.log('Available challenges:', data.challenges.map(c => ({ id: c._id, title: c.title })));
-                    alert(`Challenge not found! Looking for ID: ${challengeId}\nAvailable IDs: ${data.challenges.map(c => c._id).join(', ')}`);
+                    console.log('Available challenges:', data.challenges.map(c => ({ id: c.id, title: c.title })));
+                    alert(`Challenge not found! Looking for ID: ${challengeId}\nAvailable IDs: ${data.challenges.map(c => c.id).join(', ')}`);
                     window.location.href = 'challenges.html';
                     return;
                 }
@@ -1592,7 +1592,7 @@
 
         // Detect language from challenge ID or structure
         function detectLanguageFromChallenge(challenge) {
-            const challengeId = challenge._id.toString();
+            const challengeId = challenge.id.toString();
             
             if (challengeId.startsWith('java')) {
                 return 'java';
@@ -1808,7 +1808,7 @@
                     showSuccessModal(completionTime);
                     
                     // Update leaderboard if user is logged in
-                    await updateLeaderboard(currentChallenge._id, completionTime);
+                    await updateLeaderboard(currentChallenge.id, completionTime);
                 } else {
                     alert('❌ Solution is not correct. Please check your code and try again.\n\nExpected: ' + 
                           (currentChallenge.examples?.output || 'See challenge description') + 
@@ -1845,7 +1845,7 @@
             
             // Save completion data for challenges.html to pick up
             const completionData = {
-                challengeId: currentChallenge._id,
+                challengeId: currentChallenge.id,
                 points: getPointsForChallenge(currentChallenge),
                 completionTime: completionTime,
                 timestamp: Date.now()
