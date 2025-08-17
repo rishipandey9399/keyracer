@@ -1858,8 +1858,13 @@
         // Update leaderboard
         async function updateLeaderboard(challengeId, completionTime) {
             try {
-                // Get userId from localStorage or session
-                const userId = window.currentUserId || localStorage.getItem('userId');
+                // Get userId from window, localStorage, or Google login
+                let userId = window.currentUserId || localStorage.getItem('userId');
+                if (!userId) {
+                    // Try to get from Google login
+                    const userData = JSON.parse(localStorage.getItem('typingTestUserData') || '{}');
+                    userId = userData.id;
+                }
                 if (!userId) {
                     console.log('No userId found, skipping coderacer-leaderboard update');
                     return;
