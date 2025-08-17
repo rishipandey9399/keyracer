@@ -1858,35 +1858,32 @@
         // Update leaderboard
         async function updateLeaderboard(challengeId, completionTime) {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    console.log('No token found, skipping leaderboard update');
+                // Get userId from localStorage or session
+                const userId = window.currentUserId || localStorage.getItem('userId');
+                if (!userId) {
+                    console.log('No userId found, skipping coderacer-leaderboard update');
                     return;
                 }
-
-                const response = await fetch('/api/leaderboard/challenge-completion', {
+                // Get attempt number (if tracked), default to 1
+                const attemptNumber = window.currentAttemptNumber || 1;
+                const pointsEarned = getPointsForChallenge(currentChallenge);
+                const response = await fetch('/api/coderacer-leaderboard/submit', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        challengeId: challengeId,
-                        challengeTitle: currentChallenge?.title || 'Unknown Challenge',
-                        completionTime: completionTime,
-                        points: getPointsForChallenge(currentChallenge),
-                        difficulty: currentChallenge?.difficulty || 'unknown',
-                        category: currentChallenge?.category || 'General'
+                        userId,
+                        pointsEarned,
+                        attempts: attemptNumber,
+                        completionTime
                     })
                 });
-
                 if (response.ok) {
-                    console.log('Leaderboard updated successfully');
+                    console.log('Coderacer leaderboard updated successfully');
                 } else {
-                    console.error('Failed to update leaderboard');
+                    console.error('Failed to update coderacer leaderboard');
                 }
             } catch (error) {
-                console.error('Error updating leaderboard:', error);
+                console.error('Error updating coderacer leaderboard:', error);
             }
         }
 

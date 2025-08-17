@@ -92,279 +92,189 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        .leaderboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+        body {
+            background: #000 !important;
             min-height: 100vh;
+            font-family: 'Rajdhani', 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
         }
-
-        .leaderboard-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2rem 1.5rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
         }
-
-        .leaderboard-header h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: 3rem;
-            color: #fff;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        .leaderboard-table {
+            max-width: 1200px;
+            margin: 4rem auto 2rem auto;
+            background: rgba(20, 27, 45, 0.85);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,194,255,0.12);
+            padding: 2.5rem 2rem;
+            position: relative;
+            z-index: 1;
         }
-
-        .leaderboard-header p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 0;
-        }
-
-        .scoring-info {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
-            body {
-                background: #070B18 !important;
-            }
-
-            .leaderboard-header {
-                background: linear-gradient(135deg, #0E1E38 60%, #00C2FF 100%);
-                box-shadow: 0 8px 32px rgba(0,194,255,0.08);
-                max-width: 1400px;
-                margin: 0 auto 4rem auto;
-                text-align: center;
-                padding: 40px 0 20px 0;
-                border-radius: 18px;
-            }
-
-            .leaderboard-header h1 {
-                font-family: 'Orbitron', 'Rajdhani', sans-serif;
-                font-size: 2.8rem;
-                color: #00C2FF;
-                text-shadow: 0 2px 12px #0E1E38;
-                margin-bottom: 10px;
-            }
-
-            .leaderboard-header p {
-                font-size: 1.25rem;
-                color: #E1E6F2;
-                margin-bottom: 28px;
-            }
-
-            .scoring-info {
-                background: rgba(20, 27, 45, 0.7);
-                border-radius: 12px;
-                padding: 2rem;
-                margin: 2rem 0;
-                backdrop-filter: blur(10px);
-                border: 1px solid #00C2FF;
-            }
-
-            .scoring-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 2rem;
-                max-width: 1200px;
-                margin: 0 auto;
-            }
-
-            .scoring-card {
-                background: #161b22;
-                padding: 1.5rem;
-                border-radius: 12px;
-                border: 1px solid #00C2FF;
-                transition: all 0.3s ease;
-            }
-            .scoring-card:hover {
-                box-shadow: 0 10px 25px rgba(0, 255, 221, 0.2);
-                border-color: #FFC700;
-            }
-            .scoring-card h3 {
-                color: #00C2FF;
-                font-family: 'Orbitron', 'Rajdhani', sans-serif;
-                margin-bottom: 1rem;
-                font-size: 1.1rem;
-            }
-            .scoring-card ul {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-            .scoring-card li {
-                color: #E1E6F2;
-                margin-bottom: 0.5rem;
-                padding-left: 1.2rem;
-                position: relative;
-            }
-            .scoring-card li:before {
-                content: "▶";
-                position: absolute;
-                left: 0;
-                color: #00C2FF;
-            }
-            .filters-section {
-                background: rgba(20, 27, 45, 0.7);
-                border-radius: 12px;
-                padding: 1.5rem;
-                margin-bottom: 2rem;
-                backdrop-filter: blur(10px);
-                border: 1px solid #00C2FF;
-            }
-            .filters-grid {
-            gap: 1rem;
-            padding: 1rem;
-            font-weight: 600;
+        .table-header {
+            display: grid;
+            grid-template-columns: 70px 1.1fr 0.9fr 1.1fr 1fr 1fr 1fr 1fr;
+            align-items: center;
+            background: linear-gradient(90deg, #00C2FF 0%, #0E1E38 100%);
             color: #fff;
             font-family: 'Orbitron', monospace;
+            font-size: 1.15rem;
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 1.2rem 0;
         }
-
+        .table-header .fa-star,
+        .table-header .fa-code,
+        .table-header .fa-clock,
+        .table-header .fa-bullseye,
+        .table-header .fa-fire,
+        .table-header .fa-medal {
+            color: #00C2FF !important;
+            filter: drop-shadow(0 0 2px #00C2FF);
+        }
         .leaderboard-row {
             display: grid;
-            grid-template-columns: 60px 1fr 100px 100px 100px 120px 100px 80px;
-            gap: 1rem;
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            grid-template-columns: 70px 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 1.2rem;
+            padding: 1.2rem 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
             font-family: 'Rajdhani', sans-serif;
+            background: transparent;
         }
-
         .leaderboard-row:hover {
-            background: rgba(100, 255, 218, 0.1);
-            transform: translateY(-2px);
+            background: rgba(0, 194, 255, 0.08);
+            transform: translateY(-2px) scale(1.01);
         }
-
         .rank {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             text-align: center;
-            color: #64ffda;
+            color: #00C2FF;
+            border-radius: 50%;
+            background: rgba(0,194,255,0.08);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
         }
-
         .rank.top-3 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #ffd700 0%, #00C2FF 100%);
+            color: #0E1E38;
         }
-
         .rank.rank-1 { color: #ffd700; }
         .rank.rank-2 { color: #c0c0c0; }
         .rank.rank-3 { color: #cd7f32; }
-
         .player-info {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 1rem;
         }
-
         .player-avatar {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00C2FF 0%, #0E1E38 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0,194,255,0.12);
         }
-
         .player-details h4 {
             margin: 0;
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            font-family: 'Orbitron', monospace;
         }
-
         .player-details .player-level {
-            color: #64ffda;
-            font-size: 0.9rem;
+            color: #00C2FF;
+            font-size: 0.95rem;
             margin: 0;
         }
-
         .points {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: bold;
-            color: #64ffda;
+            color: #00C2FF;
         }
-
         .challenges-completed {
             color: #fff;
+            font-weight: 500;
         }
-
         .avg-time {
             color: #ffd700;
             font-weight: 600;
         }
-
         .accuracy {
             color: #4caf50;
             font-weight: 600;
         }
-
         .streak {
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-            padding: 0.3rem 0.6rem;
-            border-radius: 15px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 16px;
             color: #fff;
             font-weight: bold;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(255,107,107,0.12);
         }
-
         .streak.high-streak {
             background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
-            color: #000;
+            color: #0E1E38;
         }
-
         .badges {
             display: flex;
-            gap: 0.3rem;
+            gap: 0.4rem;
             flex-wrap: wrap;
         }
-
         .badge {
-            background: #64ffda;
-            color: #000;
-            padding: 0.2rem 0.5rem;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            background: #00C2FF;
+            color: #fff;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
             font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,194,255,0.12);
         }
-
-        .badge.gold { background: #ffd700; }
-        .badge.silver { background: #c0c0c0; }
-        .badge.bronze { background: #cd7f32; }
-
-        @media (max-width: 768px) {
-            .leaderboard-container {
+        .badge.gold { background: #ffd700; color: #0E1E38; }
+        .badge.silver { background: #c0c0c0; color: #0E1E38; }
+        .badge.bronze { background: #cd7f32; color: #fff; }
+        @media (max-width: 900px) {
+            .leaderboard-table {
                 padding: 1rem;
             }
-
-            .leaderboard-header h1 {
-                font-size: 2rem;
-            }
-
             .table-header,
             .leaderboard-row {
-                grid-template-columns: 50px 1fr 80px 80px;
-                gap: 0.5rem;
-                font-size: 0.9rem;
+                grid-template-columns: 50px 1fr 80px 80px 80px 80px 80px 80px;
+                font-size: 0.95rem;
             }
-
+        }
+        @media (max-width: 600px) {
+            .leaderboard-table {
+                padding: 0.5rem;
+            }
+            .table-header,
+            .leaderboard-row {
+                grid-template-columns: 40px 1fr 60px 60px;
+                font-size: 0.85rem;
+            }
             .table-header :nth-child(n+5),
             .leaderboard-row :nth-child(n+5) {
                 display: none;
-            }
-
-            .scoring-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .filters-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -402,24 +312,123 @@
     </header>
 
     <!-- Removed leaderboard-container -->
-        <div class="leaderboard-header">
-            <h1><i class="fas fa-trophy"></i> CodeRacer Challenge Leaderboard</h1>
-            <p>Elite rankings of the top programming challenge performers</p>
-        </div>
-
-
-        
-        </div>
-
-        <!-- Leaderboard Table -->
-        <div class="leaderboard-table">
-            <div class="table-header" style="display: grid; grid-template-columns: 70px 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr; align-items: center; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: #fff; font-family: 'Orbitron', monospace; font-size: 1.1rem; border-radius: 12px 12px 0 0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1rem 0;">
+        <div id="particles-js"></div>
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+        <script>
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00C2FF"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 4,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00C2FF",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "repulse"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 400,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        </script>
+    <div class="leaderboard-table">
+            <div class="table-header">
                 <div style="text-align:center;">Rank</div>
                 <div style="text-align:left;">Player</div>
                 <div style="text-align:center;"><i class="fas fa-star"></i> Points</div>
-                <div style="text-align:center;"><i class="fas fa-code"></i> Solved</div>
-                <div style="text-align:center;"><i class="fas fa-clock"></i> Avg Time</div>
-                <div style="text-align:center;"><i class="fas fa-bullseye"></i> Accuracy</div>
+                <div style="text-align:center; margin-left:12px;"><i class="fas fa-code"></i> Solved</div>
+                <div style="text-align:center; margin-left:24px;"><i class="fas fa-clock"></i> Avg Time</div>
+                <div style="text-align:center; margin-left:24px;"><i class="fas fa-bullseye"></i> Accuracy</div>
                 <div style="text-align:center;"><i class="fas fa-fire"></i> Streak</div>
                 <div style="text-align:center;"><i class="fas fa-medal"></i> Badges</div>
             </div>
@@ -433,55 +442,6 @@
     <!-- End leaderboard-header and leaderboard-table moved up one level -->
 
     <!-- Footer Section -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3><i class="fas fa-code"></i> CodeRacer</h3>
-                <p>Master programming through interactive challenges and real-time competitions.</p>
-                <div class="social-links">
-                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
-            
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="code-racer.html">Home</a></li>
-                    <li><a href="challenges.html">Challenges</a></li>
-                    <li><a href="coderacer-leaderboard.html">Leaderboard</a></li>
-                    <li><a href="about.html">About</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h4>Languages</h4>
-                <ul>
-                    <li><a href="python-tutorial.html">Python</a></li>
-                    <li><a href="java-tutorial.html">Java</a></li>
-                    <li><a href="#">JavaScript</a></li>
-                    <li><a href="#">C++</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Documentation</a></li>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Bug Reports</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2024 KeyRacer. All rights reserved. | Built with ❤️ for developers</p>
-        </div>
-    </footer>
-
     <script src="scripts/main.js"></script>
     <script>
         // Leaderboard functionality with real API integration
@@ -701,18 +661,5 @@
     </script>
 
     <!-- Legal Links Footer -->
-    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
-        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
-            <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
-                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
-                Privacy Policy
-            </a>
-            <span style="color: #555; font-size: 0.8rem;">|</span>
-            <a href="terms-conditions.html" style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
-                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
-                Terms & Conditions
-            </a>
-        </div>
-    </div>
 </body>
 </html>
