@@ -6,14 +6,29 @@ const User = require('../models/User');
 // Submit coding challenge result
 router.post('/coderacer-leaderboard/submit', async (req, res) => {
   try {
-    const { userId, pointsEarned, attempts, completionTime } = req.body;
-    if (!userId || !pointsEarned || !attempts || !completionTime) {
+    const { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
+    if ((!userId && !email && !googleId) || !pointsEarned || !attempts || !completionTime) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
-    let stats = await CoderacerStats.findOne({ userId });
+    let userObjectId = userId;
+    // If userId is not a valid ObjectId, try to look up by googleId or email
+    if (!userObjectId || !userObjectId.match(/^[0-9a-fA-F]{24}$/)) {
+      let user = null;
+      if (googleId) {
+        user = await User.findOne({ googleId });
+      } else if (email) {
+        user = await User.findOne({ email });
+      }
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+      userObjectId = user._id;
+    }
+
+    let stats = await CoderacerStats.findOne({ userId: userObjectId });
     if (!stats) {
-      stats = new CoderacerStats({ userId });
+      stats = new CoderacerStats({ userId: userObjectId });
     }
 
     // Update stats
