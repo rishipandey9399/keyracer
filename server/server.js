@@ -48,7 +48,12 @@ connectDB().then(connected => {
   }
 });
 
-// Middleware
+// Global request logger for diagnostics
+app.use((req, res, next) => {
+  console.log(`[GLOBAL LOG] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
@@ -61,6 +66,29 @@ app.use(helmet({
 app.use(morgan('dev')); // Logging
 app.use('/api', coderacerLeaderboardRoutes);
 app.use(cookieParser()); // Parse cookies for auth
+
+// Diagnostic route to list all registered endpoints
+app.get('/diagnostic/routes', (req, res) => {
+  const routes = [];
+  app._router.stack.forEach(middleware => {
+    if (middleware.route) { // routes registered directly on the app
+      routes.push({
+        path: middleware.route.path,
+        methods: middleware.route.methods
+      });
+    } else if (middleware.name === 'router') { // router middleware 
+      middleware.handle.stack.forEach(handler => {
+        if (handler.route) {
+          routes.push({
+            path: handler.route.path,
+            methods: handler.route.methods
+          });
+        }
+      });
+    }
+  });
+  res.json({ routes });
+});
 
 // Session configuration
 app.use(session({
