@@ -1,10 +1,13 @@
 const express = require('express');
+console.log('[DIAGNOSTIC] coderacerLeaderboardRoutes.js loaded');
 const router = express.Router();
 const CoderacerStats = require('../models/CoderacerStats');
 const User = require('../models/User');
 
 // Submit coding challenge result
 router.post('/coderacer-leaderboard/submit', async (req, res) => {
+  console.log('[DIAGNOSTIC] POST /api/coderacer-leaderboard/submit called');
+  console.log('[DIAGNOSTIC] Request body:', req.body);
   try {
     const { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
     if ((!userId && !email && !googleId) || !pointsEarned || !attempts || !completionTime) {
