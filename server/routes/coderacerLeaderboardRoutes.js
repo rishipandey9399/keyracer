@@ -27,13 +27,19 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
       }
       if (!user) {
         // Auto-create user for first-time Google/email sign-in
-        const newUser = new User({
+        const isGoogle = !!googleId;
+        const newUserData = {
           googleId: googleId || undefined,
           email: email || `user_${Date.now()}@keyracer.in`,
           displayName: `User${Math.floor(Math.random() * 100000)}`,
-          authMethod: googleId ? 'google' : 'local',
+          authMethod: isGoogle ? 'google' : 'local',
           isVerified: true
-        });
+        };
+        // Only set password for local users
+        if (!isGoogle) {
+          newUserData.password = Math.random().toString(36).slice(-8); // random password
+        }
+        const newUser = new User(newUserData);
         await newUser.save();
         user = newUser;
       }
