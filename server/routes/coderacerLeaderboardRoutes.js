@@ -26,8 +26,16 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
         user = await User.findOne({ email });
       }
       if (!user) {
-        responseSent = true;
-        return res.status(404).json({ success: false, message: 'User not found' });
+        // Auto-create user for first-time Google/email sign-in
+        const newUser = new User({
+          googleId: googleId || undefined,
+          email: email || `user_${Date.now()}@keyracer.in`,
+          displayName: `User${Math.floor(Math.random() * 100000)}`,
+          authMethod: googleId ? 'google' : 'local',
+          isVerified: true
+        });
+        await newUser.save();
+        user = newUser;
       }
       userObjectId = user._id;
     }
