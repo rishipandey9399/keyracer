@@ -6,7 +6,7 @@ const User = require('../models/User');
 
 // Submit coding challenge result
 router.post('/coderacer-leaderboard/submit', async (req, res) => {
-  console.log('[DIAGNOSTIC] POST /api/coderacer-leaderboard/submit called');
+  console.log('[DIAGNOSTIC] POST /coderacer-leaderboard/submit called');
   console.log('[DIAGNOSTIC] Request body:', req.body);
   try {
     const { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
