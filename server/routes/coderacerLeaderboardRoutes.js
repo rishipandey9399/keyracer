@@ -26,26 +26,26 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
         user = await User.findOne({ email });
       }
       if (!user) {
-        // Auto-create user for first-time Google/email sign-in
-        const isGoogle = !!googleId;
-        const newUserData = {
-          googleId: googleId || undefined,
-          email: email || `user_${Date.now()}@keyracer.in`,
-          displayName: `User${Math.floor(Math.random() * 100000)}`,
-          authMethod: isGoogle ? 'google' : 'local',
-          isVerified: true
-        };
-        // Only set password for local users
-        if (!isGoogle) {
-          newUserData.password = Math.random().toString(36).slice(-8); // random password
+        // Only auto-create user for Google sign-in
+        if (googleId) {
+          const newUserData = {
+            googleId: googleId,
+            email: email || `user_${Date.now()}@keyracer.in`,
+            displayName: `User${Math.floor(Math.random() * 100000)}`,
+            authMethod: 'google',
+            isVerified: true
+          };
+          const newUser = new User(newUserData);
+          await newUser.save();
+          user = newUser;
+        } else {
+          // Do not auto-create local users in leaderboard submission
+          responseSent = true;
+          return res.status(404).json({ success: false, message: 'User not found and cannot be auto-created without Google ID.' });
         }
-        const newUser = new User(newUserData);
-        await newUser.save();
-        user = newUser;
       }
       userObjectId = user._id;
     }
-
     let stats = await CoderacerStats.findOne({ userId: userObjectId });
     if (!stats) {
       stats = new CoderacerStats({ userId: userObjectId });
