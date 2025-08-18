@@ -8,9 +8,11 @@ const User = require('../models/User');
 router.post('/coderacer-leaderboard/submit', async (req, res) => {
   console.log('[DIAGNOSTIC] POST /coderacer-leaderboard/submit called');
   console.log('[DIAGNOSTIC] Request body:', req.body);
+  let responseSent = false;
   try {
     const { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
     if ((!userId && !email && !googleId) || !pointsEarned || !attempts || !completionTime) {
+      responseSent = true;
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
@@ -24,6 +26,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
         user = await User.findOne({ email });
       }
       if (!user) {
+        responseSent = true;
         return res.status(404).json({ success: false, message: 'User not found' });
       }
       userObjectId = user._id;
@@ -53,9 +56,13 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
     }
 
     await stats.save();
+    responseSent = true;
     res.json({ success: true, message: 'Challenge result saved.' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error.' });
+    console.error('[DIAGNOSTIC] Error in /coderacer-leaderboard/submit:', error);
+    if (!responseSent) {
+      res.status(500).json({ success: false, message: 'Server error.' });
+    }
   }
 });
 
