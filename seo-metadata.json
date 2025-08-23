@@ -5,9 +5,9 @@
     "baseUrl": "https://keyracer.in"
   },
   "global": {
-    "title": "KeyRacer - The Ultimate Keyboard Racing Championship",
-    "description": "KeyRacer is a comprehensive skill development platform combining typing practice, coding challenges, and professional communication skills training. Improve your typing speed, learn programming through interactive exercises, and enhance your professional skills.",
-    "keywords": "typing test, typing speed, code typing, programming practice, keyboard racing, typing competition, coding challenges, professional skills",
+  "title": "KeyRacer | keyracer.in - The Ultimate Typing, Coding & Hackathon Hub",
+  "description": "KeyRacer (keyracer.in) is the all-in-one platform for typing speed tests, code practice, hackathons, and professional skills. Improve your typing speed, learn programming, and compete in hackathons.",
+  "keywords": "keyracer, keyracer.in, typing test, typing speed, code typing, programming practice, keyboard racing, typing competition, coding challenges, hackathon, professional skills, typing hub, coding hub, preference.html",
     "author": "KeyRacer",
     "robots": "index, follow",
     "viewport": "width=device-width, initial-scale=1.0",
@@ -30,12 +30,20 @@
   },
   "pages": {
     "home": {
-      "path": "/index.html",
-      "title": "KeyRacer - The Ultimate Keyboard Racing Championship",
-      "description": "Improve your typing speed, learn programming, and enhance professional skills with KeyRacer's comprehensive platform. Join the keyboard racing championship today!",
-      "keywords": "typing test, keyboard racing, typing championship, typing competition, typing speed test, wpm test",
+      "path": "/preference.html",
+      "title": "KeyRacer - The Ultimate Typing & Coding Hub | preference.html",
+      "description": "KeyRacer is your all-in-one platform for typing speed tests, code practice, hackathons, and professional skills. Start your journey to mastery today!",
+      "keywords": "keyracer, keyracer.in, typing test, typing speed, code typing, programming practice, keyboard racing, typing competition, coding challenges, hackathon, professional skills, typing hub, coding hub, preference.html",
       "priority": 1.0,
       "changeFrequency": "daily"
+    },
+    "hackathon": {
+      "path": "/hackathon.html",
+      "title": "KeyRacer Hackathons | Compete, Code & Conquer",
+      "description": "Join exciting coding hackathons on KeyRacer! Solve challenges, compete with developers, and win amazing prizes. Sign up for our next event!",
+      "keywords": "keyracer, keyracer.in, hackathon, coding competition, programming contest, online hackathon, coding challenges, developer events, code race, hackathon platform",
+      "priority": 0.95,
+      "changeFrequency": "weekly"
     },
     "typingTest": {
       "path": "/typing-test.html",
