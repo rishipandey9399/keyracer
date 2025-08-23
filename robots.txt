@@ -10,10 +10,9 @@ Allow: /preference.html
 Allow: /typing-test.html
 Allow: /code-racer.html
 Allow: /hackathon.html
-Allow: /challenges.html
 Allow: /pro-skills.html
 Allow: /about.html
-Allow: /leaderboard.html
+
 
 # Disallow admin and private areas
 Disallow: /admin/

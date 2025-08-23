@@ -67,7 +67,6 @@
                     "@type": "CourseInstance",
                     "name": "JavaScript Development",
                     "description": "Master JavaScript with hands-on coding practice"
-                }
             ]
         },
         "breadcrumb": {
@@ -96,6 +95,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* Responsive header and layout for mobile */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 0 10px;
+            }
+            .logo-img {
+                height: 60px;
+                margin-right: 10px;
+            }
+            .main-nav {
+                flex-direction: column;
+                width: 100%;
+                gap: 8px;
+            }
+            .header-actions {
+                flex-direction: row;
+                gap: 8px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                font-size: 15px;
+            }
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .logo-img {
+                height: 40px;
+            }
+            .main-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .header-actions {
+                flex-direction: column;
+                gap: 6px;
+                width: 100%;
+                align-items: flex-end;
+            }
+            .hero-section {
+                padding: 24px 0 10px 0;
+            }
+            .languages-grid {
+                gap: 1rem;
+                padding: 0 0.5rem 2rem;
+            }
+            .language-card {
+                width: 100%;
+                min-width: 0;
+                padding: 1rem 0.5rem;
+            }
+            .language-name {
+                font-size: 1.2rem;
+            }
+            .language-description {
+                font-size: 1rem;
+            }
+        }
+        @media (max-width: 400px) {
+            body {
+                font-size: 14px;
+            }
+            .hero-title {
+                font-size: 1.2rem;
+            }
+        }
         body {
             background: #070B18 !important;
         }
@@ -181,7 +254,9 @@
         }
 
         .language-name {
-            font-size: 2rem;
+                font-size: 2rem;
+            }
+        .language-name {
             margin-bottom: 1.5rem;
             color: var(--text-color);
             font-family: 'Orbitron', sans-serif;
@@ -463,8 +538,6 @@
                     color: #E1E6F2;
                     line-height: 1.6;
                 }
-                font-size: 2rem;
-
             
             
             .hero-subtitle {

@@ -10,6 +10,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* Responsive header and layout for mobile */
+        @media (max-width: 900px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 0 10px;
+            }
+            .logo-img {
+                height: 60px;
+                margin-right: 10px;
+            }
+            .main-nav {
+                flex-direction: column;
+                width: 100%;
+                gap: 8px;
+            }
+            .header-actions {
+                flex-direction: row;
+                gap: 8px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                font-size: 15px;
+            }
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .logo-img {
+                height: 40px;
+            }
+            .main-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .header-actions {
+                flex-direction: column;
+                gap: 6px;
+                width: 100%;
+                align-items: flex-end;
+            }
+            .hero-title {
+                font-size: 1.6rem !important;
+            }
+        }
+        @media (max-width: 400px) {
+            body {
+                font-size: 14px;
+            }
+            .hero-title {
+                font-size: 1.1rem !important;
+            }
+        }
         /* ...full CSS from your original file... */
     </style>
     <!-- Structured Data for Challenges Page -->
