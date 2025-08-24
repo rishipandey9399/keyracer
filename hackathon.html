@@ -841,9 +841,9 @@
         <div class="role-cards">
             <div class="role-card">
                 <div class="icon"><i class="fas fa-user-cog"></i></div>
-                <div class="card-title">Conductor</div>
+                <div class="card-title">Organizer</div>
                 <div class="card-desc">Create and manage hackathon events, upload problem statements, track submissions, and evaluate participants' performance.</div>
-                <button class="card-btn" data-bs-toggle="modal" data-bs-target="#conductorModal">Enter as Conductor</button>
+                <button class="card-btn" data-bs-toggle="modal" data-bs-target="#conductorModal">Enter as Organizer</button>
             </div>
             <div class="role-card">
                 <div class="icon"><i class="fas fa-laptop-code"></i></div>
@@ -890,19 +890,19 @@
         </div>
     </div>
     
-    <!-- Conductor Modal -->
+    <!-- Organizer Modal -->
     <div class="modal fade" id="conductorModal" tabindex="-1" aria-labelledby="conductorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="conductorModalLabel" style="color: var(--conductor-color); font-family: 'Orbitron', sans-serif;">Enter as Conductor</h5>
+                    <h5 class="modal-title" id="conductorModalLabel" style="color: var(--conductor-color); font-family: 'Orbitron', sans-serif;">Enter as Organizer</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="conductor-options mb-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="conductorOption" id="newConductor" value="new" checked>
-                            <label class="form-check-label" for="newConductor">I'm a new conductor</label>
+                            <label class="form-check-label" for="newConductor">I'm a new organizer</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="conductorOption" id="existingConductor" value="existing">
@@ -927,7 +927,7 @@
                             <div class="mb-3">
                                 <label for="hackathonCode" class="form-label">Hackathon Code</label>
                                 <input type="text" class="form-control" id="hackathonCode" placeholder="Enter your unique hackathon code">
-                                <div class="form-text text-light">Enter your unique code to access the conductor dashboard.</div>
+                                <div class="form-text text-light">Enter your unique code to access the organizer dashboard.</div>
                             </div>
                         </div>
                     </form>
