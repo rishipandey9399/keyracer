@@ -521,21 +521,12 @@
     </style>
 </head>
 <body>
-  <!-- Corner Logo -->
-  <div class="corner-logo">
-    <a href="https://keyracer.in" class="logo-link">
-      <img src="assets/images/logo.png" alt="KeyRacer Logo" class="corner-logo-img">
-    </a>
-  </div>
-
-  <!-- SEO-Friendly Navigation -->
-  <nav class="main-nav" style="margin: 32px auto 0 auto; text-align: center;">
-    <a href="typing-test.html" class="nav-item">Type Racer - Typing Speed Test</a>
-    <a href="code-racer.html" class="nav-item">CodeRacer - Coding Challenges</a>
-    <a href="pro-skills.html" class="nav-item">Pro Skills - Resume, Email, Career Tools</a>
-    <a href="hackathon.html" class="nav-item">Hackathon - Competitive Events</a>
-    <a href="leaderboard.html" class="nav-item">Leaderboard - Top Performers</a>
-  </nav>
+    <!-- Corner Logo -->
+    <div class="corner-logo">
+        <a href="https://keyracer.in" class="logo-link">
+            <img src="assets/images/logo.png" alt="KeyRacer Logo" class="corner-logo-img">
+        </a>
+    </div>
 
   <!-- Main Content -->
   <div class="preference-page">
@@ -568,17 +559,20 @@
     </div>
   </div>
 
-  <!-- Legal Footer -->
-  <footer class="site-footer" style="margin-top: 48px; text-align: center;">
-    <div class="footer-links">
-      <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
-      <span style="color: #555; font-size: 0.8rem;">|</span>
-      <a href="terms-conditions.html" class="footer-link">Terms & Conditions</a>
+    <!-- Legal Links Footer (matches code-racer.html) -->
+    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
+            <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
+                Privacy Policy
+            </a>
+            <span style="color: #555; font-size: 0.8rem;">|</span>
+            <a href="terms-conditions.html" style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
+                Terms & Conditions
+            </a>
+        </div>
     </div>
-    <div style="margin-top: 8px; color: #aaa; font-size: 0.9rem;">
-      &copy; <span id="current-year"></span> KeyRacer. All rights reserved.
-    </div>
-  </footer>
 
   <!-- Social Profiles for SEO -->
   <div style="display:none;">

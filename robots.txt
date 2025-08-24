@@ -1,3 +1,9 @@
+# Block non-existent Python Challenges Enhanced page from search engines
+Disallow: /python-challenges-enhanced.html
+# Block Python Challenges page from search engines
+Disallow: /challenges.html
+# Block CodeRacer Leaderboard from search engines
+Disallow: /coderacer-leaderboard.html
 # KeyRacer Robots.txt
 # Updated for improved search engine visibility
 
