@@ -1,125 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+<!-- Essential SEO Meta Tags -->
+<title>KeyRacer: The Ultimate Typing & Coding Hub</title>
+<meta name="description" content="Elevate your skills with KeyRacer, the all-in-one platform for typing speed tests, coding challenges, and professional skill development. Start your journey to mastery today!">
+<meta name="keywords" content="KeyRacer, typing test, coding practice, programming challenges, professional skills, WPM test, typing speed, learn to code, developer tools">
+<meta name="author" content="KeyRacer">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://keyracer.in" />
 
-  <!-- Brand-First SEO Meta Tags -->
-  <title>KeyRacer - Typing, Coding & Professional Skills Practice Platform</title>
-  <meta name="description" content="KeyRacer offers free typing tests, interactive coding challenges, and professional skill tools like email writing, resume building, and hackathon management. Improve your speed, accuracy, coding, and career skills with KeyRacer.">
-  <meta name="keywords" content="KeyRacer, typing test, code racer, coding challenges, resume builder, email writing, hackathon management, professional skills, WPM test, programming, leaderboard, practice platform">
-  <meta name="author" content="KeyRacer">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://keyracer.in/" />
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://keyracer.in/sitemap.xml" />
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://keyracer.in/">
-  <meta property="og:title" content="KeyRacer - Typing, Coding & Professional Skills Practice Platform">
-  <meta property="og:description" content="KeyRacer offers free typing tests, coding challenges, resume builder, email writing, and hackathon management. Boost your skills with KeyRacer.">
-  <meta property="og:image" content="https://keyracer.in/assets/images/logo.png">
-  <meta property="og:site_name" content="KeyRacer">
-  <meta property="og:see_also" content="https://www.instagram.com/keyracer.in/">
-  <meta property="og:see_also" content="https://x.com/keyracerin">
-  <meta property="og:see_also" content="https://www.youtube.com/@keyracer-bsfs">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="KeyRacer - Typing, Coding & Professional Skills Practice Platform">
-  <meta name="twitter:description" content="KeyRacer offers free typing tests, coding challenges, resume builder, email writing, and hackathon management. Boost your skills with KeyRacer.">
-  <meta name="twitter:image" content="https://keyracer.in/assets/images/logo.png">
-  <meta name="twitter:site" content="@keyracerin">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/assets/images/logo.png">
-  <link rel="apple-touch-icon" href="/assets/images/logo.png">
-
-  <!-- Organization Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "KeyRacer",
-    "url": "https://keyracer.in/",
-    "logo": "https://keyracer.in/assets/images/logo.png",
-    "sameAs": [
-      "https://www.instagram.com/keyracer.in/",
-      "https://x.com/keyracerin",
-      "https://www.youtube.com/@keyracer-bsfs"
-    ]
-  }
-  </script>
-
-  <!-- Website Schema.org with SearchAction -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "KeyRacer",
-    "url": "https://keyracer.in/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://keyracer.in/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
+<!-- WebSite Schema Markup -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "KeyRacer",
+  "url": "https://keyracer.in",
+  "description": "All-in-one typing platform for speed tests, code practice, and professional skills training.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://keyracer.in/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "hasPart": [
+    {
+      "@type": "WebPage",
+      "name": "Typing Speed Test",
+      "url": "https://keyracer.in/typing-test.html"
+    },
+    {
+      "@type": "WebPage",
+      "name": "CodeRacer",
+      "url": "https://keyracer.in/code-racer.html"
+    },
+    {
+      "@type": "WebPage",
+      "name": "Professional Skills",
+      "url": "https://keyracer.in/pro-skills.html"
+    },
+	{
+      "@type": "WebPage",
+      "name": "Hackathons",
+      "url": "https://keyracer.in/hackathon.html"
     }
-  }
-  </script>
+  ]
+}
+</script>
 
-  <!-- Styles and Fonts -->
-  <link rel="stylesheet" href="styles/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-        /* Responsive layout and text for mobile-friendliness */
-        @media (max-width: 900px) {
-            .preference-page {
-                padding: 0 10px;
-            }
-            .preference-cards {
-                flex-direction: column;
-                gap: 24px;
-                align-items: stretch;
-            }
-            .preference-card {
-                width: 100%;
-                max-width: 100%;
-                min-width: 0;
-                padding: 24px 12px 18px 12px;
-            }
-            .preference-title {
-                font-size: 1.5rem;
-            }
-        }
-        @media (max-width: 600px) {
-            body {
-                font-size: 15px;
-            }
-            .preference-title {
-                font-size: 1.2rem;
-            }
-            .preference-card .icon {
-                font-size: 2.2rem;
-            }
-            .preference-card .card-title {
-                font-size: 1.1rem;
-            }
-            .preference-card .card-desc {
-                font-size: 0.98rem;
-            }
-            .preference-card .card-btn {
-                font-size: 1rem;
-                padding: 10px 18px;
-            }
-        }
-        @media (max-width: 400px) {
-            body {
-                font-size: 14px;
-            }
-            .preference-title {
-                font-size: 1rem;
-            }
-        }
+<!-- Breadcrumb Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://keyracer.in"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Typing Test",
+      "item": "https://keyracer.in/typing-test.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Code Racer",
+      "item": "https://keyracer.in/code-racer.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "Professional Skills",
+      "item": "https://keyracer.in/pro-skills.html"
+    }
+  ]
+}
+</script>
+
+<!-- Open Graph / Facebook -->
+<meta property="og:title" content="KeyRacer: The Ultimate Typing & Coding Hub">
+<meta property="og:description" content="Elevate your skills with KeyRacer, the all-in-one platform for typing speed tests, coding challenges, and professional skill development.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://keyracer.in">
+<meta property="og:image" content="https://keyracer.in/assets/images/logo.png">
+<meta property="og:site_name" content="KeyRacer">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KeyRacer: The Ultimate Typing & Coding Hub">
+<meta name="twitter:description" content="Elevate your skills with KeyRacer, the all-in-one platform for typing speed tests, coding challenges, and professional skill development.">
+<meta name="twitter:image" content="https://keyracer.in/assets/images/logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" href="/assets/images/logo.png">
+    
+    <!-- Canonical URL -->
+   <link rel="canonical" href="https://keyracer.in" />
+
+    
+    <title>KeyRacer - Choose Your Path | Typing, Coding & Professional Skills</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
         :root {
             --primary-color: #00FFDD;
             --secondary-color: #00C2FF;
@@ -521,46 +512,127 @@
     </style>
 </head>
 <body>
-    <!-- Corner Logo -->
-    <div class="corner-logo">
-        <a href="https://keyracer.in" class="logo-link">
-            <img src="assets/images/logo.png" alt="KeyRacer Logo" class="corner-logo-img">
+    <!-- Preloader -->
+    <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #070B18 !important; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;">
+        <div style="text-align: center;">
+            <img src="assets/images/logo.png" alt="KeyRacer Logo" style="height: 100px; width: auto; margin-bottom: 20px; animation: pulse 1.5s infinite alternate;">
+            <div style="width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin: 0 auto;">
+                <div id="loader-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #FFC700, #FF4A4A); border-radius: 2px; transition: width 0.5s ease;"></div>
+            </div>
+            <p id="loading-text" style="color: #FFC700; font-family: 'Orbitron', sans-serif; margin-top: 15px; font-size: 14px;">Loading your experience...</p>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.05); filter: brightness(1.2); }
+        }
+    </style>
+    <!-- Hidden anchor tags for sitelink reinforcement -->
+    <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+      <a href="/typing-test.html">Typing Test</a>
+      <a href="/code-racer.html">Code Racer</a>
+      <a href="/pro-skills.html">Professional Skills</a>
+      <a href="/privacy-policy.html">Privacy Policy</a>
+      <a href="/terms-conditions.html">Terms &amp; Conditions</a>
+    </div>
+    <!-- Top-right login button -->
+    <div style="position: fixed; top: 30px; right: 30px; z-index: 101;">
+        <a href="login.html" id="loginBtn" class="nav-item enhanced-login-btn darkred-login-btn">
+            <span class="login-icon"><i class="fas fa-sign-in-alt"></i></span>
+            <span class="login-text">Login</span>
         </a>
     </div>
-
-  <!-- Main Content -->
-  <div class="preference-page">
-    <div class="preference-title">Welcome to KeyRacer</div>
-    <div class="preference-cards">
-      <div class="preference-card">
-        <div class="icon"><i class="fas fa-keyboard"></i></div>
-        <div class="card-title">Type Racer</div>
-        <div class="card-desc">Test and improve your typing speed and accuracy with fun, competitive races and challenges.</div>
-        <a href="typing-test.html" class="card-btn">Start Typing</a>
-      </div>
-      <div class="preference-card">
-        <div class="icon"><i class="fas fa-code"></i></div>
-        <div class="card-title">CodeRacer</div>
-        <div class="card-desc">Practice coding in Python, Java, C++, and more. Level up from beginner to advanced with real code snippets.</div>
-        <a href="code-racer.html" class="card-btn">Start Coding</a>
-      </div>
-      <div class="preference-card">
-        <div class="icon"><i class="fas fa-user-tie"></i></div>
-        <div class="card-title">Professional Skills</div>
-        <div class="card-desc">Enhance your soft skills: practice resumes, cover letters, business emails, and more with real-world templates.</div>
-        <a href="pro-skills.html" class="card-btn">Practice Soft Skills</a>
-      </div>
-      <div class="preference-card">
-        <div class="icon"><i class="fas fa-trophy"></i></div>
-        <div class="card-title">Hackathon</div>
-        <div class="card-desc">Participate in coding challenges, solve DSA problems, and showcase your skills in competitive hackathons.</div>
-        <a href="hackathon.html" class="card-btn">Join Hackathon</a>
-      </div>
+    <style>
+        .darkred-login-btn {
+            background: #8B0000 !important;
+            color: #fff !important;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            padding: 14px 36px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(139,0,0,0.18), 0 2px 8px rgba(139,0,0,0.12);
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            font-size: 1.18rem;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .darkred-login-btn:hover {
+            background: #a30000 !important;
+            color: #fff !important;
+            box-shadow: 0 12px 36px rgba(139,0,0,0.22), 0 4px 16px rgba(139,0,0,0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .darkred-login-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(139,0,0,0.12);
+        }
+        .login-icon {
+            font-size: 1.3em;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            filter: drop-shadow(0 0 8px rgba(139,0,0,0.4));
+            transition: color 0.3s;
+        }
+        .darkred-login-btn:hover .login-icon {
+            color: #fff;
+            filter: drop-shadow(0 0 12px rgba(139,0,0,0.5));
+        }
+        .login-text {
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(139,0,0,0.12);
+        }
+    </style>
+    <div class="preference-page">
+        <!-- Logo in top-left corner -->
+        <div class="corner-logo">
+            <a href="https://keyracer.in" class="logo-link">
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="corner-logo-img">
+            </a>
+        </div>
+        
+        <div class="preference-title">What would you like to do today?</div>
+        <div class="preference-cards">
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-keyboard"></i></div>
+                <div class="card-title">Typing Test</div>
+                <div class="card-desc">Test and improve your typing speed and accuracy with fun, competitive races and challenges.</div>
+                <a href="typing-test.html" class="card-btn" onclick="markPreferencesComplete('typing')">Start Typing</a>
+            </div>
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-code"></i></div>
+                <div class="card-title">Code Racer</div>
+                <div class="card-desc">Practice coding in Python, Java, C++, and more. Level up from beginner to advanced with real code snippets.</div>
+                <a href="code-racer.html" class="card-btn" onclick="markPreferencesComplete('coding')">Start Coding</a>
+            </div>
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-user-tie"></i></div>
+                <div class="card-title">Professional Skills</div>
+                <div class="card-desc">Enhance your soft skills: practice resumes, cover letters, business emails, and more with real-world templates.</div>
+                <a href="pro-skills.html" class="card-btn" onclick="markPreferencesComplete('professional')">Practice Soft Skills</a>
+            </div>
+            <div class="preference-card">
+                <div class="icon"><i class="fas fa-trophy"></i></div>
+                <div class="card-title">Hackathon</div>
+                <div class="card-desc">Participate in coding challenges, solve DSA problems, and showcase your skills in competitive hackathons.</div>
+                <a href="hackathon.html" class="card-btn" onclick="markPreferencesComplete('hackathon')">Join Hackathon</a>
+            </div>
+        </div>
     </div>
-  </div>
 
-    <!-- Legal Links Footer (matches code-racer.html) -->
-    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+
+    <!-- Fixed Legal Footer -->
+
+    <!-- Fixed Legal Footer -->
+    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px); animation: fadeIn 1s ease-out 1.2s both;">
         <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
             <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
                 <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
@@ -573,23 +645,176 @@
             </a>
         </div>
     </div>
+    
+    <!-- Particles.js Container -->
+    <div id="particles-js"></div>
 
-  <!-- Social Profiles for SEO -->
-  <div style="display:none;">
-    <a href="https://www.instagram.com/keyracer.in/">Instagram</a>
-    <a href="https://x.com/keyracerin">Twitter</a>
-    <a href="https://www.youtube.com/@keyracer-bsfs">YouTube</a>
-  </div>
+    <!-- Particles.js and other scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Preloader animation with animated loading text
+        document.addEventListener('DOMContentLoaded', function() {
+            const preloader = document.getElementById('preloader');
+            const loaderBar = document.getElementById('loader-bar');
+            const loadingText = document.getElementById('loading-text');
+            let width = 0;
+            const loadingMessages = [
+                "Loading your experience...",
+                "Preparing your dashboard...",
+                "Setting up your preferences...",
+                "Almost ready!"
+            ];
+            let messageIndex = 0;
+            const messageInterval = setInterval(function() {
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+                loadingText.textContent = loadingMessages[messageIndex];
+            }, 1200);
+            const interval = setInterval(function() {
+                width += Math.floor(Math.random() * 10) + 1;
+                if (width > 100) width = 100;
+                loaderBar.style.width = width + '%';
+                if (width === 100) {
+                    clearInterval(interval);
+                    clearInterval(messageInterval);
+                    setTimeout(function() {
+                        preloader.style.opacity = '0';
+                        preloader.style.visibility = 'hidden';
+                    }, 500);
+                }
+            }, 100);
+            // Hackathon-style particles.js config (updated to match hackathon.html)
+            particlesJS("particles-js", {
+              "particles": {
+                "number": {
+                  "value": 120,
+                  "density": { "enable": true, "value_area": 900 }
+                },
+                "color": {
+                  "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"]
+                },
+                "shape": {
+                  "type": ["circle", "triangle", "edge"],
+                  "stroke": { "width": 0, "color": "#000000" },
+                  "polygon": { "nb_sides": 5 }
+                },
+                "opacity": {
+                  "value": 0.6,
+                  "random": true,
+                  "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false }
+                },
+                "size": {
+                  "value": 5,
+                  "random": true,
+                  "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
+                },
+                "line_linked": {
+                  "enable": true,
+                  "distance": 180,
+                  "color": "#00C2FF",
+                  "opacity": 0.5,
+                  "width": 1.5
+                },
+                "move": {
+                  "enable": true,
+                  "speed": 2,
+                  "direction": "none",
+                  "random": true,
+                  "straight": false,
+                  "out_mode": "out",
+                  "bounce": false,
+                  "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
+                }
+              },
+              "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                  "onhover": { "enable": true, "mode": "grab" },
+                  "onclick": { "enable": true, "mode": "push" },
+                  "resize": true
+                },
+                "modes": {
+                  "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
+                  "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                  "repulse": { "distance": 200, "duration": 0.4 },
+                  "push": { "particles_nb": 6 },
+                  "remove": { "particles_nb": 2 }
+                }
+              },
+              "retina_detect": true
+            });
+        });
+        
+        // Function to mark preferences complete with animation
+        function markPreferencesComplete(preferenceType) {
+            // Store the user's preference
+            localStorage.setItem('userPreference', preferenceType);
+            
+            // Also mark that preferences have been set
+            localStorage.setItem('preferencesComplete', 'true');
+            
+            // Add XP for making a selection
+            const userStats = JSON.parse(localStorage.getItem('userStats')) || {
+                wpm: 0,
+                accuracy: 0,
+                xp: 0,
+                level: 1
+            };
+            
+            userStats.xp = (userStats.xp || 0) + 5;
+            if (userStats.xp >= 100) {
+                userStats.level = (userStats.level || 1) + 1;
+                userStats.xp = userStats.xp - 100;
+            }
+            
+            localStorage.setItem('userStats', JSON.stringify(userStats));
+        }
 
-  <!-- Particles.js Background -->
-  <div id="particles-js"></div>
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script>
-    // Set current year in footer
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('current-year').textContent = new Date().getFullYear();
-    });
-    // (Optional) Add your particles.js config here
-  </script>
+        // Check if user is logged in, if not redirect to login
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('typingTestUser');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const cards = document.querySelectorAll('.preference-card');
+            let focusedCard = document.activeElement.closest('.preference-card');
+            let focusedIndex = -1;
+            
+            if (focusedCard) {
+                for (let i = 0; i < cards.length; i++) {
+                    if (cards[i] === focusedCard) {
+                        focusedIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    if (focusedIndex > 0) {
+                        cards[focusedIndex - 1].querySelector('.card-btn').focus();
+                    } else if (focusedIndex === -1) {
+                        cards[0].querySelector('.card-btn').focus();
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (focusedIndex < cards.length - 1) {
+                        cards[focusedIndex + 1].querySelector('.card-btn').focus();
+                    } else if (focusedIndex === -1) {
+                        cards[0].querySelector('.card-btn').focus();
+                    }
+                    break;
+                case 'ArrowUp':
+                case 'ArrowDown':
+                    if (focusedIndex === -1) {
+                        cards[0].querySelector('.card-btn').focus();
+                    }
+                    break;
+            }
+        });
+    </script>
 </body>
 </html>

@@ -5,11 +5,11 @@
     "baseUrl": "https://keyracer.in"
   },
   "global": {
-  "title": "KeyRacer | keyracer.in - The Ultimate Typing, Coding & Hackathon Hub",
-  "description": "KeyRacer (keyracer.in) is the all-in-one platform for typing speed tests, code practice, hackathons, and professional skills. Improve your typing speed, learn programming, and compete in hackathons.",
-  "keywords": "keyracer, keyracer.in, typing test, typing speed, code typing, programming practice, keyboard racing, typing competition, coding challenges, hackathon, professional skills, typing hub, coding hub, preference.html",
+    "title": "KeyRacer - The Ultimate Keyboard Racing Championship",
+    "description": "KeyRacer is a comprehensive skill development platform combining typing practice, coding challenges, and professional communication skills training. Improve your typing speed, learn programming through interactive exercises, and enhance your professional skills.",
+    "keywords": "typing test, typing speed, code typing, programming practice, keyboard racing, typing competition, coding challenges, professional skills",
     "author": "KeyRacer",
-    "robots": "preference, follow",
+    "robots": "index, follow",
     "viewport": "width=device-width, initial-scale=1.0",
     "themeColor": "#070B18",
     "favicon": "/assets/images/logo.png",
@@ -21,7 +21,7 @@
     "image": "https://keyracer.in/assets/images/logo.png",
     "imageWidth": "1200",
     "imageHeight": "630",
-    "imageAlt": "KeyRacer - By students, For students"
+    "imageAlt": "KeyRacer - The Ultimate Keyboard Racing Championship"
   },
   "twitter": {
     "card": "summary_large_image",
@@ -30,20 +30,12 @@
   },
   "pages": {
     "home": {
-      "path": "/preference.html",
-      "title": "KeyRacer - The Ultimate Typing & Coding Hub | preference.html",
-      "description": "KeyRacer is your all-in-one platform for typing speed tests, code practice, hackathons, and professional skills. Start your journey to mastery today!",
-      "keywords": "keyracer, keyracer.in, typing test, typing speed, learn programming and practice, keyboard racing, typing competition, coding challenges, hackathon, professional skills, typing hub, coding hub, preference.html",
+      "path": "/index.html",
+      "title": "KeyRacer - The Ultimate Keyboard Racing Championship",
+      "description": "Improve your typing speed, learn programming, and enhance professional skills with KeyRacer's comprehensive platform. Join the keyboard racing championship today!",
+      "keywords": "typing test, keyboard racing, typing championship, typing competition, typing speed test, wpm test",
       "priority": 1.0,
       "changeFrequency": "daily"
-    },
-    "hackathon": {
-      "path": "/hackathon.html",
-      "title": "KeyRacer Hackathons | Compete, Code & Conquer",
-      "description": "Join exciting coding hackathons on KeyRacer! Solve challenges, compete with developers, and win amazing prizes. Sign up for our next event!",
-      "keywords": "keyracer, keyracer.in, hackathon, coding competition, programming contest, online hackathon, coding challenges, developer events, code race, hackathon platform",
-      "priority": 0.95,
-      "changeFrequency": "weekly"
     },
     "typingTest": {
       "path": "/typing-test.html",
@@ -60,7 +52,14 @@
       "keywords": "code typing, programming practice, learn coding, interactive programming, code exercises, programming tutorial",
       "priority": 0.9,
       "changeFrequency": "weekly"
-    }
+    },
+    "challenges": {
+      "path": "/challenges.html",
+      "title": "Coding Challenges - Test Your Programming Skills | KeyRacer",
+      "description": "Challenge yourself with KeyRacer's programming exercises. Solve coding problems, improve your algorithm skills, and track your progress.",
+      "keywords": "coding challenges, programming problems, algorithm practice, coding exercises, programming skills",
+      "priority": 0.8,
+      "changeFrequency": "weekly"
     },
     "proSkills": {
       "path": "/pro-skills.html",
@@ -70,6 +69,14 @@
       "priority": 0.8,
       "changeFrequency": "weekly"
     },
+    "leaderboard": {
+      "path": "/leaderboard.html",
+      "title": "Global Leaderboard - Compete Worldwide | KeyRacer",
+      "description": "See how you rank against typists worldwide on KeyRacer's global leaderboard. Track top performers and challenge yourself to reach the top.",
+      "keywords": "typing leaderboard, global ranking, typing competition, fastest typists, typing championship",
+      "priority": 0.7,
+      "changeFrequency": "daily"
+    },
     "about": {
       "path": "/about.html",
       "title": "About KeyRacer - Our Mission and Team | KeyRacer",
@@ -77,8 +84,8 @@
       "keywords": "about keyracer, keyracer team, typing platform, digital skills, productivity improvement",
       "priority": 0.7,
       "changeFrequency": "monthly"
-    },
-  
+    }
+  },
   "socialProfiles": {
     "twitter": "https://twitter.com/keyracer",
     "facebook": "https://facebook.com/keyracer",
@@ -89,7 +96,7 @@
     "name": "KeyRacer",
     "logo": "https://keyracer.in/assets/images/logo.png",
     "email": "customerkeyracer@gmail.com",
-    "foundingDate": "2025",
-    "description": "KeyRacer is a comprehensive skill development platform that combines typing practice, coding challenges, professional communication skills training and hackathon managment platform."
+    "foundingDate": "2023",
+    "description": "KeyRacer is a comprehensive skill development platform that combines typing practice, coding challenges, and professional communication skills training."
   }
 }

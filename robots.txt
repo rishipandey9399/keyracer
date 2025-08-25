@@ -1,24 +1,17 @@
-# Block non-existent Python Challenges Enhanced page from search engines
-Disallow: /python-challenges-enhanced.html
-# Block Python Challenges page from search engines
-Disallow: /challenges.html
-# Block CodeRacer Leaderboard from search engines
-Disallow: /coderacer-leaderboard.html
 # KeyRacer Robots.txt
 # Updated for improved search engine visibility
 
 User-agent: *
 Allow: /
 
-
 # Important pages with high priority
-Allow: /preference.html
+Allow: /index.html
 Allow: /typing-test.html
 Allow: /code-racer.html
-Allow: /hackathon.html
+Allow: /challenges.html
 Allow: /pro-skills.html
 Allow: /about.html
-
+Allow: /leaderboard.html
 
 # Disallow admin and private areas
 Disallow: /admin/

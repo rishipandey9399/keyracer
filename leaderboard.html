@@ -2,65 +2,6 @@
 <html lang="en">
 <head>
     <style>
-            /* Responsive header and layout for mobile */
-            @media (max-width: 900px) {
-                .header-content {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    gap: 10px;
-                    padding: 0 10px;
-                }
-                .logo-img {
-                    height: 60px;
-                    margin-right: 10px;
-                }
-                .main-nav {
-                    flex-direction: column;
-                    width: 100%;
-                    gap: 8px;
-                }
-                .header-actions {
-                    flex-direction: row;
-                    gap: 8px;
-                    width: 100%;
-                    justify-content: flex-end;
-                }
-            }
-            @media (max-width: 600px) {
-                body {
-                    font-size: 15px;
-                }
-                .header-content {
-                    flex-direction: column;
-                    align-items: stretch;
-                    gap: 8px;
-                }
-                .logo-img {
-                    height: 40px;
-                }
-                .main-nav {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    gap: 6px;
-                }
-                .header-actions {
-                    flex-direction: column;
-                    gap: 6px;
-                    width: 100%;
-                    align-items: flex-end;
-                }
-                .container h1 {
-                    font-size: 1.6rem;
-                }
-            }
-            @media (max-width: 400px) {
-                body {
-                    font-size: 14px;
-                }
-                .container h1 {
-                    font-size: 1.1rem;
-                }
-            }
       body { background: #070b18 !important; color: #fff; }
       #particles-js { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; }
     </style>
@@ -158,9 +99,7 @@
     <header>
         <div class="header-content">
             <div class="logo-section">
-                    <a href="preference.html" class="logo-link">
-                        <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
-                    </a>
+                <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
             </div>
             
             <nav class="main-nav">
