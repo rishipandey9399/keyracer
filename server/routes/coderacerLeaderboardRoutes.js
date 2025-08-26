@@ -10,10 +10,15 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
   console.log('[DIAGNOSTIC] Request body:', req.body);
   let responseSent = false;
   try {
-    const { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
+    let { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
     if ((!userId && !email && !googleId) || !pointsEarned || !attempts || !completionTime) {
       responseSent = true;
       return res.status(400).json({ success: false, message: 'Missing required fields' });
+    }
+
+    // If userId is a string like 'google_...' treat it as googleId
+    if (userId && typeof userId === 'string' && userId.startsWith('google_')) {
+      googleId = userId;
     }
 
     let userObjectId = userId;
