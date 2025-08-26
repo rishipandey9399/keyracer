@@ -487,21 +487,55 @@
 
             renderLeaderboard(leaderboardData) {
                 const tableContainer = document.querySelector('.leaderboard-table');
-                
                 if (!leaderboardData || leaderboardData.length === 0) {
                     this.showEmpty();
                     return;
                 }
+                // Get current user info from localStorage or session (adjust as needed)
+                let currentUserName = null;
+                let currentUserId = null;
+                try {
+                    // Try to get from localStorage (adjust key as needed for your app)
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    if (user) {
+                        currentUserName = user.displayName || user.username || user.name || null;
+                        currentUserId = user._id || user.id || null;
+                    }
+                } catch (e) {}
 
                 // Keep the header and rebuild rows
                 const header = tableContainer.querySelector('.table-header');
                 tableContainer.innerHTML = '';
                 tableContainer.appendChild(header);
 
-                leaderboardData.forEach(entry => {
+                let myRank = null;
+                leaderboardData.forEach((entry, idx) => {
+                    // Always show player name
+                    if (!entry.user.name) entry.user.name = 'Player';
+                    // Highlight current user row if name matches
+                    let isCurrentUser = false;
+                    if (currentUserName && entry.user.name && entry.user.name.toLowerCase() === currentUserName.toLowerCase()) {
+                        isCurrentUser = true;
+                        myRank = entry.rank;
+                    }
                     const row = this.createLeaderboardRow(entry);
+                    if (isCurrentUser) {
+                        row.style.background = 'linear-gradient(90deg, #00C2FF22 0%, #fff0 100%)';
+                        row.style.border = '2px solid #00C2FF';
+                    }
                     tableContainer.appendChild(row);
                 });
+
+                // If current user is not in the top N, show their rank at the bottom
+                if (myRank && myRank > leaderboardData.length) {
+                    const myEntry = leaderboardData.find(e => e.user.name && e.user.name.toLowerCase() === currentUserName.toLowerCase());
+                    if (myEntry) {
+                        const row = this.createLeaderboardRow(myEntry);
+                        row.style.background = 'linear-gradient(90deg, #00C2FF22 0%, #fff0 100%)';
+                        row.style.border = '2px solid #00C2FF';
+                        tableContainer.appendChild(row);
+                    }
+                }
 
                 // Animate rank numbers
                 this.animateRanks();
@@ -510,21 +544,24 @@
             createLeaderboardRow(entry) {
                 const row = document.createElement('div');
                 row.className = 'leaderboard-row';
-                
+                // Defensive: ensure stats object and all fields exist
+                const stats = entry.stats || {};
+                const totalPoints = typeof stats.totalPoints === 'number' ? stats.totalPoints : 0;
+                const challengesCompleted = typeof stats.challengesCompleted === 'number' ? stats.challengesCompleted : 0;
+                const averageTime = typeof stats.averageTime === 'number' ? stats.averageTime : 0;
+                const accuracy = typeof stats.accuracy === 'number' ? stats.accuracy : 0;
+                const currentStreak = typeof stats.currentStreak === 'number' ? stats.currentStreak : 0;
+                const longestStreak = typeof stats.longestStreak === 'number' ? stats.longestStreak : 0;
                 const rankClass = entry.rank <= 3 ? `rank top-3 rank-${entry.rank}` : 'rank';
-                const streakClass = entry.stats.currentStreak >= 7 ? 'streak high-streak' : 'streak';
-                
+                const streakClass = currentStreak >= 7 ? 'streak high-streak' : 'streak';
                 // Format time display
-                const timeDisplay = this.formatTime(entry.stats.averageTime);
-                
+                const timeDisplay = this.formatTime(averageTime);
                 // Create avatar initials
                 const avatarInitials = this.getAvatarInitials(entry.user.name);
-                
                 // Format badges
-                const badgesHtml = entry.badges.map(badge => 
+                const badgesHtml = (entry.badges || []).map(badge => 
                     `<span class="badge ${this.getBadgeClass(badge.type)}">${badge.icon}</span>`
                 ).join('');
-
                 row.innerHTML = `
                     <div class="${rankClass}">${entry.rank}</div>
                     <div class="player-info">
@@ -534,14 +571,13 @@
                             <p class="player-level">${this.capitalizeFirst(entry.user.level)}</p>
                         </div>
                     </div>
-                    <div class="points">${entry.stats.totalPoints.toLocaleString()}</div>
-                    <div class="challenges-completed">${entry.stats.challengesCompleted}</div>
+                    <div class="points">${totalPoints.toLocaleString()}</div>
+                    <div class="challenges-completed">${challengesCompleted}</div>
                     <div class="avg-time">${timeDisplay}</div>
-                    <div class="accuracy">${entry.stats.accuracy}%</div>
-                    <div class="${streakClass}">${entry.stats.currentStreak}${entry.stats.currentStreak > 0 ? '🔥' : ''}</div>
+                    <div class="accuracy">${accuracy}%</div>
+                    <div class="${streakClass}">${currentStreak}${currentStreak > 0 ? '🔥' : ''}</div>
                     <div class="badges">${badgesHtml}</div>
                 `;
-
                 return row;
             }
 
