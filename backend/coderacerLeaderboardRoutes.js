@@ -83,59 +83,29 @@ router.get('/coderacer-leaderboard', async (req, res) => {
     const leaderboard = stats.map((entry, idx) => {
       const user = entry.userId || {};
       const name = user.displayName || user.username || 'Anonymous';
-      const level = 'Racer';
       // Defensive defaults for all stats fields
       const totalPoints = typeof entry.totalPoints === 'number' ? entry.totalPoints : 0;
-      const challengesCompleted = typeof entry.challengesCompleted === 'number' ? entry.challengesCompleted : 0;
-      const totalAttempts = typeof entry.totalAttempts === 'number' ? entry.totalAttempts : 0;
       const averageCompletionTime = typeof entry.averageCompletionTime === 'number' ? entry.averageCompletionTime : 0;
       const currentStreak = typeof entry.currentStreak === 'number' ? entry.currentStreak : 0;
       const longestStreak = typeof entry.longestStreak === 'number' ? entry.longestStreak : 0;
-      // Calculate accuracy: challengesCompleted / totalAttempts * 100
-      let accuracy = 0;
-      if (totalAttempts > 0) {
-        accuracy = Math.round((challengesCompleted / totalAttempts) * 100);
+      // Calculate accuracy: totalPoints / (totalPoints + 1) * 100 (fallback if no attempts info)
+      let accuracy = 100;
+      if (typeof entry.challengesCompleted === 'number' && typeof entry.totalAttempts === 'number' && entry.totalAttempts > 0) {
+        accuracy = Math.round((entry.challengesCompleted / entry.totalAttempts) * 100);
       }
       const averageTime = averageCompletionTime ? Math.round(averageCompletionTime / 1000) : 0;
-
-      // Badges logic
-      const badges = [];
-      // First Solve badge
-      if (challengesCompleted > 0) {
-        badges.push({ type: 'first_solve', icon: '🏁' });
-      }
-      // Speed Demon badge: fast average time (under 60s)
-      if (averageTime > 0 && averageTime <= 60) {
-        badges.push({ type: 'speed_demon', icon: '⚡' });
-      }
-      // Perfectionist badge: accuracy >= 95%
-      if (accuracy >= 95 && challengesCompleted > 5) {
-        badges.push({ type: 'perfectionist', icon: '🎯' });
-      }
-      // Streak Master badge: current streak >= 7
-      if (currentStreak >= 7) {
-        badges.push({ type: 'streak_master', icon: '🔥' });
-      }
-      // Specialist badges (example: python, java, etc.)
-      // You can add logic here if you track language stats
-
       return {
         rank: (page - 1) * limit + idx + 1,
         user: {
-          name,
-          level,
-          picture: user.picture || null
+          name
         },
         stats: {
           totalPoints,
-          challengesCompleted,
-          totalAttempts,
           averageTime,
           accuracy,
           currentStreak,
           longestStreak
-        },
-        badges
+        }
       };
     });
 
