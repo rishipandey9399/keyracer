@@ -470,7 +470,15 @@
                 // Store user info in local storage with the custom username
                 localStorage.setItem('typingTestUser', username);
                 localStorage.setItem('typingTestUserType', 'google');
-                
+                // Unified user object for all pages
+                const userObj = {
+                    email: userEmail,
+                    displayName: username,
+                    loginType: 'google',
+                    picture: userPicture || '',
+                    hasSetUsername: true
+                };
+                localStorage.setItem('user', JSON.stringify(userObj));
                 // Make sure we're storing the email from URL parameters
                 const userData = {
                     id: 'google_' + Date.now(),
@@ -479,7 +487,6 @@
                     picture: userPicture || '',
                     hasSetUsername: true // Add this flag to indicate username has been set
                 };
-                
                 localStorage.setItem('typingTestUserData', JSON.stringify(userData));
                 
                 // Update success message with username if showing welcome
@@ -561,6 +568,7 @@
                 localStorage.removeItem('typingTestUser');
                 localStorage.removeItem('typingTestUserType');
                 localStorage.removeItem('typingTestUserData');
+                localStorage.removeItem('user');
                 
                 // Note: We do NOT remove the emailUsernames mapping
                 // This ensures returning users don't need to re-enter their username

@@ -384,6 +384,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Hide the regular login forms since user is already logged in
         const authForms = document.querySelector('.auth-forms');
+    function saveUserToLocal(userObj) {
+        localStorage.setItem('user', JSON.stringify(userObj));
+    }
+
         if (authForms) {
             authForms.style.display = 'none';
         }

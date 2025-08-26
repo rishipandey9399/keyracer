@@ -64,6 +64,7 @@ app.use(helmet({
   contentSecurityPolicy: false // Disable for development, enable in production
 }));
 app.use(morgan('dev')); // Logging
+// Register leaderboard API routes under /api
 app.use('/api', coderacerLeaderboardRoutes);
 app.use(cookieParser()); // Parse cookies for auth
 
