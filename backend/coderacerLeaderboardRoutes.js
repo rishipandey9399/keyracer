@@ -44,6 +44,13 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
     if (!stats) {
       stats = new CoderacerStats({ userId: userObjectId });
     }
+    // Defensive: ensure all fields are numbers
+    stats.challengesCompleted = typeof stats.challengesCompleted === 'number' ? stats.challengesCompleted : 0;
+    stats.totalAttempts = typeof stats.totalAttempts === 'number' ? stats.totalAttempts : 0;
+    stats.totalPoints = typeof stats.totalPoints === 'number' ? stats.totalPoints : 0;
+    stats.averageCompletionTime = typeof stats.averageCompletionTime === 'number' ? stats.averageCompletionTime : 0;
+    stats.currentStreak = typeof stats.currentStreak === 'number' ? stats.currentStreak : 0;
+    stats.longestStreak = typeof stats.longestStreak === 'number' ? stats.longestStreak : 0;
 
     // Update stats
     stats.challengesCompleted += 1;
