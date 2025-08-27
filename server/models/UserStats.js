@@ -235,8 +235,8 @@ userStatsSchema.methods.checkAndAwardBadges = function() {
   // Language specialist badges
   Object.keys(this.languageStats).forEach(lang => {
     const stats = this.languageStats[lang];
-    if (stats.completed >= 10 && !currentBadgeTypes.includes(${lang}_specialist)) {
-      newBadges.push({ type: ${lang}_specialist });
+    if (stats.completed >= 10 && !currentBadgeTypes.includes('${lang}_specialist')) {
+      newBadges.push({ type: '${lang}_specialist' });
     }
   });
   
