@@ -95,9 +95,8 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 			// Filter out guest users (users with authMethod 'local' and password 'guest')
 			{ 
 				$match: { 
-					$or: [
-						{ 'user.authMethod': { $ne: 'local' } },
-						{ 'user.password': { $ne: 'guest' } }
+					$nor: [
+						{ 'user.authMethod': 'local', 'user.password': 'guest' }
 					]
 				} 
 			},
