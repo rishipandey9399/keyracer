@@ -601,6 +601,7 @@
                                     // fallback for old login
                                     const legacy = localStorage.getItem('typingTestUser');
                                     if (legacy) currentUserName = legacy;
+                                }
                             leaderboardData.forEach(entry => {
                                 const stats = entry.stats || {};
                                 const totalPoints = typeof stats.totalPoints === 'number' ? stats.totalPoints : 0;

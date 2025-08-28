@@ -25,19 +25,19 @@ router.post('/leaderboard/submit', async (req, res) => {
       stats = new UserStats({ userId: user._id });
     }
 
-  // Update stats
-  stats.challengesCompleted += 1;
-  stats.totalAttempts += 1;
-  stats.totalPoints += Math.round(wpm * (accuracy / 100));
-  stats.averageCompletionTime = ((stats.averageCompletionTime * (stats.challengesCompleted - 1)) + (timestamp ? new Date(timestamp).getTime() : Date.now())) / stats.challengesCompleted;
-  stats.overallAccuracy = ((stats.overallAccuracy * (stats.challengesCompleted - 1)) + accuracy) / stats.challengesCompleted;
-  stats.lastActivityDate = new Date(timestamp || Date.now());
+    // Update stats
+    stats.challengesCompleted += 1;
+    stats.totalAttempts += 1;
+    stats.totalPoints += Math.round(wpm * (accuracy / 100));
+    stats.averageCompletionTime = ((stats.averageCompletionTime * (stats.challengesCompleted - 1)) + (timestamp ? new Date(timestamp).getTime() : Date.now())) / stats.challengesCompleted;
+    stats.overallAccuracy = ((stats.overallAccuracy * (stats.challengesCompleted - 1)) + accuracy) / stats.challengesCompleted;
+    stats.lastActivityDate = new Date(timestamp || Date.now());
 
-  // Save most recent test stats
-  stats.lastWpm = wpm;
-  stats.lastAccuracy = accuracy;
-  stats.lastDifficulty = difficulty || 'Standard';
-  stats.lastTimestamp = timestamp ? new Date(timestamp) : new Date();
+    // Save most recent test stats
+    stats.lastWpm = wpm;
+    stats.lastAccuracy = accuracy;
+    stats.lastDifficulty = difficulty || 'Standard';
+    stats.lastTimestamp = timestamp ? new Date(timestamp) : new Date();
 
     // Update difficulty stats
     if (difficulty && stats.difficultyStats[difficulty]) {
@@ -66,9 +66,8 @@ router.get('/leaderboard', async (req, res) => {
       limit = 50
     } = req.query;
     
-    // Build aggregation pipeline
-    let matchStage = {};
-    let userMatchStage = {};
+    // Build query conditions
+    let queryConditions = {};
     
     // Time filter
     if (timeFilter !== 'all-time') {
@@ -88,18 +87,13 @@ router.get('/leaderboard', async (req, res) => {
       }
       
       if (startDate) {
-        matchStage.lastUpdated = { $gte: startDate };
+        queryConditions.lastActivityDate = { $gte: startDate };
       }
     }
     
-    // Language filter
-    if (language !== 'all') {
-      userMatchStage[`languageStats.${language}.completed`] = { $gt: 0 };
-    }
-    
-    // Get leaderboard data
-    const pipeline = [
-      { $match: matchStage },
+    // Get leaderboard data using aggregation pipeline to filter out guest users
+    const leaderboardPipeline = [
+      { $match: queryConditions },
       {
         $lookup: {
           from: 'users',
@@ -109,45 +103,72 @@ router.get('/leaderboard', async (req, res) => {
         }
       },
       { $unwind: '$user' },
-      { $match: userMatchStage },
+      // Filter out guest users (users with authMethod 'local' and password 'guest')
+      { 
+        $match: { 
+          $or: [
+            { 'user.authMethod': { $ne: 'local' } },
+            { 'user.password': { $ne: 'guest' } }
+          ]
+        } 
+      },
+      { $sort: { totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 } },
+      { $skip: (page - 1) * limit },
+      { $limit: parseInt(limit) },
       {
         $project: {
           userId: 1,
           totalPoints: 1,
           challengesCompleted: 1,
-          averageCompletionTime: 1,
-          overallAccuracy: 1,
-          currentStreak: 1,
-          longestStreak: 1,
-          level: 1,
-          rank: 1,
-          badges: 1,
-          languageStats: 1,
-          difficultyStats: 1,
           lastWpm: 1,
           lastAccuracy: 1,
           lastDifficulty: 1,
           lastTimestamp: 1,
+          lastActivityDate: 1,
+          averageCompletionTime: 1,
+          currentStreak: 1,
+          longestStreak: 1,
           'user.displayName': 1,
           'user.username': 1,
           'user.picture': 1
         }
-      },
-      { $sort: { totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 } },
-      { $skip: (page - 1) * limit },
-      { $limit: parseInt(limit) }
+      }
     ];
     
-    const leaderboardData = await UserStats.aggregate(pipeline);
+    const leaderboardData = await UserStats.aggregate(leaderboardPipeline);
     
-    // Get total count for pagination
-    const totalUsers = await UserStats.countDocuments(matchStage);
+    // Get total count for pagination (excluding guest users)
+    const totalCountPipeline = [
+      { $match: queryConditions },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' },
+      // Filter out guest users (users with authMethod 'local' and password 'guest')
+      { 
+        $match: { 
+          $or: [
+            { 'user.authMethod': { $ne: 'local' } },
+            { 'user.password': { $ne: 'guest' } }
+          ]
+        } 
+      },
+      { $count: 'total' }
+    ];
+    
+    const totalCountResult = await UserStats.aggregate(totalCountPipeline);
+    const totalUsers = totalCountResult.length > 0 ? totalCountResult[0].total : 0;
     
     // Format leaderboard data (flattened for frontend compatibility)
     const formattedData = leaderboardData.map((entry, index) => {
       return {
         rank: (page - 1) * limit + index + 1,
-        username: entry.user.displayName || entry.user.username || 'Anonymous',
+        username: (entry.user && (entry.user.displayName || entry.user.username)) || 'Anonymous',
         wpm: entry.lastWpm || 0,
         accuracy: entry.lastAccuracy || 0,
         difficulty: entry.lastDifficulty || 'Standard',
@@ -160,8 +181,26 @@ router.get('/leaderboard', async (req, res) => {
       };
     });
     
-    // Get global stats for context
-    const globalStats = await UserStats.aggregate([
+    // Get global stats for context (excluding guest users)
+    const globalStatsPipeline = [
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' },
+      // Filter out guest users (users with authMethod 'local' and password 'guest')
+      { 
+        $match: { 
+          $or: [
+            { 'user.authMethod': { $ne: 'local' } },
+            { 'user.password': { $ne: 'guest' } }
+          ]
+        } 
+      },
       {
         $group: {
           _id: null,
@@ -171,7 +210,15 @@ router.get('/leaderboard', async (req, res) => {
           topScore: { $max: '$totalPoints' }
         }
       }
-    ]);
+    ];
+    
+    const globalStatsResult = await UserStats.aggregate(globalStatsPipeline);
+    const globalStats = globalStatsResult[0] || {
+      totalUsers: 0,
+      totalChallengesCompleted: 0,
+      averagePoints: 0,
+      topScore: 0
+    };
 
     res.json({
       success: true,
@@ -190,20 +237,15 @@ router.get('/leaderboard', async (req, res) => {
           difficulty,
           category
         },
-        globalStats: globalStats[0] || {
-          totalUsers: 0,
-          totalChallengesCompleted: 0,
-          averagePoints: 0,
-          topScore: 0
-        }
+        globalStats: globalStats
       }
     });
     
   } catch (error) {
-    console.error('Error fetching user position:', error);
+    console.error('Error fetching leaderboard data:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Server error while fetching user position' 
+      message: 'Server error while fetching leaderboard data' 
     });
   }
 });

@@ -80,14 +80,53 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 router.get('/coderacer-leaderboard', async (req, res) => {
 	try {
 		const { page = 1, limit = 50 } = req.query;
-		const stats = await UserStats.find({})
-			.populate('userId', 'displayName username picture')
-			.sort({ totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 })
-			.skip((page - 1) * limit)
-			.limit(parseInt(limit));
+		
+		// Get leaderboard data using aggregation pipeline to filter out guest users
+		const leaderboardPipeline = [
+			{
+				$lookup: {
+					from: 'users',
+					localField: 'userId',
+					foreignField: '_id',
+					as: 'user'
+				}
+			},
+			{ $unwind: '$user' },
+			// Filter out guest users (users with authMethod 'local' and password 'guest')
+			{ 
+				$match: { 
+					$or: [
+						{ 'user.authMethod': { $ne: 'local' } },
+						{ 'user.password': { $ne: 'guest' } }
+					]
+				} 
+			},
+			{ $sort: { totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 } },
+			{ $skip: (page - 1) * limit },
+			{ $limit: parseInt(limit) },
+			{
+				$project: {
+					userId: 1,
+					totalPoints: 1,
+					totalAttempts: 1,
+					averageCompletionTime: 1,
+					currentStreak: 1,
+					'user.displayName': 1,
+					'user.username': 1,
+					'user.picture': 1
+				}
+			}
+		];
+		
+		const stats = await UserStats.aggregate(leaderboardPipeline);
+		
 		const leaderboard = stats.map((entry, idx) => ({
 			rank: (page - 1) * limit + idx + 1,
-			user: entry.userId,
+			user: {
+				displayName: entry.user.displayName,
+				username: entry.user.username,
+				picture: entry.user.picture
+			},
 			totalPoints: entry.totalPoints,
 			totalAttempts: entry.totalAttempts,
 			averageCompletionTime: entry.averageCompletionTime,
