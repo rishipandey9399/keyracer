@@ -15,8 +15,13 @@ router.post('/leaderboard/submit', async (req, res) => {
     // Find or create user
     let user = await User.findOne({ username });
     if (!user) {
-      user = new User({ username, displayName: username, email: `${username}@keyracer.in`, password: 'guest', authMethod: 'local', isVerified: false });
-      await user.save();
+      // Only create a user if they are not logged in
+      if (req.user) {
+        user = req.user; // Use the authenticated user
+      } else {
+        user = new User({ username, displayName: username, email: `${username}@keyracer.in`, password: 'guest', authMethod: 'local', isVerified: false });
+        await user.save();
+      }
     }
 
     // Find or create UserStats
