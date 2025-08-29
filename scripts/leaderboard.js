@@ -4,6 +4,7 @@ class LeaderboardManager {
         this.isLoading = false;
         this.lastUpdateTime = 0;
         this.updateCooldown = 2000; // 2 seconds between updates
+        this.pendingUpdateTimeout = null;
         
         this.init();
     }
@@ -33,6 +34,9 @@ class LeaderboardManager {
             console.log('[LeaderboardManager] Fetching leaderboard data...');
             
             const response = await fetch(`/api/leaderboard?t=${Date.now()}`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
             const result = await response.json();
             
             if (result.success && result.data && result.data.leaderboard) {
@@ -149,7 +153,11 @@ class LeaderboardManager {
         // Listen for storage events (cross-tab updates)
         window.addEventListener('storage', (event) => {
             if (event.key === 'leaderboard_update') {
-                this.handleRealTimeUpdate(JSON.parse(event.newValue || '{}'));
+                try {
+                    this.handleRealTimeUpdate(JSON.parse(event.newValue || '{}'));
+                } catch (error) {
+                    console.error('[LeaderboardManager] Error parsing storage update:', error);
+                }
             }
         });
     }
@@ -157,8 +165,14 @@ class LeaderboardManager {
     handleRealTimeUpdate(data) {
         const now = Date.now();
         if (now - this.lastUpdateTime < this.updateCooldown) {
-            // Schedule update after cooldown
-            setTimeout(() => this.loadLeaderboardData(), this.updateCooldown);
+            // Clear existing timeout and schedule new one
+            if (this.pendingUpdateTimeout) {
+                clearTimeout(this.pendingUpdateTimeout);
+            }
+            this.pendingUpdateTimeout = setTimeout(() => {
+                this.pendingUpdateTimeout = null;
+                this.loadLeaderboardData();
+            }, this.updateCooldown);
             return;
         }
 
@@ -190,10 +204,14 @@ class LeaderboardManager {
             detail: testRecord
         }));
 
-        // Schedule refresh
-        setTimeout(() => {
-            this.loadLeaderboardData();
-        }, 1000);
+        // Immediate refresh for current page
+        this.loadLeaderboardData();
+    }
+
+    // Add missing method for real-time updates
+    updateLeaderboardRealTime(testRecord) {
+        console.log('[LeaderboardManager] Real-time update received:', testRecord);
+        this.loadLeaderboardData();
     }
 
     // Periodic refresh
@@ -266,6 +284,25 @@ document.addEventListener('DOMContentLoaded', () => {
         window.leaderboardManager = new LeaderboardManager();
     }
 });
+
+// Global function to trigger leaderboard updates from any page
+window.triggerLeaderboardUpdate = function(testRecord) {
+    // Broadcast to all tabs via localStorage
+    try {
+        localStorage.setItem('leaderboard_update', JSON.stringify({
+            ...testRecord,
+            timestamp: Date.now()
+        }));
+        setTimeout(() => localStorage.removeItem('leaderboard_update'), 1000);
+    } catch (error) {
+        console.error('Error broadcasting leaderboard update:', error);
+    }
+    
+    // Update current page if leaderboard manager exists
+    if (window.leaderboardManager) {
+        window.leaderboardManager.loadLeaderboardData();
+    }
+};
 
 // Add loading spinner CSS
 if (!document.getElementById('leaderboard-spinner-css')) {

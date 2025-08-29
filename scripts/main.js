@@ -484,10 +484,10 @@ function updateTimer() {
         
         if (data.success) {
             // Trigger leaderboard update
-            if (window.leaderboardManager) {
-                setTimeout(() => {
-                    window.leaderboardManager.triggerUpdate(testRecord);
-                }, 500);
+            if (window.triggerLeaderboardUpdate) {
+                window.triggerLeaderboardUpdate(testRecord);
+            } else if (window.leaderboardManager) {
+                window.leaderboardManager.triggerUpdate(testRecord);
             }
             
             // Show success notification

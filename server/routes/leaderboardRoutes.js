@@ -126,8 +126,7 @@ router.get('/leaderboard', async (req, res) => {
       { $unwind: '$user' },
       {
         $match: {
-          lastWpm: { $gt: 0 }, // Only include users with actual test results
-          'user.username': { $ne: null }
+          lastWpm: { $gt: 0 } // Only include users with actual test results
         }
       },
       {
@@ -153,6 +152,8 @@ router.get('/leaderboard', async (req, res) => {
     ];
 
     const leaderboardData = await UserStats.aggregate(pipeline);
+    
+    console.log(`[LEADERBOARD] Raw aggregation returned ${leaderboardData.length} entries`);
     
     // Add rank to each entry
     const formattedData = leaderboardData.map((entry, index) => ({
@@ -193,6 +194,28 @@ router.get('/leaderboard', async (req, res) => {
       success: false, 
       message: 'Server error while fetching leaderboard data' 
     });
+  }
+});
+
+// Debug total stats count
+router.get('/leaderboard/debug', async (req, res) => {
+  try {
+    const totalStats = await UserStats.countDocuments();
+    const statsWithWpm = await UserStats.countDocuments({ lastWpm: { $gt: 0 } });
+    const allStats = await UserStats.find({}).limit(5).populate('userId');
+    
+    res.json({
+      success: true,
+      totalStats,
+      statsWithWpm,
+      sampleStats: allStats.map(s => ({
+        username: s.userId?.username || s.userId?.displayName,
+        lastWpm: s.lastWpm,
+        lastAccuracy: s.lastAccuracy
+      }))
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
