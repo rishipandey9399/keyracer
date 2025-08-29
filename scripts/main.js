@@ -471,8 +471,8 @@ function updateTimer() {
     }
     
     // Submit to server leaderboard for all users
-    console.log('Submitting to server leaderboard:', testRecord);
-    console.log('Username from localStorage:', localStorage.getItem('typingTestUser'));
+    console.log('[MAIN] Submitting to server leaderboard:', testRecord);
+    
     fetch('/api/leaderboard/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -480,18 +480,26 @@ function updateTimer() {
     })
     .then(res => res.json())
     .then(data => {
-        console.log('Leaderboard submission response:', data);
+        console.log('[MAIN] Leaderboard submission response:', data);
         
-        // Trigger real-time update after successful server submission
-        if (window.realTimeLeaderboard) {
-            console.log('Triggering real-time leaderboard update after server submission');
-            setTimeout(() => {
-                window.realTimeLeaderboard.triggerUpdate(testRecord);
-            }, 1000);
+        if (data.success) {
+            // Trigger leaderboard update
+            if (window.leaderboardManager) {
+                setTimeout(() => {
+                    window.leaderboardManager.triggerUpdate(testRecord);
+                }, 500);
+            }
+            
+            // Show success notification
+            showNotification(`Result submitted! ${testRecord.wpm} WPM recorded.`, 'success');
+        } else {
+            console.error('[MAIN] Leaderboard submission failed:', data.message);
+            showNotification('Failed to submit result to leaderboard', 'error');
         }
     })
     .catch(err => {
-        console.error('Error submitting to leaderboard:', err);
+        console.error('[MAIN] Error submitting to leaderboard:', err);
+        showNotification('Network error while submitting result', 'error');
     });
 
     // Show test results
@@ -822,7 +830,58 @@ function showRaceStartCountdown() {
 }
 
 // Export function for use in other scripts
-window.showRaceStartCountdown = showRaceStartCountdown; 
+window.showRaceStartCountdown = showRaceStartCountdown;
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span>${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+        </div>
+    `;
+    
+    // Add CSS if not present
+    if (!document.getElementById('notification-css')) {
+        const style = document.createElement('style');
+        style.id = 'notification-css';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 16px;
+                border-radius: 6px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateX(400px);
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+            .notification.show { transform: translateX(0); opacity: 1; }
+            .notification-success { background: #28a745; }
+            .notification-error { background: #dc3545; }
+            .notification-info { background: #007bff; }
+            .notification-content { display: flex; justify-content: space-between; align-items: center; }
+            .notification-close { background: none; border: none; color: white; font-size: 18px; cursor: pointer; padding: 0; margin-left: 10px; }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 100);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
+
+window.showNotification = showNotification; 
 
 function forceContentVisibility() {
     // Reveal all main content containers
