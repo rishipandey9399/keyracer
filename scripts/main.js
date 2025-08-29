@@ -470,34 +470,28 @@ function updateTimer() {
         });
     }
     
-    // Submit to server leaderboard only for registered users
-    const userType = localStorage.getItem('typingTestUserType');
-    if (userType === 'registered') {
-        fetch('/api/leaderboard/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(testRecord)
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log('Leaderboard submission response:', data);
-            
-            // Trigger real-time update after successful server submission
-            if (window.realTimeLeaderboard) {
-                console.log('Triggering real-time leaderboard update after server submission');
-                setTimeout(() => {
-                    window.realTimeLeaderboard.triggerUpdate(testRecord);
-                }, 500);
-            } else {
-                console.log('Real-time leaderboard not available');
-            }
-        })
-        .catch(err => {
-            console.error('Error submitting to leaderboard:', err);
-        });
-    } else {
-        console.log('Guest user - skipping server leaderboard submission');
-    }
+    // Submit to server leaderboard for all users
+    console.log('Submitting to server leaderboard:', testRecord);
+    fetch('/api/leaderboard/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testRecord)
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Leaderboard submission response:', data);
+        
+        // Trigger real-time update after successful server submission
+        if (window.realTimeLeaderboard) {
+            console.log('Triggering real-time leaderboard update after server submission');
+            setTimeout(() => {
+                window.realTimeLeaderboard.triggerUpdate(testRecord);
+            }, 1000);
+        }
+    })
+    .catch(err => {
+        console.error('Error submitting to leaderboard:', err);
+    });
 
     // Show test results
     displayResults(testRecord);
