@@ -467,19 +467,24 @@ function updateTimer() {
         });
     }
     
-    // Submit to server leaderboard
-fetch('/api/leaderboard/submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(testRecord)
-})
-.then(res => res.json())
-.then(data => {
-    console.log('Leaderboard submission response:', data);
-})
-.catch(err => {
-    console.error('Error submitting to leaderboard:', err);
-});
+    // Submit to server leaderboard only for registered users
+    const userType = localStorage.getItem('typingTestUserType');
+    if (userType === 'registered') {
+        fetch('/api/leaderboard/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(testRecord)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Leaderboard submission response:', data);
+        })
+        .catch(err => {
+            console.error('Error submitting to leaderboard:', err);
+        });
+    } else {
+        console.log('Guest user - skipping server leaderboard submission');
+    }
 
     // Show test results
     displayResults(testRecord);
