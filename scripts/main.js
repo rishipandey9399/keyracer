@@ -472,6 +472,7 @@ function updateTimer() {
     
     // Submit to server leaderboard for all users
     console.log('Submitting to server leaderboard:', testRecord);
+    console.log('Username from localStorage:', localStorage.getItem('typingTestUser'));
     fetch('/api/leaderboard/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
