@@ -137,6 +137,24 @@ const userStatsSchema = new mongoose.Schema({
     accuracy: Number
   }],
   
+  // Latest test results (for leaderboard)
+  lastWpm: {
+    type: Number,
+    default: 0
+  },
+  lastAccuracy: {
+    type: Number,
+    default: 0
+  },
+  lastDifficulty: {
+    type: String,
+    default: 'beginner'
+  },
+  lastTimestamp: {
+    type: Date,
+    default: Date.now
+  },
+  
   lastUpdated: {
     type: Date,
     default: Date.now

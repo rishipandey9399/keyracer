@@ -98,7 +98,7 @@ class LeaderboardManager {
             row.innerHTML = `
                 <td class="rank ${rankClass}">${rank}</td>
                 <td class="username">${this.formatUsername(username, rank)}</td>
-                <td class="highlight">${wpm}</td>
+                <td class="highlight">${wpm} WPM</td>
                 <td>${accuracy}%</td>
                 <td>${this.capitalizeFirst(difficulty)}</td>
                 <td>${dateStr}</td>

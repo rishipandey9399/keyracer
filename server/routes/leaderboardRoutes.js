@@ -126,23 +126,53 @@ router.get('/leaderboard', async (req, res) => {
       { $unwind: '$user' },
       {
         $match: {
-          lastWpm: { $gt: 0 } // Only include users with actual test results
+          $or: [
+            { lastWpm: { $gt: 0 } }, // Users with new lastWpm field
+            { challengesCompleted: { $gt: 0 } } // Users with any completed challenges
+          ]
+        }
+      },
+      {
+        $addFields: {
+          // Use lastWpm if available, otherwise calculate from totalPoints
+          calculatedWpm: {
+            $cond: {
+              if: { $and: [{ $exists: ['$lastWpm'] }, { $gt: ['$lastWpm', 0] }] },
+              then: '$lastWpm',
+              else: {
+                $cond: {
+                  if: { $gt: ['$challengesCompleted', 0] },
+                  then: { $divide: ['$totalPoints', '$challengesCompleted'] },
+                  else: 0
+                }
+              }
+            }
+          },
+          // Use lastAccuracy if available, otherwise use overallAccuracy
+          calculatedAccuracy: {
+            $cond: {
+              if: { $exists: ['$lastAccuracy'] },
+              then: '$lastAccuracy',
+              else: { $ifNull: ['$overallAccuracy', 85] }
+            }
+          }
         }
       },
       {
         $sort: { 
-          lastWpm: -1, 
-          lastAccuracy: -1, 
-          lastTimestamp: -1 
+          calculatedWpm: -1, 
+          calculatedAccuracy: -1, 
+          totalPoints: -1,
+          lastUpdated: -1
         }
       },
       {
         $project: {
           username: { $ifNull: ['$user.displayName', '$user.username'] },
-          wpm: '$lastWpm',
-          accuracy: '$lastAccuracy',
-          difficulty: '$lastDifficulty',
-          timestamp: '$lastTimestamp',
+          wpm: '$calculatedWpm',
+          accuracy: '$calculatedAccuracy',
+          difficulty: { $ifNull: ['$lastDifficulty', 'beginner'] },
+          timestamp: { $ifNull: ['$lastTimestamp', '$lastUpdated'] },
           totalPoints: '$totalPoints',
           challengesCompleted: '$challengesCompleted'
         }
@@ -169,7 +199,10 @@ router.get('/leaderboard', async (req, res) => {
 
     // Get total count
     const totalCount = await UserStats.countDocuments({ 
-      lastWpm: { $gt: 0 }
+      $or: [
+        { lastWpm: { $gt: 0 } },
+        { challengesCompleted: { $gt: 0 } }
+      ]
     });
 
     console.log(`[LEADERBOARD] Returning ${formattedData.length} entries`);
@@ -202,16 +235,21 @@ router.get('/leaderboard/debug', async (req, res) => {
   try {
     const totalStats = await UserStats.countDocuments();
     const statsWithWpm = await UserStats.countDocuments({ lastWpm: { $gt: 0 } });
+    const statsWithChallenges = await UserStats.countDocuments({ challengesCompleted: { $gt: 0 } });
     const allStats = await UserStats.find({}).limit(5).populate('userId');
     
     res.json({
       success: true,
       totalStats,
       statsWithWpm,
+      statsWithChallenges,
       sampleStats: allStats.map(s => ({
         username: s.userId?.username || s.userId?.displayName,
         lastWpm: s.lastWpm,
-        lastAccuracy: s.lastAccuracy
+        lastAccuracy: s.lastAccuracy,
+        challengesCompleted: s.challengesCompleted,
+        totalPoints: s.totalPoints,
+        overallAccuracy: s.overallAccuracy
       }))
     });
   } catch (error) {
