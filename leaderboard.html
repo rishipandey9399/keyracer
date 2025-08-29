@@ -325,6 +325,13 @@
                     });
                 }
             }
+            
+            // Auto-refresh leaderboard every 10 seconds when page is visible
+            setInterval(() => {
+                if (!document.hidden && window.leaderboardManager) {
+                    window.leaderboardManager.loadLeaderboardData();
+                }
+            }, 10000);
         });
     </script>
     

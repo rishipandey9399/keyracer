@@ -455,11 +455,14 @@ function updateTimer() {
             console.log('Test record saved with ID:', id);
             
             // Trigger real-time leaderboard update using the new system
+            console.log('Triggering real-time leaderboard update from local save');
             if (window.realTimeLeaderboard) {
                 window.realTimeLeaderboard.triggerUpdate(testRecord);
             } else if (window.updateLeaderboardRealTime) {
                 // Fallback to old method
                 window.updateLeaderboardRealTime(testRecord);
+            } else {
+                console.log('No real-time leaderboard system available');
             }
         })
         .catch(error => {
@@ -478,6 +481,16 @@ function updateTimer() {
         .then(res => res.json())
         .then(data => {
             console.log('Leaderboard submission response:', data);
+            
+            // Trigger real-time update after successful server submission
+            if (window.realTimeLeaderboard) {
+                console.log('Triggering real-time leaderboard update after server submission');
+                setTimeout(() => {
+                    window.realTimeLeaderboard.triggerUpdate(testRecord);
+                }, 500);
+            } else {
+                console.log('Real-time leaderboard not available');
+            }
         })
         .catch(err => {
             console.error('Error submitting to leaderboard:', err);

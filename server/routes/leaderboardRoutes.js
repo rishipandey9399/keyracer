@@ -116,7 +116,7 @@ router.get('/leaderboard', async (req, res) => {
           ]
         } 
       },
-      { $sort: { totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 } },
+      { $sort: { lastWpm: -1, lastAccuracy: -1, totalPoints: -1 } },
       { $skip: (page - 1) * limit },
       { $limit: parseInt(limit) },
       {

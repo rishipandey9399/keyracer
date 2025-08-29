@@ -80,8 +80,8 @@ class LeaderboardManager {
     async loadLeaderboardData() {
         try {
             this.showLoadingState();
-            // Fetch leaderboard data from server API
-            const response = await fetch('/api/leaderboard');
+            // Fetch leaderboard data from server API with cache busting
+            const response = await fetch(`/api/leaderboard?_t=${Date.now()}`);
             const result = await response.json();
             if (result.success && Array.isArray(result.data.leaderboard)) {
                 console.log('[LeaderboardManager] Data received from server:', result.data.leaderboard);
@@ -123,17 +123,27 @@ class LeaderboardManager {
 
     // Update the table with filtered data
     updateTable(data) {
-        // Sort data by highest accuracy, then highest WPM
+        // Sort data by highest WPM, then highest accuracy
         const sortedData = [...data].sort((a, b) => {
-            // Sort by accuracy (descending), then WPM (descending)
-            const accuracyA = typeof a.accuracy === 'number' ? (a.accuracy <= 1 ? a.accuracy * 100 : a.accuracy) : 0;
-            const accuracyB = typeof b.accuracy === 'number' ? (b.accuracy <= 1 ? b.accuracy * 100 : b.accuracy) : 0;
-            if (accuracyB !== accuracyA) return accuracyB - accuracyA;
+            // Sort by WPM (descending), then accuracy (descending)
             const wpmA = typeof a.wpm === 'number' ? a.wpm : 0;
             const wpmB = typeof b.wpm === 'number' ? b.wpm : 0;
-            return wpmB - wpmA;
+            if (wpmB !== wpmA) return wpmB - wpmA;
+            const accuracyA = typeof a.accuracy === 'number' ? (a.accuracy <= 1 ? a.accuracy * 100 : a.accuracy) : 0;
+            const accuracyB = typeof b.accuracy === 'number' ? (b.accuracy <= 1 ? b.accuracy * 100 : b.accuracy) : 0;
+            return accuracyB - accuracyA;
         });
-        const tbody = document.getElementById('leaderboard-tbody');
+        const tableId = `${this.currentTab}-tab`;
+        const tableElement = document.getElementById(tableId);
+        if (!tableElement) {
+            console.error(`Table element not found: ${tableId}`);
+            return;
+        }
+        const tbody = tableElement.querySelector('tbody');
+        if (!tbody) {
+            console.error(`Table body not found in ${tableId}`);
+            return;
+        }
         tbody.innerHTML = '';
         if (sortedData.length === 0) {
             const noDataRow = document.createElement('tr');
@@ -147,13 +157,17 @@ class LeaderboardManager {
             const rankClass = rank <= 3 ? `rank-${rank}` : '';
             const accuracyValue = typeof record.accuracy === 'number' ? (record.accuracy <= 1 ? Math.round(record.accuracy * 100) : record.accuracy) : 0;
             const wpmValue = typeof record.wpm === 'number' ? Math.round(record.wpm) : 0;
+            const username = (record.username || 'Anonymous').replace(/[<>"'&]/g, '');
+            const difficulty = (record.difficulty || 'Standard').replace(/[<>"'&]/g, '');
+            const dateStr = record.timestamp ? new Date(record.timestamp).toLocaleDateString() : '';
+            
             row.innerHTML = `
                 <td class="rank ${rankClass}">${rank}</td>
-                <td class="username">${record.username || 'Anonymous'}</td>
+                <td class="username">${username}</td>
                 <td class="highlight">${wpmValue}</td>
                 <td>${accuracyValue}%</td>
-                <td>${record.difficulty || 'Standard'}</td>
-                <td>${record.timestamp ? new Date(record.timestamp).toLocaleDateString() : ''}</td>
+                <td>${difficulty}</td>
+                <td>${dateStr}</td>
             `;
             tbody.appendChild(row);
         });
@@ -477,13 +491,15 @@ class LeaderboardManager {
         // Show a live update notification
         this.showLiveUpdateNotification(newRecord);
         
-        // Reload leaderboard data to reflect the new record
-        try {
-            await this.loadLeaderboardData();
-            console.log('Leaderboard updated successfully');
-        } catch (error) {
-            console.error('Error updating leaderboard in real-time:', error);
-        }
+        // Add a small delay to ensure server has processed the update
+        setTimeout(async () => {
+            try {
+                await this.loadLeaderboardData();
+                console.log('Leaderboard updated successfully');
+            } catch (error) {
+                console.error('Error updating leaderboard in real-time:', error);
+            }
+        }, 1000); // 1 second delay
     }
 
     // Show live update notification

@@ -180,24 +180,21 @@ class RealTimeLeaderboard {
         const currentUser = localStorage.getItem('typingTestUser');
         const userType = localStorage.getItem('typingTestUserType');
         
+        // Allow registered users
+        if (userType === 'registered' && currentUser) {
+            return { isValid: true };
+        }
+        
         // Check if user is authenticated
         if (!currentUser) {
             return { isValid: false, reason: 'No authenticated user' };
         }
         
-        // Check for guest users
+        // Check for guest users - allow them for local updates
         if (testRecord.username === 'Guest' || userType === 'guest') {
-            return { isValid: false, reason: 'Guest users cannot update leaderboard' };
+            return { isValid: true, reason: 'Guest user - local update only' };
         }
         
-        // Verify record matches authenticated user
-        if (testRecord.username !== currentUser) {
-            return { 
-                isValid: false, 
-                reason: `Username mismatch: ${testRecord.username} vs ${currentUser}` 
-            };
-        }
-
         // Check for suspicious rapid updates from same user
         const recentUpdates = this.updateQueue.filter(
             update => update.username === currentUser && 
