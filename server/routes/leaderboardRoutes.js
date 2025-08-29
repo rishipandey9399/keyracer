@@ -12,17 +12,22 @@ router.post('/leaderboard/submit', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
-    // Find or create user
+    // Find user by username
     let user = await User.findOne({ username });
     if (!user) {
-      // Only create a user if they are not logged in
-      if (req.user) {
-        user = req.user; // Use the authenticated user
-      } else {
-        user = new User({ username, displayName: username, email: `${username}@keyracer.in`, password: 'guest', authMethod: 'local', isVerified: false });
-        await user.save();
-      }
+      console.log(`User ${username} not found, creating new user`);
+      user = new User({ 
+        username, 
+        displayName: username, 
+        email: `${username}@keyracer.in`, 
+        password: 'registered', 
+        authMethod: 'local', 
+        isVerified: true 
+      });
+      await user.save();
     }
+    
+    console.log(`Updating stats for user: ${username} (${user._id})`);
 
     // Find or create UserStats
     let stats = await UserStats.findOne({ userId: user._id });
@@ -42,7 +47,9 @@ router.post('/leaderboard/submit', async (req, res) => {
     stats.lastWpm = wpm;
     stats.lastAccuracy = accuracy;
     stats.lastDifficulty = difficulty || 'Standard';
-    stats.lastTimestamp = timestamp ? new Date(timestamp) : new Date();
+    stats.lastTimestamp = new Date();
+    
+    console.log(`Updated stats: WPM=${wpm}, Accuracy=${accuracy}, Timestamp=${stats.lastTimestamp}`);
 
     // Update difficulty stats
     if (difficulty && stats.difficultyStats[difficulty]) {
@@ -51,6 +58,7 @@ router.post('/leaderboard/submit', async (req, res) => {
     }
 
     await stats.save();
+    console.log(`Stats saved successfully for ${username}`);
 
     res.json({ success: true, message: 'Result submitted and leaderboard updated.' });
   } catch (error) {
@@ -96,7 +104,7 @@ router.get('/leaderboard', async (req, res) => {
       }
     }
     
-    // Get leaderboard data using aggregation pipeline to filter out guest users
+    // Get leaderboard data using aggregation pipeline
     const leaderboardPipeline = [
       { $match: queryConditions },
       {
@@ -108,14 +116,6 @@ router.get('/leaderboard', async (req, res) => {
         }
       },
       { $unwind: '$user' },
-      // Filter out guest users (users with authMethod 'local' and password 'guest')
-      { 
-        $match: { 
-          $nor: [
-            { 'user.authMethod': 'local', 'user.password': 'guest' }
-          ]
-        } 
-      },
       { $sort: { lastWpm: -1, lastAccuracy: -1, totalPoints: -1 } },
       { $skip: (page - 1) * limit },
       { $limit: parseInt(limit) },
@@ -141,7 +141,7 @@ router.get('/leaderboard', async (req, res) => {
     
     const leaderboardData = await UserStats.aggregate(leaderboardPipeline);
     
-    // Get total count for pagination (excluding guest users)
+    // Get total count for pagination
     const totalCountPipeline = [
       { $match: queryConditions },
       {
@@ -153,14 +153,6 @@ router.get('/leaderboard', async (req, res) => {
         }
       },
       { $unwind: '$user' },
-      // Filter out guest users (users with authMethod 'local' and password 'guest')
-      { 
-        $match: { 
-          $nor: [
-            { 'user.authMethod': 'local', 'user.password': 'guest' }
-          ]
-        } 
-      },
       { $count: 'total' }
     ];
     
@@ -184,7 +176,7 @@ router.get('/leaderboard', async (req, res) => {
       };
     });
     
-    // Get global stats for context (excluding guest users)
+    // Get global stats for context
     const globalStatsPipeline = [
       {
         $lookup: {
@@ -195,14 +187,6 @@ router.get('/leaderboard', async (req, res) => {
         }
       },
       { $unwind: '$user' },
-      // Filter out guest users (users with authMethod 'local' and password 'guest')
-      { 
-        $match: { 
-          $nor: [
-            { 'user.authMethod': 'local', 'user.password': 'guest' }
-          ]
-        } 
-      },
       {
         $group: {
           _id: null,
@@ -249,6 +233,31 @@ router.get('/leaderboard', async (req, res) => {
       success: false, 
       message: 'Server error while fetching leaderboard data' 
     });
+  }
+});
+
+// Debug endpoint to check user stats
+router.get('/leaderboard/debug/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.json({ success: false, message: 'User not found' });
+    }
+    
+    const stats = await UserStats.findOne({ userId: user._id });
+    res.json({
+      success: true,
+      user: {
+        username: user.username,
+        authMethod: user.authMethod,
+        password: user.password,
+        isVerified: user.isVerified
+      },
+      stats: stats || 'No stats found'
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
