@@ -35,6 +35,20 @@ class RealTimeLeaderboard {
             }
         });
 
+        // Listen for BroadcastChannel messages for cross-tab/window updates
+        if (typeof BroadcastChannel !== 'undefined') {
+            try {
+                this.broadcastChannel = new BroadcastChannel('leaderboard_updates');
+                this.broadcastChannel.addEventListener('message', (event) => {
+                    if (event.data && event.data.type === 'leaderboard_update') {
+                        this.handleBroadcastUpdate(event.data);
+                    }
+                });
+            } catch (error) {
+                console.log('BroadcastChannel not supported, falling back to localStorage only');
+            }
+        }
+
         // Listen for page visibility changes to resume updates
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && this.updateQueue.length > 0) {
@@ -515,9 +529,10 @@ class RealTimeLeaderboard {
         }, 3000);
     }
 
-    // Broadcast update to other tabs/windows
+    // Broadcast update to other tabs/windows using both localStorage and BroadcastChannel
     broadcastUpdate(testRecord) {
         try {
+            // Method 1: localStorage for same-origin tabs (legacy support)
             localStorage.setItem('leaderboard-update', JSON.stringify({
                 ...testRecord,
                 timestamp: Date.now(),
@@ -528,6 +543,16 @@ class RealTimeLeaderboard {
             setTimeout(() => {
                 localStorage.removeItem('leaderboard-update');
             }, 1000);
+            
+            // Method 2: BroadcastChannel for modern browsers (more reliable)
+            if (this.broadcastChannel) {
+                this.broadcastChannel.postMessage({
+                    type: 'leaderboard_update',
+                    data: testRecord,
+                    timestamp: Date.now(),
+                    broadcastId: Math.random().toString(36).substr(2, 9)
+                });
+            }
         } catch (error) {
             console.error('Error broadcasting leaderboard update:', error);
         }
@@ -555,6 +580,28 @@ class RealTimeLeaderboard {
             this.processUpdateQueue();
         } catch (error) {
             console.error('Error handling storage update:', error);
+        }
+    }
+
+    // Handle BroadcastChannel updates
+    handleBroadcastUpdate(broadcastData) {
+        try {
+            // Prevent processing the same update multiple times
+            if (this.updateQueue.some(u => u.broadcastId === broadcastData.broadcastId)) {
+                return;
+            }
+
+            // Add to queue and process
+            this.updateQueue.push({
+                ...broadcastData.data,
+                processed: false,
+                fromBroadcast: true,
+                broadcastId: broadcastData.broadcastId
+            });
+
+            this.processUpdateQueue();
+        } catch (error) {
+            console.error('Error handling broadcast update:', error);
         }
     }
 
