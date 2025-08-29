@@ -76,10 +76,10 @@ class LeaderboardManager {
             return;
         }
 
-        // Sort data by WPM (descending), then accuracy (descending)
+        // Sort data by accuracy (descending), then WPM (descending)
         const sortedData = [...data].sort((a, b) => {
-            if (b.wpm !== a.wpm) return b.wpm - a.wpm;
-            return b.accuracy - a.accuracy;
+            if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+            return b.wpm - a.wpm;
         });
 
         // Create table rows

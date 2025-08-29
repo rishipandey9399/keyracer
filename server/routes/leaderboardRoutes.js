@@ -135,7 +135,7 @@ router.get('/leaderboard', async (req, res) => {
       {
         $sort: { 
           lastWpm: -1, 
-          totalPoints: -1,
+          lastAccuracy: -1, 
           lastUpdated: -1
         }
       },

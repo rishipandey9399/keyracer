@@ -100,7 +100,7 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 					]
 				} 
 			},
-			{ $sort: { totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 } },
+			{ $sort: { overallAccuracy: -1, totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 } },
 			{ $skip: (page - 1) * limit },
 			{ $limit: parseInt(limit) },
 			{
