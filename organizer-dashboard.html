@@ -253,15 +253,15 @@
         }
         
         .btn-primary-custom {
-            background: linear-gradient(90deg, var(--conductor-color) 0%, var(--danger-color) 100%);
+            background: linear-gradient(90deg, #FF4A4A 0%, #FF6B6B 100%);
             border: none;
             color: #fff;
         }
         
         .btn-primary-custom:hover {
-            background: linear-gradient(90deg, var(--danger-color) 0%, var(--conductor-color) 100%);
+            background: linear-gradient(90deg, #FF6B6B 0%, #FF4A4A 100%);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 74, 74, 0.4);
         }
         
         .btn-secondary-custom {
@@ -274,73 +274,6 @@
             background: rgba(0, 194, 255, 0.2);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 194, 255, 0.2);
-        }
-        
-        /* Dashboard Cards */
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .dashboard-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 194, 255, 0.2);
-        }
-        
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 194, 255, 0.15);
-            border-color: var(--accent-color);
-        }
-        
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .card-icon.participants {
-            background: rgba(78, 205, 196, 0.2);
-            color: var(--participant-color);
-        }
-        
-        .card-icon.problems {
-            background: rgba(255, 199, 0, 0.2);
-            color: var(--highlight-color);
-        }
-        
-        .card-icon.submissions {
-            background: rgba(0, 194, 255, 0.2);
-            color: var(--secondary-color);
-        }
-        
-        .card-icon.time {
-            background: rgba(255, 107, 107, 0.2);
-            color: var(--conductor-color);
-        }
-        
-        .card-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0;
-            color: #fff;
-        }
-        
-        .card-label {
-            color: #b8eaff;
-            font-size: 0.9rem;
-            margin: 0;
         }
         
         /* Hackathon List */
@@ -469,15 +402,6 @@
             background: rgba(255, 74, 74, 0.2);
         }
         
-        /* Participant List */
-        .participant-list {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 194, 255, 0.2);
-        }
-        
         /* Modal Styles */
         .modal-content {
             background: var(--card-bg);
@@ -570,10 +494,6 @@
         }
         
         @media (max-width: 768px) {
-            .dashboard-cards {
-                grid-template-columns: 1fr;
-            }
-            
             .hackathon-table {
                 display: block;
                 overflow-x: auto;
@@ -598,11 +518,21 @@
             0% { transform: scale(1); filter: brightness(1); }
             100% { transform: scale(1.05); filter: brightness(1.2); }
         }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25em 0.5em;
+        }
     </style>
     
     <!-- Mobile Header (visible on small screens) -->
     <div class="mobile-header d-lg-none">
-        <a href="#" class="mobile-logo">
+        <a href="preference.html" class="mobile-logo">
             <img src="assets/images/logo.png" alt="KeyRacer Logo">
             <span>KeyRacer</span>
         </a>
@@ -614,7 +544,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a href="#" class="sidebar-logo">
+            <a href="preference.html" class="sidebar-logo">
                 <img src="assets/images/logo.png" alt="KeyRacer Logo">
                 <span>KeyRacer</span>
             </a>
@@ -625,13 +555,7 @@
         
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="#" class="nav-link active" data-page="dashboard">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-page="hackathons">
+                <a href="#" class="nav-link active" data-page="hackathons">
                     <i class="fas fa-trophy"></i>
                     <span>Hackathons</span>
                 </a>
@@ -684,7 +608,7 @@
                     <p class="user-role">Hackathon Organizer</p>
                 </div>
             </div>
-            <a href="hackathon.html" class="logout-btn">
+            <a href="#" class="logout-btn" onclick="logoutOrganizer()">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
@@ -694,115 +618,8 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="dashboard-container">
-            <!-- Dashboard Page -->
-            <div class="page" id="dashboard-page">
-                <div class="page-header">
-                    <h1 class="page-title">Organizer Dashboard</h1>
-                    <div class="action-buttons">
-                        <button class="btn btn-custom btn-primary-custom" data-bs-toggle="modal" data-bs-target="#createHackathonModal">
-                            <i class="fas fa-plus"></i>
-                            <span>Create Hackathon</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="dashboard-cards">
-                    <div class="dashboard-card">
-                        <div class="card-icon participants">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h2 class="card-value">0</h2>
-                        <p class="card-label">Total Participants</p>
-                    </div>
-                    
-                    <div class="dashboard-card">
-                        <div class="card-icon problems">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h2 class="card-value">0</h2>
-                        <p class="card-label">Problem Statements</p>
-                    </div>
-                    
-                    <div class="dashboard-card">
-                        <div class="card-icon submissions">
-                            <i class="fas fa-file-code"></i>
-                        </div>
-                        <h2 class="card-value">0</h2>
-                        <p class="card-label">Total Submissions</p>
-                    </div>
-                    
-                    <div class="dashboard-card">
-                        <div class="card-icon time">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h2 class="card-value">0</h2>
-                        <p class="card-label">Active Hackathons</p>
-                    </div>
-                </div>
-                
-                <div class="hackathon-list">
-                    <div class="list-header">
-                        <h2 class="list-title">Recent Hackathons</h2>
-                        <div class="list-actions">
-                            <button class="btn btn-sm btn-secondary-custom">
-                                <i class="fas fa-filter"></i>
-                                <span>Filter</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="hackathon-table">
-                            <thead>
-                                <tr>
-                                    <th>Hackathon Name</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Participants</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Hackathon entries will appear here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <div class="participant-list">
-                    <div class="list-header">
-                        <h2 class="list-title">Recent Participants</h2>
-                        <div class="list-actions">
-                            <button class="btn btn-sm btn-secondary-custom">
-                                <i class="fas fa-download"></i>
-                                <span>Export</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="hackathon-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Hackathon</th>
-                                    <th>Joined On</th>
-                                    <th>Submissions</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Participant entries will appear here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
             <!-- Hackathons Page -->
-            <div class="page" id="hackathons-page" style="display: none;">
+            <div class="page" id="hackathons-page">
                 <div class="page-header">
                     <h1 class="page-title">Hackathons</h1>
                     <div class="action-buttons">
@@ -836,7 +653,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="hackathons-table-body">
                                 <!-- Hackathon entries will appear here -->
                             </tbody>
                         </table>
@@ -858,7 +675,7 @@
                 
                 <div class="hackathon-list">
                     <div class="list-header">
-                        <h2 class="list-title">All Problem Statements</h2>
+                        <h2 class="list-title">Problem List</h2>
                         <div class="list-actions">
                             <button class="btn btn-sm btn-secondary-custom">
                                 <i class="fas fa-filter"></i>
@@ -879,7 +696,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="problems-table-body">
                                 <!-- Problem entries will appear here -->
                             </tbody>
                         </table>
@@ -892,21 +709,27 @@
                 <div class="page-header">
                     <h1 class="page-title">Participants</h1>
                     <div class="action-buttons">
-                        <button class="btn btn-custom btn-secondary-custom">
+                        <button class="btn btn-custom btn-secondary-custom" onclick="exportParticipants()">
                             <i class="fas fa-download"></i>
                             <span>Export List</span>
+                        </button>
+                        <button class="btn btn-custom btn-primary-custom" onclick="refreshParticipants()">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
                         </button>
                     </div>
                 </div>
                 
-                <div class="participant-list">
+                <div class="hackathon-list">
                     <div class="list-header">
-                        <h2 class="list-title">All Participants</h2>
+                        <h2 class="list-title">All Participants <span id="participant-count" class="badge bg-primary">0</span></h2>
                         <div class="list-actions">
-                            <button class="btn btn-sm btn-secondary-custom">
-                                <i class="fas fa-filter"></i>
-                                <span>Filter</span>
-                            </button>
+                            <select class="form-select" id="hackathon-filter" style="width: auto; display: inline-block;">
+                                <option value="">All Hackathons</option>
+                            </select>
+                            <span class="ms-2 text-success" id="live-indicator">
+                                <i class="fas fa-circle" style="font-size: 0.5rem;"></i> Live
+                            </span>
                         </div>
                     </div>
                     
@@ -922,7 +745,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="participants-table-body">
                                 <!-- Participant entries will appear here -->
                             </tbody>
                         </table>
@@ -1206,6 +1029,105 @@
         </div>
     </div>
     
+    <!-- Edit Problem Modal -->
+    <div class="modal fade" id="editProblemModal" tabindex="-1" aria-labelledby="editProblemModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProblemModalLabel" style="color: var(--organizer-color); font-family: 'Orbitron', sans-serif;">Edit Problem</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProblemForm">
+                        <input type="hidden" id="editProblemIndex">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editProblemTitle" class="form-label">Problem Title</label>
+                                <input type="text" class="form-control" id="editProblemTitle" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editProblemDifficulty" class="form-label">Difficulty</label>
+                                <select class="form-select" id="editProblemDifficulty" required>
+                                    <option value="easy">Easy</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="hard">Hard</option>
+                                    <option value="expert">Expert</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editProblemCategory" class="form-label">Category</label>
+                                <select class="form-select" id="editProblemCategory" required>
+                                    <option value="algorithms">Algorithms</option>
+                                    <option value="data-structures">Data Structures</option>
+                                    <option value="dynamic-programming">Dynamic Programming</option>
+                                    <option value="graph-theory">Graph Theory</option>
+                                    <option value="string-manipulation">String Manipulation</option>
+                                    <option value="mathematics">Mathematics</option>
+                                    <option value="web-development">Web Development</option>
+                                    <option value="database">Database</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editProblemHackathon" class="form-label">Assign to Hackathon</label>
+                                <select class="form-select" id="editProblemHackathon" required>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editProblemDescription" class="form-label">Problem Description</label>
+                                <textarea class="form-control" id="editProblemDescription" rows="6" required></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editProblemConstraints" class="form-label">Constraints</label>
+                                <textarea class="form-control" id="editProblemConstraints" rows="3"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editProblemTimeLimit" class="form-label">Time Limit (seconds)</label>
+                                <input type="number" class="form-control" id="editProblemTimeLimit" min="1" max="10">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editProblemMemoryLimit" class="form-label">Memory Limit (MB)</label>
+                                <input type="number" class="form-control" id="editProblemMemoryLimit" min="64" max="1024">
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editProblemSampleInput" class="form-label">Sample Input</label>
+                                <textarea class="form-control" id="editProblemSampleInput" rows="3"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editProblemSampleOutput" class="form-label">Sample Output</label>
+                                <textarea class="form-control" id="editProblemSampleOutput" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveProblemBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Add Problem Modal -->
     <div class="modal fade" id="addProblemModal" tabindex="-1" aria-labelledby="addProblemModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -1217,40 +1139,44 @@
                 <div class="modal-body">
                     <form id="addProblemForm">
                         <div class="row mb-3">
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <label for="problemTitle" class="form-label">Problem Title</label>
                                 <input type="text" class="form-control" id="problemTitle" placeholder="Enter problem title" required>
                             </div>
-                            <div class="col-md-4">
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="problemDifficulty" class="form-label">Difficulty</label>
                                 <select class="form-select" id="problemDifficulty" required>
                                     <option value="">Select difficulty</option>
                                     <option value="easy">Easy</option>
                                     <option value="medium">Medium</option>
                                     <option value="hard">Hard</option>
+                                    <option value="expert">Expert</option>
                                 </select>
                             </div>
-                        </div>
-                        
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="problemCategory" class="form-label">Category</label>
                                 <select class="form-select" id="problemCategory" required>
                                     <option value="">Select category</option>
                                     <option value="algorithms">Algorithms</option>
                                     <option value="data-structures">Data Structures</option>
-                                    <option value="string-manipulation">String Manipulation</option>
                                     <option value="dynamic-programming">Dynamic Programming</option>
-                                    <option value="math">Mathematics</option>
                                     <option value="graph-theory">Graph Theory</option>
-                                    <option value="optimization">Optimization</option>
+                                    <option value="string-manipulation">String Manipulation</option>
+                                    <option value="mathematics">Mathematics</option>
+                                    <option value="web-development">Web Development</option>
+                                    <option value="database">Database</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label for="problemHackathon" class="form-label">Hackathon</label>
-                                <select class="form-select" id="problemHackathon">
-                                    <option value="">Select hackathon (optional)</option>
-                                    <!-- Hackathon options will be populated dynamically -->
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="problemHackathon" class="form-label">Assign to Hackathon</label>
+                                <select class="form-select" id="problemHackathon" required>
+                                    <option value="">Select hackathon</option>
                                 </select>
                             </div>
                         </div>
@@ -1263,60 +1189,34 @@
                         </div>
                         
                         <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="problemConstraints" class="form-label">Constraints</label>
+                                <textarea class="form-control" id="problemConstraints" rows="3" placeholder="Enter problem constraints"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="inputFormat" class="form-label">Input Format</label>
-                                <textarea class="form-control" id="inputFormat" rows="3" placeholder="Describe the input format"></textarea>
+                                <label for="problemTimeLimit" class="form-label">Time Limit (seconds)</label>
+                                <input type="number" class="form-control" id="problemTimeLimit" value="1" min="1" max="10">
                             </div>
                             <div class="col-md-6">
-                                <label for="outputFormat" class="form-label">Output Format</label>
-                                <textarea class="form-control" id="outputFormat" rows="3" placeholder="Describe the output format"></textarea>
+                                <label for="problemMemoryLimit" class="form-label">Memory Limit (MB)</label>
+                                <input type="number" class="form-control" id="problemMemoryLimit" value="256" min="64" max="1024">
                             </div>
                         </div>
                         
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <label for="exampleInput" class="form-label">Example Input</label>
-                                <textarea class="form-control" id="exampleInput" rows="2" placeholder="Provide example input"></textarea>
+                                <label for="problemSampleInput" class="form-label">Sample Input</label>
+                                <textarea class="form-control" id="problemSampleInput" rows="3" placeholder="Enter sample input"></textarea>
                             </div>
                         </div>
                         
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <label for="exampleOutput" class="form-label">Example Output</label>
-                                <textarea class="form-control" id="exampleOutput" rows="2" placeholder="Provide example output"></textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="constraints" class="form-label">Constraints</label>
-                                <textarea class="form-control" id="constraints" rows="3" placeholder="List any constraints or limitations"></textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="allowedLanguages" class="form-label">Allowed Languages</label>
-                                <select class="form-select" id="allowedLanguages" multiple>
-                                    <option value="javascript">JavaScript</option>
-                                    <option value="python">Python</option>
-                                    <option value="java">Java</option>
-                                    <option value="cpp">C++</option>
-                                    <option value="csharp">C#</option>
-                                    <option value="php">PHP</option>
-                                    <option value="ruby">Ruby</option>
-                                    <option value="go">Go</option>
-                                </select>
-                                <div class="form-text text-light">Hold Ctrl/Cmd to select multiple options</div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="publishImmediately" checked>
-                                    <label class="form-check-label" for="publishImmediately">Publish immediately to participants</label>
-                                </div>
+                                <label for="problemSampleOutput" class="form-label">Sample Output</label>
+                                <textarea class="form-control" id="problemSampleOutput" rows="3" placeholder="Enter expected output"></textarea>
                             </div>
                         </div>
                     </form>
@@ -1329,6 +1229,148 @@
         </div>
     </div>
     
+    <!-- Hackathon Created Success Modal -->
+    <div class="modal fade" id="hackathonCreatedModal" tabindex="-1" aria-labelledby="hackathonCreatedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hackathonCreatedModalLabel" style="color: var(--organizer-color); font-family: 'Orbitron', sans-serif;">Hackathon Created Successfully!</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success" style="background: rgba(78, 205, 196, 0.1); border: 1px solid rgba(78, 205, 196, 0.3); color: var(--participant-color);">
+                        <i class="fas fa-check-circle"></i>
+                        Your hackathon has been created successfully!
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Hackathon ID (For Participants)</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="generatedHackathonId" readonly>
+                                <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('generatedHackathonId')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="form-text text-light">Share this ID with participants to join your hackathon</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Your Organizer Code</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="generatedOrganizerCode" readonly>
+                                <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('generatedOrganizerCode')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="form-text text-light">Use this code to access your organizer dashboard later</div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning" style="background: rgba(255, 199, 0, 0.1); border: 1px solid rgba(255, 199, 0, 0.3); color: var(--highlight-color);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Important:</strong> Save these codes safely. You'll need them to manage your hackathon.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Hackathon Modal -->
+    <div class="modal fade" id="editHackathonModal" tabindex="-1" aria-labelledby="editHackathonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editHackathonModalLabel" style="color: var(--organizer-color); font-family: 'Orbitron', sans-serif;">Edit Hackathon</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editHackathonForm">
+                        <input type="hidden" id="editHackathonIndex">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editHackathonTitle" class="form-label">Hackathon Title</label>
+                                <input type="text" class="form-control" id="editHackathonTitle" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editHackathonDate" class="form-label">Date</label>
+                                <input type="text" class="form-control" id="editHackathonDate" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="editStartTime" class="form-label">Start Time</label>
+                                <input type="text" class="form-control" id="editStartTime" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="editEndTime" class="form-label">End Time</label>
+                                <input type="text" class="form-control" id="editEndTime" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editHackathonRules" class="form-label">Rules</label>
+                                <textarea class="form-control" id="editHackathonRules" rows="4"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editAllowedTechStack" class="form-label">Allowed Tech Stack</label>
+                                <select class="form-select" id="editAllowedTechStack" multiple>
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="python">Python</option>
+                                    <option value="java">Java</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="csharp">C#</option>
+                                    <option value="php">PHP</option>
+                                    <option value="ruby">Ruby</option>
+                                    <option value="go">Go</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editAutoStart" class="form-label">Auto Start</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="editAutoStart">
+                                    <label class="form-check-label" for="editAutoStart">Enable auto start at scheduled time</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editAntiCheating" class="form-label">Anti-Cheating Tools</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editScreenshotCheck">
+                                    <label class="form-check-label" for="editScreenshotCheck">Screenshot Check</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editWebcamPermission">
+                                    <label class="form-check-label" for="editWebcamPermission">Webcam Permission</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editTabSwitchMonitoring">
+                                    <label class="form-check-label" for="editTabSwitchMonitoring">Tab Switch Monitoring</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveHackathonBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Particles.js Container -->
     <div id="particles-js"></div>
 
@@ -1336,6 +1378,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="scripts/participant-manager.js"></script>
+    <script src="scripts/problem-sync.js"></script>
     <script>
         // Preloader animation
         document.addEventListener('DOMContentLoaded', function() {
@@ -1536,6 +1580,93 @@
                 });
             });
             
+            // Code generation functions
+            function generateHackathonId() {
+                return 'HK' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            }
+            
+            function generateOrganizerCode() {
+                return 'ORG' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            }
+            
+            // Copy to clipboard function
+            window.copyToClipboard = function(elementId) {
+                const element = document.getElementById(elementId);
+                element.select();
+                element.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                
+                // Show feedback
+                const button = element.nextElementSibling;
+                const originalIcon = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                button.style.color = 'var(--participant-color)';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalIcon;
+                    button.style.color = '';
+                }, 1000);
+            };
+            
+            // Organizer Data Management
+            let currentOrganizerId = localStorage.getItem('currentOrganizerId');
+            
+            // Check if organizer is accessing via organizer code
+            const urlParams = new URLSearchParams(window.location.search);
+            const organizerCode = urlParams.get('organizerCode') || localStorage.getItem('currentOrganizerCode');
+            
+            // If organizer code exists, find the corresponding organizer ID
+            if (organizerCode) {
+                // Search through all stored hackathons to find the organizer
+                const allKeys = Object.keys(localStorage);
+                let foundOrganizerId = null;
+                
+                for (const key of allKeys) {
+                    if (key.includes('_hackathons')) {
+                        try {
+                            const hackathons = JSON.parse(localStorage.getItem(key));
+                            const hackathon = hackathons.find(h => h.organizerCode === organizerCode);
+                            if (hackathon && hackathon.organizerId) {
+                                foundOrganizerId = hackathon.organizerId;
+                                break;
+                            }
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                if (foundOrganizerId) {
+                    currentOrganizerId = foundOrganizerId;
+                    localStorage.setItem('currentOrganizerId', currentOrganizerId);
+                    localStorage.setItem('currentOrganizerCode', organizerCode);
+                } else {
+                    // Invalid organizer code
+                    alert('Invalid organizer code. Please check and try again.');
+                    window.location.href = 'hackathon.html';
+                    return;
+                }
+            }
+            
+            // If no organizer ID exists, create one for new organizer
+            if (!currentOrganizerId) {
+                currentOrganizerId = 'ORG_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                localStorage.setItem('currentOrganizerId', currentOrganizerId);
+            }
+            
+            // Helper functions for organizer-specific data
+            function getOrganizerKey(key) {
+                return `${currentOrganizerId}_${key}`;
+            }
+            
+            function getOrganizerData(key) {
+                return JSON.parse(localStorage.getItem(getOrganizerKey(key))) || [];
+            }
+            
+            function setOrganizerData(key, data) {
+                localStorage.setItem(getOrganizerKey(key), JSON.stringify(data));
+            }
+            
             // Create Hackathon Button
             const createHackathonBtn = document.getElementById('createHackathonBtn');
             
@@ -1551,280 +1682,695 @@
                         return;
                     }
                     
-                    // In a real app, this would send data to a server
-                    console.log('Creating hackathon:', {
+                    // Generate unique codes
+                    const hackathonId = generateHackathonId();
+                    const organizerCode = generateOrganizerCode();
+                    
+                    // Get selected tech stack
+                    const techStackSelect = document.getElementById('allowedTechStack');
+                    const allowedTechStack = Array.from(techStackSelect.selectedOptions).map(option => option.value);
+                    
+                    // Create hackathon object
+                    const hackathon = {
+                        id: hackathonId,
+                        organizerCode: organizerCode,
+                        organizerId: currentOrganizerId,
                         title,
                         date,
                         startTime,
                         endTime,
                         rules: document.getElementById('hackathonRules').value,
+                        allowedTechStack,
                         autoStart: document.getElementById('autoStart').checked,
                         antiCheating: {
                             screenshotCheck: document.getElementById('screenshotCheck').checked,
                             webcamPermission: document.getElementById('webcamPermission').checked,
                             tabSwitchMonitoring: document.getElementById('tabSwitchMonitoring').checked
-                        }
-                    });
+                        },
+                        createdAt: new Date().toISOString(),
+                        status: 'upcoming',
+                        participants: []
+                    };
                     
-                    // Close the modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('createHackathonModal'));
-                    modal.hide();
+                    // Save hackathon to organizer-specific storage
+                    let hackathons = getOrganizerData('hackathons');
+                    hackathons.push(hackathon);
+                    setOrganizerData('hackathons', hackathons);
                     
-                    // Show success message
-                    alert('Hackathon created successfully!');
+                    // Store organizer code for this session
+                    localStorage.setItem('currentOrganizerCode', organizerCode);
+                    localStorage.setItem('currentHackathonId', hackathonId);
+                    
+                    // Close the create modal
+                    const createModal = bootstrap.Modal.getInstance(document.getElementById('createHackathonModal'));
+                    createModal.hide();
+                    
+                    // Show the generated codes
+                    document.getElementById('generatedHackathonId').value = hackathonId;
+                    document.getElementById('generatedOrganizerCode').value = organizerCode;
+                    
+                    // Show success modal
+                    const successModal = new bootstrap.Modal(document.getElementById('hackathonCreatedModal'));
+                    successModal.show();
                     
                     // Reset the form
                     document.getElementById('createHackathonForm').reset();
+                    
+                    // Refresh hackathons table
+                    displayHackathons();
                 });
             }
             
-            // Set organizer name from localStorage
-            const organizerCode = localStorage.getItem('organizerCode') || localStorage.getItem('conductorCode');
-            if (organizerCode) {
-                document.getElementById('organizer-name').textContent = `Organizer ${organizerCode}`;
-            }
-            
-            // Problem management
-            const addProblemBtn = document.getElementById('addProblemBtn');
-            const problemsTable = document.getElementById('problems-table');
-            
-            // Initialize problems array from localStorage or create empty array
-            let problems = JSON.parse(localStorage.getItem('problems')) || [];
-            
-            // Display existing problems if any
-            function displayProblems() {
-                const problemsTableBody = problemsTable.querySelector('tbody');
-                problemsTableBody.innerHTML = '';
+            // Display hackathons in table
+            function displayHackathons() {
+                const hackathons = getOrganizerData('hackathons');
+                const tableBody = document.getElementById('hackathons-table-body');
                 
-                if (problems.length === 0) {
+                if (!tableBody) return;
+                
+                tableBody.innerHTML = '';
+                
+                if (hackathons.length === 0) {
                     const emptyRow = document.createElement('tr');
-                    emptyRow.innerHTML = `<td colspan="6" class="text-center">No problems added yet</td>`;
-                    problemsTableBody.appendChild(emptyRow);
+                    emptyRow.innerHTML = `<td colspan="6" class="text-center">No hackathons created yet</td>`;
+                    tableBody.appendChild(emptyRow);
                     return;
                 }
                 
-                problems.forEach((problem, index) => {
+                hackathons.forEach((hackathon, index) => {
+                    const participantCount = hackathon.participants ? hackathon.participants.length : 0;
+                    const statusClass = hackathon.status === 'active' ? 'active' : hackathon.status === 'completed' ? 'completed' : 'upcoming';
+                    
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${problem.title}</td>
+                        <td>${hackathon.title}</td>
+                        <td>${hackathon.date}</td>
+                        <td>${hackathon.startTime} - ${hackathon.endTime}</td>
+                        <td><span class="badge bg-primary">${participantCount}</span></td>
+                        <td><span class="status ${statusClass}">${hackathon.status.charAt(0).toUpperCase() + hackathon.status.slice(1)}</span></td>
                         <td>
-                            <span class="badge ${problem.difficulty === 'easy' ? 'bg-success' : problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger'}">
-                                ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
-                            </span>
-                        </td>
-                        <td>${problem.category}</td>
-                        <td>${problem.hackathon || 'N/A'}</td>
-                        <td>
-                            <span class="badge ${problem.published ? 'bg-success' : 'bg-secondary'}">
-                                ${problem.published ? 'Published' : 'Draft'}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="action-buttons-sm">
-                                <button class="btn btn-sm btn-primary edit-problem" data-index="${index}">
+                            <div class="actions">
+                                <button class="action-btn view" title="View Details" onclick="viewHackathon(${index})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit" title="Edit Hackathon" onclick="editHackathon(${index})">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-sm btn-success publish-problem" data-index="${index}" ${problem.published ? 'disabled' : ''}>
-                                    <i class="fas fa-upload"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger delete-problem" data-index="${index}">
+                                <button class="action-btn delete" title="Delete Hackathon" onclick="deleteHackathon(${index})">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </td>
                     `;
-                    problemsTableBody.appendChild(row);
-                });
-                
-                // Add event listeners to action buttons
-                document.querySelectorAll('.edit-problem').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        editProblem(index);
-                    });
-                });
-                
-                document.querySelectorAll('.publish-problem').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        publishProblem(index);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-problem').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        deleteProblem(index);
-                    });
+                    tableBody.appendChild(row);
                 });
             }
             
-            // Call displayProblems on page load
-            displayProblems();
+            // Hackathon action functions
+            window.viewHackathon = function(index) {
+                const hackathons = getOrganizerData('hackathons');
+                const hackathon = hackathons[index];
+                if (hackathon) {
+                    alert(`Hackathon: ${hackathon.title}\nID: ${hackathon.id}\nOrganizer Code: ${hackathon.organizerCode}\nParticipants: ${hackathon.participants ? hackathon.participants.length : 0}`);
+                }
+            };
             
-            // Add problem functionality
+            window.editHackathon = function(index) {
+                const hackathons = getOrganizerData('hackathons');
+                const hackathon = hackathons[index];
+                
+                if (!hackathon) return;
+                
+                // Populate edit form
+                document.getElementById('editHackathonIndex').value = index;
+                document.getElementById('editHackathonTitle').value = hackathon.title;
+                document.getElementById('editHackathonDate').value = hackathon.date;
+                document.getElementById('editStartTime').value = hackathon.startTime;
+                document.getElementById('editEndTime').value = hackathon.endTime;
+                document.getElementById('editHackathonRules').value = hackathon.rules || '';
+                document.getElementById('editAutoStart').checked = hackathon.autoStart || false;
+                
+                // Set tech stack selections
+                const techStackSelect = document.getElementById('editAllowedTechStack');
+                Array.from(techStackSelect.options).forEach(option => {
+                    option.selected = hackathon.allowedTechStack && hackathon.allowedTechStack.includes(option.value);
+                });
+                
+                // Set anti-cheating options
+                if (hackathon.antiCheating) {
+                    document.getElementById('editScreenshotCheck').checked = hackathon.antiCheating.screenshotCheck || false;
+                    document.getElementById('editWebcamPermission').checked = hackathon.antiCheating.webcamPermission || false;
+                    document.getElementById('editTabSwitchMonitoring').checked = hackathon.antiCheating.tabSwitchMonitoring || false;
+                }
+                
+                // Show edit modal
+                const editModal = new bootstrap.Modal(document.getElementById('editHackathonModal'));
+                editModal.show();
+            };
+            
+            window.deleteHackathon = function(index) {
+                if (confirm('Are you sure you want to delete this hackathon?')) {
+                    let hackathons = getOrganizerData('hackathons');
+                    hackathons.splice(index, 1);
+                    setOrganizerData('hackathons', hackathons);
+                    displayHackathons();
+                    alert('Hackathon deleted successfully!');
+                }
+            };
+            
+            // Real-time updates - check for participant changes every 3 seconds
+            setInterval(function() {
+                displayHackathons();
+                displayParticipants();
+            }, 3000);
+            
+            // Display participants function
+            function displayParticipants() {
+                const participants = getOrganizerData('participants');
+                const hackathons = getOrganizerData('hackathons');
+                const tableBody = document.getElementById('participants-table-body');
+                const participantCount = document.getElementById('participant-count');
+                const hackathonFilter = document.getElementById('hackathon-filter');
+                
+                if (!tableBody) return;
+                
+                // Update participant count
+                if (participantCount) {
+                    participantCount.textContent = participants.length;
+                }
+                
+                // Filter participants based on selected hackathon and organizer
+                const selectedHackathon = hackathonFilter ? hackathonFilter.value : '';
+                const organizerParticipants = participants.filter(p => {
+                    const hackathon = hackathons.find(h => h.id === p.hackathonId);
+                    return hackathon && hackathon.organizerId === currentOrganizerId;
+                });
+                const filteredParticipants = selectedHackathon ? 
+                    organizerParticipants.filter(p => p.hackathonId === selectedHackathon) : organizerParticipants;
+                
+                tableBody.innerHTML = '';
+                
+                if (filteredParticipants.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `<td colspan="6" class="text-center">No participants found</td>`;
+                    tableBody.appendChild(emptyRow);
+                    return;
+                }
+                
+                filteredParticipants.forEach((participant, index) => {
+                    const hackathon = hackathons.find(h => h.id === participant.hackathonId);
+                    const hackathonName = hackathon ? hackathon.title : 'Unknown';
+                    const joinedDate = new Date(participant.joinedAt).toLocaleString();
+                    const submissionCount = participant.submissions ? participant.submissions.length : 0;
+                    const status = participant.status || 'active';
+                    const statusClass = status === 'active' ? 'active' : status === 'inactive' ? 'completed' : 'upcoming';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="user-avatar me-2" style="width: 30px; height: 30px; font-size: 0.8rem;">
+                                    ${participant.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <div class="fw-bold">${participant.name}</div>
+                                    <small class="text-muted">${participant.email || 'No email'}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${hackathonName}</td>
+                        <td>${joinedDate}</td>
+                        <td><span class="badge bg-info">${submissionCount}</span></td>
+                        <td><span class="status ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn view" title="View Details" onclick="viewParticipant('${participant.id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit" title="Send Message" onclick="messageParticipant('${participant.id}')">
+                                    <i class="fas fa-envelope"></i>
+                                </button>
+                                <button class="action-btn delete" title="Remove Participant" onclick="removeParticipant('${participant.id}')">
+                                    <i class="fas fa-user-times"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Save hackathon changes
+            const saveHackathonBtn = document.getElementById('saveHackathonBtn');
+            if (saveHackathonBtn) {
+                saveHackathonBtn.addEventListener('click', function() {
+                    const index = parseInt(document.getElementById('editHackathonIndex').value);
+                    const hackathons = getOrganizerData('hackathons');
+                    
+                    if (index >= 0 && index < hackathons.length) {
+                        // Update hackathon data
+                        hackathons[index].title = document.getElementById('editHackathonTitle').value;
+                        hackathons[index].date = document.getElementById('editHackathonDate').value;
+                        hackathons[index].startTime = document.getElementById('editStartTime').value;
+                        hackathons[index].endTime = document.getElementById('editEndTime').value;
+                        hackathons[index].rules = document.getElementById('editHackathonRules').value;
+                        hackathons[index].autoStart = document.getElementById('editAutoStart').checked;
+                        
+                        // Update tech stack
+                        const techStackSelect = document.getElementById('editAllowedTechStack');
+                        hackathons[index].allowedTechStack = Array.from(techStackSelect.selectedOptions).map(option => option.value);
+                        
+                        // Update anti-cheating settings
+                        hackathons[index].antiCheating = {
+                            screenshotCheck: document.getElementById('editScreenshotCheck').checked,
+                            webcamPermission: document.getElementById('editWebcamPermission').checked,
+                            tabSwitchMonitoring: document.getElementById('editTabSwitchMonitoring').checked
+                        };
+                        
+                        // Save to organizer-specific storage
+                        setOrganizerData('hackathons', hackathons);
+                        
+                        // Close modal
+                        const editModal = bootstrap.Modal.getInstance(document.getElementById('editHackathonModal'));
+                        editModal.hide();
+                        
+                        // Refresh table
+                        displayHackathons();
+                        
+                        alert('Hackathon updated successfully!');
+                    }
+                });
+            }
+            
+            // Initialize edit form date pickers
+            flatpickr("#editHackathonDate", {
+                dateFormat: "Y-m-d",
+                minDate: "today"
+            });
+            
+            flatpickr("#editStartTime", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true
+            });
+            
+            flatpickr("#editEndTime", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true
+            });
+            
+            // Problem Management Functions
+            function loadHackathonsIntoSelect() {
+                const hackathons = getOrganizerData('hackathons');
+                const select = document.getElementById('problemHackathon');
+                
+                // Clear existing options except the first one
+                select.innerHTML = '<option value="">Select hackathon</option>';
+                
+                hackathons.forEach(hackathon => {
+                    const option = document.createElement('option');
+                    option.value = hackathon.id;
+                    option.textContent = hackathon.title;
+                    select.appendChild(option);
+                });
+            }
+            
+            // Add Problem Button Event
+            const addProblemBtn = document.getElementById('addProblemBtn');
             if (addProblemBtn) {
                 addProblemBtn.addEventListener('click', function() {
                     const title = document.getElementById('problemTitle').value;
                     const difficulty = document.getElementById('problemDifficulty').value;
                     const category = document.getElementById('problemCategory').value;
-                    const hackathon = document.getElementById('problemHackathon').value;
+                    const hackathonId = document.getElementById('problemHackathon').value;
                     const description = document.getElementById('problemDescription').value;
-                    const inputFormat = document.getElementById('inputFormat').value;
-                    const outputFormat = document.getElementById('outputFormat').value;
-                    const exampleInput = document.getElementById('exampleInput').value;
-                    const exampleOutput = document.getElementById('exampleOutput').value;
-                    const constraints = document.getElementById('constraints').value;
                     
-                    // Get selected languages
-                    const allowedLanguagesSelect = document.getElementById('allowedLanguages');
-                    const allowedLanguages = Array.from(allowedLanguagesSelect.selectedOptions).map(option => option.value);
-                    
-                    const publishImmediately = document.getElementById('publishImmediately').checked;
-                    
-                    if (!title || !difficulty || !category || !description) {
+                    if (!title || !difficulty || !category || !hackathonId || !description) {
                         alert('Please fill in all required fields');
                         return;
                     }
                     
-                    // Create problem object
                     const problem = {
-                        id: Date.now().toString(),
+                        id: 'PROB' + Math.random().toString(36).substr(2, 6).toUpperCase(),
                         title,
                         difficulty,
                         category,
-                        hackathon,
+                        hackathonId,
                         description,
-                        inputFormat,
-                        outputFormat,
-                        exampleInput,
-                        exampleOutput,
-                        constraints,
-                        allowedLanguages,
-                        published: publishImmediately,
-                        createdAt: new Date().toISOString()
+                        constraints: document.getElementById('problemConstraints').value,
+                        timeLimit: document.getElementById('problemTimeLimit').value,
+                        memoryLimit: document.getElementById('problemMemoryLimit').value,
+                        sampleInput: document.getElementById('problemSampleInput').value,
+                        sampleOutput: document.getElementById('problemSampleOutput').value,
+                        createdAt: new Date().toISOString(),
+                        status: 'active'
                     };
                     
-                    // Add to problems array
+                    // Save problem to organizer-specific storage
+                    let problems = getOrganizerData('problems');
                     problems.push(problem);
+                    setOrganizerData('problems', problems);
                     
-                    // Save to localStorage
-                    localStorage.setItem('problems', JSON.stringify(problems));
-                    
-                    // Close the modal
+                    // Close modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('addProblemModal'));
                     modal.hide();
                     
-                    // Show success message
-                    alert('Problem added successfully!');
-                    
-                    // Reset the form
+                    // Reset form
                     document.getElementById('addProblemForm').reset();
                     
-                    // Refresh the problems table
+                    // Refresh problems table
                     displayProblems();
+                    
+                    // Trigger problem sync for participants
+                    if (window.triggerProblemUpdate) {
+                        window.triggerProblemUpdate();
+                    }
+                    
+                    alert('Problem added successfully!');
                 });
             }
             
-            // Edit problem function
-            function editProblem(index) {
+            // Display problems in table
+            function displayProblems() {
+                const problems = getOrganizerData('problems');
+                const hackathons = getOrganizerData('hackathons');
+                const tableBody = document.getElementById('problems-table-body');
+                
+                if (!tableBody) return;
+                
+                tableBody.innerHTML = '';
+                
+                if (problems.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `<td colspan="6" class="text-center">No problems added yet</td>`;
+                    tableBody.appendChild(emptyRow);
+                    return;
+                }
+                
+                problems.forEach((problem, index) => {
+                    const hackathon = hackathons.find(h => h.id === problem.hackathonId);
+                    const hackathonName = hackathon ? hackathon.title : 'Unknown';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${problem.title}</td>
+                        <td><span class="badge bg-${getDifficultyColor(problem.difficulty)}">${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}</span></td>
+                        <td>${problem.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</td>
+                        <td>${hackathonName}</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn view" title="View Problem" onclick="viewProblem(${index})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit" title="Edit Problem" onclick="editProblem(${index})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" title="Delete Problem" onclick="deleteProblem(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            function getDifficultyColor(difficulty) {
+                switch(difficulty) {
+                    case 'easy': return 'success';
+                    case 'medium': return 'warning';
+                    case 'hard': return 'danger';
+                    case 'expert': return 'dark';
+                    default: return 'secondary';
+                }
+            }
+            
+            // Problem action functions
+            window.viewProblem = function(index) {
+                const problems = getOrganizerData('problems');
+                const problem = problems[index];
+                if (problem) {
+                    alert(`Problem: ${problem.title}\nDifficulty: ${problem.difficulty}\nCategory: ${problem.category}\nDescription: ${problem.description.substring(0, 100)}...`);
+                }
+            };
+            
+            window.editProblem = function(index) {
+                const problems = getOrganizerData('problems');
                 const problem = problems[index];
                 
-                // Populate the form with problem data
-                document.getElementById('problemTitle').value = problem.title;
-                document.getElementById('problemDifficulty').value = problem.difficulty;
-                document.getElementById('problemCategory').value = problem.category;
-                document.getElementById('problemHackathon').value = problem.hackathon || '';
-                document.getElementById('problemDescription').value = problem.description;
-                document.getElementById('inputFormat').value = problem.inputFormat || '';
-                document.getElementById('outputFormat').value = problem.outputFormat || '';
-                document.getElementById('exampleInput').value = problem.exampleInput || '';
-                document.getElementById('exampleOutput').value = problem.exampleOutput || '';
-                document.getElementById('constraints').value = problem.constraints || '';
+                if (!problem) return;
                 
-                // Set selected languages
-                const allowedLanguagesSelect = document.getElementById('allowedLanguages');
-                Array.from(allowedLanguagesSelect.options).forEach(option => {
-                    option.selected = problem.allowedLanguages && problem.allowedLanguages.includes(option.value);
+                // Populate edit form
+                document.getElementById('editProblemIndex').value = index;
+                document.getElementById('editProblemTitle').value = problem.title;
+                document.getElementById('editProblemDifficulty').value = problem.difficulty;
+                document.getElementById('editProblemCategory').value = problem.category;
+                document.getElementById('editProblemDescription').value = problem.description;
+                document.getElementById('editProblemConstraints').value = problem.constraints || '';
+                document.getElementById('editProblemTimeLimit').value = problem.timeLimit;
+                document.getElementById('editProblemMemoryLimit').value = problem.memoryLimit;
+                document.getElementById('editProblemSampleInput').value = problem.sampleInput || '';
+                document.getElementById('editProblemSampleOutput').value = problem.sampleOutput || '';
+                
+                // Load hackathons and set selected
+                const hackathons = getOrganizerData('hackathons');
+                const select = document.getElementById('editProblemHackathon');
+                select.innerHTML = '';
+                
+                hackathons.forEach(hackathon => {
+                    const option = document.createElement('option');
+                    option.value = hackathon.id;
+                    option.textContent = hackathon.title;
+                    option.selected = hackathon.id === problem.hackathonId;
+                    select.appendChild(option);
                 });
                 
-                document.getElementById('publishImmediately').checked = problem.published;
-                
-                // Change button text and functionality
-                addProblemBtn.textContent = 'Update Problem';
-                addProblemBtn.setAttribute('data-editing', 'true');
-                addProblemBtn.setAttribute('data-index', index);
-                
-                // Open the modal
-                const modal = new bootstrap.Modal(document.getElementById('addProblemModal'));
-                modal.show();
-                
-                // Update the modal title
-                document.getElementById('addProblemModalLabel').textContent = 'Edit Problem';
-                
-                // Add one-time event listener for the update
-                addProblemBtn.addEventListener('click', function updateHandler() {
-                    if (addProblemBtn.getAttribute('data-editing') === 'true') {
-                        const index = addProblemBtn.getAttribute('data-index');
+                // Show edit modal
+                const editModal = new bootstrap.Modal(document.getElementById('editProblemModal'));
+                editModal.show();
+            };
+            
+            window.deleteProblem = function(index) {
+                if (confirm('Are you sure you want to delete this problem?')) {
+                    let problems = getOrganizerData('problems');
+                    problems.splice(index, 1);
+                    setOrganizerData('problems', problems);
+                    displayProblems();
+                    
+                    // Trigger problem sync for participants
+                    if (window.triggerProblemUpdate) {
+                        window.triggerProblemUpdate();
+                    }
+                    
+                    alert('Problem deleted successfully!');
+                }
+            };
+            
+            // Save problem changes
+            const saveProblemBtn = document.getElementById('saveProblemBtn');
+            if (saveProblemBtn) {
+                saveProblemBtn.addEventListener('click', function() {
+                    const index = parseInt(document.getElementById('editProblemIndex').value);
+                    const problems = getOrganizerData('problems');
+                    
+                    if (index >= 0 && index < problems.length) {
+                        problems[index].title = document.getElementById('editProblemTitle').value;
+                        problems[index].difficulty = document.getElementById('editProblemDifficulty').value;
+                        problems[index].category = document.getElementById('editProblemCategory').value;
+                        problems[index].hackathonId = document.getElementById('editProblemHackathon').value;
+                        problems[index].description = document.getElementById('editProblemDescription').value;
+                        problems[index].constraints = document.getElementById('editProblemConstraints').value;
+                        problems[index].timeLimit = document.getElementById('editProblemTimeLimit').value;
+                        problems[index].memoryLimit = document.getElementById('editProblemMemoryLimit').value;
+                        problems[index].sampleInput = document.getElementById('editProblemSampleInput').value;
+                        problems[index].sampleOutput = document.getElementById('editProblemSampleOutput').value;
                         
-                        // Update the problem object
-                        problems[index].title = document.getElementById('problemTitle').value;
-                        problems[index].difficulty = document.getElementById('problemDifficulty').value;
-                        problems[index].category = document.getElementById('problemCategory').value;
-                        problems[index].hackathon = document.getElementById('problemHackathon').value;
-                        problems[index].description = document.getElementById('problemDescription').value;
-                        problems[index].inputFormat = document.getElementById('inputFormat').value;
-                        problems[index].outputFormat = document.getElementById('outputFormat').value;
-                        problems[index].exampleInput = document.getElementById('exampleInput').value;
-                        problems[index].exampleOutput = document.getElementById('exampleOutput').value;
-                        problems[index].constraints = document.getElementById('constraints').value;
+                        setOrganizerData('problems', problems);
                         
-                        // Update selected languages
-                        problems[index].allowedLanguages = Array.from(allowedLanguagesSelect.selectedOptions).map(option => option.value);
+                        const editModal = bootstrap.Modal.getInstance(document.getElementById('editProblemModal'));
+                        editModal.hide();
                         
-                        problems[index].published = document.getElementById('publishImmediately').checked;
-                        problems[index].updatedAt = new Date().toISOString();
-                        
-                        // Save to localStorage
-                        localStorage.setItem('problems', JSON.stringify(problems));
-                        
-                        // Reset the form and button
-                        document.getElementById('addProblemForm').reset();
-                        addProblemBtn.textContent = 'Add Problem';
-                        addProblemBtn.removeAttribute('data-editing');
-                        addProblemBtn.removeAttribute('data-index');
-                        
-                        // Reset the modal title
-                        document.getElementById('addProblemModalLabel').textContent = 'Add New Problem';
-                        
-                        // Refresh the problems table
                         displayProblems();
                         
-                        // Remove this event listener
-                        addProblemBtn.removeEventListener('click', updateHandler);
+                        if (window.triggerProblemUpdate) {
+                            window.triggerProblemUpdate();
+                        }
+                        
+                        alert('Problem updated successfully!');
                     }
                 });
             }
             
-            // Publish problem function
-            function publishProblem(index) {
-                if (confirm('Are you sure you want to publish this problem to participants?')) {
-                    problems[index].published = true;
-                    localStorage.setItem('problems', JSON.stringify(problems));
-                    displayProblems();
-                    alert('Problem published successfully!');
-                }
+            // Load hackathons into select when modal is shown
+            const addProblemModal = document.getElementById('addProblemModal');
+            if (addProblemModal) {
+                addProblemModal.addEventListener('show.bs.modal', function() {
+                    loadHackathonsIntoSelect();
+                });
             }
             
-            // Delete problem function
-            function deleteProblem(index) {
-                if (confirm('Are you sure you want to delete this problem?')) {
-                    problems.splice(index, 1);
-                    localStorage.setItem('problems', JSON.stringify(problems));
+            // Real-time updates for problems and participants
+            setInterval(function() {
+                if (document.getElementById('problems-page').style.display !== 'none') {
                     displayProblems();
-                    alert('Problem deleted successfully!');
                 }
+                if (document.getElementById('participants-page').style.display !== 'none') {
+                    displayParticipants();
+                }
+            }, 3000);
+            
+            // Initial display of hackathons
+            displayHackathons();
+            
+            // Set organizer name from localStorage or URL params
+            const organizerName = urlParams.get('organizerName') || localStorage.getItem('conductorName') || localStorage.getItem('organizerName') || 'Organizer';
+            document.getElementById('organizer-name').textContent = organizerName;
+            
+            // Store organizer name for future use
+            if (urlParams.get('organizerName')) {
+                localStorage.setItem('organizerName', organizerName);
             }
+            
+            // Load hackathons into participant filter
+            function loadHackathonsIntoFilter() {
+                const hackathons = getOrganizerData('hackathons');
+                const filter = document.getElementById('hackathon-filter');
+                
+                if (!filter) return;
+                
+                // Clear existing options except the first one
+                filter.innerHTML = '<option value="">All Hackathons</option>';
+                
+                hackathons.forEach(hackathon => {
+                    const option = document.createElement('option');
+                    option.value = hackathon.id;
+                    option.textContent = hackathon.title;
+                    filter.appendChild(option);
+                });
+            }
+            
+            // Participant action functions
+            window.viewParticipant = function(participantId) {
+                const participants = getOrganizerData('participants');
+                const participant = participants.find(p => p.id === participantId);
+                
+                if (participant) {
+                    const hackathons = getOrganizerData('hackathons');
+                    const hackathon = hackathons.find(h => h.id === participant.hackathonId);
+                    
+                    alert(`Participant Details:\n\nName: ${participant.name}\nEmail: ${participant.email || 'Not provided'}\nHackathon: ${hackathon ? hackathon.title : 'Unknown'}\nJoined: ${new Date(participant.joinedAt).toLocaleString()}\nSubmissions: ${participant.submissions ? participant.submissions.length : 0}\nStatus: ${participant.status || 'active'}`);
+                }
+            };
+            
+            window.messageParticipant = function(participantId) {
+                const participants = getOrganizerData('participants');
+                const participant = participants.find(p => p.id === participantId);
+                
+                if (participant) {
+                    const message = prompt(`Send message to ${participant.name}:`);
+                    if (message) {
+                        const messages = JSON.parse(localStorage.getItem('participantMessages')) || [];
+                        messages.push({
+                            id: Date.now().toString(),
+                            participantId: participantId,
+                            from: 'organizer',
+                            message: message,
+                            timestamp: new Date().toISOString(),
+                            read: false
+                        });
+                        localStorage.setItem('participantMessages', JSON.stringify(messages));
+                        alert('Message sent successfully!');
+                    }
+                }
+            };
+            
+            window.removeParticipant = function(participantId) {
+                const participants = getOrganizerData('participants');
+                const participant = participants.find(p => p.id === participantId);
+                
+                if (participant && confirm(`Are you sure you want to remove ${participant.name} from the hackathon?`)) {
+                    const updatedParticipants = participants.filter(p => p.id !== participantId);
+                    setOrganizerData('participants', updatedParticipants);
+                    displayParticipants();
+                    alert('Participant removed successfully!');
+                }
+            };
+            
+            window.refreshParticipants = function() {
+                displayParticipants();
+                const refreshBtn = event.target.closest('button');
+                const icon = refreshBtn.querySelector('i');
+                icon.style.animation = 'spin 1s linear';
+                setTimeout(() => {
+                    icon.style.animation = '';
+                }, 1000);
+            };
+            
+            window.exportParticipants = function() {
+                const participants = getOrganizerData('participants');
+                const hackathons = getOrganizerData('hackathons');
+                
+                if (participants.length === 0) {
+                    alert('No participants to export');
+                    return;
+                }
+                
+                let csvContent = 'Name,Email,Hackathon,Joined On,Submissions,Status\n';
+                
+                participants.forEach(participant => {
+                    const hackathon = hackathons.find(h => h.id === participant.hackathonId);
+                    const hackathonName = hackathon ? hackathon.title : 'Unknown';
+                    const joinedDate = new Date(participant.joinedAt).toLocaleString();
+                    const submissionCount = participant.submissions ? participant.submissions.length : 0;
+                    
+                    csvContent += `"${participant.name}","${participant.email || ''}","${hackathonName}","${joinedDate}",${submissionCount},"${participant.status || 'active'}"\n`;
+                });
+                
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `hackathon_participants_${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            };
+            
+            // Filter change event
+            const hackathonFilter = document.getElementById('hackathon-filter');
+            if (hackathonFilter) {
+                hackathonFilter.addEventListener('change', function() {
+                    displayParticipants();
+                });
+            }
+            
+            // Logout function
+            window.logoutOrganizer = function() {
+                if (confirm('Are you sure you want to logout? This will clear your current session.')) {
+                    // Clear current organizer session data
+                    localStorage.removeItem('currentOrganizerId');
+                    localStorage.removeItem('currentOrganizerCode');
+                    localStorage.removeItem('currentHackathonId');
+                    localStorage.removeItem('organizerName');
+                    localStorage.removeItem('conductorName');
+                    localStorage.removeItem('userRole');
+                    localStorage.removeItem('isNewHackathon');
+                    
+                    // Redirect to main hackathon page
+                    window.location.href = 'hackathon.html';
+                }
+            };
+            
+            // Display hackathons, problems, and participants on page load
+            displayHackathons();
+            displayProblems();
+            displayParticipants();
+            loadHackathonsIntoFilter();
         });
     </script>
 </body>

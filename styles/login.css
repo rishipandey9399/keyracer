@@ -69,42 +69,75 @@ body {
 /* Authentication container */
 .auth-container {
     width: 100%;
-    max-width: 500px;
-    background-color: rgba(14, 30, 56, 0.8);
-    border-radius: 16px;
+    max-width: 480px;
+    background: linear-gradient(145deg, rgba(14, 30, 56, 0.95), rgba(7, 11, 24, 0.9));
+    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(0, 194, 255, 0.2);
-    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 194, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
     position: relative;
+    transform: translateY(0);
+    transition: all 0.4s ease;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 194, 255, 0.6), transparent);
+    z-index: 1;
+}
+
+.auth-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 35px 100px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(0, 194, 255, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* Tab navigation */
 .auth-tabs {
     display: flex;
     position: relative;
-    border-bottom: 1px solid rgba(0, 194, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 194, 255, 0.15);
+    backdrop-filter: blur(10px);
 }
 
 .auth-tab {
     flex: 1;
     background: none;
     border: none;
-    color: var(--text-color);
-    padding: 20px;
+    color: rgba(225, 230, 242, 0.7);
+    padding: 24px 20px;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: var(--body-font);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
     position: relative;
     z-index: 10;
+    border-radius: 0;
 }
 
 .auth-tab.active {
     color: var(--accent-color);
+    background: rgba(0, 194, 255, 0.05);
+    text-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+}
+
+.auth-tab:hover:not(.active) {
+    color: rgba(225, 230, 242, 0.9);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .tab-indicator {
@@ -113,14 +146,17 @@ body {
     left: 0;
     width: 50%;
     height: 3px;
-    background-color: var(--accent-color);
-    transition: transform 0.3s ease;
+    background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+    box-shadow: 0 0 15px rgba(0, 194, 255, 0.6);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 3px 3px 0 0;
 }
 
 /* Form styles */
 .auth-forms {
     position: relative;
-    padding: 30px 25px;
+    padding: 40px 35px;
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .auth-form {
@@ -138,11 +174,29 @@ body {
 .form-title {
     color: var(--text-color);
     font-family: var(--heading-font);
-    font-size: 2rem;
-    margin-bottom: 30px;
+    font-size: 2.2rem;
+    margin-bottom: 35px;
     text-align: center;
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 20px rgba(0, 194, 255, 0.4);
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+.form-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
 }
 
 .form-group {
@@ -170,21 +224,30 @@ body {
 
 .input-with-icon input {
     width: 100%;
-    padding: 15px 15px 15px 45px;
-    background-color: rgba(7, 11, 24, 0.6);
-    border: 1px solid rgba(0, 194, 255, 0.3);
-    border-radius: 12px;
+    padding: 18px 18px 18px 50px;
+    background: rgba(7, 11, 24, 0.8);
+    border: 1px solid rgba(0, 194, 255, 0.25);
+    border-radius: 16px;
     color: var(--text-color);
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    font-size: 1.05rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: var(--body-font);
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 
+        inset 0 2px 10px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
 }
 
 .input-with-icon input:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(0, 194, 255, 0.2), inset 0 2px 10px rgba(0, 0, 0, 0.3);
+    background: rgba(7, 11, 24, 0.9);
+    box-shadow: 
+        0 0 0 3px rgba(0, 194, 255, 0.25),
+        0 0 20px rgba(0, 194, 255, 0.15),
+        inset 0 2px 10px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
 }
 
 .input-with-icon.focused input {
@@ -286,28 +349,53 @@ body {
 /* Submit button */
 .auth-btn {
     width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, var(--primary-color), #D01712);
+    padding: 18px;
+    background: linear-gradient(135deg, var(--primary-color), #D01712, var(--primary-color));
+    background-size: 200% 200%;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
+    border-radius: 16px;
+    font-size: 1.15rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    box-shadow: 0 5px 20px rgba(228, 27, 23, 0.4);
+    gap: 12px;
+    box-shadow: 
+        0 8px 25px rgba(228, 27, 23, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
 }
 
 .auth-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(228, 27, 23, 0.5);
+    transform: translateY(-4px) scale(1.02);
+    background-position: 100% 0;
+    box-shadow: 
+        0 12px 35px rgba(228, 27, 23, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.auth-btn:hover::before {
+    left: 100%;
 }
 
 .auth-btn:active {

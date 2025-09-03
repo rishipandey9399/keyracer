@@ -12,10 +12,115 @@
   <script src="../js/google-signin.js"></script>
   <!-- Load navigation component -->
   <script src="../js/nav.js"></script>
+  <style>
+    /* Video Modal Styles */
+    .video-modal {
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .video-modal-content {
+      position: relative;
+      margin: 5% auto;
+      width: 90%;
+      max-width: 800px;
+      background: #1a1a2e;
+      border-radius: 15px;
+      border: 2px solid #00FFDD;
+      padding: 20px;
+      animation: modalSlideIn 0.5s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .video-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #00FFDD;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .video-close:hover {
+      color: #FFC700;
+    }
+
+    .video-container {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .video-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .skip-btn, .dont-show-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .skip-btn {
+      background: linear-gradient(90deg, #00FFDD, #00C2FF);
+      color: #111827;
+    }
+
+    .dont-show-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #00FFDD;
+      border: 1px solid #00FFDD;
+    }
+
+    .skip-btn:hover, .dont-show-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 221, 0.3);
+    }
+  </style>
 </head>
 <body>
   <!-- Navigation bar will be inserted by nav.js -->
   <div id="app-nav"></div>
+  
+  <!-- Intro Video Modal -->
+  <div id="intro-video-modal" class="video-modal" style="display: none;">
+    <div class="video-modal-content">
+      <span class="video-close">&times;</span>
+      <div class="video-container">
+        <video id="intro-video" controls autoplay muted>
+          <source src="../assets/videos/intro-video.mp4" type="video/mp4">
+          <source src="../assets/videos/intro-video.webm" type="video/webm">
+          <p>Your browser doesn't support video playback.</p>
+        </video>
+      </div>
+      <div class="video-actions">
+        <button id="skip-video" class="skip-btn">Skip Intro</button>
+        <button id="dont-show-again" class="dont-show-btn">Don't show again</button>
+      </div>
+    </div>
+  </div>
   
   <div class="container">
     <div class="login-container">
@@ -88,7 +193,45 @@
   </div>
   
   <script>
+    // Show intro video on first visit
+    function showIntroVideo() {
+      const hasSeenIntro = localStorage.getItem('hasSeenIntro');
+      if (!hasSeenIntro) {
+        const modal = document.getElementById('intro-video-modal');
+        const video = document.getElementById('intro-video');
+        const closeBtn = document.querySelector('.video-close');
+        const skipBtn = document.getElementById('skip-video');
+        const dontShowBtn = document.getElementById('dont-show-again');
+
+        modal.style.display = 'block';
+
+        function closeModal() {
+          modal.style.display = 'none';
+          video.pause();
+        }
+
+        closeBtn.onclick = closeModal;
+        skipBtn.onclick = closeModal;
+        
+        dontShowBtn.onclick = function() {
+          localStorage.setItem('hasSeenIntro', 'true');
+          closeModal();
+        };
+
+        video.onended = closeModal;
+
+        window.onclick = function(event) {
+          if (event.target === modal) {
+            closeModal();
+          }
+        };
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+      // Show intro video after page loads
+      setTimeout(showIntroVideo, 1000);
+      
       // Handle standard login
       const loginForm = document.getElementById('login-form');
       const messageEl = document.getElementById('login-message');

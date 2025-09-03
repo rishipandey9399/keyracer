@@ -510,6 +510,44 @@
             box-shadow: 0 5px 15px rgba(0, 194, 255, 0.2);
         }
         
+        /* Output Section */
+        .output-section {
+            background: rgba(7, 11, 24, 0.8);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .output-title {
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .output-title::before {
+            content: '🖥️';
+            font-size: 1rem;
+        }
+        
+        .output-content {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 194, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #e2e8f0;
+            min-height: 100px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
         /* Submission History */
         .history-container {
             background: var(--card-bg);
@@ -809,7 +847,7 @@
     
     <!-- Mobile Header (visible on small screens) -->
     <div class="mobile-header d-lg-none">
-        <a href="#" class="mobile-logo">
+        <a href="preference.html" class="mobile-logo">
             <img src="assets/images/logo.png" alt="KeyRacer Logo">
             <span>KeyRacer</span>
         </a>
@@ -821,7 +859,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a href="#" class="sidebar-logo">
+            <a href="preference.html" class="sidebar-logo">
                 <img src="assets/images/logo.png" alt="KeyRacer Logo">
                 <span>KeyRacer</span>
             </a>
@@ -832,13 +870,7 @@
         
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="#" class="nav-link active" data-page="dashboard">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-page="problem">
+                <a href="#" class="nav-link active" data-page="problem">
                     <i class="fas fa-code"></i>
                     <span>Problem Statement</span>
                 </a>
@@ -883,115 +915,10 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="dashboard-container">
-            <!-- Dashboard Page -->
-            <div class="page" id="dashboard-page">
-                <div class="page-header">
-                    <h1 class="page-title">Participant Dashboard</h1>
-                </div>
-                
-                <!-- Timer -->
-                <div class="timer-container">
-                    <div class="timer-info">
-                        <p class="timer-label">Time Remaining</p>
-                        <h2 class="timer-value" id="countdown-timer">02:45:30</h2>
-                    </div>
-                    <div class="timer-status">Hackathon in Progress</div>
-                </div>
-                
-                <!-- Problem Statement -->
-                <div class="problem-container">
-                    <div class="problem-header">
-                        <h2 class="problem-title">Problem Statement</h2>
-                        <span class="problem-difficulty">Difficulty level will appear here</span>
-                    </div>
-                    
-                    <div class="problem-content">
-                        <div class="problem-section">
-                            <p>Problem description will appear here.</p>
-                        </div>
-                        
-                        <!-- Examples and constraints will appear here -->
-                    </div>
-                </div>
-                
-                <!-- Submission Section -->
-                <div class="submission-container">
-                    <div class="submission-header">
-                        <h2 class="submission-title">Submit Your Solution</h2>
-                    </div>
-                    
-                    <div class="code-editor">
-                        <div class="code-editor-header">
-                            <select class="language-selector">
-                                <option value="javascript">JavaScript</option>
-                                <option value="python">Python</option>
-                                <option value="java">Java</option>
-                                <option value="cpp">C++</option>
-                            </select>
-                            <div class="editor-actions">
-                                <button class="editor-btn" title="Format Code">
-                                    <i class="fas fa-indent"></i>
-                                </button>
-                                <button class="editor-btn" title="Reset Code">
-                                    <i class="fas fa-undo"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <textarea class="code-textarea" id="code-editor" placeholder="Write your code here..."></textarea>
-                    </div>
-                    
-                    <div class="submission-actions">
-                        <div class="submission-options">
-                            <div class="option-group">
-                                <input type="checkbox" id="github-link">
-                                <label for="github-link" class="option-label">Add GitHub Link</label>
-                            </div>
-                            <div class="option-group">
-                                <input type="checkbox" id="add-notes">
-                                <label for="add-notes" class="option-label">Add Notes</label>
-                            </div>
-                        </div>
-                        <div class="submission-buttons">
-                            <button class="btn btn-secondary-custom me-2">
-                                <i class="fas fa-save"></i>
-                                <span>Save Draft</span>
-                            </button>
-                            <button class="btn btn-primary-custom">
-                                <i class="fas fa-paper-plane"></i>
-                                <span>Submit Solution</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Submission History -->
-                <div class="history-container">
-                    <div class="history-header">
-                        <h2 class="history-title">Submission History</h2>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="submission-table">
-                            <thead>
-                                <tr>
-                                    <th>Submission ID</th>
-                                    <th>Problem</th>
-                                    <th>Language</th>
-                                    <th>Submitted At</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Submission entries will appear here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+
             
             <!-- Problem Statement Page -->
-            <div class="page" id="problem-page" style="display: none;">
+            <div class="page" id="problem-page">
                 <div class="page-header">
                     <h1 class="page-title">Problem Statement</h1>
                 </div>
@@ -1103,14 +1030,22 @@
                             </div>
                         </div>
                         <div class="submission-buttons">
-                            <button class="btn btn-secondary-custom me-2">
-                                <i class="fas fa-save"></i>
-                                <span>Save Draft</span>
+                            <button class="btn btn-secondary-custom me-2" id="run-code-btn">
+                                <i class="fas fa-play"></i>
+                                <span>Run Code</span>
                             </button>
                             <button class="btn btn-primary-custom">
                                 <i class="fas fa-paper-plane"></i>
                                 <span>Submit Solution</span>
                             </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Output Section -->
+                    <div class="output-section" id="output-section" style="display: none;">
+                        <h3 class="output-title">Output</h3>
+                        <div class="output-content" id="output-content">
+                            Click "Run Code" to see the output here...
                         </div>
                     </div>
                 </div>
@@ -1245,7 +1180,125 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="scripts/participant-manager.js"></script>
+    <script src="scripts/problem-sync.js"></script>
     <script>
+        // Load problems function for problem page
+        function loadAvailableProblems() {
+            const problems = ProblemSync.getAllProblems();
+            const problemPage = document.getElementById('problem-page');
+            
+            if (!problemPage) return;
+            
+            // Clear existing content
+            problemPage.innerHTML = `
+                <div class="page-header">
+                    <h1 class="page-title">Problem Statements</h1>
+                </div>
+            `;
+            
+            if (problems.length === 0) {
+                problemPage.innerHTML += `
+                    <div class="problem-container">
+                        <div class="problem-header">
+                            <h2 class="problem-title">No Problems Available</h2>
+                        </div>
+                        <div class="problem-content">
+                            <p class="text-center">No problems available yet. Please check back later.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            problems.forEach(problem => {
+                const problemContainer = document.createElement('div');
+                problemContainer.className = 'problem-container';
+                problemContainer.innerHTML = `
+                    <div class="problem-header">
+                        <h2 class="problem-title">${problem.title}</h2>
+                        <span class="problem-difficulty difficulty-${problem.difficulty}">${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}</span>
+                    </div>
+                    <div class="problem-content">
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Description</h3>
+                            <p>${problem.description}</p>
+                        </div>
+                        ${problem.constraints ? `
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Constraints</h3>
+                                <div class="constraints"><p>${problem.constraints}</p></div>
+                            </div>
+                        ` : ''}
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Limits</h3>
+                            <p>Time Limit: ${problem.timeLimit} seconds</p>
+                            <p>Memory Limit: ${problem.memoryLimit} MB</p>
+                        </div>
+                        ${problem.sampleInput ? `
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Sample Input/Output</h3>
+                                <div class="example-box">
+                                    <h4 class="example-title">Input:</h4>
+                                    <div class="code-example">${problem.sampleInput}</div>
+                                    <h4 class="example-title">Output:</h4>
+                                    <div class="code-example">${problem.sampleOutput}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="submission-buttons mt-4">
+                            <button class="btn btn-primary-custom solve-problem-btn" data-problem-id="${problem.id}">
+                                <i class="fas fa-code"></i>
+                                <span>Solve This Problem</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener to solve button
+                const solveBtn = problemContainer.querySelector('.solve-problem-btn');
+                if (solveBtn) {
+                    solveBtn.addEventListener('click', function() {
+                        const problemId = this.getAttribute('data-problem-id');
+                        selectProblemForSubmission(problemId);
+                    });
+                }
+                
+                problemPage.appendChild(problemContainer);
+            });
+        }
+        
+        function getDifficultyColor(difficulty) {
+            switch(difficulty) {
+                case 'easy': return 'success';
+                case 'medium': return 'warning';
+                case 'hard': return 'danger';
+                case 'expert': return 'dark';
+                default: return 'secondary';
+            }
+        }
+        
+        function selectProblemForSubmission(problemId) {
+            const problems = ProblemSync.getAllProblems();
+            const problem = problems.find(p => p.id === problemId);
+            
+            if (!problem) return;
+            
+            // Navigate to submission page
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            document.getElementById('submission-page').style.display = 'block';
+            
+            // Update nav
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector('[data-page="submission"]').classList.add('active');
+            
+            // Populate submission page with problem details
+            populateSubmissionPage(problem);
+        }
+        
+        // Listen for problem updates
+        window.addEventListener('problemsUpdated', loadAvailableProblems);
+        
         // Preloader animation
         document.addEventListener('DOMContentLoaded', function() {
             const preloader = document.getElementById('preloader');
@@ -1433,7 +1486,6 @@
                     
                     // Get the page name from data-page attribute
                     const pageName = this.getAttribute('data-page');
-                    console.log(`Navigating to ${pageName} page`);
                     
                     // Hide all pages
                     document.querySelectorAll('.page').forEach(page => {
@@ -1537,6 +1589,9 @@
             if (participantName) {
                 document.getElementById('participant-name').textContent = participantName;
             }
+            
+            // Load available problems
+            loadAvailableProblems();
             
             // Load problems from localStorage
             const problems = JSON.parse(localStorage.getItem('problems')) || [];
@@ -2125,108 +2180,6 @@
                     });
                 });
             }
-            }
-            
-            // Display problem list in the problem page
-            function displayProblemList(problemPage, problems) {
-                // Clear existing content
-                problemPage.innerHTML = `
-                    <div class="page-header">
-                        <h1 class="page-title">Problem Statements</h1>
-                    </div>
-                `;
-                
-                // Create problem list
-                problems.forEach(problem => {
-                    const difficultyClass = problem.difficulty === 'easy' ? 'bg-success' : 
-                                           problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger';
-                    
-                    const problemElement = document.createElement('div');
-                    problemElement.className = 'problem-container';
-                    problemElement.innerHTML = `
-                        <div class="problem-header">
-                            <h2 class="problem-title">${problem.title}</h2>
-                            <span class="problem-difficulty">
-                                <span class="badge ${difficultyClass}">
-                                    ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
-                                </span>
-                            </span>
-                        </div>
-                        
-                        <div class="problem-content">
-                            <div class="problem-section">
-                                <p>${problem.description}</p>
-                            </div>
-                            
-                            <div class="problem-section">
-                                <h3 class="problem-section-title">Input Format</h3>
-                                <p>${problem.inputFormat}</p>
-                            </div>
-                            
-                            <div class="problem-section">
-                                <h3 class="problem-section-title">Output Format</h3>
-                                <p>${problem.outputFormat}</p>
-                            </div>
-                            
-                            <div class="problem-section">
-                                <h3 class="problem-section-title">Example</h3>
-                                <div class="example-box">
-                                    <h4 class="example-title">Input</h4>
-                                    <div class="code-example">${problem.exampleInput}</div>
-                                    
-                                    <h4 class="example-title">Output</h4>
-                                    <div class="code-example">${problem.exampleOutput}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="problem-section">
-                                <h3 class="problem-section-title">Constraints</h3>
-                                <div class="constraints">
-                                    <p>${problem.constraints}</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="submission-actions">
-                            <button class="btn btn-primary-custom solve-problem" data-problem-id="${problem.id}">
-                                <i class="fas fa-code"></i>
-                                <span>Solve Problem</span>
-                            </button>
-                        </div>
-                    `;
-                    
-                    problemPage.appendChild(problemElement);
-                });
-                
-                // Add event listeners to solve buttons
-                document.querySelectorAll('.solve-problem').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const problemId = this.getAttribute('data-problem-id');
-                        const problem = problems.find(p => p.id === problemId);
-                        
-                        if (problem) {
-                            // Navigate to submission page
-                            document.querySelectorAll('.page').forEach(page => {
-                                page.style.display = 'none';
-                            });
-                            
-                            const submissionPage = document.getElementById('submission-page');
-                            submissionPage.style.display = 'block';
-                            
-                            // Update navigation menu
-                            document.querySelectorAll('.nav-link').forEach(link => {
-                                link.classList.remove('active');
-                                if (link.getAttribute('data-page') === 'submission') {
-                                    link.classList.add('active');
-                                }
-                            });
-                            
-                            // Populate submission page with problem details
-                            populateSubmissionPage(problem);
-                        }
-                    });
-                });
-            }
             
             // Populate submission page with problem details
             function populateSubmissionPage(problem) {
@@ -2280,6 +2233,106 @@
             
             // Call displayProblems on page load
             displayProblems();
+            
+            // Run Code Button Event Listener
+            const runCodeBtn = document.getElementById('run-code-btn');
+            if (runCodeBtn) {
+                runCodeBtn.addEventListener('click', async function() {
+                    const submissionContainer = document.querySelector('#submission-page .submission-container');
+                    const languageSelector = submissionContainer.querySelector('.language-selector');
+                    const language = languageSelector.value;
+                    const code = submissionContainer.querySelector('textarea').value.trim();
+                    const outputSection = document.getElementById('output-section');
+                    const outputContent = document.getElementById('output-content');
+                    
+                    if (!code) {
+                        alert('Please enter some code first!');
+                        return;
+                    }
+                    
+                    // Show output section and loading state
+                    outputSection.style.display = 'block';
+                    outputContent.textContent = 'Running code...';
+                    
+                    // Show loading state on button
+                    runCodeBtn.disabled = true;
+                    runCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Running...</span>';
+                    
+                    try {
+                        // Execute code using Piston API
+                        const result = await executeCodeWithPiston(code, language);
+                        
+                        if (result.success) {
+                            outputContent.textContent = result.output || 'Code executed successfully (no output)';
+                        } else {
+                            outputContent.textContent = `Error: ${result.error}`;
+                        }
+                    } catch (error) {
+                        console.error('Error running code:', error);
+                        outputContent.textContent = `Error: ${error.message}`;
+                    } finally {
+                        // Reset button state
+                        runCodeBtn.disabled = false;
+                        runCodeBtn.innerHTML = '<i class="fas fa-play"></i> <span>Run Code</span>';
+                    }
+                });
+            }
+            
+            // Execute code using Piston API
+            async function executeCodeWithPiston(code, language) {
+                const PISTON_API = 'https://emkc.org/api/v2/piston/execute';
+                
+                // Language mapping for Piston API
+                const languageMap = {
+                    'javascript': 'javascript',
+                    'python': 'python',
+                    'java': 'java',
+                    'cpp': 'cpp',
+                    'c': 'c',
+                    'csharp': 'csharp',
+                    'go': 'go',
+                    'php': 'php',
+                    'ruby': 'ruby',
+                    'rust': 'rust'
+                };
+                
+                const pistonLanguage = languageMap[language] || 'python';
+                
+                try {
+                    const response = await fetch(PISTON_API, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            language: pistonLanguage,
+                            version: '*',
+                            files: [{
+                                content: code
+                            }]
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    return {
+                        success: data.run.code === 0,
+                        output: data.run.stdout,
+                        error: data.run.stderr || (data.run.code !== 0 ? `Exit code: ${data.run.code}` : '')
+                    };
+                } catch (error) {
+                    console.error('Piston API error:', error);
+                    return {
+                        success: false,
+                        output: '',
+                        error: error.message
+                    };
+                }
+            }
             
             // Piston API integration for code compilation
             const submitSolutionBtn = document.querySelector('#submission-page .btn-primary-custom');
@@ -2663,6 +2716,9 @@
             
             // Initialize submission history
             updateSubmissionHistory();
+            
+            // Refresh problems every 10 seconds
+            setInterval(loadAvailableProblems, 10000);
         });
     </script>
 </body>

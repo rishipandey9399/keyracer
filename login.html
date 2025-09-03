@@ -148,21 +148,13 @@
         <div class="loader"></div>
     </div>
     
-    <!-- Racing car animations -->
-    <div class="racing-car sports-car">
-        <div class="headlights"></div>
-        <div class="headlights right"></div>
-            </div>
-    <div class="racing-car formula" style="animation-delay: 2s; bottom: 120px;"></div>
-    <div class="racing-car" style="animation-delay: 4s; bottom: 80px;">
-        <div class="headlights"></div>
-        <div class="headlights right"></div>
-            </div>
+    <!-- Particles Background -->
+    <div id="particles-js"><canvas class="particles-js-canvas-el" width="2452" height="1894" style="width: 100%; height: 100%;"></canvas></div>
     
     <div class="login-page">
         <!-- Logo in top-left corner -->
         <div class="corner-logo">
-            <a href="index.html" class="logo-link">
+            <a href="/" class="logo-link">
                 <img src="assets/images/logo.png" alt="Key Racer Logo" class="corner-logo-img">
             </a>
         </div>
@@ -285,35 +277,11 @@
                 </div>
                 
         <div class="login-footer">
-            <p class="copyright">© <span id="current-year"></span> Key Racer - The ultimate keyboard racing championship</p>
+            <p class="copyright">© <span id="current-year"></span> Key Racer - By Students For Students</p>
                 </div>
             </div>
             
-    <!-- Racing car animation -->
-    <div class="racing-car-animation">
-        <div class="car">
-            <div class="car-body"></div>
-            <div class="car-top"></div>
-            <div class="car-stripe"></div>
-            <div class="headlight left"></div>
-            <div class="headlight right"></div>
-            <div class="taillight"></div>
-            <div class="wheel front"></div>
-            <div class="wheel back"></div>
-            <div class="exhaust">
-                <div class="smoke"></div>
-                <div class="smoke"></div>
-                <div class="smoke"></div>
-            </div>
-        </div>
-        <div class="road">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-        </div>
-    </div>
+
     
     <!-- Load CSS after critical rendering path -->
     <link rel="stylesheet" href="styles/style.css">
@@ -322,11 +290,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
     <!-- Load scripts at the end -->
     <script src="scripts/database.js"></script>
     <script src="scripts/preloader.js"></script>
     <script src="scripts/login.js"></script>
     <!-- Removed header-auth.js to prevent redirect loops on login page -->
+    
+    <!-- Initialize Particles -->
+    <script>
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: '#00FFDD' },
+            shape: { type: 'circle' },
+            opacity: { value: 0.5, random: false },
+            size: { value: 3, random: true },
+            line_linked: { enable: true, distance: 150, color: '#00FFDD', opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 6, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+            modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+        },
+        retina_detect: true
+    });
+    </script>
 
     <!-- Legal Links Footer -->
     <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">

@@ -990,6 +990,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="scripts/participant-manager.js"></script>
     <script>
         // Preloader animation
         document.addEventListener('DOMContentLoaded', function() {
@@ -1216,22 +1217,23 @@
                     return;
                 }
                 
-                // Generate a unique code for the new hackathon
-                const generatedCode = generateUniqueCode();
-                
                 // Show success animation
                 document.querySelector('#conductorModal .modal-content').classList.add('animate__animated', 'animate__fadeOutUp');
                 
                 setTimeout(() => {
                     // Store the conductor info in localStorage
                     localStorage.setItem('conductorName', conductorName);
+                    localStorage.setItem('organizerName', conductorName);
                     localStorage.setItem('hackathonName', hackathonName);
-                    localStorage.setItem('conductorCode', generatedCode);
                     localStorage.setItem('userRole', 'conductor');
                     localStorage.setItem('isNewHackathon', 'true');
                     
-                    // Redirect to conductor dashboard
-                    window.location.href = 'conductor-dashboard.html';
+                    // Clear any existing organizer data to start fresh
+                    localStorage.removeItem('currentOrganizerId');
+                    localStorage.removeItem('currentOrganizerCode');
+                    
+                    // Redirect to organizer dashboard with parameters
+                    window.location.href = `organizer-dashboard.html?organizerName=${encodeURIComponent(conductorName)}&isNew=true`;
                 }, 800);
             } else {
                 const hackathonCode = document.getElementById('hackathonCode').value.trim();
@@ -1255,17 +1257,64 @@
                     return;
                 }
                 
+                // Validate organizer code across all organizers
+                const allKeys = Object.keys(localStorage);
+                let validHackathon = null;
+                let organizerName = 'Organizer';
+                
+                for (const key of allKeys) {
+                    if (key.includes('_hackathons')) {
+                        try {
+                            const hackathons = JSON.parse(localStorage.getItem(key));
+                            const hackathon = hackathons.find(h => h.organizerCode === hackathonCode);
+                            if (hackathon) {
+                                validHackathon = hackathon;
+                                // Try to get organizer name from stored data
+                                const storedName = localStorage.getItem('organizerName') || localStorage.getItem('conductorName');
+                                if (storedName) {
+                                    organizerName = storedName;
+                                }
+                                break;
+                            }
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                if (!validHackathon) {
+                    submitBtn.classList.remove('animate__pulse');
+                    submitBtn.classList.add('animate__shakeX');
+                    submitBtn.textContent = 'Invalid Code';
+                    
+                    // Show error styling
+                    document.getElementById('hackathonCode').style.borderColor = 'var(--danger-color)';
+                    document.getElementById('hackathonCode').classList.add('animate__animated', 'animate__shakeX');
+                    
+                    setTimeout(() => {
+                        submitBtn.classList.remove('animate__shakeX');
+                        submitBtn.textContent = 'Access Dashboard';
+                        document.getElementById('hackathonCode').classList.remove('animate__shakeX');
+                        document.getElementById('hackathonCode').style.borderColor = '';
+                    }, 2000);
+                    
+                    return;
+                }
+                
                 // Show success animation
                 document.querySelector('#conductorModal .modal-content').classList.add('animate__animated', 'animate__fadeOutUp');
                 
                 setTimeout(() => {
-                    // Store the code in localStorage
-                    localStorage.setItem('conductorCode', hackathonCode);
+                    // Store the validated info in localStorage
+                    localStorage.setItem('currentOrganizerCode', hackathonCode);
+                    localStorage.setItem('currentHackathonId', validHackathon.id);
+                    localStorage.setItem('hackathonName', validHackathon.title);
+                    localStorage.setItem('organizerName', organizerName);
                     localStorage.setItem('userRole', 'conductor');
                     localStorage.setItem('isNewHackathon', 'false');
                     
-                    // Redirect to conductor dashboard
-                    window.location.href = 'conductor-dashboard.html';
+                    // Redirect to organizer dashboard with parameters
+                    window.location.href = `organizer-dashboard.html?organizerCode=${encodeURIComponent(hackathonCode)}&organizerName=${encodeURIComponent(organizerName)}`;
                 }, 800);
             }
         });
@@ -1309,18 +1358,63 @@
                 return;
             }
             
-            // Show success animation
-            document.querySelector('#participantModal .modal-content').classList.add('animate__animated', 'animate__fadeOutUp');
-            
-            setTimeout(() => {
-                // Store the participant info in localStorage
-                localStorage.setItem('participantName', participantName);
-                localStorage.setItem('hackathonId', hackathonId);
-                localStorage.setItem('userRole', 'participant');
+            try {
+                // Validate hackathon ID using ParticipantManager
+                const validHackathon = window.ParticipantManager.validateHackathonId(hackathonId);
                 
-                // Redirect to participant dashboard
-                window.location.href = 'participant-dashboard.html';
-            }, 800);
+                if (!validHackathon) {
+                    submitBtn.classList.remove('animate__pulse');
+                    submitBtn.classList.add('animate__shakeX');
+                    submitBtn.textContent = 'Invalid ID';
+                    
+                    // Show error styling
+                    document.getElementById('hackathonId').style.borderColor = 'var(--danger-color)';
+                    document.getElementById('hackathonId').classList.add('animate__animated', 'animate__shakeX');
+                    
+                    setTimeout(() => {
+                        submitBtn.classList.remove('animate__shakeX');
+                        submitBtn.textContent = 'Join Hackathon';
+                        document.getElementById('hackathonId').classList.remove('animate__shakeX');
+                        document.getElementById('hackathonId').style.borderColor = '';
+                    }, 2000);
+                    
+                    return;
+                }
+                
+                // Register participant using ParticipantManager
+                const registeredParticipant = window.ParticipantManager.registerParticipant(participantName, hackathonId);
+                
+                submitBtn.textContent = 'Success!';
+                submitBtn.style.background = 'linear-gradient(90deg, var(--participant-color) 0%, var(--secondary-color) 100%)';
+                
+                // Show success animation
+                document.querySelector('#participantModal .modal-content').classList.add('animate__animated', 'animate__fadeOutUp');
+                
+                setTimeout(() => {
+                    // Store the participant info in localStorage
+                    localStorage.setItem('participantName', participantName);
+                    localStorage.setItem('currentHackathonId', hackathonId);
+                    localStorage.setItem('currentParticipantId', registeredParticipant.id);
+                    localStorage.setItem('hackathonTitle', validHackathon.title);
+                    localStorage.setItem('userRole', 'participant');
+                    
+                    // Redirect to participant dashboard
+                    window.location.href = 'participant-dashboard.html';
+                }, 800);
+                
+            } catch (error) {
+                submitBtn.classList.remove('animate__pulse');
+                submitBtn.classList.add('animate__shakeX');
+                submitBtn.textContent = 'Error: ' + error.message;
+                
+                setTimeout(() => {
+                    submitBtn.classList.remove('animate__shakeX');
+                    submitBtn.textContent = 'Join Hackathon';
+                    submitBtn.style.background = '';
+                }, 3000);
+                
+                return;
+            }
         });
     </script>
 </body>

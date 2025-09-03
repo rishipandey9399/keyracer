@@ -126,10 +126,7 @@ router.get('/leaderboard', async (req, res) => {
       { $unwind: '$user' },
       {
         $match: {
-          $or: [
-            { lastWpm: { $exists: true, $gt: 0 } },
-            { challengesCompleted: { $gt: 0 } }
-          ]
+          lastWpm: { $exists: true, $gt: 0 }
         }
       },
       {
@@ -172,10 +169,7 @@ router.get('/leaderboard', async (req, res) => {
 
     // Get total count
     const totalCount = await UserStats.countDocuments({ 
-      $or: [
-        { lastWpm: { $exists: true, $gt: 0 } },
-        { challengesCompleted: { $gt: 0 } }
-      ]
+      lastWpm: { $exists: true, $gt: 0 }
     });
 
     console.log(`[LEADERBOARD] Returning ${formattedData.length} entries`);
