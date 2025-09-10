@@ -224,6 +224,27 @@ router.get('/leaderboard/debug', async (req, res) => {
   }
 });
 
+// Clear all leaderboard data (admin only)
+router.delete('/leaderboard/clear', async (req, res) => {
+  try {
+    console.log('[LEADERBOARD] Clearing all leaderboard data...');
+    
+    // Delete all user stats
+    const deleteResult = await UserStats.deleteMany({});
+    
+    console.log(`[LEADERBOARD] Cleared ${deleteResult.deletedCount} user stats records`);
+    
+    res.json({
+      success: true,
+      message: `Cleared ${deleteResult.deletedCount} leaderboard records`,
+      deletedCount: deleteResult.deletedCount
+    });
+  } catch (error) {
+    console.error('[LEADERBOARD] Error clearing data:', error);
+    res.status(500).json({ success: false, message: 'Error clearing leaderboard data' });
+  }
+});
+
 // Debug endpoint
 router.get('/leaderboard/debug/:username', async (req, res) => {
   try {
