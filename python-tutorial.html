@@ -906,6 +906,48 @@ float(5)      # 5.0
 complex(4)    # (4+0j)</code></pre>
                     </div>
                 </div>
+            </section>
+        </main>
+    </div>
+    
+    <style>
+        @media (max-width: 768px) {
+            .tutorial-container { grid-template-columns: 1fr; }
+            .tutorial-sidebar { position: static; width: 100%; height: auto; order: 2; }
+            .tutorial-content { order: 1; }
+        }
+        
+        @media (max-width: 480px) {
+            .tutorial-header { padding: 1rem; }
+            .header-content { flex-direction: column; gap: 1rem; }
+            .main-nav { flex-wrap: wrap; gap: 0.5rem; }
+            .nav-item { padding: 0.5rem 1rem; font-size: 0.9rem; }
+            .tutorial-container { padding: 1rem; }
+            .tutorial-sidebar { padding: 1.5rem; }
+            .tutorial-nav h3 { font-size: 1.3rem; }
+            .menu-item { padding: 0.8rem 1rem; font-size: 0.9rem; }
+            .tutorial-content { padding: 1.5rem; }
+            .tutorial-section h1 { font-size: 1.8rem; }
+            .example-box { padding: 1.5rem; }
+            .code-demo { font-size: 0.85rem; }
+            .try-it-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+        }
+        
+        @media (max-width: 360px) {
+            .tutorial-header { padding: 0.8rem; }
+            .nav-item { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+            .tutorial-container { padding: 0.5rem; }
+            .tutorial-sidebar { padding: 1rem; }
+            .tutorial-nav h3 { font-size: 1.2rem; }
+            .menu-item { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+            .tutorial-content { padding: 1rem; }
+            .tutorial-section h1 { font-size: 1.6rem; }
+            .example-box { padding: 1rem; }
+            .code-demo { font-size: 0.8rem; }
+        }
+    </style>
+                    </div>
+                </div>
 
                 <div class="example-box">
                     <h3>🔸 5. Number Operations</h3>

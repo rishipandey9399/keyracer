@@ -568,3 +568,337 @@ section h2::after {
         grid-template-columns: 1fr;
     }
 }
+/* ===== RESPONSIVE DESIGN FOR ABOUT PAGE ===== */
+
+/* Mobile Portrait: 320px - 479px */
+@media (max-width: 479px) {
+    .page-header h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .page-header p {
+        font-size: 0.95rem;
+        padding: 0 10px;
+    }
+    
+    .section-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .content-image {
+        padding: 15px;
+    }
+    
+    .content-text {
+        padding: 20px 15px;
+    }
+    
+    .content-text h2 {
+        font-size: 1.5rem;
+    }
+    
+    .content-text p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .team-member {
+        padding: 20px;
+    }
+    
+    .member-avatar {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .team-member h3 {
+        font-size: 1.2rem;
+    }
+    
+    .member-role {
+        font-size: 0.8rem;
+    }
+    
+    .member-description {
+        font-size: 0.85rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .feature-card {
+        padding: 20px;
+    }
+    
+    .feature-icon {
+        font-size: 2rem;
+    }
+    
+    .feature-card h3 {
+        font-size: 1.1rem;
+    }
+    
+    .feature-card p {
+        font-size: 0.9rem;
+    }
+    
+    .contact-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .contact-card {
+        padding: 20px;
+    }
+    
+    .contact-card i {
+        font-size: 2.5rem;
+    }
+    
+    .contact-card h3 {
+        font-size: 1.1rem;
+    }
+    
+    .timeline::before {
+        left: 15px;
+    }
+    
+    .timeline-point {
+        left: 15px;
+        width: 15px;
+        height: 15px;
+    }
+    
+    .timeline-content {
+        width: calc(100% - 50px);
+        margin-left: 35px !important;
+        padding: 15px;
+    }
+    
+    .timeline-date {
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        top: -20px;
+    }
+    
+    .timeline-content h3 {
+        font-size: 1.1rem;
+    }
+    
+    .timeline-content p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile Landscape: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    .page-header h1 {
+        font-size: 2.1rem;
+    }
+    
+    .section-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .content-image {
+        padding: 20px;
+    }
+    
+    .content-text {
+        padding: 25px 20px;
+    }
+    
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    .contact-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    .timeline::before {
+        left: 20px;
+    }
+    
+    .timeline-point {
+        left: 20px;
+    }
+    
+    .timeline-content {
+        width: calc(100% - 60px);
+        margin-left: 40px !important;
+    }
+}
+
+/* Tablet Portrait: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .page-header h1 {
+        font-size: 2.3rem;
+    }
+    
+    .section-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .content-image {
+        padding: 25px;
+    }
+    
+    .content-text {
+        padding: 30px 25px;
+    }
+    
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    
+    .contact-cards {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+}
+
+/* Tablet Landscape & Small Desktop: 1024px - 1439px */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .section-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Large Desktop: 1440px+ */
+@media (min-width: 1440px) {
+    .page-header h1 {
+        font-size: 2.8rem;
+    }
+    
+    .content-text h2 {
+        font-size: 2.2rem;
+    }
+    
+    .team-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Height-based responsive adjustments */
+@media (max-height: 600px) {
+    .page-header {
+        margin: 15px 0;
+    }
+    
+    .page-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 5px;
+    }
+    
+    section {
+        margin-bottom: 30px;
+    }
+    
+    .team-member {
+        padding: 15px;
+    }
+    
+    .member-avatar {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+    }
+    
+    .feature-card {
+        padding: 20px;
+    }
+    
+    .contact-card {
+        padding: 20px;
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+    .page-header h1 {
+        font-size: 3.2rem;
+    }
+    
+    .content-text h2 {
+        font-size: 2.5rem;
+    }
+    
+    .team-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Ensure proper touch targets on mobile */
+@media (max-width: 767px) {
+    .chat-btn,
+    .social-link {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .team-member,
+    .feature-card,
+    .contact-card {
+        min-height: 44px;
+    }
+}
+
+/* Prevent horizontal scroll */
+@media (max-width: 479px) {
+    * {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .about-section,
+    .team-grid,
+    .features-grid,
+    .contact-cards {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+}

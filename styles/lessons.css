@@ -1168,3 +1168,588 @@
     color: var(--accent-color);
     font-family: var(--monospace-font);
 } 
+/* ===== RESPONSIVE DESIGN FOR LESSONS PAGE ===== */
+
+/* Mobile Portrait: 320px - 479px */
+@media (max-width: 479px) {
+    .lesson-category {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .lesson-category h2 {
+        font-size: 1.4rem;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .category-description {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .lesson-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .lesson-card {
+        padding: 15px;
+    }
+    
+    .lesson-icon {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+    
+    .lesson-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+    
+    .lesson-card p {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .start-lesson-btn {
+        padding: 12px 16px;
+        font-size: 0.85rem;
+        width: 100%;
+    }
+    
+    .bigram-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .bigram-group {
+        padding: 12px;
+    }
+    
+    .bigram-group h3 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .bigram-chips {
+        gap: 6px;
+    }
+    
+    .bigram-chip {
+        padding: 4px 8px;
+        font-size: 0.9rem;
+    }
+    
+    .bigram-practice {
+        padding: 12px;
+    }
+    
+    .bigram-practice h3 {
+        font-size: 1.1rem;
+    }
+    
+    .current-bigram {
+        font-size: 2.5rem;
+        letter-spacing: 0.3rem;
+    }
+    
+    .next-bigrams span {
+        font-size: 1.2rem;
+    }
+    
+    .bigram-input {
+        padding: 12px;
+        font-size: 1.2rem;
+        letter-spacing: 0.3rem;
+    }
+    
+    .lesson-practice {
+        padding: 15px;
+    }
+    
+    .lesson-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .lesson-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .close-lesson-btn {
+        align-self: flex-end;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .lesson-instructions {
+        padding: 12px;
+    }
+    
+    .lesson-instructions p {
+        font-size: 0.95rem;
+    }
+    
+    .progress-steps {
+        max-width: 200px;
+    }
+    
+    .step {
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+    
+    .lesson-text-display {
+        font-size: 1.1rem;
+        padding: 12px;
+        min-height: 120px;
+    }
+    
+    .lesson-navigation {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .nav-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        width: 95%;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+    
+    .completion-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .completion-stat .stat-value {
+        font-size: 1.8rem;
+    }
+    
+    .completion-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .completion-actions button {
+        width: 100%;
+        padding: 12px 20px;
+    }
+    
+    .racing-dashboard {
+        flex-direction: column;
+        gap: 15px;
+        padding: 12px 15px;
+    }
+    
+    .speedometer {
+        width: 80px;
+        height: 80px;
+        margin-right: 0;
+    }
+    
+    .speedometer-dial {
+        height: 35px;
+    }
+    
+    .dashboard-metrics {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .dashboard-metric {
+        padding: 8px 12px;
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .metric-label {
+        font-size: 0.7rem;
+    }
+    
+    .metric-value {
+        font-size: 1rem;
+    }
+}
+
+/* Mobile Landscape: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    .lesson-category {
+        padding: 18px;
+    }
+    
+    .lesson-category h2 {
+        font-size: 1.6rem;
+    }
+    
+    .lesson-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+    
+    .lesson-card {
+        padding: 18px;
+    }
+    
+    .lesson-icon {
+        font-size: 2rem;
+    }
+    
+    .lesson-card h3 {
+        font-size: 1.3rem;
+    }
+    
+    .bigram-container {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 18px;
+    }
+    
+    .current-bigram {
+        font-size: 3rem;
+        letter-spacing: 0.4rem;
+    }
+    
+    .bigram-input {
+        font-size: 1.3rem;
+        letter-spacing: 0.4rem;
+    }
+    
+    .lesson-practice {
+        padding: 18px;
+    }
+    
+    .lesson-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .lesson-text-display {
+        font-size: 1.2rem;
+        padding: 15px;
+    }
+    
+    .racing-dashboard {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .speedometer {
+        width: 100px;
+        height: 100px;
+        margin-right: 10px;
+    }
+    
+    .speedometer-dial {
+        height: 45px;
+    }
+    
+    .dashboard-metrics {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .dashboard-metric {
+        min-width: 70px;
+    }
+}
+
+/* Tablet Portrait: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .lesson-category {
+        padding: 20px;
+    }
+    
+    .lesson-category h2 {
+        font-size: 1.7rem;
+    }
+    
+    .lesson-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .bigram-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .lesson-practice {
+        padding: 20px;
+    }
+    
+    .lesson-header h2 {
+        font-size: 1.7rem;
+    }
+    
+    .lesson-text-display {
+        font-size: 1.3rem;
+        padding: 18px;
+    }
+    
+    .racing-dashboard {
+        padding: 15px 20px;
+    }
+    
+    .speedometer {
+        width: 110px;
+        height: 110px;
+        margin-right: 15px;
+    }
+    
+    .speedometer-dial {
+        height: 48px;
+    }
+}
+
+/* Tablet Landscape & Small Desktop: 1024px - 1439px */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .lesson-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .bigram-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Large Desktop: 1440px+ */
+@media (min-width: 1440px) {
+    .lesson-category h2 {
+        font-size: 2rem;
+    }
+    
+    .lesson-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .lesson-card h3 {
+        font-size: 1.5rem;
+    }
+    
+    .lesson-card p {
+        font-size: 1.1rem;
+    }
+    
+    .current-bigram {
+        font-size: 4rem;
+    }
+    
+    .lesson-text-display {
+        font-size: 1.5rem;
+    }
+    
+    .modal-content h2 {
+        font-size: 2.2rem;
+    }
+    
+    .racing-dashboard {
+        padding: 18px 25px;
+    }
+    
+    .speedometer {
+        width: 130px;
+        height: 130px;
+        margin-right: 25px;
+    }
+    
+    .speedometer-dial {
+        height: 55px;
+    }
+}
+
+/* Height-based responsive adjustments */
+@media (max-height: 600px) {
+    .lesson-category {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .lesson-category h2 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+    
+    .lesson-card {
+        padding: 12px;
+    }
+    
+    .lesson-icon {
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+    }
+    
+    .lesson-practice {
+        padding: 12px;
+    }
+    
+    .lesson-header {
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+    }
+    
+    .lesson-instructions {
+        padding: 10px;
+    }
+    
+    .lesson-text-display {
+        min-height: 100px;
+        padding: 10px;
+    }
+    
+    .modal-content {
+        padding: 15px;
+    }
+    
+    .racing-dashboard {
+        padding: 10px 15px;
+    }
+    
+    .speedometer {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .speedometer-dial {
+        height: 30px;
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+    .lesson-category h2 {
+        font-size: 2.2rem;
+    }
+    
+    .lesson-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .lesson-card h3 {
+        font-size: 1.6rem;
+    }
+    
+    .current-bigram {
+        font-size: 4.5rem;
+    }
+    
+    .lesson-text-display {
+        font-size: 1.6rem;
+    }
+    
+    .racing-dashboard {
+        max-width: 1400px;
+        margin: 0 auto 20px;
+    }
+    
+    .speedometer {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .speedometer-dial {
+        height: 60px;
+    }
+}
+
+/* Ensure proper touch targets on mobile */
+@media (max-width: 767px) {
+    .start-lesson-btn,
+    .nav-btn,
+    .close-lesson-btn,
+    .bigram-chip,
+    .step {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .lesson-card {
+        min-height: 44px;
+    }
+    
+    .bigram-input {
+        min-height: 44px;
+    }
+}
+
+/* Prevent horizontal scroll */
+@media (max-width: 479px) {
+    * {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .lesson-category,
+    .bigram-container,
+    .lesson-practice,
+    .modal-content {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+}
+
+/* Keyboard animation responsive */
+@media (max-width: 767px) {
+    .keyboard-animation {
+        height: 250px;
+    }
+    
+    .keyboard {
+        width: 100%;
+        max-width: 600px;
+        height: 200px;
+    }
+    
+    .finger-guide {
+        width: 100%;
+        max-width: 600px;
+        height: 200px;
+    }
+    
+    .finger {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .finger-tip {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+/* Race start lights responsive */
+@media (max-width: 479px) {
+    .lights-container {
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .light {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .countdown-number {
+        font-size: 5rem;
+    }
+    
+    .countdown-number.go-text {
+        font-size: 6rem;
+    }
+}

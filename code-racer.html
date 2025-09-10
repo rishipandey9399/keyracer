@@ -488,7 +488,41 @@
             .language-name {
                 font-size: 1.75rem;
             }
-            
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .languages-grid { padding: 0 0.5rem 3rem; gap: 1.5rem; }
+            .language-card { padding: 1.5rem 1rem; }
+            .language-icon { font-size: 2.5rem; }
+            .language-name { font-size: 1.5rem; }
+            .language-description { font-size: 1rem; }
+            .start-learning-btn { padding: 8px 20px; font-size: 1rem; }
+            .features-title { font-size: 2rem; }
+            .feature-card { padding: 1.5rem; }
+            .feature-icon { font-size: 2rem; }
+            .feature-title { font-size: 1.1rem; }
+        }
+        
+        @media (max-width: 360px) {
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 0.9rem; }
+            .language-card { padding: 1.2rem 0.8rem; }
+            .language-icon { font-size: 2.2rem; }
+            .language-name { font-size: 1.3rem; }
+            .language-description { font-size: 0.95rem; }
+            .start-learning-btn { padding: 6px 16px; font-size: 0.95rem; }
+            .features-title { font-size: 1.8rem; }
+            .feature-card { padding: 1.2rem; }
+        }
+        
+        @media (max-height: 600px) and (orientation: landscape) {
+            .hero-section { padding: 2rem 2rem; }
+            .hero-title { font-size: 2.2rem; }
+            .languages-grid { padding: 0 1rem 2rem; }
+            .features-section { padding: 2rem 2rem; }
+        }
 
         #particles-js {
             position: fixed;

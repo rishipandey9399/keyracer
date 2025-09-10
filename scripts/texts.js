@@ -70,13 +70,95 @@ function getFreshText(difficulty = 'beginner') {
     return selectedText;
 }
 
+// Word pools for dynamic text generation
+const wordPools = {
+    beginner: {
+        subjects: ['the cat', 'a dog', 'my friend', 'the teacher', 'a student', 'the bird', 'a child', 'the man', 'a woman', 'the boy'],
+        verbs: ['runs', 'walks', 'jumps', 'sits', 'stands', 'reads', 'writes', 'plays', 'works', 'sleeps'],
+        objects: ['quickly', 'slowly', 'carefully', 'happily', 'quietly', 'loudly', 'softly', 'gently', 'fast', 'well'],
+        connectors: ['and', 'but', 'so', 'then', 'also', 'while', 'when', 'after', 'before', 'during']
+    },
+    intermediate: {
+        subjects: ['the professional', 'many people', 'technology', 'the computer', 'modern society', 'digital communication', 'online learning', 'remote work', 'artificial intelligence', 'the internet'],
+        verbs: ['transforms', 'improves', 'develops', 'creates', 'enhances', 'facilitates', 'revolutionizes', 'optimizes', 'streamlines', 'accelerates'],
+        objects: ['our daily lives', 'business processes', 'educational methods', 'communication channels', 'work efficiency', 'global connectivity', 'information access', 'productivity levels', 'learning opportunities', 'collaboration tools'],
+        connectors: ['furthermore', 'however', 'therefore', 'consequently', 'meanwhile', 'nevertheless', 'additionally', 'similarly', 'in contrast', 'as a result']
+    },
+    advanced: {
+        subjects: ['contemporary research', 'emerging technologies', 'interdisciplinary studies', 'computational algorithms', 'machine learning systems', 'quantum computing', 'biotechnology advances', 'sustainable development', 'global economic trends', 'environmental sustainability'],
+        verbs: ['demonstrates', 'establishes', 'investigates', 'synthesizes', 'revolutionizes', 'conceptualizes', 'implements', 'optimizes', 'facilitates', 'encompasses'],
+        objects: ['unprecedented opportunities', 'complex methodologies', 'innovative solutions', 'transformative potential', 'multifaceted challenges', 'systematic approaches', 'comprehensive frameworks', 'strategic implementations', 'collaborative initiatives', 'sustainable practices'],
+        connectors: ['consequently', 'furthermore', 'nevertheless', 'simultaneously', 'correspondingly', 'alternatively', 'specifically', 'particularly', 'essentially', 'fundamentally']
+    }
+};
+
+// Function to generate dynamic, unique text
+function generateDynamicText(difficulty = 'beginner') {
+    const pool = wordPools[difficulty] || wordPools.beginner;
+    const sentences = [];
+    const numSentences = difficulty === 'beginner' ? 3 : difficulty === 'intermediate' ? 4 : 5;
+    
+    for (let i = 0; i < numSentences; i++) {
+        const subject = pool.subjects[Math.floor(Math.random() * pool.subjects.length)];
+        const verb = pool.verbs[Math.floor(Math.random() * pool.verbs.length)];
+        const object = pool.objects[Math.floor(Math.random() * pool.objects.length)];
+        
+        let sentence = `${subject.charAt(0).toUpperCase() + subject.slice(1)} ${verb} ${object}`;
+        
+        // Add connector and additional clause for variety
+        if (Math.random() > 0.4) {
+            const connector = pool.connectors[Math.floor(Math.random() * pool.connectors.length)];
+            const secondSubject = pool.subjects[Math.floor(Math.random() * pool.subjects.length)];
+            const secondVerb = pool.verbs[Math.floor(Math.random() * pool.verbs.length)];
+            sentence += ` ${connector} ${secondSubject} ${secondVerb}`;
+        }
+        
+        sentence += '.';
+        sentences.push(sentence);
+    }
+    
+    return sentences.join(' ');
+}
+
+// Enhanced getFreshText that combines static and dynamic content
+function getFreshText(difficulty = 'beginner') {
+    // 70% chance for dynamic text, 30% for static to maintain variety
+    if (Math.random() > 0.3) {
+        return generateDynamicText(difficulty);
+    }
+    
+    const texts = typingTexts[difficulty] || typingTexts.beginner;
+    const recentTexts = JSON.parse(localStorage.getItem('recentTexts') || '[]');
+    
+    // Filter out recently used texts
+    const availableTexts = texts.filter(text => !recentTexts.includes(text));
+    
+    // If all texts have been used recently, reset the history
+    if (availableTexts.length === 0) {
+        localStorage.setItem('recentTexts', JSON.stringify([]));
+        return generateDynamicText(difficulty); // Use dynamic instead of static
+    }
+    
+    // Get a random text from available texts
+    const randomIndex = Math.floor(Math.random() * availableTexts.length);
+    const selectedText = availableTexts[randomIndex];
+    
+    // Update recent texts
+    recentTexts.push(selectedText);
+    if (recentTexts.length > 5) recentTexts.shift();
+    localStorage.setItem('recentTexts', JSON.stringify(recentTexts));
+    
+    return selectedText;
+}
+
 // Export the texts and functions for use in other scripts
 if (typeof module !== 'undefined') {
-    module.exports = { typingTexts, getRandomText, getFreshText };
+    module.exports = { typingTexts, getRandomText, getFreshText, generateDynamicText };
 }
 // Attach to window for browser usage
 if (typeof window !== 'undefined') {
     window.typingTexts = typingTexts;
     window.getRandomText = getRandomText;
     window.getFreshText = getFreshText;
+    window.generateDynamicText = generateDynamicText;
 } 

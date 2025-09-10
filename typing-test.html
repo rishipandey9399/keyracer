@@ -170,6 +170,24 @@
             visibility: hidden !important;
         }
         
+        /* Prevent text selection during typing test */
+        .text-input {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Disable context menu on typing area */
+        .race-typing-area {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
         /* Ensure all main content is visible with no animation delays */
         .container, main, header, section, .race-track, .keyboard-container {
             opacity: 1 !important;
@@ -286,7 +304,7 @@
                 
                 <div class="race-typing-area">
                     <div class="text-display" id="text-display"></div>
-                    <textarea id="text-input" class="text-input" placeholder="The race will begin when you start typing..." disabled></textarea>
+                    <textarea id="text-input" class="text-input" placeholder="The race will begin when you start typing..." disabled autocomplete="off" spellcheck="false" onpaste="return false" oncut="return false" oncopy="return false"></textarea>
                 </div>
                 
                 <div id="custom-text-container" style="display: none;">

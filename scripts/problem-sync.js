@@ -7,7 +7,7 @@ class ProblemSync {
     init() {
         // Listen for storage changes to sync problems across tabs
         window.addEventListener('storage', (event) => {
-            if (event.key === 'problems') {
+            if (event.key && event.key.includes('_problems')) {
                 this.handleProblemsUpdate();
             }
         });
@@ -18,12 +18,36 @@ class ProblemSync {
 
     // Broadcast problems to all participants
     broadcastProblems() {
-        const problems = JSON.parse(localStorage.getItem('problems')) || [];
-        const hackathons = JSON.parse(localStorage.getItem('hackathons')) || [];
+        // Get problems from all organizers
+        const allKeys = Object.keys(localStorage);
+        let allProblems = [];
+        let allHackathons = [];
+        
+        // Collect problems from all organizer keys
+        for (const key of allKeys) {
+            if (key.includes('_problems')) {
+                try {
+                    const problems = JSON.parse(localStorage.getItem(key));
+                    allProblems = allProblems.concat(problems);
+                } catch (e) {
+                    // Skip invalid entries
+                }
+            }
+            if (key.includes('_hackathons')) {
+                try {
+                    const hackathons = JSON.parse(localStorage.getItem(key));
+                    allHackathons = allHackathons.concat(hackathons);
+                } catch (e) {
+                    // Skip invalid entries
+                }
+            }
+        }
+        
+        console.log('Broadcasting problems:', allProblems.length);
         
         // Create participant-visible problems data
-        const participantProblems = problems.map(problem => {
-            const hackathon = hackathons.find(h => h.id === problem.hackathonId);
+        const participantProblems = allProblems.map(problem => {
+            const hackathon = allHackathons.find(h => h.id === problem.hackathonId);
             return {
                 id: problem.id,
                 title: problem.title,

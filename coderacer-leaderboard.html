@@ -342,6 +342,29 @@
                 display: none;
             }
         }
+        
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .language-tabs { flex-wrap: wrap; gap: 5px; }
+            .language-tab { padding: 8px 16px; font-size: 1rem; }
+            .user-stats-panel { flex-direction: column; gap: 16px; }
+            .stat-item { padding: 12px 20px; }
+            .difficulty-filter-bar { padding: 12px 0; }
+            .filter-container { flex-wrap: wrap; gap: 10px; }
+            .difficulty-filter { padding: 8px 16px; font-size: 0.9rem; }
+        }
+        
+        @media (max-width: 360px) {
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 0.9rem; }
+            .language-tab { padding: 6px 12px; font-size: 0.9rem; }
+            .stat-item { padding: 10px 16px; }
+            .stat-value { font-size: 1.1rem; }
+            .difficulty-filter { padding: 6px 12px; font-size: 0.85rem; }
+            .leaderboard-table { padding: 0.1rem; }
+            .table-header, .leaderboard-row { font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body>

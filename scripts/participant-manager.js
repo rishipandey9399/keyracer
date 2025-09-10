@@ -3,20 +3,26 @@
 // Helper function to find hackathon across all organizers
 function findHackathonAcrossOrganizers(hackathonId) {
     const allKeys = Object.keys(localStorage);
+    console.log('Searching for hackathon ID:', hackathonId);
+    console.log('Available keys:', allKeys.filter(k => k.includes('_hackathons')));
     
     for (const key of allKeys) {
         if (key.includes('_hackathons')) {
             try {
                 const hackathons = JSON.parse(localStorage.getItem(key));
+                console.log(`Checking hackathons in ${key}:`, hackathons.map(h => h.id));
                 const hackathon = hackathons.find(h => h.id === hackathonId);
                 if (hackathon) {
-                    return { hackathon, organizerId: key.split('_')[0] };
+                    const organizerId = key.split('_hackathons')[0];
+                    console.log('Found hackathon in organizer:', organizerId);
+                    return { hackathon, organizerId };
                 }
             } catch (e) {
-                // Skip invalid entries
+                console.log('Error parsing hackathons from key:', key, e);
             }
         }
     }
+    console.log('Hackathon not found:', hackathonId);
     return null;
 }
 
@@ -55,6 +61,11 @@ function registerParticipant(participantName, hackathonId, email = '') {
     const participantsKey = `${organizerId}_participants`;
     const participants = JSON.parse(localStorage.getItem(participantsKey)) || [];
     
+    console.log('Registering participant with key:', participantsKey);
+    console.log('Organizer ID:', organizerId);
+    console.log('Hackathon ID:', hackathonId);
+    console.log('Participant name:', participantName);
+    
     // Check if participant already exists for this hackathon
     const existingParticipant = participants.find(p => 
         p.name.toLowerCase() === participantName.toLowerCase().trim() && 
@@ -66,12 +77,15 @@ function registerParticipant(participantName, hackathonId, email = '') {
         existingParticipant.lastActivity = new Date().toISOString();
         existingParticipant.status = 'active';
         localStorage.setItem(participantsKey, JSON.stringify(participants));
+        console.log('Updated existing participant:', existingParticipant);
         return existingParticipant;
     }
     
     // Add new participant
     participants.push(participant);
     localStorage.setItem(participantsKey, JSON.stringify(participants));
+    console.log('Added new participant:', participant);
+    console.log('Total participants now:', participants.length);
     
     // Update hackathon participant count
     const hackathonsKey = `${organizerId}_hackathons`;

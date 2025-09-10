@@ -104,7 +104,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // --- Typing Input ---
-        if (textInput) textInput.addEventListener('input', handleInput);
+        if (textInput) {
+            textInput.addEventListener('input', handleInput);
+            
+            // Prevent copy-paste operations
+            textInput.addEventListener('paste', function(e) {
+                e.preventDefault();
+                showNotification('Copy-paste is not allowed in typing tests!', 'error');
+            });
+            
+            textInput.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            textInput.addEventListener('keydown', function(e) {
+                // Prevent Ctrl+V, Ctrl+C, Ctrl+X, Ctrl+A
+                if (e.ctrlKey && (e.key === 'v' || e.key === 'c' || e.key === 'x' || e.key === 'a')) {
+                    e.preventDefault();
+                    showNotification('Keyboard shortcuts are disabled during typing tests!', 'error');
+                }
+            });
+        }
 
         // Initial reset
         resetTest();
@@ -258,8 +278,12 @@ async function startTest() {
             currentText = "Please enter your custom text in the text area above. This is a default text since no custom text was provided.";
         }
     } else {
-        // Use predefined texts
-        if (window.typingTexts && window.typingTexts[difficulty]) {
+        // Use dynamic text generation to prevent memorization
+        if (window.generateDynamicText) {
+            currentText = window.generateDynamicText(difficulty);
+        } else if (window.getFreshText) {
+            currentText = window.getFreshText(difficulty);
+        } else if (window.typingTexts && window.typingTexts[difficulty]) {
             const texts = window.typingTexts[difficulty];
             const randomIndex = Math.floor(Math.random() * texts.length);
             currentText = texts[randomIndex];
@@ -337,6 +361,25 @@ function updateTimer() {
     }
 }
 
+// Anti-cheat validation
+function validateInput(newInput, previousInput) {
+    const timeDiff = Date.now() - (window.lastInputTime || Date.now());
+    const charDiff = newInput.length - (previousInput || '').length;
+    
+    // Flag if too many characters added too quickly (likely paste)
+    if (charDiff > 3 && timeDiff < 100) {
+        return false;
+    }
+    
+    // Check for non-sequential input (jumping around)
+    if (charDiff < 0 && Math.abs(charDiff) > 1) {
+        return false; // Multiple character deletion is suspicious
+    }
+    
+    window.lastInputTime = Date.now();
+    return true;
+}
+
 // Function to handle user input during the test
     function handleInput() {
     if (!window.isTestActive) return;
@@ -347,6 +390,15 @@ function updateTimer() {
     if (!textInput || !textDisplay) return;
     
         const userInput = textInput.value;
+        
+    // Anti-cheat validation
+    if (!validateInput(userInput, window.previousInput || '')) {
+        textInput.value = window.previousInput || '';
+        showNotification('Suspicious input detected! Please type naturally.', 'error');
+        return;
+    }
+    
+    window.previousInput = userInput;
         const textSpans = textDisplay.querySelectorAll('span');
         
     let correctChars = 0;

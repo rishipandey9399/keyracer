@@ -917,6 +917,15 @@
         <div class="dashboard-container">
 
             
+            <!-- Timer Section -->
+            <div class="timer-container">
+                <div class="timer-info">
+                    <div class="timer-label">Time Remaining</div>
+                    <div class="timer-value" id="countdown-timer">02:30:00</div>
+                </div>
+                <div class="timer-status">Active</div>
+            </div>
+            
             <!-- Problem Statement Page -->
             <div class="page" id="problem-page">
                 <div class="page-header">
@@ -1293,7 +1302,10 @@
             document.querySelector('[data-page="submission"]').classList.add('active');
             
             // Populate submission page with problem details
-            populateSubmissionPage(problem);
+            const submissionContainer = document.querySelector('#submission-page .submission-container');
+            submissionContainer.querySelector('.problem-title').textContent = problem.title;
+            submissionContainer.querySelector('.problem-difficulty').textContent = problem.difficulty;
+            submissionContainer.setAttribute('data-problem-id', problem.id);
         }
         
         // Listen for problem updates
@@ -1563,6 +1575,8 @@
             // Countdown timer
             function updateTimer() {
                 const timerElement = document.getElementById('countdown-timer');
+                if (!timerElement) return;
+                
                 let timeString = timerElement.textContent;
                 let [hours, minutes, seconds] = timeString.split(':').map(Number);
                 
@@ -1593,12 +1607,21 @@
             // Load available problems
             loadAvailableProblems();
             
-            // Load problems from localStorage
-            const problems = JSON.parse(localStorage.getItem('problems')) || [];
-            const publishedProblems = problems.filter(problem => problem.published);
+            // Also call displayProblems to show localStorage problems
+            displayProblems();
+            
+            // Load problems from synced participant data
+            const participantProblems = JSON.parse(localStorage.getItem('participantProblems')) || [];
+            const currentHackathonId = localStorage.getItem('currentHackathonId');
+            const availableProblems = currentHackathonId ? 
+                participantProblems.filter(p => p.hackathonId === currentHackathonId) : 
+                participantProblems;
+            
+            console.log('All participant problems:', participantProblems);
+            console.log('Available problems for hackathon:', availableProblems);
             
             // Load submissions from localStorage
-            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
             
             // Piston API configuration
             const PISTON_API = 'https://emkc.org/api/v2/piston/execute';
@@ -1633,29 +1656,96 @@
             
             // Display problems in the dashboard
             function displayProblems() {
-                const problemContainer = document.querySelector('#dashboard-page .problem-container');
                 const problemPage = document.getElementById('problem-page');
                 
-                if (publishedProblems.length === 0) {
-                    // No problems available
-                    problemContainer.querySelector('.problem-content').innerHTML = `
-                        <div class="problem-section">
-                            <p>No problem statements are available yet. Please check back later.</p>
-                        </div>
-                    `;
-                    problemContainer.querySelector('.problem-difficulty').textContent = 'N/A';
+                if (!problemPage) return;
+                
+                // Get fresh problems from synced participant data
+                const participantProblems = JSON.parse(localStorage.getItem('participantProblems')) || [];
+                const currentHackathonId = localStorage.getItem('currentHackathonId');
+                const availableProblems = currentHackathonId ? 
+                    participantProblems.filter(p => p.hackathonId === currentHackathonId) : 
+                    participantProblems;
+                
+                console.log('Available problems for display:', availableProblems);
+                
+                if (availableProblems.length === 0) {
+                    // No problems available - update problem page
+                    const problemContainer = problemPage.querySelector('.problem-container');
+                    if (problemContainer) {
+                        const problemContent = problemContainer.querySelector('.problem-content');
+                        const problemDifficulty = problemContainer.querySelector('.problem-difficulty');
+                        
+                        if (problemContent) {
+                            problemContent.innerHTML = `
+                                <div class="problem-section">
+                                    <p>No problem statements are available yet. Please check back later.</p>
+                                </div>
+                            `;
+                        }
+                        
+                        if (problemDifficulty) {
+                            problemDifficulty.textContent = 'N/A';
+                        }
+                    }
                     return;
                 }
                 
-                // Display the first problem in the dashboard
-                const firstProblem = publishedProblems[0];
-                displayProblemInDashboard(firstProblem);
-                
-                // Display all problems in the problem page
-                displayProblemList(problemPage, publishedProblems);
+                // Display the first problem in the existing container
+                const firstProblem = availableProblems[0];
+                displayFirstProblem(firstProblem);
                 
                 // Display submission history
                 displaySubmissionHistory();
+            }
+            
+            // Display first problem in the existing problem container
+            function displayFirstProblem(problem) {
+                const problemContainer = document.querySelector('.problem-container');
+                if (!problemContainer) return;
+                
+                const problemTitle = problemContainer.querySelector('.problem-title');
+                const problemDifficulty = problemContainer.querySelector('.problem-difficulty');
+                const problemContent = problemContainer.querySelector('.problem-content');
+                
+                if (problemTitle) problemTitle.textContent = problem.title;
+                if (problemDifficulty) problemDifficulty.textContent = problem.difficulty;
+                
+                if (problemContent) {
+                    problemContent.innerHTML = `
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Description</h3>
+                            <p>${problem.description}</p>
+                        </div>
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Input Format</h3>
+                            <p>${problem.inputFormat || 'Not specified'}</p>
+                        </div>
+                        <div class="problem-section">
+                            <h3 class="problem-section-title">Output Format</h3>
+                            <p>${problem.outputFormat || 'Not specified'}</p>
+                        </div>
+                        ${problem.exampleInput ? `
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Example</h3>
+                                <div class="example-box">
+                                    <h4 class="example-title">Input:</h4>
+                                    <div class="code-example">${problem.exampleInput}</div>
+                                    <h4 class="example-title">Output:</h4>
+                                    <div class="code-example">${problem.exampleOutput || 'Not provided'}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${problem.constraints ? `
+                            <div class="problem-section">
+                                <h3 class="problem-section-title">Constraints</h3>
+                                <div class="constraints">
+                                    <p>${problem.constraints}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                    `;
+                }
             }
             
             // Display a problem in the dashboard
@@ -1839,11 +1929,19 @@
                 const submissionPage = document.getElementById('submission-page');
                 const submissionContainer = submissionPage.querySelector('.submission-container');
                 
+                // Get current problem index for display
+                const currentIndex = parseInt(localStorage.getItem('currentProblemIndex') || '0') + 1;
+                const participantProblems = JSON.parse(localStorage.getItem('participantProblems')) || [];
+                const currentHackathonId = localStorage.getItem('currentHackathonId');
+                const totalProblems = currentHackathonId ? 
+                    participantProblems.filter(p => p.hackathonId === currentHackathonId).length : 
+                    participantProblems.length;
+                
                 // Update problem title and difficulty
                 const difficultyClass = problem.difficulty === 'easy' ? 'bg-success' : 
                                        problem.difficulty === 'medium' ? 'bg-warning' : 'bg-danger';
                 
-                submissionContainer.querySelector('.problem-title').textContent = problem.title;
+                submissionContainer.querySelector('.problem-title').textContent = `${problem.title} (${currentIndex}/${totalProblems})`;
                 submissionContainer.querySelector('.problem-difficulty').innerHTML = `
                     <span class="badge ${difficultyClass}">
                         ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
@@ -1856,42 +1954,10 @@
                     submitBtn.setAttribute('data-problem-id', problem.id);
                 }
                 
-                // Populate language selector based on allowed languages
-                const languageSelector = submissionContainer.querySelector('.language-selector');
-                if (languageSelector) {
-                    languageSelector.innerHTML = '';
-                    
-                    // If problem has allowed languages, use them, otherwise use default languages
-                    const languages = problem.allowedLanguages && problem.allowedLanguages.length > 0 ? 
-                                     problem.allowedLanguages : 
-                                     Object.keys(languageVersions);
-                    
-                    languages.forEach(lang => {
-                        const option = document.createElement('option');
-                        option.value = lang;
-                        option.textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
-                        languageSelector.appendChild(option);
-                    });
-                }
-                
                 // Clear code editor
                 const codeEditor = document.getElementById('solution-editor');
                 if (codeEditor) {
                     codeEditor.value = '';
-                }
-                
-                // Add event listener to submit button
-                const submitSolutionBtn = submissionContainer.querySelector('.btn-primary-custom');
-                if (submitSolutionBtn) {
-                    // Remove existing event listeners
-                    const newSubmitBtn = submitSolutionBtn.cloneNode(true);
-                    submitSolutionBtn.parentNode.replaceChild(newSubmitBtn, submitSolutionBtn);
-                    
-                    // Add new event listener
-                    newSubmitBtn.addEventListener('click', function() {
-                        const problemId = this.getAttribute('data-problem-id');
-                        submitSolution(problemId);
-                    });
                 }
             }
             
@@ -2032,6 +2098,9 @@
                 const historyPage = document.getElementById('history-page');
                 if (!historyPage) return;
                 
+                // Get fresh submissions from localStorage
+                const currentSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                
                 const historyContainer = historyPage.querySelector('.history-container');
                 const tableBody = historyContainer.querySelector('tbody');
                 
@@ -2070,7 +2139,7 @@
                 // Clear existing rows
                 tbody.innerHTML = '';
                 
-                if (submissions.length === 0) {
+                if (currentSubmissions.length === 0) {
                     tbody.innerHTML = `
                         <tr>
                             <td colspan="6" class="text-center">No submissions yet</td>
@@ -2080,7 +2149,7 @@
                 }
                 
                 // Sort submissions by date (newest first)
-                const sortedSubmissions = [...submissions].sort((a, b) => {
+                const sortedSubmissions = [...currentSubmissions].sort((a, b) => {
                     return new Date(b.submittedAt) - new Date(a.submittedAt);
                 });
                 
@@ -2113,7 +2182,7 @@
                 viewButtons.forEach(btn => {
                     btn.addEventListener('click', function() {
                         const submissionId = this.getAttribute('data-submission-id');
-                        const submission = submissions.find(s => s.id === submissionId);
+                        const submission = currentSubmissions.find(s => s.id === submissionId);
                         
                         if (submission) {
                             // Create modal to show submission details
@@ -2340,7 +2409,8 @@
                 submitSolutionBtn.addEventListener('click', async function() {
                     const submissionContainer = document.querySelector('#submission-page .submission-container');
                     const problemId = submissionContainer.getAttribute('data-problem-id');
-                    const problem = problems.find(p => p.id === problemId);
+                    const participantProblems = JSON.parse(localStorage.getItem('participantProblems')) || [];
+                    const problem = participantProblems.find(p => p.id === problemId);
                     
                     if (!problem) {
                         alert('Problem not found!');
@@ -2443,20 +2513,8 @@
                         // Update submission history
                         updateSubmissionHistory();
                         
-                        // Navigate to history page
-                        document.querySelectorAll('.page').forEach(page => {
-                            page.style.display = 'none';
-                        });
-                        
-                        document.getElementById('history-page').style.display = 'block';
-                        
-                        // Update navigation menu
-                        document.querySelectorAll('.nav-link').forEach(link => {
-                            link.classList.remove('active');
-                            if (link.getAttribute('data-page') === 'history') {
-                                link.classList.add('active');
-                            }
-                        });
+                        // Advance to next problem
+                        advanceToNextProblem();
                         
                         // End of error handling
                     } finally {
@@ -2717,8 +2775,47 @@
             // Initialize submission history
             updateSubmissionHistory();
             
+            // Function to advance to next problem
+            function advanceToNextProblem() {
+                const currentIndex = parseInt(localStorage.getItem('currentProblemIndex') || '0');
+                const nextIndex = currentIndex + 1;
+                localStorage.setItem('currentProblemIndex', nextIndex.toString());
+                
+                setTimeout(() => {
+                    alert('Problem submitted! Moving to next problem.');
+                    // Navigate back to problem page
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.style.display = 'none';
+                    });
+                    document.getElementById('problem-page').style.display = 'block';
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('data-page') === 'problem') {
+                            link.classList.add('active');
+                        }
+                    });
+                    displayProblems();
+                }, 1000);
+            }
+            
+            window.resetProblemProgress = function() {
+                localStorage.setItem('currentProblemIndex', '0');
+                displayProblems();
+            };
+            
+            // Trigger initial problem sync
+            if (window.problemSync) {
+                window.problemSync.broadcastProblems();
+            }
+            
             // Refresh problems every 10 seconds
-            setInterval(loadAvailableProblems, 10000);
+            setInterval(() => {
+                if (window.problemSync) {
+                    window.problemSync.broadcastProblems();
+                }
+                loadAvailableProblems();
+                displayProblems();
+            }, 10000);
         });
     </script>
 </body>

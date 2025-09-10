@@ -1380,6 +1380,7 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="scripts/participant-manager.js"></script>
     <script src="scripts/problem-sync.js"></script>
+    <script src="debug-participants.js"></script>
     <script>
         // Preloader animation
         document.addEventListener('DOMContentLoaded', function() {
@@ -1620,14 +1621,18 @@
                 // Search through all stored hackathons to find the organizer
                 const allKeys = Object.keys(localStorage);
                 let foundOrganizerId = null;
+                let foundHackathon = null;
                 
                 for (const key of allKeys) {
                     if (key.includes('_hackathons')) {
                         try {
                             const hackathons = JSON.parse(localStorage.getItem(key));
                             const hackathon = hackathons.find(h => h.organizerCode === organizerCode);
-                            if (hackathon && hackathon.organizerId) {
-                                foundOrganizerId = hackathon.organizerId;
+                            if (hackathon) {
+                                // Extract organizer ID from the key
+                                foundOrganizerId = key.split('_hackathons')[0];
+                                foundHackathon = hackathon;
+                                console.log('Found organizer ID from key:', foundOrganizerId, 'for code:', organizerCode);
                                 break;
                             }
                         } catch (e) {
@@ -1636,10 +1641,11 @@
                     }
                 }
                 
-                if (foundOrganizerId) {
+                if (foundOrganizerId && foundHackathon) {
                     currentOrganizerId = foundOrganizerId;
                     localStorage.setItem('currentOrganizerId', currentOrganizerId);
                     localStorage.setItem('currentOrganizerCode', organizerCode);
+                    console.log('Set current organizer ID to:', currentOrganizerId);
                 } else {
                     // Invalid organizer code
                     alert('Invalid organizer code. Please check and try again.');
@@ -1846,11 +1852,49 @@
             
             // Display participants function
             function displayParticipants() {
-                const participants = getOrganizerData('participants');
+                // Get all participants across all organizers for this organizer's hackathons
                 const hackathons = getOrganizerData('hackathons');
+                const hackathonIds = hackathons.map(h => h.id);
+                
+                // Find participants across all organizer keys
+                const allKeys = Object.keys(localStorage);
+                let allParticipants = [];
+                
+                for (const key of allKeys) {
+                    if (key.includes('_participants')) {
+                        try {
+                            const participants = JSON.parse(localStorage.getItem(key));
+                            // Filter participants that belong to this organizer's hackathons
+                            const relevantParticipants = participants.filter(p => hackathonIds.includes(p.hackathonId));
+                            allParticipants = allParticipants.concat(relevantParticipants);
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                const participants = allParticipants;
                 const tableBody = document.getElementById('participants-table-body');
                 const participantCount = document.getElementById('participant-count');
                 const hackathonFilter = document.getElementById('hackathon-filter');
+                
+                console.log('Current organizer ID:', currentOrganizerId);
+                console.log('Organizer hackathons:', hackathons);
+                console.log('Looking for participants across all organizers for hackathons:', hackathonIds);
+                console.log('All localStorage keys:', allKeys.filter(k => k.includes('_participants')));
+                console.log('Found participants:', participants);
+                
+                // Debug: Show all participants in localStorage
+                for (const key of allKeys) {
+                    if (key.includes('_participants')) {
+                        try {
+                            const participants = JSON.parse(localStorage.getItem(key));
+                            console.log(`Participants in ${key}:`, participants);
+                        } catch (e) {
+                            console.log(`Invalid participants data in ${key}`);
+                        }
+                    }
+                }
                 
                 if (!tableBody) return;
                 
@@ -1859,14 +1903,10 @@
                     participantCount.textContent = participants.length;
                 }
                 
-                // Filter participants based on selected hackathon and organizer
+                // Filter participants based on selected hackathon
                 const selectedHackathon = hackathonFilter ? hackathonFilter.value : '';
-                const organizerParticipants = participants.filter(p => {
-                    const hackathon = hackathons.find(h => h.id === p.hackathonId);
-                    return hackathon && hackathon.organizerId === currentOrganizerId;
-                });
                 const filteredParticipants = selectedHackathon ? 
-                    organizerParticipants.filter(p => p.hackathonId === selectedHackathon) : organizerParticipants;
+                    participants.filter(p => p.hackathonId === selectedHackathon) : participants;
                 
                 tableBody.innerHTML = '';
                 
@@ -2045,6 +2085,9 @@
                     displayProblems();
                     
                     // Trigger problem sync for participants
+                    if (window.problemSync) {
+                        window.problemSync.broadcastProblems();
+                    }
                     if (window.triggerProblemUpdate) {
                         window.triggerProblemUpdate();
                     }
@@ -2162,6 +2205,9 @@
                     displayProblems();
                     
                     // Trigger problem sync for participants
+                    if (window.problemSync) {
+                        window.problemSync.broadcastProblems();
+                    }
                     if (window.triggerProblemUpdate) {
                         window.triggerProblemUpdate();
                     }
@@ -2196,6 +2242,10 @@
                         
                         displayProblems();
                         
+                        // Trigger problem sync for participants
+                        if (window.problemSync) {
+                            window.problemSync.broadcastProblems();
+                        }
                         if (window.triggerProblemUpdate) {
                             window.triggerProblemUpdate();
                         }
@@ -2255,8 +2305,21 @@
             
             // Participant action functions
             window.viewParticipant = function(participantId) {
-                const participants = getOrganizerData('participants');
-                const participant = participants.find(p => p.id === participantId);
+                // Find participant across all organizer keys
+                const allKeys = Object.keys(localStorage);
+                let participant = null;
+                
+                for (const key of allKeys) {
+                    if (key.includes('_participants')) {
+                        try {
+                            const participants = JSON.parse(localStorage.getItem(key));
+                            participant = participants.find(p => p.id === participantId);
+                            if (participant) break;
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
                 
                 if (participant) {
                     const hackathons = getOrganizerData('hackathons');
@@ -2267,8 +2330,21 @@
             };
             
             window.messageParticipant = function(participantId) {
-                const participants = getOrganizerData('participants');
-                const participant = participants.find(p => p.id === participantId);
+                // Find participant across all organizer keys
+                const allKeys = Object.keys(localStorage);
+                let participant = null;
+                
+                for (const key of allKeys) {
+                    if (key.includes('_participants')) {
+                        try {
+                            const participants = JSON.parse(localStorage.getItem(key));
+                            participant = participants.find(p => p.id === participantId);
+                            if (participant) break;
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
                 
                 if (participant) {
                     const message = prompt(`Send message to ${participant.name}:`);
@@ -2289,12 +2365,30 @@
             };
             
             window.removeParticipant = function(participantId) {
-                const participants = getOrganizerData('participants');
-                const participant = participants.find(p => p.id === participantId);
+                // Find participant across all organizer keys
+                const allKeys = Object.keys(localStorage);
+                let participant = null;
+                let participantsKey = null;
                 
-                if (participant && confirm(`Are you sure you want to remove ${participant.name} from the hackathon?`)) {
+                for (const key of allKeys) {
+                    if (key.includes('_participants')) {
+                        try {
+                            const participants = JSON.parse(localStorage.getItem(key));
+                            participant = participants.find(p => p.id === participantId);
+                            if (participant) {
+                                participantsKey = key;
+                                break;
+                            }
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                if (participant && participantsKey && confirm(`Are you sure you want to remove ${participant.name} from the hackathon?`)) {
+                    const participants = JSON.parse(localStorage.getItem(participantsKey)) || [];
                     const updatedParticipants = participants.filter(p => p.id !== participantId);
-                    setOrganizerData('participants', updatedParticipants);
+                    localStorage.setItem(participantsKey, JSON.stringify(updatedParticipants));
                     displayParticipants();
                     alert('Participant removed successfully!');
                 }
@@ -2311,17 +2405,35 @@
             };
             
             window.exportParticipants = function() {
-                const participants = getOrganizerData('participants');
+                // Get all participants across all organizers for this organizer's hackathons
                 const hackathons = getOrganizerData('hackathons');
+                const hackathonIds = hackathons.map(h => h.id);
                 
-                if (participants.length === 0) {
+                // Find participants across all organizer keys
+                const allKeys = Object.keys(localStorage);
+                let allParticipants = [];
+                
+                for (const key of allKeys) {
+                    if (key.includes('_participants')) {
+                        try {
+                            const participants = JSON.parse(localStorage.getItem(key));
+                            // Filter participants that belong to this organizer's hackathons
+                            const relevantParticipants = participants.filter(p => hackathonIds.includes(p.hackathonId));
+                            allParticipants = allParticipants.concat(relevantParticipants);
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                if (allParticipants.length === 0) {
                     alert('No participants to export');
                     return;
                 }
                 
                 let csvContent = 'Name,Email,Hackathon,Joined On,Submissions,Status\n';
                 
-                participants.forEach(participant => {
+                allParticipants.forEach(participant => {
                     const hackathon = hackathons.find(h => h.id === participant.hackathonId);
                     const hackathonName = hackathon ? hackathon.title : 'Unknown';
                     const joinedDate = new Date(participant.joinedAt).toLocaleString();
@@ -2365,6 +2477,11 @@
                     window.location.href = 'hackathon.html';
                 }
             };
+            
+            // Trigger problem sync first
+            if (window.problemSync) {
+                window.problemSync.broadcastProblems();
+            }
             
             // Display hackathons, problems, and participants on page load
             displayHackathons();
