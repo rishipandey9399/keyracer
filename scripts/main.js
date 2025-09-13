@@ -458,7 +458,6 @@ function validateInput(newInput, previousInput) {
     const elapsedMinutes = (endTime - window.startTime) / 1000 / 60; // in minutes
     
     // Get final metrics
-    const textInput = document.getElementById('text-input');
     if (!textInput) return;
     
         const userInput = textInput.value;
