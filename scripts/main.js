@@ -105,25 +105,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // --- Typing Input ---
         if (textInput) {
+            // Remove existing event listeners to prevent duplicates
+            textInput.removeEventListener('input', handleInput);
+            textInput.removeEventListener('paste', preventPaste);
+            textInput.removeEventListener('contextmenu', preventContextMenu);
+            textInput.removeEventListener('keydown', preventShortcuts);
+            
+            // Add fresh event listeners
             textInput.addEventListener('input', handleInput);
-            
-            // Prevent copy-paste operations
-            textInput.addEventListener('paste', function(e) {
-                e.preventDefault();
-                showNotification('Copy-paste is not allowed in typing tests!', 'error');
-            });
-            
-            textInput.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-            });
-            
-            textInput.addEventListener('keydown', function(e) {
-                // Prevent Ctrl+V, Ctrl+C, Ctrl+X, Ctrl+A
-                if (e.ctrlKey && (e.key === 'v' || e.key === 'c' || e.key === 'x' || e.key === 'a')) {
-                    e.preventDefault();
-                    showNotification('Keyboard shortcuts are disabled during typing tests!', 'error');
-                }
-            });
+            textInput.addEventListener('paste', preventPaste);
+            textInput.addEventListener('contextmenu', preventContextMenu);
+            textInput.addEventListener('keydown', preventShortcuts);
         }
 
         // Initial reset
@@ -176,20 +168,7 @@ function initializeTypingTest() {
     }
     
     if (resetButton) {
-        resetButton.addEventListener('click', function() {
-            clearInterval(window.timer);
-            window.isTestActive = false;
-            textInput.disabled = true;
-            textInput.value = '';
-            document.getElementById('text-display').innerHTML = '';
-            document.getElementById('wpm').textContent = '0';
-            document.getElementById('accuracy').textContent = '100';
-            document.getElementById('errors').textContent = '0';
-            document.getElementById('minutes').textContent = '1';
-            document.getElementById('seconds').textContent = '00';
-            startButton.disabled = false;
-            resetButton.disabled = true;
-        });
+        resetButton.addEventListener('click', resetTest);
     }
     
     if (textInput) {
@@ -336,6 +315,11 @@ async function startTest() {
     if (minutesDisplay) minutesDisplay.textContent = minutes;
     if (secondsDisplay) secondsDisplay.textContent = seconds < 10 ? `0${seconds}` : seconds;
     
+    // Clear any existing timer before starting new one
+    if (window.timer) {
+        clearInterval(window.timer);
+    }
+    
     // Start counting down
     window.startTime = Date.now();
     window.timer = setInterval(updateTimer, 1000);
@@ -458,7 +442,16 @@ function validateInput(newInput, previousInput) {
     function endTest() {
     // Stop the test
     window.isTestActive = false;
-    clearInterval(window.timer);
+    if (window.timer) {
+        clearInterval(window.timer);
+        window.timer = null;
+    }
+    
+    // Disable text input
+    const textInput = document.getElementById('text-input');
+    if (textInput) {
+        textInput.disabled = true;
+    }
     
     // Calculate elapsed time
     const endTime = Date.now();
@@ -933,7 +926,30 @@ function showNotification(message, type = 'info') {
     }, 4000);
 }
 
-window.showNotification = showNotification; 
+window.showNotification = showNotification;
+
+// Anti-cheat event handlers (defined separately to allow removal)
+function preventPaste(e) {
+    e.preventDefault();
+    showNotification('Copy-paste is not allowed in typing tests!', 'error');
+}
+
+function preventContextMenu(e) {
+    e.preventDefault();
+}
+
+function preventShortcuts(e) {
+    // Prevent Ctrl+V, Ctrl+C, Ctrl+X, Ctrl+A, Ctrl+Z
+    if (e.ctrlKey && ['v', 'c', 'x', 'a', 'z'].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        showNotification('Keyboard shortcuts are disabled during typing tests!', 'error');
+    }
+    // Prevent F12, Ctrl+Shift+I (Developer Tools)
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+        e.preventDefault();
+        showNotification('Developer tools are disabled during typing tests!', 'error');
+    }
+} 
 
 function forceContentVisibility() {
     // Reveal all main content containers
@@ -997,28 +1013,61 @@ function renderTextDisplay(text) {
 
 // --- Add global resetTest function ---
 function resetTest() {
+    // Stop all timers and clear test state
+    if (window.timer) {
+        clearInterval(window.timer);
+        window.timer = null;
+    }
+    window.isTestActive = false;
+    window.startTime = null;
+    window.timeLeft = 60;
+    window.currentText = '';
+    window.previousInput = '';
+    window.lastInputTime = null;
+    
+    // Reset DOM elements
     const textInput = document.getElementById('text-input');
     const textDisplay = document.getElementById('text-display');
+    
     if (textInput) {
         textInput.value = '';
         textInput.disabled = true;
+        textInput.placeholder = 'The race will begin when you start typing...';
     }
+    
     if (textDisplay) {
         textDisplay.innerHTML = '';
     }
+    
+    // Reset display metrics
     const wpmDisplay = document.getElementById('wpm');
     const accuracyDisplay = document.getElementById('accuracy');
     const errorsDisplay = document.getElementById('errors');
+    const minutesDisplay = document.getElementById('minutes');
+    const secondsDisplay = document.getElementById('seconds');
+    
     if (wpmDisplay) wpmDisplay.textContent = '0';
     if (accuracyDisplay) accuracyDisplay.textContent = '100';
     if (errorsDisplay) errorsDisplay.textContent = '0';
+    if (minutesDisplay) minutesDisplay.textContent = '1';
+    if (secondsDisplay) secondsDisplay.textContent = '00';
+    
+    // Hide modals and overlays
     const modal = document.querySelector('.test-complete-container');
     if (modal) modal.style.display = 'none';
+    
     const resultsOverlay = document.getElementById('results');
     if (resultsOverlay) resultsOverlay.style.display = 'none';
-    // Enable Start, disable Reset
+    
+    // Reset button states
     const startBtn = document.getElementById('start-btn');
     const resetBtn = document.getElementById('reset-btn');
-    if (startBtn) startBtn.disabled = false;
+    
+    if (startBtn) {
+        startBtn.disabled = false;
+        startBtn.innerHTML = '<i class="fas fa-flag-checkered"></i> Start Race';
+    }
     if (resetBtn) resetBtn.disabled = true;
+    
+    console.log('Test reset completed');
 }
