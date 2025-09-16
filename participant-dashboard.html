@@ -22,6 +22,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <style>
+        .CodeMirror {
+            height: 300px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .CodeMirror-gutters {
+            border-right: 1px solid rgba(0, 194, 255, 0.3);
+            background-color: rgba(7, 11, 24, 0.8);
+            width: 40px;
+        }
+        .CodeMirror-linenumber {
+            color: #6272a4;
+            padding: 0 8px 0 5px;
+            min-width: 30px;
+            text-align: right;
+        }
+        .CodeMirror-lines {
+            padding-left: 4px;
+        }
+        .CodeMirror-cursor {
+            border-left: 2px solid #00FFDD !important;
+        }
+        .CodeMirror-code {
+            padding-left: 0;
+        }
+    </style>
     
     <style>
         :root {
@@ -36,6 +64,9 @@
             --participant-color: #4ECDC4;
         }
         
+        html {
+            background: #070b18;
+        }
         body {
             background: radial-gradient(circle at center, #10182a 0%, #070b18 100%);
             min-height: 100vh;
@@ -1024,7 +1055,13 @@
                                 </button>
                             </div>
                         </div>
-                        <textarea class="code-textarea" id="solution-editor" placeholder="Write your code here..."></textarea>
+                        <div id="code-editor-container">
+                            <textarea class="code-textarea" id="solution-editor" placeholder="Write your code here..." 
+                                      onpaste="return false" ondrop="return false" 
+                                      oncontextmenu="return false" 
+                                      onselectstart="return true" 
+                                      ondragstart="return false"></textarea>
+                        </div>
                     </div>
                     
                     <div class="submission-actions">
@@ -1189,12 +1226,23 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
     <script src="scripts/participant-manager.js"></script>
     <script src="scripts/problem-sync.js"></script>
     <script>
         // Load problems function for problem page
         function loadAvailableProblems() {
-            const problems = ProblemSync.getAllProblems();
+            const allProblems = ProblemSync.getAllProblems();
+            const currentHackathonId = localStorage.getItem('currentHackathonId');
+            
+            // Filter problems by current hackathon ID
+            const problems = currentHackathonId ? 
+                allProblems.filter(p => p.hackathonId === currentHackathonId) : 
+                [];
+            
             const problemPage = document.getElementById('problem-page');
             
             if (!problemPage) return;
@@ -1310,6 +1358,69 @@
         
         // Listen for problem updates
         window.addEventListener('problemsUpdated', loadAvailableProblems);
+        
+        // Anti-cheating: Fullscreen and tab monitoring
+        let tabSwitchCount = 0;
+        let isFullscreenActive = false;
+        
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+        
+        function handleFullscreenChange() {
+            isFullscreenActive = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+            
+            if (!isFullscreenActive) {
+                setTimeout(() => {
+                    if (confirm('Fullscreen mode is required for the hackathon. Click OK to continue or Cancel to exit.')) {
+                        enterFullscreen();
+                    } else {
+                        window.location.href = 'hackathon.html';
+                    }
+                }, 100);
+            }
+        }
+        
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                tabSwitchCount++;
+                localStorage.setItem('tabSwitchCount', tabSwitchCount.toString());
+                
+                if (tabSwitchCount >= 3) {
+                    alert('Multiple tab switches detected! This may be reported to organizers.');
+                }
+            }
+        }
+        
+        // Prevent common cheating shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.key === 'u') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'C')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Monitor fullscreen and visibility changes
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
         
         // Preloader animation
         document.addEventListener('DOMContentLoaded', function() {
@@ -1533,36 +1644,82 @@
             function sendMessage() {
                 const message = chatInput.value.trim();
                 if (message) {
-                    const now = new Date();
-                    const hours = now.getHours();
-                    const minutes = now.getMinutes();
-                    const timeString = `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${hours >= 12 ? 'PM' : 'AM'}`;
+                    const currentHackathonId = localStorage.getItem('currentHackathonId');
+                    const participantName = localStorage.getItem('participantName') || 'Anonymous';
                     
+                    if (!currentHackathonId) {
+                        alert('No hackathon selected. Please join a hackathon first.');
+                        return;
+                    }
+                    
+                    const chatMessage = {
+                        id: Date.now().toString(),
+                        hackathonId: currentHackathonId,
+                        sender: 'participant',
+                        senderName: participantName,
+                        message: message,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Save message to localStorage
+                    const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+                    messages.push(chatMessage);
+                    localStorage.setItem('chatMessages', JSON.stringify(messages));
+                    
+                    // Clear input
+                    chatInput.value = '';
+                    
+                    // Reload chat messages
+                    loadChatMessages();
+                }
+            }
+            
+            function loadChatMessages() {
+                const currentHackathonId = localStorage.getItem('currentHackathonId');
+                if (!currentHackathonId) return;
+                
+                const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+                const hackathonMessages = messages.filter(m => m.hackathonId === currentHackathonId)
+                    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                
+                chatBody.innerHTML = '';
+                
+                if (hackathonMessages.length === 0) {
+                    chatBody.innerHTML = `
+                        <div class="text-center text-muted p-3">
+                            <i class="fas fa-comments fa-2x mb-2"></i>
+                            <p>No messages yet. Start the conversation!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                hackathonMessages.forEach(message => {
                     const messageElement = document.createElement('div');
-                    messageElement.className = 'chat-message message-sent';
+                    messageElement.className = `chat-message ${message.sender === 'participant' ? 'message-sent' : 'message-received'}`;
+                    
+                    const timestamp = new Date(message.timestamp);
+                    const timeString = timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
                     messageElement.innerHTML = `
-                        <div class="message-content">${message}</div>
+                        <div class="message-content">
+                            <div class="message-sender" style="font-size: 0.8rem; color: ${message.sender === 'participant' ? 'var(--participant-color)' : 'var(--organizer-color)'}; margin-bottom: 2px;">
+                                ${message.senderName}
+                            </div>
+                            ${message.message}
+                        </div>
                         <div class="message-time">${timeString}</div>
                     `;
                     
                     chatBody.appendChild(messageElement);
-                    chatInput.value = '';
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                    
-                    // Simulate response (in a real app, this would be from the server)
-                    setTimeout(function() {
-                        const responseElement = document.createElement('div');
-                        responseElement.className = 'chat-message message-received';
-                        responseElement.innerHTML = `
-                            <div class="message-content">Thank you for your message. A conductor will respond shortly.</div>
-                            <div class="message-time">${timeString}</div>
-                        `;
-                        
-                        chatBody.appendChild(responseElement);
-                        chatBody.scrollTop = chatBody.scrollHeight;
-                    }, 1000);
-                }
+                });
+                
+                chatBody.scrollTop = chatBody.scrollHeight;
             }
+            
+            // Load chat messages on page load and set up real-time updates
+            loadChatMessages();
+            setInterval(loadChatMessages, 3000);
             
             chatSend.addEventListener('click', sendMessage);
             
@@ -1572,37 +1729,154 @@
                 }
             });
             
-            // Countdown timer
+            // Update chat header with hackathon info
+            const chatHackathonId = localStorage.getItem('currentHackathonId');
+            if (chatHackathonId) {
+                // Find hackathon from all organizer data
+                const allKeys = Object.keys(localStorage);
+                let currentHackathon = null;
+                
+                for (const key of allKeys) {
+                    if (key.includes('_hackathons')) {
+                        try {
+                            const hackathons = JSON.parse(localStorage.getItem(key));
+                            currentHackathon = hackathons.find(h => h.id === chatHackathonId);
+                            if (currentHackathon) break;
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                if (currentHackathon) {
+                    const chatTitle = document.querySelector('.chat-title');
+                    if (chatTitle) {
+                        chatTitle.innerHTML = `
+                            <i class="fas fa-comments"></i>
+                            <span>Chat - ${currentHackathon.title}</span>
+                        `;
+                    }
+                }
+            }
+            
+            // Countdown timer based on hackathon end time
             function updateTimer() {
                 const timerElement = document.getElementById('countdown-timer');
                 if (!timerElement) return;
                 
-                let timeString = timerElement.textContent;
-                let [hours, minutes, seconds] = timeString.split(':').map(Number);
+                const currentHackathonId = localStorage.getItem('currentHackathonId');
+                if (!currentHackathonId) {
+                    timerElement.textContent = '00:00:00';
+                    return;
+                }
                 
-                let totalSeconds = hours * 3600 + minutes * 60 + seconds;
-                if (totalSeconds <= 0) {
+                // Find hackathon details from all organizer data
+                const allKeys = Object.keys(localStorage);
+                let hackathon = null;
+                
+                for (const key of allKeys) {
+                    if (key.includes('_hackathons')) {
+                        try {
+                            const hackathons = JSON.parse(localStorage.getItem(key));
+                            hackathon = hackathons.find(h => h.id === currentHackathonId);
+                            if (hackathon) break;
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                if (!hackathon) {
+                    timerElement.textContent = '00:00:00';
+                    return;
+                }
+                
+                // Calculate end time from hackathon date and endTime
+                const hackathonDate = hackathon.date; // YYYY-MM-DD format
+                const endTime = hackathon.endTime; // HH:MM format
+                
+                const endDateTime = new Date(`${hackathonDate}T${endTime}:00`);
+                const now = new Date();
+                
+                const timeDiff = endDateTime.getTime() - now.getTime();
+                
+                if (timeDiff <= 0) {
                     clearInterval(timerInterval);
                     timerElement.textContent = '00:00:00';
                     return;
                 }
                 
-                totalSeconds--;
-                
-                hours = Math.floor(totalSeconds / 3600);
-                minutes = Math.floor((totalSeconds % 3600) / 60);
-                seconds = totalSeconds % 60;
+                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
                 
                 timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
             
             const timerInterval = setInterval(updateTimer, 1000);
+            updateTimer(); // Initialize immediately
+            
+            // Enter fullscreen mode on page load
+            setTimeout(() => {
+                if (confirm('This hackathon requires fullscreen mode for security. Click OK to enter fullscreen mode.')) {
+                    enterFullscreen();
+                } else {
+                    alert('Fullscreen mode is required to participate in this hackathon.');
+                    window.location.href = 'hackathon.html';
+                }
+            }, 2000);
             
             // Set participant name from localStorage
             const participantName = localStorage.getItem('participantName');
             if (participantName) {
                 document.getElementById('participant-name').textContent = participantName;
             }
+            
+            // Initialize CodeMirror for syntax highlighting
+            window.codeEditor = null;
+            function initializeCodeEditor() {
+                const textarea = document.getElementById('solution-editor');
+                if (textarea && typeof CodeMirror !== 'undefined') {
+                    window.codeEditor = CodeMirror.fromTextArea(textarea, {
+                        lineNumbers: true,
+                        mode: 'javascript',
+                        theme: 'dracula',
+                        indentUnit: 4,
+                        lineWrapping: true,
+                        autoCloseBrackets: true,
+                        matchBrackets: true,
+                        gutters: ['CodeMirror-linenumbers'],
+                        extraKeys: {
+                            'Ctrl-V': function() { return false; },
+                            'Cmd-V': function() { return false; },
+                            'Ctrl-C': function() { return false; },
+                            'Cmd-C': function() { return false; }
+                        }
+                    });
+                    
+                    // Focus and position cursor properly in the code area
+                    setTimeout(() => {
+                        window.codeEditor.refresh();
+                        window.codeEditor.focus();
+                        window.codeEditor.setCursor({line: 0, ch: 0});
+                    }, 200);
+                    
+                    window.codeEditor.getWrapperElement().addEventListener('contextmenu', function(e) {
+                        e.preventDefault();
+                        return false;
+                    });
+                } else {
+                    if (textarea) {
+                        textarea.addEventListener('paste', function(e) {
+                            e.preventDefault();
+                            alert('Copy-paste is disabled!');
+                            return false;
+                        });
+                    }
+                }
+            }
+            
+            setTimeout(initializeCodeEditor, 1000);
             
             // Load available problems
             loadAvailableProblems();
@@ -1620,8 +1894,9 @@
             console.log('All participant problems:', participantProblems);
             console.log('Available problems for hackathon:', availableProblems);
             
-            // Load submissions from localStorage
-            let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            // Initialize participant ID early
+            const participantId = localStorage.getItem('participantId') || 'participant_' + Date.now();
+            localStorage.setItem('participantId', participantId);
             
             // Piston API configuration
             const PISTON_API = 'https://emkc.org/api/v2/piston/execute';
@@ -1663,9 +1938,11 @@
                 // Get fresh problems from synced participant data
                 const participantProblems = JSON.parse(localStorage.getItem('participantProblems')) || [];
                 const currentHackathonId = localStorage.getItem('currentHackathonId');
+                
+                // Filter problems by current hackathon ID only
                 const availableProblems = currentHackathonId ? 
                     participantProblems.filter(p => p.hackathonId === currentHackathonId) : 
-                    participantProblems;
+                    [];
                 
                 console.log('Available problems for display:', availableProblems);
                 
@@ -1744,7 +2021,22 @@
                                 </div>
                             </div>
                         ` : ''}
+                        <div class="submission-buttons mt-4">
+                            <button class="btn btn-primary-custom solve-problem-btn" data-problem-id="${problem.id}">
+                                <i class="fas fa-code"></i>
+                                <span>Solve This Problem</span>
+                            </button>
+                        </div>
                     `;
+                    
+                    // Add event listener to solve button
+                    const solveBtn = problemContainer.querySelector('.solve-problem-btn');
+                    if (solveBtn) {
+                        solveBtn.addEventListener('click', function() {
+                            const problemId = this.getAttribute('data-problem-id');
+                            selectProblemForSubmission(problemId);
+                        });
+                    }
                 }
             }
             
@@ -1955,9 +2247,13 @@
                 }
                 
                 // Clear code editor
-                const codeEditor = document.getElementById('solution-editor');
-                if (codeEditor) {
-                    codeEditor.value = '';
+                if (window.codeEditor) {
+                    window.codeEditor.setValue('');
+                } else {
+                    const textarea = document.getElementById('solution-editor');
+                    if (textarea) {
+                        textarea.value = '';
+                    }
                 }
             }
             
@@ -2098,8 +2394,10 @@
                 const historyPage = document.getElementById('history-page');
                 if (!historyPage) return;
                 
-                // Get fresh submissions from localStorage
-                const currentSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                // Get participant-specific submissions only
+                const participantId = localStorage.getItem('participantId') || 'participant_' + Date.now();
+                const submissionKey = `${participantId}_submissions`;
+                const currentSubmissions = JSON.parse(localStorage.getItem(submissionKey)) || [];
                 
                 const historyContainer = historyPage.querySelector('.history-container');
                 const tableBody = historyContainer.querySelector('tbody');
@@ -2310,7 +2608,13 @@
                     const submissionContainer = document.querySelector('#submission-page .submission-container');
                     const languageSelector = submissionContainer.querySelector('.language-selector');
                     const language = languageSelector.value;
-                    const code = submissionContainer.querySelector('textarea').value.trim();
+                    let code = '';
+                    if (window.codeEditor) {
+                        window.codeEditor.save(); // Sync CodeMirror with textarea
+                        code = window.codeEditor.getValue().trim();
+                    } else {
+                        code = submissionContainer.querySelector('textarea').value.trim();
+                    }
                     const outputSection = document.getElementById('output-section');
                     const outputContent = document.getElementById('output-content');
                     
@@ -2347,40 +2651,49 @@
                 });
             }
             
-            // Execute code using Piston API
+            // Execute code using Piston API with proper error handling
             async function executeCodeWithPiston(code, language) {
                 const PISTON_API = 'https://emkc.org/api/v2/piston/execute';
                 
                 // Language mapping for Piston API
                 const languageMap = {
-                    'javascript': 'javascript',
+                    'javascript': 'node',
                     'python': 'python',
                     'java': 'java',
                     'cpp': 'cpp',
-                    'c': 'c',
-                    'csharp': 'csharp',
-                    'go': 'go',
-                    'php': 'php',
-                    'ruby': 'ruby',
-                    'rust': 'rust'
+                    'c': 'c'
                 };
                 
                 const pistonLanguage = languageMap[language] || 'python';
                 
                 try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                    
                     const response = await fetch(PISTON_API, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'User-Agent': 'KeyRacer-Platform'
                         },
                         body: JSON.stringify({
                             language: pistonLanguage,
                             version: '*',
                             files: [{
+                                name: getFileName(language),
                                 content: code
-                            }]
-                        })
+                            }],
+                            stdin: '',
+                            args: [],
+                            compile_timeout: 10000,
+                            run_timeout: 3000,
+                            compile_memory_limit: -1,
+                            run_memory_limit: -1
+                        }),
+                        signal: controller.signal
                     });
+                    
+                    clearTimeout(timeoutId);
                     
                     if (!response.ok) {
                         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -2389,18 +2702,29 @@
                     const data = await response.json();
                     
                     return {
-                        success: data.run.code === 0,
-                        output: data.run.stdout,
-                        error: data.run.stderr || (data.run.code !== 0 ? `Exit code: ${data.run.code}` : '')
+                        success: data.run && data.run.code === 0,
+                        output: data.run ? data.run.stdout : '',
+                        error: data.run ? (data.run.stderr || (data.run.code !== 0 ? `Exit code: ${data.run.code}` : '')) : 'Unknown error'
                     };
                 } catch (error) {
                     console.error('Piston API error:', error);
-                    return {
-                        success: false,
-                        output: '',
-                        error: error.message
-                    };
+                    
+                    // Fallback to simulation if Piston fails
+                    console.log('Falling back to local simulation');
+                    return simulateCodeExecution(code, language, '');
                 }
+            }
+            
+            // Helper function to get proper file names
+            function getFileName(language) {
+                const fileNames = {
+                    'javascript': 'index.js',
+                    'python': 'main.py',
+                    'java': 'Main.java',
+                    'cpp': 'main.cpp',
+                    'c': 'main.c'
+                };
+                return fileNames[language] || 'main.txt';
             }
             
             // Piston API integration for code compilation
@@ -2419,9 +2743,20 @@
                     
                     const languageSelector = submissionContainer.querySelector('.language-selector');
                     const language = languageSelector.value;
-                    const code = submissionContainer.querySelector('textarea').value.trim();
+                    let code = '';
                     
-                    if (!code) {
+                    // Get code from CodeMirror or textarea
+                    if (window.codeEditor) {
+                        window.codeEditor.save(); // Sync CodeMirror with textarea
+                        code = window.codeEditor.getValue().trim();
+                    } else {
+                        code = submissionContainer.querySelector('textarea').value.trim();
+                    }
+                    
+                    console.log('Code from editor:', code);
+                    console.log('CodeMirror instance:', window.codeEditor);
+                    
+                    if (!code || code.length === 0) {
                         alert('Please enter your code before submitting!');
                         return;
                     }
@@ -2431,39 +2766,50 @@
                     submitSolutionBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
                     
                     try {
-                        // Use local simulation instead of Piston API
-                        console.log(`Using local simulation for ${language} code execution`);
+                        // Try Piston API first, fallback to simulation
+                        console.log(`Executing ${language} code via Piston API`);
                         
-                        // Use the simulateCodeExecution function directly
-                        const result = simulateCodeExecution(code, language, problem.exampleInput || '');
+                        const result = await executeCodeWithPiston(code, language);
                         
-                        console.log('Simulation result:', result);
+                        console.log('Execution result:', result);
                         
                         // Create submission record
                         const submission = {
                             id: `#SUB-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
                             problemId: problem.id,
                             problemTitle: problem.title,
+                            hackathonId: problem.hackathonId,
+                            participantName: localStorage.getItem('participantName') || 'Anonymous',
                             language: language,
                             code: code,
                             submittedAt: new Date().toISOString(),
-                            status: result.run.code === 0 ? 'Completed' : 'Error',
-                            output: result.run.output,
-                            stderr: result.run.stderr,
-                            exitCode: result.run.code
+                            status: result.success ? 'Completed' : 'Error',
+                            output: result.output,
+                            stderr: result.error,
+                            exitCode: result.success ? 0 : 1,
+                            evaluated: false
                         };
                         
-                        // Save submission to localStorage
-                        const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                        // Save submission to participant-specific localStorage
+                        const participantId = localStorage.getItem('participantId') || 'participant_' + Date.now();
+                        localStorage.setItem('participantId', participantId);
+                        
+                        const submissionKey = `${participantId}_submissions`;
+                        const submissions = JSON.parse(localStorage.getItem(submissionKey)) || [];
                         submissions.push(submission);
-                        localStorage.setItem('submissions', JSON.stringify(submissions));
+                        localStorage.setItem(submissionKey, JSON.stringify(submissions));
+                        
+                        // Also save to global submissions for organizer visibility
+                        const globalSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                        globalSubmissions.push(submission);
+                        localStorage.setItem('submissions', JSON.stringify(globalSubmissions));
                         
                         // Show result
                         let resultMessage = '';
-                        if (result.run.code === 0) {
-                            resultMessage = `Your code executed successfully!\n\nOutput:\n${result.run.output}`;
+                        if (result.success) {
+                            resultMessage = `Your code executed successfully!\n\nOutput:\n${result.output}`;
                         } else {
-                            resultMessage = `Your code encountered an error!\n\nError:\n${result.run.stderr || result.run.output}`;
+                            resultMessage = `Your code encountered an error!\n\nError:\n${result.error}`;
                         }
                         
                         alert(resultMessage);
@@ -2493,19 +2839,31 @@
                             id: `#SUB-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
                             problemId: problem.id,
                             problemTitle: problem.title,
+                            hackathonId: problem.hackathonId,
+                            participantName: localStorage.getItem('participantName') || 'Anonymous',
                             language: language,
                             code: code,
                             submittedAt: new Date().toISOString(),
                             status: 'Error',
                             output: '',
                             stderr: `Simulation Error: ${error.message || 'Unknown error occurred'}`,
-                            exitCode: -1
+                            exitCode: -1,
+                            evaluated: false
                         };
                         
-                        // Save submission to localStorage
-                        const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                        // Save submission to participant-specific localStorage
+                        const participantId = localStorage.getItem('participantId') || 'participant_' + Date.now();
+                        localStorage.setItem('participantId', participantId);
+                        
+                        const submissionKey = `${participantId}_submissions`;
+                        const submissions = JSON.parse(localStorage.getItem(submissionKey)) || [];
                         submissions.push(submission);
-                        localStorage.setItem('submissions', JSON.stringify(submissions));
+                        localStorage.setItem(submissionKey, JSON.stringify(submissions));
+                        
+                        // Also save to global submissions for organizer visibility
+                        const globalSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                        globalSubmissions.push(submission);
+                        localStorage.setItem('submissions', JSON.stringify(globalSubmissions));
                         
                         // Show error message
                         alert(`Error executing code: ${error.message || 'An error occurred while executing your code. Please try again.'}`);
@@ -2533,8 +2891,10 @@
                 // Clear existing entries
                 submissionTable.innerHTML = '';
                 
-                // Get submissions from localStorage
-                const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                // Get participant-specific submissions
+                const participantId = localStorage.getItem('participantId') || 'participant_' + Date.now();
+                const submissionKey = `${participantId}_submissions`;
+                const submissions = JSON.parse(localStorage.getItem(submissionKey)) || [];
                 
                 if (submissions.length === 0) {
                     const emptyRow = document.createElement('tr');

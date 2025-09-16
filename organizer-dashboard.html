@@ -758,21 +758,22 @@
                 <div class="page-header">
                     <h1 class="page-title">Submissions</h1>
                     <div class="action-buttons">
-                        <button class="btn btn-custom btn-secondary-custom">
-                            <i class="fas fa-download"></i>
-                            <span>Export All</span>
+                        <button class="btn btn-custom btn-secondary-custom" onclick="refreshSubmissions()">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
                         </button>
                     </div>
                 </div>
                 
                 <div class="hackathon-list">
                     <div class="list-header">
-                        <h2 class="list-title">All Submissions</h2>
+                        <h2 class="list-title">All Submissions <span id="submission-count" class="badge bg-primary">0</span></h2>
                         <div class="list-actions">
-                            <button class="btn btn-sm btn-secondary-custom">
-                                <i class="fas fa-filter"></i>
-                                <span>Filter</span>
-                            </button>
+                            <select class="form-select" id="submission-filter" style="width: auto; display: inline-block;">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="evaluated">Evaluated</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -782,13 +783,13 @@
                                 <tr>
                                     <th>Participant</th>
                                     <th>Problem</th>
-                                    <th>Hackathon</th>
+                                    <th>Language</th>
                                     <th>Submitted On</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="submissions-table-body">
                                 <!-- Submission entries will appear here -->
                             </tbody>
                         </table>
@@ -801,22 +802,16 @@
                 <div class="page-header">
                     <h1 class="page-title">Evaluation</h1>
                     <div class="action-buttons">
-                        <button class="btn btn-custom btn-secondary-custom">
-                            <i class="fas fa-cog"></i>
-                            <span>Evaluation Settings</span>
+                        <button class="btn btn-custom btn-secondary-custom" onclick="refreshEvaluations()">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
                         </button>
                     </div>
                 </div>
                 
                 <div class="hackathon-list">
                     <div class="list-header">
-                        <h2 class="list-title">Pending Evaluations</h2>
-                        <div class="list-actions">
-                            <button class="btn btn-sm btn-secondary-custom">
-                                <i class="fas fa-filter"></i>
-                                <span>Filter</span>
-                            </button>
-                        </div>
+                        <h2 class="list-title">Pending Evaluations <span id="evaluation-count" class="badge bg-warning">0</span></h2>
                     </div>
                     
                     <div class="table-responsive">
@@ -826,12 +821,12 @@
                                     <th>Submission ID</th>
                                     <th>Participant</th>
                                     <th>Problem</th>
-                                    <th>Hackathon</th>
+                                    <th>Language</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="evaluations-table-body">
                                 <!-- Evaluation entries will appear here -->
                             </tbody>
                         </table>
@@ -844,24 +839,46 @@
                 <div class="page-header">
                     <h1 class="page-title">Live Chat</h1>
                     <div class="action-buttons">
-                        <button class="btn btn-custom btn-secondary-custom">
-                            <i class="fas fa-bell"></i>
-                            <span>Notifications</span>
+                        <button class="btn btn-custom btn-secondary-custom" onclick="refreshChat()">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
                         </button>
                     </div>
                 </div>
                 
-                <div class="hackathon-list">
-                    <div class="list-header">
-                        <h2 class="list-title">Chat Channels</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="hackathon-list">
+                            <div class="list-header">
+                                <h2 class="list-title">Chat Channels</h2>
+                            </div>
+                            <div id="chat-channels-list">
+                                <!-- Chat channels will appear here -->
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Select a hackathon to view its chat channel</span>
+                    <div class="col-md-8">
+                        <div class="hackathon-list" style="height: 600px; display: flex; flex-direction: column;">
+                            <div class="list-header">
+                                <h2 class="list-title" id="active-chat-title">Select a Channel</h2>
+                                <span class="badge bg-success" id="online-count">0 online</span>
+                            </div>
+                            <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 20px; background: rgba(7, 11, 24, 0.5); border-radius: 8px; margin-bottom: 15px;">
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-comments fa-3x mb-3"></i>
+                                    <p>Select a hackathon channel to start chatting</p>
+                                </div>
+                            </div>
+                            <div id="chat-input-area" style="display: none;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="chat-message-input" placeholder="Type your message..." maxlength="500">
+                                    <button class="btn btn-primary-custom" id="send-message-btn">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <!-- Chat interface will be implemented here -->
                 </div>
             </div>
             
@@ -1229,6 +1246,55 @@
         </div>
     </div>
     
+    <!-- Evaluation Modal -->
+    <div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="evaluationModalLabel" style="color: var(--organizer-color); font-family: 'Orbitron', sans-serif;">Evaluate Submission</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-info">Submission Details</h6>
+                            <div id="submission-details"></div>
+                            
+                            <h6 class="text-info mt-4">Code</h6>
+                            <div class="code-example" id="submission-code" style="max-height: 300px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-info">Evaluation</h6>
+                            <form id="evaluationForm">
+                                <input type="hidden" id="eval-submission-id">
+                                <div class="mb-3">
+                                    <label for="eval-score" class="form-label">Score (0-100)</label>
+                                    <input type="number" class="form-control" id="eval-score" min="0" max="100" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eval-status" class="form-label">Status</label>
+                                    <select class="form-select" id="eval-status" required>
+                                        <option value="accepted">Accepted</option>
+                                        <option value="rejected">Rejected</option>
+                                        <option value="partial">Partial Credit</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eval-feedback" class="form-label">Feedback</label>
+                                    <textarea class="form-control" id="eval-feedback" rows="4" placeholder="Provide feedback to the participant"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveEvaluationBtn">Save Evaluation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Hackathon Created Success Modal -->
     <div class="modal fade" id="hackathonCreatedModal" tabindex="-1" aria-labelledby="hackathonCreatedModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -1509,24 +1575,33 @@
             });
             
             // Initialize Flatpickr for date and time pickers
-            flatpickr("#hackathonDate", {
-                dateFormat: "Y-m-d",
-                minDate: "today"
-            });
+            function initializeFlatpickr() {
+                if (typeof flatpickr !== 'undefined') {
+                    flatpickr("#hackathonDate", {
+                        dateFormat: "Y-m-d",
+                        minDate: "today"
+                    });
+                    
+                    flatpickr("#startTime", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true
+                    });
+                    
+                    flatpickr("#endTime", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true
+                    });
+                } else {
+                    // Retry after a short delay if flatpickr is not loaded yet
+                    setTimeout(initializeFlatpickr, 100);
+                }
+            }
             
-            flatpickr("#startTime", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true
-            });
-            
-            flatpickr("#endTime", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true
-            });
+            initializeFlatpickr();
             
             // Sidebar toggle for mobile
             const sidebar = document.getElementById('sidebar');
@@ -1848,7 +1923,223 @@
             setInterval(function() {
                 displayHackathons();
                 displayParticipants();
+                displaySubmissions();
+                displayEvaluations();
             }, 3000);
+            
+            // Display submissions function
+            function displaySubmissions() {
+                const hackathons = getOrganizerData('hackathons');
+                const hackathonIds = hackathons.map(h => h.id);
+                
+                // Get all submissions from localStorage
+                const allSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                
+                // Filter submissions for this organizer's hackathons
+                const organizerSubmissions = allSubmissions.filter(sub => {
+                    // Check if submission belongs to organizer's problems
+                    const problems = getOrganizerData('problems');
+                    return problems.some(p => p.id === sub.problemId);
+                });
+                
+                const tableBody = document.getElementById('submissions-table-body');
+                const submissionCount = document.getElementById('submission-count');
+                
+                if (!tableBody) return;
+                
+                if (submissionCount) {
+                    submissionCount.textContent = organizerSubmissions.length;
+                }
+                
+                tableBody.innerHTML = '';
+                
+                if (organizerSubmissions.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `<td colspan="6" class="text-center">No submissions found</td>`;
+                    tableBody.appendChild(emptyRow);
+                    return;
+                }
+                
+                organizerSubmissions.forEach(submission => {
+                    const problems = getOrganizerData('problems');
+                    const problem = problems.find(p => p.id === submission.problemId);
+                    const problemTitle = problem ? problem.title : 'Unknown Problem';
+                    
+                    const submittedDate = new Date(submission.submittedAt).toLocaleString();
+                    const statusClass = submission.status === 'Completed' ? 'active' : 'completed';
+                    const evaluationStatus = submission.evaluated ? 'evaluated' : 'pending';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${localStorage.getItem('participantName') || 'Anonymous'}</td>
+                        <td>${problemTitle}</td>
+                        <td>${submission.language}</td>
+                        <td>${submittedDate}</td>
+                        <td><span class="status ${statusClass}">${evaluationStatus}</span></td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn view" title="View Code" onclick="viewSubmission('${submission.id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit" title="Evaluate" onclick="evaluateSubmission('${submission.id}')">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Display evaluations function
+            function displayEvaluations() {
+                const hackathons = getOrganizerData('hackathons');
+                const allSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                
+                // Filter pending evaluations for this organizer's problems
+                const problems = getOrganizerData('problems');
+                const pendingEvaluations = allSubmissions.filter(sub => {
+                    return problems.some(p => p.id === sub.problemId) && !sub.evaluated;
+                });
+                
+                const tableBody = document.getElementById('evaluations-table-body');
+                const evaluationCount = document.getElementById('evaluation-count');
+                
+                if (!tableBody) return;
+                
+                if (evaluationCount) {
+                    evaluationCount.textContent = pendingEvaluations.length;
+                }
+                
+                tableBody.innerHTML = '';
+                
+                if (pendingEvaluations.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `<td colspan="6" class="text-center">No pending evaluations</td>`;
+                    tableBody.appendChild(emptyRow);
+                    return;
+                }
+                
+                pendingEvaluations.forEach(submission => {
+                    const problem = problems.find(p => p.id === submission.problemId);
+                    const problemTitle = problem ? problem.title : 'Unknown Problem';
+                    const submittedDate = new Date(submission.submittedAt).toLocaleString();
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${submission.id}</td>
+                        <td>${localStorage.getItem('participantName') || 'Anonymous'}</td>
+                        <td>${problemTitle}</td>
+                        <td>${submission.language}</td>
+                        <td><span class="status upcoming">Pending</span></td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn edit" title="Evaluate" onclick="evaluateSubmission('${submission.id}')">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // View submission function
+            window.viewSubmission = function(submissionId) {
+                const allSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                const submission = allSubmissions.find(s => s.id === submissionId);
+                
+                if (submission) {
+                    const problems = getOrganizerData('problems');
+                    const problem = problems.find(p => p.id === submission.problemId);
+                    const problemTitle = problem ? problem.title : 'Unknown Problem';
+                    
+                    alert(`Submission Details:\n\nID: ${submission.id}\nProblem: ${problemTitle}\nLanguage: ${submission.language}\nSubmitted: ${new Date(submission.submittedAt).toLocaleString()}\nStatus: ${submission.status}\n\nCode:\n${submission.code}`);
+                }
+            };
+            
+            // Evaluate submission function
+            window.evaluateSubmission = function(submissionId) {
+                const allSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                const submission = allSubmissions.find(s => s.id === submissionId);
+                
+                if (!submission) return;
+                
+                const problems = getOrganizerData('problems');
+                const problem = problems.find(p => p.id === submission.problemId);
+                const problemTitle = problem ? problem.title : 'Unknown Problem';
+                
+                // Populate evaluation modal
+                document.getElementById('eval-submission-id').value = submissionId;
+                document.getElementById('submission-details').innerHTML = `
+                    <p><strong>ID:</strong> ${submission.id}</p>
+                    <p><strong>Problem:</strong> ${problemTitle}</p>
+                    <p><strong>Language:</strong> ${submission.language}</p>
+                    <p><strong>Submitted:</strong> ${new Date(submission.submittedAt).toLocaleString()}</p>
+                    <p><strong>Status:</strong> ${submission.status}</p>
+                `;
+                
+                document.getElementById('submission-code').textContent = submission.code;
+                
+                // Clear form
+                document.getElementById('evaluationForm').reset();
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('evaluationModal'));
+                modal.show();
+            };
+            
+            // Save evaluation
+            const saveEvaluationBtn = document.getElementById('saveEvaluationBtn');
+            if (saveEvaluationBtn) {
+                saveEvaluationBtn.addEventListener('click', function() {
+                    const submissionId = document.getElementById('eval-submission-id').value;
+                    const score = document.getElementById('eval-score').value;
+                    const status = document.getElementById('eval-status').value;
+                    const feedback = document.getElementById('eval-feedback').value;
+                    
+                    if (!score || !status) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    // Update submission with evaluation
+                    const allSubmissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                    const submissionIndex = allSubmissions.findIndex(s => s.id === submissionId);
+                    
+                    if (submissionIndex !== -1) {
+                        allSubmissions[submissionIndex].evaluated = true;
+                        allSubmissions[submissionIndex].evaluation = {
+                            score: parseInt(score),
+                            status: status,
+                            feedback: feedback,
+                            evaluatedAt: new Date().toISOString(),
+                            evaluatedBy: currentOrganizerId
+                        };
+                        
+                        localStorage.setItem('submissions', JSON.stringify(allSubmissions));
+                        
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+                        modal.hide();
+                        
+                        // Refresh displays
+                        displaySubmissions();
+                        displayEvaluations();
+                        
+                        alert('Evaluation saved successfully!');
+                    }
+                });
+            }
+            
+            // Refresh functions
+            window.refreshSubmissions = function() {
+                displaySubmissions();
+            };
+            
+            window.refreshEvaluations = function() {
+                displayEvaluations();
+            };
             
             // Display participants function
             function displayParticipants() {
@@ -2003,24 +2294,32 @@
             }
             
             // Initialize edit form date pickers
-            flatpickr("#editHackathonDate", {
-                dateFormat: "Y-m-d",
-                minDate: "today"
-            });
+            function initializeEditFlatpickr() {
+                if (typeof flatpickr !== 'undefined') {
+                    flatpickr("#editHackathonDate", {
+                        dateFormat: "Y-m-d",
+                        minDate: "today"
+                    });
+                    
+                    flatpickr("#editStartTime", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true
+                    });
+                    
+                    flatpickr("#editEndTime", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true
+                    });
+                } else {
+                    setTimeout(initializeEditFlatpickr, 100);
+                }
+            }
             
-            flatpickr("#editStartTime", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true
-            });
-            
-            flatpickr("#editEndTime", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true
-            });
+            initializeEditFlatpickr();
             
             // Problem Management Functions
             function loadHackathonsIntoSelect() {
@@ -2271,6 +2570,9 @@
                 if (document.getElementById('participants-page').style.display !== 'none') {
                     displayParticipants();
                 }
+                if (document.getElementById('chat-page').style.display !== 'none') {
+                    displayChatChannels();
+                }
             }, 3000);
             
             // Initial display of hackathons
@@ -2483,11 +2785,255 @@
                 window.problemSync.broadcastProblems();
             }
             
+            // Live Chat System
+            let activeChatChannel = null;
+            let chatUpdateInterval = null;
+            
+            function initializeLiveChat() {
+                displayChatChannels();
+                
+                // Set up message input
+                const messageInput = document.getElementById('chat-message-input');
+                const sendBtn = document.getElementById('send-message-btn');
+                
+                if (messageInput && sendBtn) {
+                    messageInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            sendChatMessage();
+                        }
+                    });
+                    
+                    sendBtn.addEventListener('click', sendChatMessage);
+                }
+            }
+            
+            function displayChatChannels() {
+                const hackathons = getOrganizerData('hackathons');
+                const channelsList = document.getElementById('chat-channels-list');
+                
+                if (!channelsList) return;
+                
+                channelsList.innerHTML = '';
+                
+                if (hackathons.length === 0) {
+                    channelsList.innerHTML = '<div class="text-center text-muted p-3">No hackathons available</div>';
+                    return;
+                }
+                
+                hackathons.forEach(hackathon => {
+                    const unreadCount = getUnreadMessagesCount(hackathon.id);
+                    const participantCount = getHackathonParticipantCount(hackathon.id);
+                    
+                    const channelDiv = document.createElement('div');
+                    channelDiv.className = `chat-channel ${activeChatChannel === hackathon.id ? 'active' : ''}`;
+                    channelDiv.style.cssText = `
+                        padding: 15px;
+                        margin-bottom: 10px;
+                        background: rgba(14, 30, 56, 0.5);
+                        border-radius: 8px;
+                        cursor: pointer;
+                        border: 1px solid rgba(0, 194, 255, 0.2);
+                        transition: all 0.3s ease;
+                    `;
+                    
+                    channelDiv.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1" style="color: var(--accent-color);">${hackathon.title}</h6>
+                                <small class="text-muted">${participantCount} participants</small>
+                            </div>
+                            <div class="text-end">
+                                ${unreadCount > 0 ? `<span class="badge bg-danger">${unreadCount}</span>` : ''}
+                                <div><small class="text-success"><i class="fas fa-circle" style="font-size: 0.5rem;"></i> Live</small></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    channelDiv.addEventListener('click', () => selectChatChannel(hackathon.id, hackathon.title));
+                    channelDiv.addEventListener('mouseenter', function() {
+                        if (activeChatChannel !== hackathon.id) {
+                            this.style.background = 'rgba(0, 194, 255, 0.1)';
+                        }
+                    });
+                    channelDiv.addEventListener('mouseleave', function() {
+                        if (activeChatChannel !== hackathon.id) {
+                            this.style.background = 'rgba(14, 30, 56, 0.5)';
+                        }
+                    });
+                    
+                    if (activeChatChannel === hackathon.id) {
+                        channelDiv.style.background = 'rgba(0, 255, 221, 0.1)';
+                        channelDiv.style.borderColor = 'var(--accent-color)';
+                    }
+                    
+                    channelsList.appendChild(channelDiv);
+                });
+            }
+            
+            function selectChatChannel(hackathonId, hackathonTitle) {
+                activeChatChannel = hackathonId;
+                
+                // Update UI
+                document.getElementById('active-chat-title').textContent = hackathonTitle;
+                document.getElementById('chat-input-area').style.display = 'block';
+                
+                // Update channel selection
+                displayChatChannels();
+                
+                // Load messages
+                loadChatMessages(hackathonId);
+                
+                // Start real-time updates
+                if (chatUpdateInterval) {
+                    clearInterval(chatUpdateInterval);
+                }
+                chatUpdateInterval = setInterval(() => loadChatMessages(hackathonId), 2000);
+                
+                // Update online count
+                updateOnlineCount(hackathonId);
+            }
+            
+            function loadChatMessages(hackathonId) {
+                const messages = getChatMessages(hackathonId);
+                const messagesContainer = document.getElementById('chat-messages');
+                
+                if (!messagesContainer) return;
+                
+                messagesContainer.innerHTML = '';
+                
+                if (messages.length === 0) {
+                    messagesContainer.innerHTML = `
+                        <div class="text-center text-muted">
+                            <i class="fas fa-comments fa-2x mb-3"></i>
+                            <p>No messages yet. Start the conversation!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                messages.forEach(message => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `chat-message ${message.sender === 'organizer' ? 'organizer-message' : 'participant-message'}`;
+                    messageDiv.style.cssText = `
+                        margin-bottom: 15px;
+                        padding: 12px;
+                        border-radius: 8px;
+                        max-width: 80%;
+                        ${message.sender === 'organizer' ? 
+                            'margin-left: auto; background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.3);' : 
+                            'margin-right: auto; background: rgba(78, 205, 196, 0.1); border: 1px solid rgba(78, 205, 196, 0.3);'
+                        }
+                    `;
+                    
+                    const timestamp = new Date(message.timestamp).toLocaleString();
+                    messageDiv.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong style="color: ${message.sender === 'organizer' ? 'var(--organizer-color)' : 'var(--participant-color)'};">                                ${message.senderName}
+                            </strong>
+                            <small class="text-muted">${timestamp}</small>
+                        </div>
+                        <div>${message.message}</div>
+                    `;
+                    
+                    messagesContainer.appendChild(messageDiv);
+                });
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            function sendChatMessage() {
+                const messageInput = document.getElementById('chat-message-input');
+                const message = messageInput.value.trim();
+                
+                if (!message || !activeChatChannel) return;
+                
+                const chatMessage = {
+                    id: Date.now().toString(),
+                    hackathonId: activeChatChannel,
+                    sender: 'organizer',
+                    senderName: localStorage.getItem('organizerName') || 'Organizer',
+                    message: message,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Save message
+                saveChatMessage(chatMessage);
+                
+                // Clear input
+                messageInput.value = '';
+                
+                // Reload messages
+                loadChatMessages(activeChatChannel);
+            }
+            
+            function getChatMessages(hackathonId) {
+                const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+                return messages.filter(m => m.hackathonId === hackathonId).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            }
+            
+            function saveChatMessage(message) {
+                const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+                messages.push(message);
+                localStorage.setItem('chatMessages', JSON.stringify(messages));
+            }
+            
+            function getUnreadMessagesCount(hackathonId) {
+                const messages = getChatMessages(hackathonId);
+                const lastRead = localStorage.getItem(`lastReadMessage_${hackathonId}`) || '0';
+                return messages.filter(m => m.timestamp > lastRead && m.sender !== 'organizer').length;
+            }
+            
+            function getHackathonParticipantCount(hackathonId) {
+                const allKeys = Object.keys(localStorage);
+                let count = 0;
+                
+                for (const key of allKeys) {
+                    if (key.includes('_participants')) {
+                        try {
+                            const participants = JSON.parse(localStorage.getItem(key));
+                            count += participants.filter(p => p.hackathonId === hackathonId).length;
+                        } catch (e) {
+                            // Skip invalid entries
+                        }
+                    }
+                }
+                
+                return count;
+            }
+            
+            function updateOnlineCount(hackathonId) {
+                const count = getHackathonParticipantCount(hackathonId);
+                const onlineCountElement = document.getElementById('online-count');
+                if (onlineCountElement) {
+                    onlineCountElement.textContent = `${count} participants`;
+                }
+            }
+            
+            window.refreshChat = function() {
+                displayChatChannels();
+                if (activeChatChannel) {
+                    loadChatMessages(activeChatChannel);
+                }
+            };
+            
+            // Initialize chat when chat page is shown
+            const chatNavLink = document.querySelector('[data-page="chat"]');
+            if (chatNavLink) {
+                chatNavLink.addEventListener('click', function() {
+                    setTimeout(initializeLiveChat, 100);
+                });
+            }
+            
             // Display hackathons, problems, and participants on page load
             displayHackathons();
             displayProblems();
             displayParticipants();
+            displaySubmissions();
+            displayEvaluations();
             loadHackathonsIntoFilter();
+            initializeLiveChat();
         });
     </script>
 </body>
