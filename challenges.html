@@ -46,9 +46,8 @@
             </div>
         </div>
     </header>
-    <section class="hero-section" style="background: linear-gradient(135deg, #0E1E38 60%, #00C2FF 100%); padding: 40px 0 20px 0; box-shadow: 0 8px 32px rgba(0,194,255,0.08);">
-        <h1 class="hero-title" style="font-family: 'Orbitron', 'Rajdhani', sans-serif; font-size: 2.8rem; color: #00C2FF; text-shadow: 0 2px 12px #0E1E38; margin-bottom: 10px;">Coding Challenges</h1>
-        <p class="hero-subtitle" style="font-size: 1.25rem; color: #E1E6F2; margin-bottom: 28px;">Track your progress and compete on the leaderboard</p>
+    <section class="hero-section" style="padding: 0 0 20px 0;">
+
         <div class="language-selector" style="margin-bottom: 18px;">
             <div class="language-tabs" style="display: flex; gap: 10px; justify-content: center;">
                 <button class="language-tab active" data-language="python" style="background: #00C2FF; color: #0E1E38; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,194,255,0.12);">
@@ -68,23 +67,7 @@
                 </button>
             </div>
         </div>
-        <div class="user-stats-panel" id="userStatsPanel" style="display: flex; gap: 32px; justify-content: center; margin-bottom: 10px;">
-            <div class="stat-item" style="background: rgba(0,194,255,0.08); border-radius: 12px; padding: 18px 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,194,255,0.08);">
-                <i class="fas fa-trophy" style="color: #FFC700; font-size: 1.5rem;"></i><br>
-                <span class="stat-label" style="font-size: 1rem; color: #E1E6F2;">Rank</span><br>
-                <span class="stat-value" id="userRank" style="font-size: 1.3rem; color: #00C2FF; font-weight: 700;">-</span>
-            </div>
-            <div class="stat-item" style="background: rgba(0,194,255,0.08); border-radius: 12px; padding: 18px 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,194,255,0.08);">
-                <i class="fas fa-star" style="color: #FFC700; font-size: 1.5rem;"></i><br>
-                <span class="stat-label" style="font-size: 1rem; color: #E1E6F2;">Total Points</span><br>
-                <span class="stat-value" id="totalPoints" style="font-size: 1.3rem; color: #00C2FF; font-weight: 700;">0</span>
-            </div>
-            <div class="stat-item" style="background: rgba(0,194,255,0.08); border-radius: 12px; padding: 18px 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,194,255,0.08);">
-                <i class="fas fa-fire" style="color: #E41B17; font-size: 1.5rem;"></i><br>
-                <span class="stat-label" style="font-size: 1rem; color: #E1E6F2;">Streak</span><br>
-                <span class="stat-value" id="currentStreak" style="font-size: 1.3rem; color: #00C2FF; font-weight: 700;">0</span>
-            </div>
-        </div>
+
     </section>
     <div class="difficulty-filter-bar" style="background: rgba(0,194,255,0.05); padding: 18px 0; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,194,255,0.04);">
         <div class="filter-container" style="display: flex; gap: 18px; justify-content: center;">
@@ -129,7 +112,7 @@ class EnhancedChallengesManager {
     }
 
     async showDemoData(language = 'python') {
-        if (language === 'python' || language === 'java') {
+        if (language === 'python' || language === 'java' || language === 'javascript') {
             try {
                 const response = await fetch('scripts/challenges.json');
                 const data = await response.json();
@@ -139,6 +122,8 @@ class EnhancedChallengesManager {
                         return !ch.language || ch.language === 'python';
                     } else if (language === 'java') {
                         return ch.language === 'java';
+                    } else if (language === 'javascript') {
+                        return ch.language === 'javascript';
                     }
                     return false;
                 });
@@ -159,8 +144,8 @@ class EnhancedChallengesManager {
                 const selectedLang = button.getAttribute('data-language');
                 await this.showDemoData(selectedLang);
                 this.renderChallenges();
-                // If not python or java, show 'coming soon' message
-                if (selectedLang !== 'python' && selectedLang !== 'java') {
+                // If not python, java, or javascript, show 'coming soon' message
+                if (selectedLang !== 'python' && selectedLang !== 'java' && selectedLang !== 'javascript') {
                     const container = document.getElementById('challenges-list');
                     if (container) {
                         Array.from(container.children).forEach(child => {
@@ -249,7 +234,7 @@ class EnhancedChallengesManager {
                 </div>
             </div>
             <div class="challenge-actions" style="width: 100%; display: flex; justify-content: center;">
-                <button class="challenge-btn challenge-btn-primary" style="background: linear-gradient(135deg, #00C2FF, #0E1E38); color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 28px; font-size: 1.08rem; border: none; box-shadow: 0 2px 8px rgba(0,194,255,0.12); transition: background 0.3s, transform 0.2s; cursor: pointer;" onmouseover="this.style.background='linear-gradient(135deg, #FFC700, #E41B17)'" onmouseout="this.style.background='linear-gradient(135deg, #00C2FF, #0E1E38)'" onclick="window.challengesManager.startChallenge('${challenge.id}')">Start Challenge</button>
+                <button class="challenge-btn challenge-btn-primary" style="background: linear-gradient(135deg, #00C2FF, #0E1E38); color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 28px; font-size: 1.08rem; border: none; box-shadow: 0 2px 8px rgba(0,194,255,0.12); transition: background 0.3s, transform 0.2s; cursor: pointer;" onmouseover="this.style.background='linear-gradient(135deg, #FFC700, #E41B17)'" onmouseout="this.style.background='linear-gradient(135deg, #00C2FF, #0E1E38)'" onclick="window.challengesManager.startChallenge('${challenge.id}')">${challenge.status === 'completed' ? 'Retake Challenge' : 'Start Challenge'}</button>
             </div>
         `;
         return card;

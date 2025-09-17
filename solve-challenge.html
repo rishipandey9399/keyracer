@@ -1869,9 +1869,23 @@
                     console.log('No userId found, skipping coderacer-leaderboard update');
                     return;
                 }
+                
+                // Check if challenge was already completed before
+                const savedStats = localStorage.getItem('challengeStats');
+                let completedChallenges = [];
+                if (savedStats) {
+                    const stats = JSON.parse(savedStats);
+                    completedChallenges = stats.completedChallenges || [];
+                }
+                
+                // Only award points if this is the first completion
+                const isFirstCompletion = !completedChallenges.includes(challengeId.toString());
+                const pointsEarned = isFirstCompletion ? getPointsForChallenge(currentChallenge) : 0;
+                
+                console.log(`Challenge ${challengeId}: First completion = ${isFirstCompletion}, Points = ${pointsEarned}`);
+                
                 // Get attempt number (if tracked), default to 1
                 const attemptNumber = window.currentAttemptNumber || 1;
-                const pointsEarned = getPointsForChallenge(currentChallenge);
                 const response = await fetch('/api/coderacer-leaderboard/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

@@ -81,7 +81,7 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 	try {
 		const { page = 1, limit = 50 } = req.query;
 		
-		// Get leaderboard data using aggregation pipeline to filter out guest users
+		// Get leaderboard data - only rank by total challenge points
 		const leaderboardPipeline = [
 			{
 				$lookup: {
@@ -92,7 +92,7 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 				}
 			},
 			{ $unwind: '$user' },
-			// Filter out guest users (users with authMethod 'local' and password 'guest')
+			// Filter out guest users
 			{ 
 				$match: { 
 					$nor: [
@@ -100,19 +100,15 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 					]
 				} 
 			},
-			{ $sort: { overallAccuracy: -1, totalPoints: -1, challengesCompleted: -1, averageCompletionTime: 1 } },
+			// Sort only by total points (descending)
+			{ $sort: { totalPoints: -1 } },
 			{ $skip: (page - 1) * limit },
 			{ $limit: parseInt(limit) },
 			{
 				$project: {
-					userId: 1,
 					totalPoints: 1,
-					totalAttempts: 1,
-					averageCompletionTime: 1,
-					currentStreak: 1,
 					'user.displayName': 1,
-					'user.username': 1,
-					'user.picture': 1
+					'user.username': 1
 				}
 			}
 		];
@@ -122,14 +118,11 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 		const leaderboard = stats.map((entry, idx) => ({
 			rank: (page - 1) * limit + idx + 1,
 			user: {
-				displayName: entry.user.displayName,
-				username: entry.user.username,
-				picture: entry.user.picture
+				name: entry.user.displayName || entry.user.username || 'Player'
 			},
-			totalPoints: entry.totalPoints,
-			totalAttempts: entry.totalAttempts,
-			averageCompletionTime: entry.averageCompletionTime,
-			currentStreak: entry.currentStreak
+			stats: {
+				totalPoints: entry.totalPoints || 0
+			}
 		}));
 		res.json({ success: true, data: { leaderboard } });
 	} catch (error) {

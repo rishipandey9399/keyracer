@@ -37,9 +37,9 @@
     {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "CodeRacer: Learn to Code by Typing | KeyRacer",
+        "name": "CodeRacer: Learn to Code | KeyRacer",
         "url": "https://keyracer.in/code-racer.html",
-        "description": "Master programming with CodeRacer by KeyRacer. Learn to code by typing in Python, JavaScript, HTML, and CSS with interactive tutorials.",
+        "description": "Master programming with CodeRacer by KeyRacer. Learn to code in Python, JavaScript, HTML, and CSS with interactive tutorials.",
         "isPartOf": {
             "@type": "WebSite",
             "name": "KeyRacer",
@@ -48,7 +48,7 @@
         "mainEntity": {
             "@type": "Course",
             "name": "Interactive Programming Course",
-            "description": "Learn programming languages through interactive typing exercises",
+            "description": "Learn programming languages through interactive  exercises",
             "provider": {
                 "@type": "Organization",
                 "name": "KeyRacer"
@@ -56,12 +56,12 @@
             "courseMode": "online",
             "programmingLanguage": ["Python", "JavaScript", "HTML", "CSS", "Java", "C++"],
             "educationalLevel": ["Beginner", "Intermediate", "Advanced"],
-            "teaches": ["Programming Fundamentals", "Syntax Mastery", "Code Typing", "Software Development", "Web Development"],
+            "teaches": ["Programming Fundamentals", "Syntax Mastery", "Code", "Software Development", "Web Development"],
             "hasCourseInstance": [
                 {
                     "@type": "CourseInstance",
                     "name": "Python Programming",
-                    "description": "Learn Python through interactive typing exercises"
+                    "description": "Learn Python through interactive exercises"
                 },
                 {
                     "@type": "CourseInstance",
@@ -90,7 +90,7 @@
     }
     </script>
     
-    <title>CodeRacer: Learn to Code by Typing | KeyRacer</title>
+    <title>CodeRacer: Learn to Code | KeyRacer</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/code-racer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -333,15 +333,19 @@
                 .language-card {
                     background: #161b22;
                     border-radius: 18px;
-                    padding: 28px 24px 22px 24px;
+                    padding: 28px 24px 32px 24px;
                     width: 260px;
+                    min-width: 260px;
+                    height: 420px;
                     box-shadow: 0 8px 32px rgba(0,194,255,0.10);
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    justify-content: space-between;
                     position: relative;
                     transition: all 0.3s;
-                    margin-bottom: 0;
+                    margin-bottom: 20px;
+                    flex-shrink: 0;
                 }
 
                 .language-icon {
@@ -357,6 +361,15 @@
                 }
                 .language-card .fa-java.language-icon {
                     color: #E41B17;
+                }
+                .language-card .fa-html5.language-icon {
+                    color: #E34F26;
+                }
+                .language-card .fa-css3-alt.language-icon {
+                    color: #1572B6;
+                }
+                .language-card .fa-database.language-icon {
+                    color: #336791;
                 }
 
 
@@ -463,9 +476,11 @@
                     color: #E1E6F2;
                     line-height: 1.6;
                 }
+        
+        @media (max-width: 768px) {
+            .hero-title {
                 font-size: 2rem;
-
-            
+            }
             
             .hero-subtitle {
                 font-size: 1.25rem;
@@ -555,6 +570,7 @@
                 <a href="code-racer.html" class="nav-item active"><i class="fas fa-home"></i> Home</a>
                 <a href="challenges.html" class="nav-item"><i class="fas fa-code"></i> Challenges</a>
                 <a href="coderacer-leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <a href="preference.html" class="nav-item" style="background: #FFC700; color: #000; font-weight: 600;"><i class="fas fa-cog"></i> Preference</a>
             </nav>
             <div class="header-actions">
                 <div class="user-section">
@@ -572,10 +588,7 @@
         </div>
     </header>
 
-    <section class="hero-section">
-        <h1 class="hero-title">Learn Programming</h1>
-        <p class="hero-subtitle">Code your way to mastery - one keystroke at a time</p>
-    </section>
+
 
     <section id="languages" class="languages-grid">
         <div class="language-card">
@@ -597,6 +610,27 @@
             <h2 class="language-name">Java</h2>
             <p class="language-description">Master Java - a versatile language used in enterprise and Android development.</p>
             <a href="java-tutorial.html" class="start-learning-btn">Start Learning Java</a>
+        </div>
+
+        <div class="language-card">
+            <i class="fab fa-html5 language-icon"></i>
+            <h2 class="language-name">HTML</h2>
+            <p class="language-description">Learn HTML - the foundation of web development and structure of web pages.</p>
+            <button class="start-learning-btn disabled">Coming Soon</button>
+        </div>
+
+        <div class="language-card">
+            <i class="fab fa-css3-alt language-icon"></i>
+            <h2 class="language-name">CSS</h2>
+            <p class="language-description">Style your web pages with CSS - make beautiful and responsive designs.</p>
+            <button class="start-learning-btn disabled">Coming Soon</button>
+        </div>
+
+        <div class="language-card">
+            <i class="fas fa-database language-icon"></i>
+            <h2 class="language-name">SQL</h2>
+            <p class="language-description">Master SQL - query and manage databases with structured query language.</p>
+            <button class="start-learning-btn disabled">Coming Soon</button>
         </div>
     </section>
 

@@ -178,7 +178,7 @@
         }
         .table-header {
             display: grid;
-            grid-template-columns: 60px 2.5fr 1.1fr 1.1fr 1.1fr 1.1fr;
+            grid-template-columns: 80px 2fr 1fr;
             align-items: center;
             background: #0e1e38;
             color: #00C2FF;
@@ -202,7 +202,7 @@
         }
         .leaderboard-row {
             display: grid;
-            grid-template-columns: 60px 2.5fr 1.1fr 1.1fr 1.1fr 1.1fr;
+            grid-template-columns: 80px 2fr 1fr;
             column-gap: 0.5rem;
             padding: 0.85rem 0.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -322,7 +322,7 @@
             }
             .table-header,
             .leaderboard-row {
-                grid-template-columns: 40px 1.5fr 1fr 1fr 1fr 1fr;
+                grid-template-columns: 60px 2fr 1fr;
                 font-size: 0.95rem;
                 column-gap: 0.3rem;
             }
@@ -333,13 +333,9 @@
             }
             .table-header,
             .leaderboard-row {
-                grid-template-columns: 28px 1fr 1fr 1fr;
+                grid-template-columns: 50px 2fr 1fr;
                 font-size: 0.85rem;
-                column-gap: 0.1rem;
-            }
-            .table-header :nth-child(n+5),
-            .leaderboard-row :nth-child(n+5) {
-                display: none;
+                column-gap: 0.2rem;
             }
         }
         
@@ -519,14 +515,11 @@
                                         <th>Rank</th>
                                         <th>Player</th>
                                         <th>Points</th>
-                                        <th>Avg Time</th>
-                                        <th>Accuracy</th>
-                                        <th>Streak</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leaderboardBody">
                                     <tr class="loading-row">
-                                        <td colspan="6">
+                                        <td colspan="3">
                                             <div class="loading-content">
                                                 <i class="fas fa-spinner fa-spin"></i>
                                                 <span>Loading champion rankings...</span>
@@ -614,35 +607,35 @@
                             const tbody = document.getElementById('leaderboardBody');
                             tbody.innerHTML = '';
                             if (!leaderboardData || leaderboardData.length === 0) {
-                                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:#b3b8d0;"><i class='fas fa-trophy'></i> No participants yet. Be the first to compete!</td></tr>`;
+                                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:2rem; color:#b3b8d0;"><i class='fas fa-trophy'></i> No participants yet. Be the first to compete!</td></tr>`;
                                 return;
                             }
                             let currentUserName = null;
                             try {
                                 const user = JSON.parse(localStorage.getItem('user'));
                                 if (user) currentUserName = user.displayName || user.username || user.name || null;
-                            } catch (e) {}
-                                    // fallback for old login
-                                    const legacy = localStorage.getItem('typingTestUser');
-                                    if (legacy) currentUserName = legacy;
-                                }
+                            } catch (e) {
+                                // fallback for old login
+                                const legacy = localStorage.getItem('typingTestUser');
+                                if (legacy) currentUserName = legacy;
+                            }
                             leaderboardData.forEach(entry => {
                                 const stats = entry.stats || {};
                                 const totalPoints = typeof stats.totalPoints === 'number' ? stats.totalPoints : 0;
-                                const averageTime = typeof stats.averageTime === 'number' ? stats.averageTime : 0;
-                                const accuracy = typeof stats.accuracy === 'number' ? stats.accuracy : 0;
-                                const currentStreak = typeof stats.currentStreak === 'number' ? stats.currentStreak : 0;
                                 let playerName = (entry.user && entry.user.name) ? entry.user.name : 'Player';
                                 const isCurrentUser = currentUserName && playerName && playerName.toLowerCase() === currentUserName.toLowerCase();
                                 const row = document.createElement('tr');
                                 if (isCurrentUser) row.classList.add('highlighted');
+                                
+                                let rankDisplay = entry.rank;
+                                if (entry.rank === 1) rankDisplay = '🥇';
+                                else if (entry.rank === 2) rankDisplay = '🥈';
+                                else if (entry.rank === 3) rankDisplay = '🥉';
+                                
                                 row.innerHTML = `
-                                    <td>${entry.rank}</td>
+                                    <td>${rankDisplay}</td>
                                     <td><div class="racer-cell"><span class="racer-avatar">${escapeHtml(playerName.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2))}</span><span class="racer-name">${escapeHtml(playerName)}</span></div></td>
                                     <td>${totalPoints.toLocaleString()}</td>
-                                    <td>${formatTime(averageTime)}</td>
-                                    <td>${accuracy}%</td>
-                                    <td><span style="background:linear-gradient(135deg,#ff6b6b 0%,#ee5a24 100%);padding:0.25rem 0.7rem;border-radius:12px;color:#fff;font-weight:700;">${currentStreak}${currentStreak>0?'🔥':''}</span></td>
                                 `;
                                 tbody.appendChild(row);
                             });
@@ -650,7 +643,7 @@
 
                 function showLoading() {
                     const tbody = document.getElementById('leaderboardBody');
-                    tbody.innerHTML = `<tr class='loading-placeholder'><td colspan='6' style='text-align:center; padding:2.5rem; color:#64ffda;'><i class='fas fa-spinner fa-spin' style='font-size:2rem; margin-bottom:1rem;'></i><p>Loading champion rankings...</p></td></tr>`;
+                    tbody.innerHTML = `<tr class='loading-placeholder'><td colspan='3' style='text-align:center; padding:2.5rem; color:#64ffda;'><i class='fas fa-spinner fa-spin' style='font-size:2rem; margin-bottom:1rem;'></i><p>Loading champion rankings...</p></td></tr>`;
                 }
 
                 async function loadLeaderboard(page=1) {
