@@ -30,6 +30,7 @@
                 <a href="code-racer.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
                 <a href="challenges.html" class="nav-item active"><i class="fas fa-code"></i> Challenges</a>
                 <a href="coderacer-leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
             </nav>
             <div class="header-actions">
                 <div class="user-section">
@@ -46,75 +47,83 @@
             </div>
         </div>
     </header>
-    <section class="hero-section" style="background: linear-gradient(135deg, #0E1E38 60%, #00C2FF 100%); padding: 40px 0 20px 0; box-shadow: 0 8px 32px rgba(0,194,255,0.08);">
-        <h1 class="hero-title" style="font-family: 'Orbitron', 'Rajdhani', sans-serif; font-size: 2.8rem; color: #00C2FF; text-shadow: 0 2px 12px #0E1E38; margin-bottom: 10px;">Coding Challenges</h1>
-        <p class="hero-subtitle" style="font-size: 1.25rem; color: #E1E6F2; margin-bottom: 28px;">Track your progress and compete on the leaderboard</p>
-        <div class="language-selector" style="margin-bottom: 18px;">
-            <div class="language-tabs" style="display: flex; gap: 10px; justify-content: center;">
-                <button class="language-tab active" data-language="python" style="background: #00C2FF; color: #0E1E38; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,194,255,0.12);">
+    
+
+    <section class="hero-section">
+        <h1 class="hero-title">Coding Challenges</h1>
+        <p class="hero-subtitle">Track your progress and compete on the leaderboard</p>
+        
+        <div class="language-selector">
+            <div class="language-tabs">
+                <button class="language-tab active" data-language="python">
                     <i class="fab fa-python"></i> <span>Python</span>
                 </button>
-                <button class="language-tab" data-language="javascript" style="background: #FFC700; color: #0E1E38; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem;">
+                <button class="language-tab" data-language="javascript">
                     <i class="fab fa-js"></i> <span>JavaScript</span>
                 </button>
-                <button class="language-tab" data-language="java" style="background: #E41B17; color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem;">
+                <button class="language-tab" data-language="java">
                     <i class="fab fa-java"></i> <span>Java</span>
                 </button>
-                <button class="language-tab disabled" data-language="cpp" style="background: #161b22; color: #8b949e; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem; opacity: 0.5;">
+                <button class="language-tab disabled" data-language="cpp">
                     <i class="fas fa-code"></i> <span>C++</span>
                 </button>
-                <button class="language-tab disabled" data-language="go" style="background: #161b22; color: #8b949e; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem; opacity: 0.5;">
+                <button class="language-tab disabled" data-language="go">
                     <i class="fas fa-bolt"></i> <span>Go</span>
                 </button>
             </div>
         </div>
-        <div class="user-stats-panel" id="userStatsPanel" style="display: flex; gap: 32px; justify-content: center; margin-bottom: 10px;">
-            <div class="stat-item" style="background: rgba(0,194,255,0.08); border-radius: 12px; padding: 18px 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,194,255,0.08);">
-                <i class="fas fa-trophy" style="color: #FFC700; font-size: 1.5rem;"></i><br>
-                <span class="stat-label" style="font-size: 1rem; color: #E1E6F2;">Rank</span><br>
-                <span class="stat-value" id="userRank" style="font-size: 1.3rem; color: #00C2FF; font-weight: 700;">-</span>
+        
+        <div class="user-stats-panel" id="userStatsPanel">
+            <div class="stat-item">
+                <i class="fas fa-trophy"></i><br>
+                <span class="stat-label">Rank</span><br>
+                <span class="stat-value" id="userRank">-</span>
             </div>
-            <div class="stat-item" style="background: rgba(0,194,255,0.08); border-radius: 12px; padding: 18px 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,194,255,0.08);">
-                <i class="fas fa-star" style="color: #FFC700; font-size: 1.5rem;"></i><br>
-                <span class="stat-label" style="font-size: 1rem; color: #E1E6F2;">Total Points</span><br>
-                <span class="stat-value" id="totalPoints" style="font-size: 1.3rem; color: #00C2FF; font-weight: 700;">0</span>
+            <div class="stat-item">
+                <i class="fas fa-star"></i><br>
+                <span class="stat-label">Total Points</span><br>
+                <span class="stat-value" id="totalPoints">0</span>
             </div>
-            <div class="stat-item" style="background: rgba(0,194,255,0.08); border-radius: 12px; padding: 18px 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,194,255,0.08);">
-                <i class="fas fa-fire" style="color: #E41B17; font-size: 1.5rem;"></i><br>
-                <span class="stat-label" style="font-size: 1rem; color: #E1E6F2;">Streak</span><br>
-                <span class="stat-value" id="currentStreak" style="font-size: 1.3rem; color: #00C2FF; font-weight: 700;">0</span>
+            <div class="stat-item">
+                <i class="fas fa-fire"></i><br>
+                <span class="stat-label">Streak</span><br>
+                <span class="stat-value" id="currentStreak">0</span>
             </div>
         </div>
     </section>
-    <div class="difficulty-filter-bar" style="background: rgba(0,194,255,0.05); padding: 18px 0; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,194,255,0.04);">
-        <div class="filter-container" style="display: flex; gap: 18px; justify-content: center;">
-            <button class="difficulty-filter active" data-difficulty="all" style="background: #00C2FF; color: #0E1E38; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1rem; box-shadow: 0 2px 8px rgba(0,194,255,0.12);">All Challenges</button>
-            <button class="difficulty-filter" data-difficulty="easy" style="background: #FFC700; color: #0E1E38; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1rem;">Beginner <span class="points">(10pts)</span></button>
-            <button class="difficulty-filter" data-difficulty="medium" style="background: #E41B17; color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1rem;">Intermediate <span class="points">(20pts)</span></button>
-            <button class="difficulty-filter" data-difficulty="hard" style="background: #0E1E38; color: #FFC700; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1rem;">Advanced <span class="points">(30pts)</span></button>
-            <button class="difficulty-filter" data-difficulty="expert" style="background: #161b22; color: #00C2FF; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1rem;">Expert <span class="points">(40pts)</span></button>
+    
+    <div class="difficulty-filter-bar">
+        <div class="filter-container">
+            <button class="difficulty-filter active" data-difficulty="all">All Challenges</button>
+            <button class="difficulty-filter" data-difficulty="easy">Beginner <span class="points">(10pts)</span></button>
+            <button class="difficulty-filter" data-difficulty="medium">Intermediate <span class="points">(20pts)</span></button>
+            <button class="difficulty-filter" data-difficulty="hard">Advanced <span class="points">(30pts)</span></button>
+            <button class="difficulty-filter" data-difficulty="expert">Expert <span class="points">(40pts)</span></button>
         </div>
     </div>
-    <section id="challenges-list" class="challenges-grid" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; min-height: 300px; margin-bottom: 40px;">
-        <div class="loading-container" id="loadingContainer" style="width: 100%; text-align: center; margin-top: 40px;">
-            <div class="loading-spinner" style="margin-bottom: 18px;"></div>
-            <p style="font-size: 1.2rem; color: #00C2FF;">Loading Python challenges...</p>
+    
+    <section id="challenges-list" class="challenges-grid">
+        <div class="loading-container" id="loadingContainer">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading Python challenges...</p>
         </div>
         <!-- Challenges will be loaded dynamically -->
     </section>
-    <div class="legal-footer" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
-        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
-            <a href="privacy-policy.html" style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
-                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
+    
+    <div class="legal-footer">
+        <div class="legal-footer-content">
+            <a href="privacy-policy.html" class="legal-link">
+                <i class="fas fa-shield-alt"></i>
                 Privacy Policy
             </a>
-            <span style="color: #555; font-size: 0.8rem;">|</span>
-            <a href="terms-conditions.html" style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
-                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
+            <span class="legal-separator">|</span>
+            <a href="terms-conditions.html" class="legal-link">
+                <i class="fas fa-gavel"></i>
                 Terms & Conditions
             </a>
         </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
 class EnhancedChallengesManager {
@@ -170,7 +179,7 @@ class EnhancedChallengesManager {
                         });
                         const comingDiv = document.createElement('div');
                         comingDiv.className = 'loading-container';
-                        comingDiv.innerHTML = `<p style="font-size:1.2rem;color:#FFC700;">${selectedLang.charAt(0).toUpperCase()+selectedLang.slice(1)} challenges coming soon!</p>`;
+                        comingDiv.innerHTML = `<p class="loading-text coming-soon">${selectedLang.charAt(0).toUpperCase()+selectedLang.slice(1)} challenges coming soon!</p>`;
                         container.appendChild(comingDiv);
                     }
                 }
@@ -222,34 +231,23 @@ class EnhancedChallengesManager {
     createChallengeCard(challenge) {
         const card = document.createElement('div');
         card.className = 'challenge-card';
-        card.style.background = 'linear-gradient(135deg, #161b22 70%, #00C2FF 100%)';
-        card.style.borderRadius = '18px';
-        card.style.padding = '28px 24px 22px 24px';
-        card.style.width = '260px';
-        card.style.boxShadow = '0 8px 32px rgba(0,194,255,0.10)';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        card.style.alignItems = 'center';
-        card.style.position = 'relative';
-        card.style.transition = 'all 0.3s';
-        card.style.marginBottom = '0';
         const statusClass = this.getStatusClass(challenge.status);
         const difficultyClass = `difficulty-${challenge.difficulty.toLowerCase()}`;
         card.innerHTML = `
-            <div class="challenge-status ${statusClass}" style="position: absolute; top: 18px; right: 18px; width: 16px; height: 16px; border-radius: 50%; background: ${statusClass==='status-completed'?'#00BF63':statusClass==='status-attempted'?'#FFC700':'#00C2FF'}; box-shadow: 0 2px 8px rgba(0,194,255,0.18);"></div>
-            <div class="challenge-header" style="width: 100%; text-align: left; margin-bottom: 10px;">
-                <span class="challenge-title" style="font-family: 'Orbitron', 'Rajdhani', sans-serif; font-size: 1.25rem; color: #00C2FF; font-weight: 700;">${challenge.title}</span><br>
-                <span class="difficulty-badge ${difficultyClass}" style="background: #0E1E38; color: #FFC700; font-size: 0.95rem; font-weight: 600; border-radius: 6px; padding: 4px 12px; margin-top: 6px; display: inline-block;">${challenge.difficulty} (${challenge.points}pts)</span>
+            <div class="challenge-status ${statusClass}"></div>
+            <div class="challenge-header">
+                <span class="challenge-title">${challenge.title}</span><br>
+                <span class="difficulty-badge ${difficultyClass}">${challenge.difficulty} (${challenge.points}pts)</span>
             </div>
-            <p class="challenge-description" style="font-size: 1rem; color: #E1E6F2; margin-bottom: 12px; text-align: left; width: 100%;">${challenge.description}</p>
-            <div class="challenge-stats" style="width: 100%; margin-bottom: 14px;">
-                <div class="challenge-stat" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span class="challenge-stat-label" style="font-size: 0.95rem; color: #FFC700; font-weight: 600;">Category</span>
-                    <span class="challenge-stat-value" style="font-size: 0.95rem; color: #00C2FF; font-weight: 600;">${challenge.category}</span>
+            <p class="challenge-description">${challenge.description}</p>
+            <div class="challenge-stats">
+                <div class="challenge-stat">
+                    <span class="challenge-stat-label">Category</span>
+                    <span class="challenge-stat-value">${challenge.category}</span>
                 </div>
             </div>
-            <div class="challenge-actions" style="width: 100%; display: flex; justify-content: center;">
-                <button class="challenge-btn challenge-btn-primary" style="background: linear-gradient(135deg, #00C2FF, #0E1E38); color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 28px; font-size: 1.08rem; border: none; box-shadow: 0 2px 8px rgba(0,194,255,0.12); transition: background 0.3s, transform 0.2s; cursor: pointer;" onmouseover="this.style.background='linear-gradient(135deg, #FFC700, #E41B17)'" onmouseout="this.style.background='linear-gradient(135deg, #00C2FF, #0E1E38)'" onclick="window.challengesManager.startChallenge('${challenge.id}')">Start Challenge</button>
+            <div class="challenge-actions">
+                <button class="challenge-btn challenge-btn-primary" onclick="window.challengesManager.startChallenge('${challenge.id}')">Start Challenge</button>
             </div>
         `;
         return card;
