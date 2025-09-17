@@ -282,7 +282,7 @@ def mergeKLists(lists):
     testCases: [
       { input: [[[1,4,5],[1,3,4],[2,6]]], expectedOutput: [1,1,2,3,4,4,5,6] },
       { input: [[]], expectedOutput: [] },
-      { input: [[[]], expectedOutput: [] }
+      { input: [[]], expectedOutput: [] }
     ],
     timeLimit: 10000,
     memoryLimit: 1024

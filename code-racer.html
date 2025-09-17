@@ -100,13 +100,13 @@
             background: #070B18 !important;
         }
 
-        .hero-section {
+        /* .hero-section {
             text-align: center;
             padding: 6rem 2rem;
             background: linear-gradient(180deg, rgba(0,255,221,0.05) 0%, rgba(0,255,221,0) 100%);
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 4rem;
-        }
+        } */
 
         .hero-title {
             font-size: 4rem;
@@ -119,7 +119,6 @@
             color: transparent;
             text-transform: uppercase;
             letter-spacing: 2px;
-            animation: glow 2s ease-in-out infinite alternate;
         }
 
         .hero-subtitle {
@@ -132,11 +131,11 @@
 
         .languages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem 6rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto; /* This keeps it centered horizontally */
+            padding-top: 0; 
         }
 
         .language-card {
@@ -298,14 +297,14 @@
                     background: #070B18 !important;
                 }
 
-                .hero-section {
+                /* .hero-section {
                     background: linear-gradient(135deg, #0E1E38 60%, #00C2FF 100%);
                     box-shadow: 0 8px 32px rgba(0,194,255,0.08);
                     max-width: 1400px;
                     margin: 0 auto 4rem auto;
                     text-align: center;
                     padding: 40px 0 20px 0;
-                }
+                } */
 
                 .hero-title {
                     font-family: 'Orbitron', 'Rajdhani', sans-serif;
@@ -391,7 +390,7 @@
                 .language-card .fa-java ~ .start-learning-btn {
                     background: linear-gradient(135deg, #E41B17, #0E1E38);
                     font-weight: 700;
-                    border-radius: 8px;
+                    border-radius: 50px;
                     font-size: 1.08rem;
                     border: none;
                     box-shadow: 0 2px 8px rgba(0,194,255,0.12);
@@ -555,6 +554,7 @@
                 <a href="code-racer.html" class="nav-item active"><i class="fas fa-home"></i> Home</a>
                 <a href="challenges.html" class="nav-item"><i class="fas fa-code"></i> Challenges</a>
                 <a href="coderacer-leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+                <a href="about.html" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
             </nav>
             <div class="header-actions">
                 <div class="user-section">
@@ -572,28 +572,29 @@
         </div>
     </header>
 
-    <section class="hero-section">
-        <h1 class="hero-title">Learn Programming</h1>
-        <p class="hero-subtitle">Code your way to mastery - one keystroke at a time</p>
+    <!-- Created new section below to avoid conflicts with earlier messy class -->
+    <section class="learn-hero-section">
+    <h1 class="hero-title">Learn Programming</h1>
+    <p class="hero-subtitle">Code your way to mastery - one keystroke at a time</p>
     </section>
 
     <section id="languages" class="languages-grid">
         <div class="language-card">
-            <i class="fab fa-python language-icon"></i>
+            <i class="fab fa-python language-icon python-icon"></i>
             <h2 class="language-name">Python</h2>
             <p class="language-description">Start with Python - a beginner-friendly language perfect for learning programming concepts.</p>
             <a href="python-tutorial.html" class="start-learning-btn">Start Learning Python</a>
         </div>
 
         <div class="language-card">
-            <i class="fab fa-js language-icon"></i>
+            <i class="fab fa-js language-icon js-icon"></i>
             <h2 class="language-name">JavaScript</h2>
             <p class="language-description">Learn JavaScript - the language that powers the web and modern applications.</p>
             <a href="javascript-tutorial.html" class="start-learning-btn">Start Learning JavaScript</a>
         </div>
 
         <div class="language-card">
-            <i class="fab fa-java language-icon"></i>
+            <i class="fab fa-java language-icon java-icon"></i>
             <h2 class="language-name">Java</h2>
             <p class="language-description">Master Java - a versatile language used in enterprise and Android development.</p>
             <a href="java-tutorial.html" class="start-learning-btn">Start Learning Java</a>
