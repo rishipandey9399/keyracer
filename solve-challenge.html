@@ -21,6 +21,8 @@
     
     <!-- Code Executor Script -->
     <script src="scripts/code-executor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     
     <style>
         :root {
@@ -764,6 +766,27 @@
                 inset 0 3px 0 rgba(255, 255, 255, 0.2);
         }
 
+        .code-editor {
+            display: flex;
+            position: relative;
+        }
+        
+        .line-numbers {
+            background: #1e1e1e;
+            color: #858585;
+            padding: 2rem 1rem 2rem 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: right;
+            user-select: none;
+            border-right: 1px solid #333;
+            min-width: 60px;
+            white-space: pre;
+        }
+        
+
+        
         .code-input {
             width: 100%;
             height: 100%;
@@ -777,17 +800,12 @@
             font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
             line-height: 1.5;
-            resize: vertical;
+            resize: none;
             outline: none;
-            position: absolute;
-            top: 0;
-            left: 0;
             z-index: 2;
             tab-size: 4;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            box-sizing: border-box;
+            white-space: pre;
+            overflow: auto;
         }
 
         .code-input::placeholder {
@@ -1445,11 +1463,14 @@
                 </div>
                 
                 <div class="code-editor">
+                    <div class="line-numbers" id="lineNumbers">1</div>
                     <textarea 
                         class="code-input" 
                         id="codeInput"
-                        placeholder="# Write your Python code here...&#10;# For example:&#10;print('Hello, World!')"
+                        placeholder="# Write your Python code here..."
                         spellcheck="false"
+                        onpaste="return false"
+                        oncontextmenu="return false"
                     ></textarea>
                 </div>
             </div>
@@ -1502,6 +1523,7 @@
         document.addEventListener('DOMContentLoaded', async function() {
             await loadChallenge();
             setupEventListeners();
+
         });
 
         // Load challenge from URL parameter
@@ -1668,9 +1690,32 @@
                 navigateBackToChallenges();
             });
             
-            // Update back button URL with language parameter
+            const codeInput = document.getElementById('codeInput');
+            const lineNumbers = document.getElementById('lineNumbers');
+            
+            codeInput.addEventListener('input', updateLineNumbers);
+            codeInput.addEventListener('scroll', () => {
+                lineNumbers.scrollTop = codeInput.scrollTop;
+            });
+            
+            // Prevent copy/paste
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'x')) {
+                    e.preventDefault();
+                }
+            });
+            
+            function updateLineNumbers() {
+                const lines = codeInput.value.split('\n').length;
+                lineNumbers.textContent = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+            }
+            
+            updateLineNumbers();
+            
             updateNavigationUrls();
         }
+        
+
 
         // Update navigation URLs with language parameter
         function updateNavigationUrls() {

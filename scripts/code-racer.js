@@ -248,11 +248,13 @@ class CodeRacer {
         this.currentChallenge = challenge.name;
         
         // Update code display with syntax highlighting
-        this.elements.codeSnippetArea.textContent = challenge.code;
-        this.elements.codeSnippetArea.className = 'language-' + (prismLangMap[this.currentLang] || this.currentLang);
-        
-        if (window.Prism) {
-            Prism.highlightElement(this.elements.codeSnippetArea);
+        if (this.elements.codeSnippetArea) {
+            this.elements.codeSnippetArea.textContent = challenge.code;
+            this.elements.codeSnippetArea.className = 'language-' + (prismLangMap[this.currentLang] || this.currentLang);
+            
+            if (window.Prism) {
+                Prism.highlightElement(this.elements.codeSnippetArea);
+            }
         }
         
         // Reset input and stats
@@ -268,6 +270,8 @@ class CodeRacer {
         // Show challenge description
         if (challenge.description && this.elements.challengeDescription) {
             this.elements.challengeDescription.textContent = challenge.description;
+        } else if (challenge.description) {
+            console.log('Challenge description element not found');
         }
 
         this.updateStats(true);
