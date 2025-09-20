@@ -1858,15 +1858,14 @@
         // Update leaderboard
         async function updateLeaderboard(challengeId, completionTime) {
             try {
-                // Get userId from window, localStorage, or Google login
-                let userId = window.currentUserId || localStorage.getItem('userId');
-                if (!userId) {
-                    // Try to get from Google login
-                    const userData = JSON.parse(localStorage.getItem('typingTestUserData') || '{}');
-                    userId = userData.id;
-                }
-                if (!userId) {
-                    console.log('No userId found, skipping coderacer-leaderboard update');
+                // Get user information from localStorage
+                const currentUser = localStorage.getItem('typingTestUser');
+                const userType = localStorage.getItem('typingTestUserType');
+                const userEmail = localStorage.getItem('typingTestUserEmail');
+                const userData = JSON.parse(localStorage.getItem('typingTestUserData') || '{}');
+                
+                if (!currentUser) {
+                    console.log('No user logged in, skipping coderacer-leaderboard update');
                     return;
                 }
                 
@@ -1884,22 +1883,41 @@
                 
                 console.log(`Challenge ${challengeId}: First completion = ${isFirstCompletion}, Points = ${pointsEarned}`);
                 
-                // Get attempt number (if tracked), default to 1
-                const attemptNumber = window.currentAttemptNumber || 1;
+                // Prepare submission data
+                let submissionData = {
+                    pointsEarned,
+                    attempts: 1, // First successful attempt
+                    completionTime
+                };
+                
+                // Add user identification based on login type
+                if (userType === 'google' && userData.sub) {
+                    submissionData.googleId = userData.sub;
+                    submissionData.email = userEmail || userData.email;
+                } else if (userEmail) {
+                    submissionData.email = userEmail;
+                } else {
+                    // Fallback: try to find user by display name
+                    submissionData.email = `${currentUser.toLowerCase().replace(/\s+/g, '')}@keyracer.local`;
+                }
+                
+                console.log('Submitting to coderacer leaderboard:', submissionData);
+                
                 const response = await fetch('/api/coderacer-leaderboard/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userId,
-                        pointsEarned,
-                        attempts: attemptNumber,
-                        completionTime
-                    })
+                    body: JSON.stringify(submissionData)
                 });
+                
+                const result = await response.json();
+                
                 if (response.ok) {
-                    console.log('Coderacer leaderboard updated successfully');
+                    console.log('Coderacer leaderboard updated successfully:', result);
+                    if (result.pointsAwarded > 0) {
+                        console.log(`🎉 Awarded ${result.pointsAwarded} points!`);
+                    }
                 } else {
-                    console.error('Failed to update coderacer leaderboard');
+                    console.error('Failed to update coderacer leaderboard:', result);
                 }
             } catch (error) {
                 console.error('Error updating coderacer leaderboard:', error);
@@ -1910,10 +1928,13 @@
         function getPointsForChallenge(challenge) {
             const difficulty = challenge?.difficulty?.toLowerCase();
             switch (difficulty) {
+                case 'beginner': return 10;
                 case 'easy': return 10;
+                case 'intermediate': return 20;
                 case 'medium': return 30;
+                case 'advanced': return 30;
                 case 'hard': return 50;
-                case 'expert': return 100;
+                case 'expert': return 40;
                 default: return 10;
             }
         }

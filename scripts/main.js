@@ -595,6 +595,13 @@ function displayResults(testStats) {
     if (resultWpm) resultWpm.textContent = testStats.wpm;
     if (resultAccuracy) resultAccuracy.textContent = testStats.accuracy;
     if (resultErrors) resultErrors.textContent = testStats.errors;
+    
+    // Hide sections when showing results
+    const whySection = document.querySelector('.why-typeracer');
+    const championshipSection = document.querySelector('.championship-info');
+    if (whySection) whySection.style.display = 'none';
+    if (championshipSection) championshipSection.style.display = 'none';
+    
     // Show results modal
     const resultsSection = document.getElementById('results');
     if (resultsSection) resultsSection.style.display = 'flex';
@@ -1057,6 +1064,12 @@ function resetTest() {
     
     const resultsOverlay = document.getElementById('results');
     if (resultsOverlay) resultsOverlay.style.display = 'none';
+    
+    // Show sections again when test is reset
+    const whySection = document.querySelector('.why-typeracer');
+    const championshipSection = document.querySelector('.championship-info');
+    if (whySection) whySection.style.display = 'block';
+    if (championshipSection) championshipSection.style.display = 'block';
     
     // Reset button states
     const startBtn = document.getElementById('start-btn');

@@ -319,36 +319,17 @@ class CodeRacer {
         if (this.elements.evaluationResults) {
             this.elements.evaluationResults.innerHTML = `
                 <div class="completion-message">
-                    <h3>Challenge Complete!</h3>
+                    <h3>Typing Practice Complete!</h3>
                     <p>Time: ${timeElapsed.toFixed(2)} seconds</p>
                     <p>Speed: ${wpm} WPM</p>
+                    <p><small>Complete real challenges in <a href="challenges.html">Challenges</a> to earn points!</small></p>
                 </div>
             `;
         }
 
-            // Send result to backend for global leaderboard
-            const username = localStorage.getItem('username') || 'Anonymous';
-            const accuracy = 100; // You may want to calculate actual accuracy
-            const difficulty = this.currentDifficulty || 'standard';
-            const payload = {
-                username,
-                wpm,
-                accuracy,
-                difficulty,
-                timestamp: new Date().toISOString()
-            };
-            fetch('/api/leaderboard/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log('Leaderboard submission response:', data);
-            })
-            .catch(err => {
-                console.error('Error submitting leaderboard result:', err);
-            });
+            // Note: This is the old code-racer.html typing practice, not the actual challenges
+            // Real challenge completion happens in solve-challenge.html
+            console.log('Code typing practice completed - this does not affect CodeRacer leaderboard');
     }
 
     resetChallenge() {

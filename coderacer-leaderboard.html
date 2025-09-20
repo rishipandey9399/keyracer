@@ -515,6 +515,7 @@
                                         <th>Rank</th>
                                         <th>Player</th>
                                         <th>Points</th>
+                                        <th>Challenges</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leaderboardBody">
@@ -560,6 +561,10 @@
                                             max-height: 350px;
                                             padding: 10px 2px 10px 2px;
                                         }
+                                        .rankings-table th, .rankings-table td {
+                                            padding: 0.8rem 0.5rem;
+                                            font-size: 0.9rem;
+                                        }
                                     }
                             .rankings-table th, .rankings-table td {
                                 color: #eaf6fb;
@@ -576,6 +581,9 @@
                     }
                     .rankings-table th, .rankings-table td {
                         min-width: 110px;
+                    }
+                    .rankings-table th:nth-child(4), .rankings-table td:nth-child(4) {
+                        min-width: 80px;
                     }
         </style>
     <!-- End leaderboard-header and leaderboard-table moved up one level -->
@@ -607,7 +615,7 @@
                             const tbody = document.getElementById('leaderboardBody');
                             tbody.innerHTML = '';
                             if (!leaderboardData || leaderboardData.length === 0) {
-                                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:2rem; color:#b3b8d0;"><i class='fas fa-trophy'></i> No participants yet. Be the first to compete!</td></tr>`;
+                                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:2rem; color:#b3b8d0;"><i class='fas fa-trophy'></i> No participants yet. Complete challenges to appear on the leaderboard!</td></tr>`;
                                 return;
                             }
                             let currentUserName = null;
@@ -622,6 +630,7 @@
                             leaderboardData.forEach(entry => {
                                 const stats = entry.stats || {};
                                 const totalPoints = typeof stats.totalPoints === 'number' ? stats.totalPoints : 0;
+                                const challengesCompleted = typeof stats.challengesCompleted === 'number' ? stats.challengesCompleted : 0;
                                 let playerName = (entry.user && entry.user.name) ? entry.user.name : 'Player';
                                 const isCurrentUser = currentUserName && playerName && playerName.toLowerCase() === currentUserName.toLowerCase();
                                 const row = document.createElement('tr');
@@ -636,6 +645,7 @@
                                     <td>${rankDisplay}</td>
                                     <td><div class="racer-cell"><span class="racer-avatar">${escapeHtml(playerName.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2))}</span><span class="racer-name">${escapeHtml(playerName)}</span></div></td>
                                     <td>${totalPoints.toLocaleString()}</td>
+                                    <td>${challengesCompleted}</td>
                                 `;
                                 tbody.appendChild(row);
                             });

@@ -5,13 +5,12 @@ User-agent: *
 Allow: /
 
 # Important pages with high priority
-Allow: /index.html
+Allow: /preference.html
 Allow: /typing-test.html
 Allow: /code-racer.html
 Allow: /challenges.html
 Allow: /pro-skills.html
 Allow: /about.html
-Allow: /leaderboard.html
 
 # Disallow admin and private areas
 Disallow: /admin/

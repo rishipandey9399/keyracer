@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-9511160987539177">
-    
+
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Take KeyRacer's typing speed test to measure your WPM and accuracy. Improve your typing skills with our professional-grade interface and real-time feedback.">
-    <meta name="keywords" content="KeyRacer, typing speed test, WPM test, typing test online, keyboard speed test, typing accuracy, words per minute, free typing test, typing skills, improve typing speed">
+    <meta name="description"
+        content="Take KeyRacer's typing speed test to measure your WPM and accuracy. Improve your typing skills with our professional-grade interface and real-time feedback.">
+    <meta name="keywords"
+        content="KeyRacer, typing speed test, WPM test, typing test online, keyboard speed test, typing accuracy, words per minute, free typing test, typing skills, improve typing speed">
     <meta name="author" content="KeyRacer">
     <meta name="robots" content="index, follow">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://keyracer.in/typing-test.html">
     <meta property="og:title" content="Typing Speed Test - Measure Your WPM | KeyRacer">
-    <meta property="og:description" content="How fast can you type? Take our typing speed test to measure your WPM and accuracy. Get real-time feedback and improve your skills.">
+    <meta property="og:description"
+        content="How fast can you type? Take our typing speed test to measure your WPM and accuracy. Get real-time feedback and improve your skills.">
     <meta property="og:image" content="https://keyracer.in/assets/images/logo.png">
     <meta property="og:site_name" content="KeyRacer">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://keyracer.in/typing-test.html">
     <meta property="twitter:title" content="Typing Speed Test - Measure Your WPM | KeyRacer">
-    <meta property="twitter:description" content="How fast can you type? Take our typing speed test to measure your WPM and accuracy. Get real-time feedback and improve your skills.">
+    <meta property="twitter:description"
+        content="How fast can you type? Take our typing speed test to measure your WPM and accuracy. Get real-time feedback and improve your skills.">
     <meta property="twitter:image" content="https://keyracer.in/assets/images/logo.png">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/images/logo.png">
     <link rel="apple-touch-icon" href="/assets/images/logo.png">
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="https://keyracer.in/typing-test.html" />
-    
+
     <!-- Structured Data for Typing Test Page -->
     <script type="application/ld+json">
     {
@@ -85,28 +90,35 @@
         }
     }
     </script>
-    
+
     <title>Typing Speed Test - Measure Your WPM | KeyRacer</title>
     <!-- Critical CSS to ensure immediate content visibility -->
     <style>
         :root {
-            --primary-color: #E41B17; /* Racing red */
-            --secondary-color: #0E1E38; /* Deep navy */
-            --accent-color: #00C2FF; /* Electric blue */
-            --highlight-color: #FFC700; /* Vibrant yellow */
-            --background-color: #070B18; /* Dark background */
-            --text-color: #E1E6F2; /* Light text */
+            --primary-color: #E41B17;
+            /* Racing red */
+            --secondary-color: #0E1E38;
+            /* Deep navy */
+            --accent-color: #00C2FF;
+            /* Electric blue */
+            --highlight-color: #FFC700;
+            /* Vibrant yellow */
+            --background-color: #070B18;
+            /* Dark background */
+            --text-color: #E1E6F2;
+            /* Light text */
         }
-        
+
         /* Force immediate visibility for all content */
-        html, body {
+        html,
+        body {
             opacity: 1 !important;
             visibility: visible !important;
             background: #070b18;
             margin: 0;
             padding: 0;
         }
-        
+
         /* Preloader styling */
         #preloader {
             position: fixed;
@@ -121,13 +133,13 @@
             align-items: center;
             transition: opacity 0.2s ease, visibility 0.2s ease;
         }
-        
+
         .loader {
             width: 80px;
             height: 80px;
             position: relative;
         }
-        
+
         .loader:before {
             content: '';
             width: 80px;
@@ -139,7 +151,7 @@
             position: absolute;
             animation: spin 1s linear infinite;
         }
-        
+
         .loader:after {
             content: '';
             width: 60px;
@@ -153,23 +165,28 @@
             left: 10px;
             animation: spin 0.8s linear infinite reverse;
         }
-        
+
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
-        
+
         /* Hide preloader immediately if JS is disabled */
         .no-js #preloader {
             display: none;
         }
-        
+
         /* Add this class with JS to hide preloader */
         .preloader-hidden {
             opacity: 0 !important;
             visibility: hidden !important;
         }
-        
+
         /* Prevent text selection during typing test */
         .text-input {
             -webkit-user-select: none;
@@ -177,7 +194,7 @@
             -ms-user-select: none;
             user-select: none;
         }
-        
+
         /* Disable context menu on typing area */
         .race-typing-area {
             -webkit-touch-callout: none;
@@ -187,15 +204,21 @@
             -ms-user-select: none;
             user-select: none;
         }
-        
+
         /* Ensure all main content is visible with no animation delays */
-        .container, main, header, section, .race-track, .keyboard-container {
+        .container,
+        main,
+        header,
+        section,
+        .race-track,
+        .keyboard-container {
             opacity: 1 !important;
             visibility: visible !important;
         }
-        
+
         /* Remove fade-in and slide-up animations */
-        .fade-in, .slide-up {
+        .fade-in,
+        .slide-up {
             animation: none !important;
             opacity: 1 !important;
             transform: none !important;
@@ -205,20 +228,21 @@
     <!-- Add no-js class to html, will be removed if JS is enabled -->
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
-     crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <!-- Preloader -->
     <div id="preloader">
         <div class="loader"></div>
     </div>
-    
+
     <!-- Remove the no-js class since JS is working -->
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
-    
+
     <!-- Particle Effects Layer -->
     <div id="particles-js"></div>
-    
+
     <!-- Header Section -->
     <header>
         <div class="header-content">
@@ -227,25 +251,26 @@
                     <img src="assets/images/logo.png" alt="Key Racer Logo" class="logo-img">
                 </a>
             </div>
-            
+
             <nav class="main-nav">
                 <a href="typing-test.html" class="nav-item active"><i class="fas fa-home"></i> Home</a>
                 <a href="lessons.html" class="nav-item"><i class="fas fa-graduation-cap"></i> Training</a>
                 <a href="typing-tips.html" class="nav-item"><i class="fas fa-lightbulb"></i> Tips</a>
                 <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Championship</a>
             </nav>
-            
+
             <div class="header-actions">
                 <a href="preference.html" class="pref-btn"><i class="fas fa-cog"></i> Preference</a>
                 <a href="login.html" id="loginBtn" class="nav-item"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <a href="#" id="logoutBtn" class="nav-item" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="#" id="logoutBtn" class="nav-item" style="display: none;"><i class="fas fa-sign-out-alt"></i>
+                    Logout</a>
                 <button class="nav-toggle" aria-label="Toggle navigation">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
     </header>
-    
+
     <div class="container">
         <section class="challenge-categories slide-up">
             <div class="challenge-card active" data-challenge="standard">
@@ -253,32 +278,32 @@
                 <h3 class="challenge-name">Standard Race</h3>
                 <p class="challenge-desc">Classic typing race against the clock</p>
             </div>
-            
+
             <div class="challenge-card" data-challenge="timetrial">
                 <i class="fas fa-stopwatch challenge-icon"></i>
                 <h3 class="challenge-name">Time Trial</h3>
                 <p class="challenge-desc">Complete text in limited time</p>
             </div>
-            
+
             <div class="challenge-card" data-challenge="marathon">
                 <i class="fas fa-route challenge-icon"></i>
                 <h3 class="challenge-name">Marathon</h3>
                 <p class="challenge-desc">Extended race for endurance</p>
             </div>
-            
+
             <div class="challenge-card" data-challenge="custom">
                 <i class="fas fa-edit challenge-icon"></i>
                 <h3 class="challenge-name">Custom Track</h3>
                 <p class="challenge-desc">Practice with your own text</p>
-                </div>
+            </div>
         </section>
-        
+
         <div class="difficulty-selector slide-up">
             <button class="difficulty-btn active" id="beginner">Beginner</button>
             <button class="difficulty-btn" id="intermediate">Intermediate</button>
             <button class="difficulty-btn" id="advanced">Advanced</button>
-                        </div>
-        
+        </div>
+
         <main class="fade-in">
             <div class="race-track">
                 <div class="race-dashboard">
@@ -287,31 +312,33 @@
                         <span class="dashboard-value" id="wpm">0</span>
                         <span class="dashboard-unit">WPM</span>
                     </div>
-                    
+
                     <div class="dashboard-item">
                         <span class="dashboard-label">Time</span>
                         <span class="dashboard-value"><span id="minutes">1</span>:<span id="seconds">00</span></span>
                         <span class="dashboard-unit">MIN:SEC</span>
                     </div>
-                    
+
                     <div class="dashboard-item">
                         <span class="dashboard-label">Accuracy</span>
                         <span class="dashboard-value" id="accuracy">100</span>
                         <span class="dashboard-unit">%</span>
                     </div>
                 </div>
-                
+
                 <div class="race-typing-area">
                     <div class="text-display" id="text-display"></div>
-                    <textarea id="text-input" class="text-input" placeholder="The race will begin when you start typing..." disabled autocomplete="off" spellcheck="false" onpaste="return false" oncut="return false" oncopy="return false"></textarea>
+                    <textarea id="text-input" class="text-input"
+                        placeholder="The race will begin when you start typing..." disabled autocomplete="off"
+                        spellcheck="false" onpaste="return false" oncut="return false" oncopy="return false"></textarea>
                 </div>
-                
+
                 <div id="custom-text-container" style="display: none;">
                     <h3>Create Your Custom Track:</h3>
                     <textarea id="custom-text-input" placeholder="Enter your own text to practice with..."></textarea>
                     <button id="use-custom-text" class="btn btn-secondary">Use This Text</button>
                 </div>
-                
+
                 <div class="race-actions">
                     <button id="start-btn" class="btn btn-primary">
                         <i class="fas fa-flag-checkered"></i> Start Race
@@ -327,39 +354,110 @@
             <div class="results-overlay" id="results">
                 <div class="results-container">
                     <h2 class="results-title">Race Complete!</h2>
-                    
+
                     <div class="results-stats">
                         <div class="stat-card primary">
                             <div class="stat-name">Speed</div>
                             <div class="stat-value" id="result-wpm">0</div>
                             <div class="stat-unit">WPM</div>
                         </div>
-                        
+
                         <div class="stat-card">
                             <div class="stat-name">Accuracy</div>
                             <div class="stat-value" id="result-accuracy">0</div>
                             <div class="stat-unit">%</div>
                         </div>
-                        
+
                         <div class="stat-card">
                             <div class="stat-name">Errors</div>
                             <div class="stat-value" id="result-errors">0</div>
                         </div>
                     </div>
-                    
+
                     <div class="analysis-section" id="ai-feedback">
                         <h3 class="analysis-title">Performance Analysis</h3>
                         <div class="analysis-content">
                             <p>Analysis of your typing performance will appear here after the race.</p>
                         </div>
                     </div>
-                    
+
                     <button class="close-results">Back to Track</button>
                 </div>
             </div>
         </main>
+
+        <!-- Why Type Racer Section -->
+        <section class="why-typeracer fade-in">
+            <div class="section-container">
+                <h2 class="section-title">Why Choose Type Racer?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-tachometer-alt feature-icon"></i>
+                        <h3>Real-Time Analytics</h3>
+                        <p>Get instant feedback on your WPM, accuracy, and typing patterns with our advanced analytics
+                            engine.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy feature-icon"></i>
+                        <h3>Competitive Racing</h3>
+                        <p>Race against players worldwide and climb the leaderboards in our monthly typing
+                            championships.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-brain feature-icon"></i>
+                        <h3>AI-Powered Feedback</h3>
+                        <p>Receive personalized improvement suggestions based on your typing patterns and performance
+                            data.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Progress Tracking</h3>
+                        <p>Monitor your improvement over time with detailed statistics and performance graphs.</p>
+                    </div>
+                </div>
             </div>
-            
+        </section>
+
+        <!-- Monthly Championship Section -->
+        <section class="championship-info fade-in">
+            <div class="section-container">
+                <div class="championship-banner">
+                    <div class="championship-content">
+                        <h2 class="championship-title">
+                            <i class="fas fa-crown"></i>
+                            Monthly Typing Championship
+                        </h2>
+                        <p class="championship-desc">
+                            Join thousands of typists competing for the ultimate typing crown! Our monthly championship
+                            features multiple categories, exciting prizes, and global recognition.
+                        </p>
+                        <div class="championship-features">
+                            <div class="championship-feature">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Every Month</span>
+                            </div>
+                            <div class="championship-feature">
+                                <i class="fas fa-medal"></i>
+                                <span>Multiple Categories</span>
+                            </div>
+                            <div class="championship-feature">
+                                <i class="fas fa-gift"></i>
+                                <span>Exciting Prizes</span>
+                            </div>
+                        </div>
+                        <a href="#" class="championship-btn">
+                            <i class="fas fa-clock"></i>
+                            Coming Soon
+                        </a>
+                    </div>
+                    <div class="championship-visual">
+                        <i class="fas fa-trophy championship-trophy"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <footer class="site-footer fade-in">
         <div class="footer-content">
             <div class="footer-links">
@@ -372,26 +470,44 @@
 
             <div class="copyright">
                 © <span id="current-year"></span> Key Racer - By students for students
-                </div>
             </div>
-        </footer>
+        </div>
+    </footer>
+
+    <!-- Legal Links Footer -->
+    <div class="legal-footer"
+        style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(7, 11, 24, 0.9); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(0, 194, 255, 0.3); backdrop-filter: blur(10px);">
+        <div style="display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
+            <a href="privacy-policy.html"
+                style="color: #00FFDD; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-shield-alt" style="font-size: 0.8rem;"></i>
+                Privacy Policy
+            </a>
+            <span style="color: #555; font-size: 0.8rem;">|</span>
+            <a href="terms-conditions.html"
+                style="color: #FFC107; text-decoration: none; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fas fa-gavel" style="font-size: 0.8rem;"></i>
+                Terms & Conditions
+            </a>
+        </div>
+    </div>
 
     <script>
         // Preloader handling - executed as early as possible
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Remove preloader immediately after DOM is ready
             hidePreloader();
-            
+
             // Initialize other components with a slight delay to ensure UI is responsive
             setTimeout(initComponents, 50);
         });
-        
+
         // Also hide preloader if window fully loads
         window.addEventListener('load', hidePreloader);
-        
+
         // Hide preloader with fallback timeout
         setTimeout(hidePreloader, 1500); // Fallback after 1.5 seconds max
-        
+
         function hidePreloader() {
             const preloader = document.getElementById('preloader');
             if (preloader) {
@@ -404,11 +520,11 @@
                 }, 300);
             }
         }
-        
+
         function initComponents() {
             // Current year for copyright
             document.getElementById('current-year').textContent = new Date().getFullYear();
-            
+
             // Connect to database - ensure this is called after preloader is hidden
             if (window.typingDB) {
                 console.log('Database already initialized');
@@ -440,77 +556,77 @@
                     };
                 }
             }
-            
+
             // Initialize particles.js if available
             if (typeof particlesJS !== 'undefined') {
                 particlesJS('particles-js', {
-                  "particles": {
-                    "number": {
-                      "value": 120,
-                      "density": { "enable": true, "value_area": 900 }
+                    "particles": {
+                        "number": {
+                            "value": 120,
+                            "density": { "enable": true, "value_area": 900 }
+                        },
+                        "color": {
+                            "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"]
+                        },
+                        "shape": {
+                            "type": ["circle", "triangle", "edge"],
+                            "stroke": { "width": 0, "color": "#000000" },
+                            "polygon": { "nb_sides": 5 }
+                        },
+                        "opacity": {
+                            "value": 0.6,
+                            "random": true,
+                            "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false }
+                        },
+                        "size": {
+                            "value": 5,
+                            "random": true,
+                            "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
+                        },
+                        "line_linked": {
+                            "enable": true,
+                            "distance": 180,
+                            "color": "#00C2FF",
+                            "opacity": 0.5,
+                            "width": 1.5
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 2,
+                            "direction": "none",
+                            "random": true,
+                            "straight": false,
+                            "out_mode": "out",
+                            "bounce": false,
+                            "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
+                        }
                     },
-                    "color": {
-                      "value": ["#FFC700", "#FF4A4A", "#00FFDD", "#00C2FF"]
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": { "enable": true, "mode": "grab" },
+                            "onclick": { "enable": true, "mode": "push" },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
+                            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                            "repulse": { "distance": 200, "duration": 0.4 },
+                            "push": { "particles_nb": 6 },
+                            "remove": { "particles_nb": 2 }
+                        }
                     },
-                    "shape": {
-                      "type": ["circle", "triangle", "edge"],
-                      "stroke": { "width": 0, "color": "#000000" },
-                      "polygon": { "nb_sides": 5 }
-                    },
-                    "opacity": {
-                      "value": 0.6,
-                      "random": true,
-                      "anim": { "enable": true, "speed": 1.2, "opacity_min": 0.2, "sync": false }
-                    },
-                    "size": {
-                      "value": 5,
-                      "random": true,
-                      "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
-                    },
-                    "line_linked": {
-                      "enable": true,
-                      "distance": 180,
-                      "color": "#00C2FF",
-                      "opacity": 0.5,
-                      "width": 1.5
-                    },
-                    "move": {
-                      "enable": true,
-                      "speed": 2,
-                      "direction": "none",
-                      "random": true,
-                      "straight": false,
-                      "out_mode": "out",
-                      "bounce": false,
-                      "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
-                    }
-                  },
-                  "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                      "onhover": { "enable": true, "mode": "grab" },
-                      "onclick": { "enable": true, "mode": "push" },
-                      "resize": true
-                    },
-                    "modes": {
-                      "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } },
-                      "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
-                      "repulse": { "distance": 200, "duration": 0.4 },
-                      "push": { "particles_nb": 6 },
-                      "remove": { "particles_nb": 2 }
-                    }
-                  },
-                  "retina_detect": true
+                    "retina_detect": true
                 });
             }
-            
+
             // Challenge cards interaction
             const challengeCards = document.querySelectorAll('.challenge-card');
             challengeCards.forEach(card => {
-                card.addEventListener('click', function() {
+                card.addEventListener('click', function () {
                     challengeCards.forEach(c => c.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     // Show custom text input if custom track is selected
                     if (this.querySelector('.challenge-name').textContent.includes('Custom')) {
                         document.getElementById('custom-text-container').style.display = 'block';
@@ -519,33 +635,35 @@
                     }
                 });
             });
-            
+
             // Difficulty buttons interaction
             const difficultyBtns = document.querySelectorAll('.difficulty-btn');
             difficultyBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     difficultyBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                 });
             });
-            
+
             // Mobile navigation toggle
             const navToggle = document.querySelector('.nav-toggle');
             const mainNav = document.querySelector('.main-nav');
             if (navToggle && mainNav) {
-                navToggle.addEventListener('click', function() {
+                navToggle.addEventListener('click', function () {
                     mainNav.classList.toggle('show');
                 });
             }
         }
     </script>
-    
+
     <!-- Load CSS after critical rendering path -->
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/preloader.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+
     <!-- Load scripts at the end -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="scripts/preloader.js"></script>
@@ -561,4 +679,5 @@
     <script src="scripts/header-auth.js"></script>
     <script src="scripts/realtime-leaderboard.js?v=3"></script>
 </body>
+
 </html>

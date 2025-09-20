@@ -678,11 +678,21 @@
             </div>
         </main>
 
-        <footer style="text-align: left;">
-            <p>&copy; 2025 Key Racer - By students for students</p>
+        <footer class="site-footer fade-in">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="about.html" class="footer-link">About</a>
+                <a href="login.html" class="footer-link">Login</a>
+                <a href="leaderboard.html" class="footer-link">Championship</a>
+                <a href="typing-tips.html" class="footer-link">Tips</a>
+                <a href="lessons.html" class="footer-link">Training</a>
+            </div>
 
-        </footer>
-    </div>
+            <div class="copyright">
+                © <span id="current-year"></span> Key Racer - By students for students
+            </div>
+        </div>
+    </footer>
 
     <!-- Load CSS after critical rendering path -->
     <link rel="stylesheet" href="styles/style.css">
@@ -734,5 +744,8 @@
         },
         "retina_detect": true
       });
+      
+      // Set current year for copyright
+      document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 </html>

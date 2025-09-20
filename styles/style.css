@@ -809,6 +809,12 @@ header, .tutorial-header {
     backdrop-filter: blur(5px);
 }
 
+/* Hide sections when results are shown */
+body:has(.results-overlay[style*="display: flex"]) .why-typeracer,
+body:has(.results-overlay[style*="display: flex"]) .championship-info {
+    display: none !important;
+}
+
 .results-container {
     background-color: var(--results-bg);
     padding: 40px;
@@ -1946,4 +1952,322 @@ html, body {
     .padding-small { padding: 20px; }
     .padding-medium { padding: 40px; }
     .padding-large { padding: 60px; }
+}
+
+/* Why Type Racer Section */
+.why-typeracer {
+    margin: 60px 0;
+    padding: 40px 0;
+    background: linear-gradient(135deg, rgba(14, 30, 56, 0.3), rgba(7, 11, 24, 0.5));
+    border-radius: 20px;
+    border: 1px solid rgba(0, 194, 255, 0.1);
+}
+
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 50px;
+    font-family: var(--heading-font);
+    text-shadow: 0 0 20px rgba(0, 194, 255, 0.3);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.feature-card {
+    background: rgba(20, 36, 64, 0.6);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    border: 1px solid rgba(0, 194, 255, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-color);
+    box-shadow: 0 20px 40px rgba(0, 194, 255, 0.2);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    color: var(--primary-color);
+    transform: scale(1.1) rotate(5deg);
+}
+
+.feature-card h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-family: var(--heading-font);
+}
+
+.feature-card p {
+    color: rgba(225, 230, 242, 0.8);
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Monthly Championship Section */
+.championship-info {
+    margin: 60px 0;
+    padding: 0;
+}
+
+.championship-banner {
+    background: linear-gradient(135deg, var(--primary-color), #D01712, var(--secondary-color));
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 20px 50px rgba(228, 27, 23, 0.3);
+    border: 2px solid rgba(255, 199, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.championship-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 199, 0, 0.1) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.championship-content {
+    flex: 1;
+    z-index: 2;
+    position: relative;
+}
+
+.championship-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--highlight-color);
+    margin-bottom: 20px;
+    font-family: var(--heading-font);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-shadow: 0 0 20px rgba(255, 199, 0, 0.5);
+}
+
+.championship-title i {
+    font-size: 2.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.championship-desc {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.championship-features {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.championship-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.championship-feature i {
+    color: var(--highlight-color);
+    font-size: 1.2rem;
+}
+
+.championship-btn {
+    background: linear-gradient(135deg, var(--highlight-color), #FFB347);
+    color: var(--secondary-color);
+    padding: 15px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(255, 199, 0, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.championship-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(255, 199, 0, 0.6);
+    background: linear-gradient(135deg, #FFD700, var(--highlight-color));
+}
+
+.championship-visual {
+    flex: 0 0 auto;
+    z-index: 2;
+    position: relative;
+}
+
+.championship-trophy {
+    font-size: 8rem;
+    color: var(--highlight-color);
+    filter: drop-shadow(0 0 30px rgba(255, 199, 0, 0.7));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Responsive Design for New Sections */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .feature-card {
+        padding: 25px;
+    }
+    
+    .championship-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    
+    .championship-title {
+        font-size: 1.8rem;
+        justify-content: center;
+    }
+    
+    .championship-features {
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .championship-trophy {
+        font-size: 5rem;
+        margin-top: 20px;
+    }
+    
+    .championship-visual {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .why-typeracer {
+        margin: 40px 0;
+        padding: 30px 0;
+    }
+    
+    .section-container {
+        padding: 0 15px;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .feature-card {
+        padding: 20px;
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+    }
+    
+    .championship-title {
+        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .championship-title i {
+        font-size: 2rem;
+    }
+    
+    .championship-desc {
+        font-size: 1rem;
+    }
+    
+    .championship-features {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .championship-btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+    
+    .championship-trophy {
+        font-size: 4rem;
+    }
 }

@@ -5,6 +5,31 @@ const router = express.Router();
 const UserStats = require('../models/UserStats');
 const User = require('../models/User');
 
+// Clear demo/seeded leaderboard data (only users with 0 challenges completed)
+router.post('/coderacer-leaderboard/clear-demo-data', async (req, res) => {
+	try {
+		// Remove UserStats entries where challengesCompleted is 0 but totalPoints > 0 (demo data)
+		const result = await UserStats.deleteMany({
+			challengesCompleted: 0,
+			totalPoints: { $gt: 0 }
+		});
+		
+		// Reset totalPoints to 0 for users who have points but no completed challenges
+		const resetResult = await UserStats.updateMany(
+			{ challengesCompleted: 0, totalPoints: { $gt: 0 } },
+			{ $set: { totalPoints: 0 } }
+		);
+		
+		res.json({ 
+			success: true, 
+			message: `Cleared ${result.deletedCount} demo entries and reset ${resetResult.modifiedCount} user stats.` 
+		});
+	} catch (error) {
+		console.error('Error clearing demo data:', error);
+		res.status(500).json({ success: false, message: 'Server error.' });
+	}
+});
+
 // Submit coding challenge result
 router.post('/coderacer-leaderboard/submit', async (req, res) => {
 	console.log('[DIAGNOSTIC] POST /coderacer-leaderboard/submit called');
@@ -12,10 +37,19 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 	let responseSent = false;
 	try {
 		let { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
-		if ((!userId && !email && !googleId) || !pointsEarned || !attempts || !completionTime) {
+		
+		// Validate required fields
+		if ((!userId && !email && !googleId) || pointsEarned === undefined || !attempts || !completionTime) {
 			responseSent = true;
 			return res.status(400).json({ success: false, message: 'Missing required fields' });
 		}
+		
+		// Only award points if pointsEarned > 0 (successful completion)
+		if (pointsEarned <= 0) {
+			responseSent = true;
+			return res.json({ success: true, message: 'No points awarded for incomplete challenge.' });
+		}
+		
 		// If userId is a string like 'google_...' treat it as googleId
 		if (userId && typeof userId === 'string' && userId.startsWith('google_')) {
 			googleId = userId;
@@ -54,7 +88,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 		if (!stats) {
 			stats = new UserStats({ userId: userObjectId });
 		}
-		// Update stats
+		// Update stats only for successful completions
 		stats.challengesCompleted += 1;
 		stats.totalAttempts += attempts;
 		stats.totalPoints += pointsEarned;
@@ -67,7 +101,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 		stats.checkAndAwardBadges();
 		await stats.save();
 		responseSent = true;
-		res.json({ success: true, message: 'Challenge result saved.' });
+		res.json({ success: true, message: 'Challenge result saved.', pointsAwarded: pointsEarned });
 	} catch (error) {
 		console.error('[DIAGNOSTIC] Error in /coderacer-leaderboard/submit:', error);
 		if (!responseSent) {
@@ -81,7 +115,7 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 	try {
 		const { page = 1, limit = 50 } = req.query;
 		
-		// Get leaderboard data - only rank by total challenge points
+		// Get leaderboard data - only show users who have actually completed challenges
 		const leaderboardPipeline = [
 			{
 				$lookup: {
@@ -92,21 +126,24 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 				}
 			},
 			{ $unwind: '$user' },
-			// Filter out guest users
+			// Only show users who have completed at least one challenge AND have points
 			{ 
 				$match: { 
+					challengesCompleted: { $gt: 0 },
+					totalPoints: { $gt: 0 },
 					$nor: [
 						{ 'user.authMethod': 'local', 'user.password': 'guest' }
 					]
 				} 
 			},
-			// Sort only by total points (descending)
+			// Sort by total points (descending)
 			{ $sort: { totalPoints: -1 } },
 			{ $skip: (page - 1) * limit },
 			{ $limit: parseInt(limit) },
 			{
 				$project: {
 					totalPoints: 1,
+					challengesCompleted: 1,
 					'user.displayName': 1,
 					'user.username': 1
 				}
@@ -121,7 +158,8 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 				name: entry.user.displayName || entry.user.username || 'Player'
 			},
 			stats: {
-				totalPoints: entry.totalPoints || 0
+				totalPoints: entry.totalPoints || 0,
+				challengesCompleted: entry.challengesCompleted || 0
 			}
 		}));
 		res.json({ success: true, data: { leaderboard } });

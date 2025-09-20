@@ -228,11 +228,7 @@
             transform: none;
         }
 
-        .features-section {
-            padding: 4rem 2rem;
-            background: rgba(20, 27, 45, 0.7);
-            backdrop-filter: blur(10px);
-        }
+
 
         .features-title {
             text-align: center;
@@ -418,8 +414,6 @@
 
                 .features-section {
                     padding: 4rem 2rem;
-                    background: rgba(20, 27, 45, 0.7);
-                    backdrop-filter: blur(10px);
                 }
 
                 .features-title {
@@ -654,6 +648,22 @@
         </div>
     </section>
 
+    <footer class="site-footer fade-in">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="about.html" class="footer-link">About</a>
+                <a href="login.html" class="footer-link">Login</a>
+                <a href="coderacer-leaderboard.html" class="footer-link">Leaderboard</a>
+                <a href="typing-tips.html" class="footer-link">Tips</a>
+                <a href="lessons.html" class="footer-link">Training</a>
+            </div>
+
+            <div class="copyright">
+                © <span id="current-year"></span> Key Racer - By students for students
+            </div>
+        </div>
+    </footer>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
@@ -698,6 +708,9 @@
             },
             "retina_detect": true
         });
+        
+        // Set current year for copyright
+        document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 
     <!-- Legal Links Footer -->
