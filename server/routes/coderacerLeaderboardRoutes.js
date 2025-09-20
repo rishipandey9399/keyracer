@@ -75,7 +75,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 						displayName: guestName,
 						username: guestName,
 						password: 'guest_user',
-						authMethod: 'guest',
+						authMethod: 'local',
 						isVerified: true
 					};
 					const newUser = new User(newUserData);
