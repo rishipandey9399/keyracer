@@ -100,10 +100,8 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 		stats.averageCompletionTime =
 			((stats.averageCompletionTime * (stats.challengesCompleted - 1)) + completionTime) / stats.challengesCompleted;
 		stats.lastActivityDate = new Date();
-		// Advanced: update level, streak, badges
 		stats.level = stats.calculateLevel();
 		stats.updateStreak();
-		stats.checkAndAwardBadges();
 		await stats.save();
 		responseSent = true;
 		res.json({ success: true, message: 'Challenge result saved.', pointsAwarded: pointsEarned });
