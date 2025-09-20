@@ -64,8 +64,9 @@ app.use(helmet({
   contentSecurityPolicy: false // Disable for development, enable in production
 }));
 app.use(morgan('dev')); // Logging
-// Register leaderboard API routes under /api
+// Register CodeRacer leaderboard API routes under /api
 app.use('/api', coderacerLeaderboardRoutes);
+console.log('[SERVER] CodeRacer leaderboard routes registered');
 app.use(cookieParser()); // Parse cookies for auth
 
 // Diagnostic route to list all registered endpoints
@@ -202,6 +203,7 @@ app.use(express.static(path.join(__dirname, '../')));
 app.use('/api/auth', authRoutes);
 app.use('/api', challengeRoutes);
 app.use('/api', leaderboardRoutes);
+console.log('[SERVER] All API routes registered');
 
 // Add rate limiting for auth routes
 const authLimiter = rateLimit({

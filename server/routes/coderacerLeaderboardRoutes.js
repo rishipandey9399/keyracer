@@ -27,7 +27,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 	console.log('[DIAGNOSTIC] Request body:', req.body);
 	let responseSent = false;
 	try {
-		let { userId, pointsEarned, attempts, completionTime, email, googleId } = req.body;
+		let { userId, pointsEarned, attempts, completionTime, email, googleId, createGuestUser } = req.body;
 		
 		// Validate required fields
 		if ((!userId && !email && !googleId) || pointsEarned === undefined || !attempts || !completionTime) {
@@ -55,7 +55,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 				user = await User.findOne({ email });
 			}
 			if (!user) {
-				// Only auto-create user for Google sign-in
+				// Auto-create user for Google sign-in or guest users
 				if (googleId) {
 					const newUserData = {
 						googleId: googleId,
@@ -67,10 +67,23 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 					const newUser = new User(newUserData);
 					await newUser.save();
 					user = newUser;
+				} else if (createGuestUser && email) {
+					// Create guest user for challenge completion
+					const guestName = email.split('@')[0];
+					const newUserData = {
+						email: email,
+						displayName: guestName,
+						username: guestName,
+						password: 'guest_user',
+						authMethod: 'guest',
+						isVerified: true
+					};
+					const newUser = new User(newUserData);
+					await newUser.save();
+					user = newUser;
 				} else {
-					// Do not auto-create local users in leaderboard submission
 					responseSent = true;
-					return res.status(404).json({ success: false, message: 'User not found and cannot be auto-created without Google ID.' });
+					return res.status(404).json({ success: false, message: 'User not found.' });
 				}
 			}
 			userObjectId = user._id;

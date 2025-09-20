@@ -1894,11 +1894,10 @@
                 if (userType === 'google' && userData.sub) {
                     submissionData.googleId = userData.sub;
                     submissionData.email = userEmail || userData.email;
-                } else if (userEmail) {
-                    submissionData.email = userEmail;
                 } else {
-                    // Fallback: try to find user by display name
-                    submissionData.email = `${currentUser.toLowerCase().replace(/\s+/g, '')}@keyracer.local`;
+                    // For local users, create a guest user entry
+                    submissionData.email = `${currentUser.toLowerCase().replace(/\s+/g, '')}@guest.keyracer`;
+                    submissionData.createGuestUser = true;
                 }
                 
                 console.log('Submitting to coderacer leaderboard:', submissionData);
