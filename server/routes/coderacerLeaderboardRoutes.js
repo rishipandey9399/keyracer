@@ -27,7 +27,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 	console.log('[DIAGNOSTIC] Request body:', req.body);
 	let responseSent = false;
 	try {
-		let { userId, pointsEarned, attempts, completionTime, email, googleId, createGuestUser } = req.body;
+		let { userId, pointsEarned, attempts, completionTime, email, googleId, createGuestUser, displayName } = req.body;
 		
 		// Validate required fields
 		if ((!userId && !email && !googleId) || pointsEarned === undefined || !attempts || !completionTime) {
@@ -69,11 +69,12 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 					user = newUser;
 				} else if (createGuestUser && email) {
 					// Create guest user for challenge completion
-					const guestName = email.split('@')[0];
+					const userName = displayName || email.split('@')[0];
+					const uniqueUsername = `${userName.toLowerCase().replace(/\s+/g, '')}_${Date.now()}`;
 					const newUserData = {
 						email: email,
-						displayName: guestName,
-						username: guestName,
+						displayName: userName,
+						username: uniqueUsername,
 						password: 'guest_user',
 						authMethod: 'local',
 						isVerified: true

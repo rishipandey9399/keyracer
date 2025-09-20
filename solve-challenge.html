@@ -1898,6 +1898,7 @@
                     // For local users, create a guest user entry
                     submissionData.email = `${currentUser.toLowerCase().replace(/\s+/g, '')}@guest.keyracer`;
                     submissionData.createGuestUser = true;
+                    submissionData.displayName = currentUser;
                 }
                 
                 console.log('Submitting to coderacer leaderboard:', submissionData);
