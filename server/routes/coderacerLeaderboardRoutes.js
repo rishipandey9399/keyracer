@@ -2,30 +2,21 @@
 const express = require('express');
 console.log('[DIAGNOSTIC] coderacerLeaderboardRoutes.js loaded');
 const router = express.Router();
-const UserStats = require('../models/UserStats');
+const CoderacerStats = require('../models/CoderacerStats');
 const User = require('../models/User');
 
-// Clear demo/seeded leaderboard data (only users with 0 challenges completed)
+// Clear all CodeRacer leaderboard data
 router.post('/coderacer-leaderboard/clear-demo-data', async (req, res) => {
 	try {
-		// Remove UserStats entries where challengesCompleted is 0 but totalPoints > 0 (demo data)
-		const result = await UserStats.deleteMany({
-			challengesCompleted: 0,
-			totalPoints: { $gt: 0 }
-		});
-		
-		// Reset totalPoints to 0 for users who have points but no completed challenges
-		const resetResult = await UserStats.updateMany(
-			{ challengesCompleted: 0, totalPoints: { $gt: 0 } },
-			{ $set: { totalPoints: 0 } }
-		);
+		// Delete all CoderacerStats entries
+		const result = await CoderacerStats.deleteMany({});
 		
 		res.json({ 
 			success: true, 
-			message: `Cleared ${result.deletedCount} demo entries and reset ${resetResult.modifiedCount} user stats.` 
+			message: `Cleared ${result.deletedCount} CodeRacer entries. Leaderboard is now clean.` 
 		});
 	} catch (error) {
-		console.error('Error clearing demo data:', error);
+		console.error('Error clearing CodeRacer data:', error);
 		res.status(500).json({ success: false, message: 'Server error.' });
 	}
 });
@@ -84,9 +75,9 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 			}
 			userObjectId = user._id;
 		}
-		let stats = await UserStats.findOne({ userId: userObjectId });
+		let stats = await CoderacerStats.findOne({ userId: userObjectId });
 		if (!stats) {
-			stats = new UserStats({ userId: userObjectId });
+			stats = new CoderacerStats({ userId: userObjectId });
 		}
 		// Update stats only for successful completions
 		stats.challengesCompleted += 1;
@@ -115,7 +106,7 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 	try {
 		const { page = 1, limit = 50 } = req.query;
 		
-		// Get leaderboard data - only show users who have actually completed challenges
+		// Get leaderboard data from CoderacerStats
 		const leaderboardPipeline = [
 			{
 				$lookup: {
@@ -126,14 +117,11 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 				}
 			},
 			{ $unwind: '$user' },
-			// Only show users who have completed at least one challenge AND have points
+			// Only show users who have completed challenges
 			{ 
 				$match: { 
 					challengesCompleted: { $gt: 0 },
-					totalPoints: { $gt: 0 },
-					$nor: [
-						{ 'user.authMethod': 'local', 'user.password': 'guest' }
-					]
+					totalPoints: { $gt: 0 }
 				} 
 			},
 			// Sort by total points (descending)
@@ -150,7 +138,7 @@ router.get('/coderacer-leaderboard', async (req, res) => {
 			}
 		];
 		
-		const stats = await UserStats.aggregate(leaderboardPipeline);
+		const stats = await CoderacerStats.aggregate(leaderboardPipeline);
 		
 		const leaderboard = stats.map((entry, idx) => ({
 			rank: (page - 1) * limit + idx + 1,
