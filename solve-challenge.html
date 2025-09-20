@@ -1883,11 +1883,18 @@
                 
                 console.log(`Challenge ${challengeId}: First completion = ${isFirstCompletion}, Points = ${pointsEarned}`);
                 
+                // Save completed challenge to localStorage
+                if (isFirstCompletion) {
+                    completedChallenges.push(challengeId.toString());
+                    localStorage.setItem('challengeStats', JSON.stringify({ completedChallenges }));
+                }
+                
                 // Prepare submission data
                 let submissionData = {
                     pointsEarned,
-                    attempts: 1, // First successful attempt
-                    completionTime
+                    attempts: 1,
+                    completionTime,
+                    challengeId: challengeId.toString()
                 };
                 
                 // Add user identification based on login type

@@ -48,7 +48,12 @@ const coderacerStatsSchema = new mongoose.Schema({
   longestStreak: {
     type: Number,
     default: 0
-  }
+  },
+  
+  // Track completed challenges to prevent duplicate points
+  completedChallenges: [{
+    type: String
+  }]
 }, {
   timestamps: true
 });

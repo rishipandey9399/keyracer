@@ -27,7 +27,7 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 	console.log('[DIAGNOSTIC] Request body:', req.body);
 	let responseSent = false;
 	try {
-		let { userId, pointsEarned, attempts, completionTime, email, googleId, createGuestUser, displayName } = req.body;
+		let { userId, pointsEarned, attempts, completionTime, email, googleId, createGuestUser, displayName, challengeId } = req.body;
 		
 		// Validate required fields
 		if ((!userId && !email && !googleId) || pointsEarned === undefined || !attempts || !completionTime) {
@@ -93,12 +93,25 @@ router.post('/coderacer-leaderboard/submit', async (req, res) => {
 		if (!stats) {
 			stats = new CoderacerStats({ userId: userObjectId });
 		}
+		// Check if user already completed this challenge
+		if (challengeId && stats.completedChallenges && stats.completedChallenges.includes(challengeId)) {
+			responseSent = true;
+			return res.json({ success: true, message: 'Challenge already completed. No additional points awarded.', pointsAwarded: 0 });
+		}
+		
 		// Update stats only for successful completions
-		stats.challengesCompleted += 1;
+		if (pointsEarned > 0) {
+			stats.challengesCompleted += 1;
+			stats.totalPoints += pointsEarned;
+			// Track completed challenges
+			if (!stats.completedChallenges) stats.completedChallenges = [];
+			if (challengeId && !stats.completedChallenges.includes(challengeId)) {
+				stats.completedChallenges.push(challengeId);
+			}
+		}
 		stats.totalAttempts += attempts;
-		stats.totalPoints += pointsEarned;
 		stats.averageCompletionTime =
-			((stats.averageCompletionTime * (stats.challengesCompleted - 1)) + completionTime) / stats.challengesCompleted;
+			((stats.averageCompletionTime * Math.max(1, stats.challengesCompleted - 1)) + completionTime) / Math.max(1, stats.challengesCompleted);
 		stats.lastActivityDate = new Date();
 		stats.level = stats.calculateLevel();
 		stats.updateStreak();
