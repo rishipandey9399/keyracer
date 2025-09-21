@@ -1366,11 +1366,18 @@
         function enterFullscreen() {
             const elem = document.documentElement;
             if (elem.requestFullscreen) {
-                elem.requestFullscreen();
+                elem.requestFullscreen().catch(err => {
+                    console.log('Fullscreen request failed:', err);
+                });
             } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
             } else if (elem.msRequestFullscreen) {
                 elem.msRequestFullscreen();
+            } else {
+                console.log('Fullscreen API not supported');
+                alert('Your browser does not support fullscreen mode. Please use a modern browser for security compliance.');
             }
         }
         
@@ -1379,11 +1386,8 @@
             
             if (!isFullscreenActive) {
                 setTimeout(() => {
-                    if (confirm('Fullscreen mode is required for the hackathon. Click OK to continue or Cancel to exit.')) {
-                        enterFullscreen();
-                    } else {
-                        window.location.href = 'hackathon.html';
-                    }
+                    alert('Fullscreen mode is required for security. Re-entering fullscreen mode automatically.');
+                    enterFullscreen();
                 }, 100);
             }
         }
@@ -1419,8 +1423,26 @@
         // Monitor fullscreen and visibility changes
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
         document.addEventListener('msfullscreenchange', handleFullscreenChange);
         document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        // Additional check when page becomes visible
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && !isFullscreenActive) {
+                setTimeout(() => {
+                    enterFullscreen();
+                }, 500);
+            }
+        });
+        
+        // Check fullscreen status periodically
+        setInterval(() => {
+            const currentFullscreenState = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+            if (!currentFullscreenState && !document.hidden) {
+                enterFullscreen();
+            }
+        }, 3000);
         
         // Preloader animation
         document.addEventListener('DOMContentLoaded', function() {
@@ -1816,15 +1838,60 @@
             const timerInterval = setInterval(updateTimer, 1000);
             updateTimer(); // Initialize immediately
             
-            // Enter fullscreen mode on page load
+            // Enter fullscreen mode automatically on page load
+            // First try immediate fullscreen
             setTimeout(() => {
-                if (confirm('This hackathon requires fullscreen mode for security. Click OK to enter fullscreen mode.')) {
-                    enterFullscreen();
-                } else {
-                    alert('Fullscreen mode is required to participate in this hackathon.');
-                    window.location.href = 'hackathon.html';
+                enterFullscreen();
+            }, 1000);
+            
+            // Backup: Show modal requiring user interaction for fullscreen
+            setTimeout(() => {
+                if (!isFullscreenActive) {
+                    const fullscreenModal = document.createElement('div');
+                    fullscreenModal.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.9);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 10000;
+                        color: white;
+                        font-family: 'Orbitron', sans-serif;
+                    `;
+                    
+                    fullscreenModal.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 15px; border: 2px solid var(--accent-color);">
+                            <h2 style="color: var(--accent-color); margin-bottom: 20px;">🔒 Security Mode Required</h2>
+                            <p style="margin-bottom: 30px; font-size: 1.1rem;">This hackathon requires fullscreen mode for security and fair play.</p>
+                            <button id="enterFullscreenBtn" style="
+                                background: linear-gradient(90deg, var(--participant-color) 0%, var(--secondary-color) 100%);
+                                border: none;
+                                color: white;
+                                padding: 15px 30px;
+                                font-size: 1.1rem;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-family: 'Orbitron', sans-serif;
+                                font-weight: 600;
+                            ">Enter Fullscreen Mode</button>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(fullscreenModal);
+                    
+                    document.getElementById('enterFullscreenBtn').addEventListener('click', () => {
+                        enterFullscreen();
+                        document.body.removeChild(fullscreenModal);
+                        setTimeout(() => {
+                            alert('You are now in fullscreen mode. Tab switching and fullscreen exits will be monitored.');
+                        }, 500);
+                    });
                 }
-            }, 2000);
+            }, 3000);
             
             // Set participant name from localStorage
             const participantName = localStorage.getItem('participantName');
