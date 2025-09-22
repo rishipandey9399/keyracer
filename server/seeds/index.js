@@ -1,5 +1,6 @@
 const { seedChallenges } = require('./seedChallenges');
 const { seedUserData } = require('./seedUserData');
+const seedAptitudeQuestions = require('./seedAptitudeQuestions');
 
 async function seedAll() {
   try {
@@ -10,8 +11,13 @@ async function seedAll() {
     await seedChallenges();
     console.log('✅ Challenge seeding completed\n');
     
-    // Step 2: Seed user data (depends on challenges)
-    console.log('Step 2: Seeding user data...');
+    // Step 2: Seed aptitude questions
+    console.log('Step 2: Seeding aptitude questions...');
+    await seedAptitudeQuestions();
+    console.log('✅ Aptitude questions seeding completed\n');
+    
+    // Step 3: Seed user data (depends on challenges)
+    console.log('Step 3: Seeding user data...');
     await seedUserData();
     console.log('✅ User data seeding completed\n');
     

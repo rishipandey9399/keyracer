@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptitude Leaderboard | KeyRacer</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/aptitude.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="tutorial-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <a href="preference.html">
+                    <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="preference.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="aptitude-learn.html" class="nav-item"><i class="fas fa-book"></i> Learn</a>
+                <a href="aptitude-challenges.html" class="nav-item"><i class="fas fa-brain"></i> Challenges</a>
+                <a href="aptitude-leaderboard.html" class="nav-item active"><i class="fas fa-trophy"></i> Leaderboard</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="aptitude-main" style="max-width: 1200px; margin: 0 auto;">
+            <div class="content-header">
+                <h1 class="content-title">
+                    <i class="fas fa-trophy"></i>
+                    Aptitude Leaderboard
+                </h1>
+            </div>
+
+            <div class="leaderboard-filters">
+                <button class="filter-btn active" data-period="all-time">
+                    <i class="fas fa-infinity"></i>
+                    All Time
+                </button>
+                <button class="filter-btn" data-period="weekly">
+                    <i class="fas fa-calendar-week"></i>
+                    Weekly
+                </button>
+                <button class="filter-btn" data-period="daily">
+                    <i class="fas fa-calendar-day"></i>
+                    Daily
+                </button>
+            </div>
+
+            <div class="leaderboard-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-medal"></i> Rank</th>
+                            <th><i class="fas fa-user"></i> Name</th>
+                            <th><i class="fas fa-star"></i> Score</th>
+                            <th><i class="fas fa-clock"></i> Time</th>
+                            <th><i class="fas fa-percentage"></i> Accuracy</th>
+                            <th><i class="fas fa-award"></i> Badges</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-color);">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                                <br>
+                                Loading leaderboard...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="badges-info" style="margin-top: 40px; padding: 30px; background: var(--card-bg); border-radius: 16px; border: 1px solid rgba(0, 194, 255, 0.2);">
+                <h3 style="color: var(--accent-color); margin-bottom: 20px; text-align: center;">
+                    <i class="fas fa-info-circle"></i>
+                    Badge Information
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="text-align: center; padding: 20px; background: rgba(7, 11, 24, 0.7); border-radius: 12px;">
+                        <div class="badge" style="margin-bottom: 10px;">
+                            <i class="fas fa-medal"></i>
+                            Math Whiz
+                        </div>
+                        <p style="color: var(--text-color); font-size: 0.9rem;">Achieve 90%+ accuracy in any test</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: rgba(7, 11, 24, 0.7); border-radius: 12px;">
+                        <div class="badge" style="margin-bottom: 10px;">
+                            <i class="fas fa-medal"></i>
+                            Fast Thinker
+                        </div>
+                        <p style="color: var(--text-color); font-size: 0.9rem;">Complete test in under 5 minutes</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: rgba(7, 11, 24, 0.7); border-radius: 12px;">
+                        <div class="badge" style="margin-bottom: 10px;">
+                            <i class="fas fa-medal"></i>
+                            Puzzle Master
+                        </div>
+                        <p style="color: var(--text-color); font-size: 0.9rem;">Get 100% accuracy in any test</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="about.html" class="footer-link">About</a>
+                <a href="login.html" class="footer-link">Login</a>
+                <a href="aptitude-challenges.html" class="footer-link">Challenges</a>
+                <a href="typing-tips.html" class="footer-link">Tips</a>
+            </div>
+            <div class="copyright">
+                © <span id="current-year"></span> Key Racer - Aptitude & Reasoning
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/aptitude.js"></script>
+    <script src="scripts/header-auth.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Load leaderboard on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                window.aptitudeManager.loadLeaderboard('all-time');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

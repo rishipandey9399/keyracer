@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptitude Challenges | KeyRacer</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/aptitude.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="tutorial-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <a href="preference.html">
+                    <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="preference.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="aptitude-learn.html" class="nav-item"><i class="fas fa-book"></i> Learn</a>
+                <a href="aptitude-challenges.html" class="nav-item active"><i class="fas fa-brain"></i> Challenges</a>
+                <a href="aptitude-leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</a>
+            </nav>
+            <div class="header-actions">
+                <div class="user-section">
+                    <a href="login.html" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="#" class="logout-btn" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="aptitude-container">
+            <aside class="aptitude-sidebar">
+                <h2 class="sidebar-title">Select Topic</h2>
+                <ul class="topic-list">
+                    <li class="topic-item">
+                        <a href="#" class="topic-link active" data-topic="quant">
+                            <i class="fas fa-calculator topic-icon"></i>
+                            Quantitative
+                        </a>
+                    </li>
+                    <li class="topic-item">
+                        <a href="#" class="topic-link" data-topic="logical-reasoning">
+                            <i class="fas fa-puzzle-piece topic-icon"></i>
+                            Logical Reasoning
+                        </a>
+                    </li>
+                    <li class="topic-item">
+                        <a href="#" class="topic-link" data-topic="verbal">
+                            <i class="fas fa-language topic-icon"></i>
+                            Verbal Ability
+                        </a>
+                    </li>
+                    <li class="topic-item">
+                        <a href="#" class="topic-link" data-topic="puzzles">
+                            <i class="fas fa-lightbulb topic-icon"></i>
+                            Puzzles
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="aptitude-main">
+                <div class="challenge-header">
+                    <h1 class="content-title">Aptitude Challenge</h1>
+                    <div class="timer-controls">
+                        <button class="timer-btn" data-duration="5">5 min</button>
+                        <button class="timer-btn active" data-duration="10">10 min</button>
+                        <button class="timer-btn" data-duration="20">20 min</button>
+                        <div class="timer-display">10:00</div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-header">
+                        <span class="question-number">Question 1 of 10</span>
+                        <span class="question-difficulty difficulty-medium">MEDIUM</span>
+                    </div>
+                    
+                    <div class="question-text">
+                        Select a topic from the sidebar to start the challenge.
+                    </div>
+                    
+                    <div class="answer-container">
+                        <!-- Options or text input will be inserted here -->
+                    </div>
+                </div>
+
+                <div class="navigation-controls">
+                    <button class="nav-btn prev-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    
+                    <button class="submit-btn">
+                        <i class="fas fa-check"></i>
+                        Submit Test
+                    </button>
+                    
+                    <button class="nav-btn next-btn">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="about.html" class="footer-link">About</a>
+                <a href="login.html" class="footer-link">Login</a>
+                <a href="aptitude-leaderboard.html" class="footer-link">Leaderboard</a>
+                <a href="typing-tips.html" class="footer-link">Tips</a>
+            </div>
+            <div class="copyright">
+                © <span id="current-year"></span> Key Racer - Aptitude & Reasoning
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/aptitude.js"></script>
+    <script src="scripts/header-auth.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Load questions when topic is selected
+        document.querySelectorAll('.topic-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const topic = e.currentTarget.dataset.topic;
+                window.aptitudeManager.loadQuestions(topic);
+            });
+        });
+    </script>
+</body>
+</html>
