@@ -103,7 +103,7 @@ if (process.env.NODE_ENV === 'production') {
         styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
         fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
         imgSrc: ["'self'", "data:", "https:"],
-        connectSrc: ["'self'"]
+        connectSrc: ["'self'", "https://cdnjs.cloudflare.com"]
       }
     },
     crossOriginEmbedderPolicy: false
