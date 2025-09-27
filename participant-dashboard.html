@@ -1360,6 +1360,7 @@
         
         // Anti-cheating: Tab monitoring and fullscreen
         let tabSwitchCount = 0;
+        let fullscreenExitCount = 0;
         
         function enterFullscreen() {
             const elem = document.documentElement;
@@ -1372,6 +1373,105 @@
             } else if (elem.msRequestFullscreen) {
                 elem.msRequestFullscreen();
             }
+        }
+        
+        function handleFullscreenExit() {
+            const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+            
+            if (!isFullscreen) {
+                fullscreenExitCount++;
+                
+                if (fullscreenExitCount === 1) {
+                    showWarningModal('⚠️ Warning!', 'You have exited fullscreen mode. This is your first warning. Please return to fullscreen mode to continue.');
+                } else if (fullscreenExitCount >= 2) {
+                    showDisqualificationModal();
+                }
+            }
+        }
+        
+        function showWarningModal(title, message) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                color: white;
+                font-family: 'Orbitron', sans-serif;
+            `;
+            
+            modal.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 15px; border: 2px solid var(--danger-color); max-width: 500px;">
+                    <h2 style="color: var(--danger-color); margin-bottom: 20px;">${title}</h2>
+                    <p style="margin-bottom: 30px; font-size: 1.1rem; line-height: 1.5;">${message}</p>
+                    <button id="returnFullscreenBtn" style="
+                        background: linear-gradient(90deg, var(--participant-color) 0%, var(--secondary-color) 100%);
+                        border: none;
+                        color: white;
+                        padding: 15px 30px;
+                        font-size: 1.1rem;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-family: 'Orbitron', sans-serif;
+                        font-weight: 600;
+                    ">Return to Fullscreen</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            document.getElementById('returnFullscreenBtn').addEventListener('click', () => {
+                enterFullscreen();
+                document.body.removeChild(modal);
+            });
+        }
+        
+        function showDisqualificationModal() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                color: white;
+                font-family: 'Orbitron', sans-serif;
+            `;
+            
+            modal.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 15px; border: 2px solid var(--danger-color); max-width: 500px;">
+                    <h2 style="color: var(--danger-color); margin-bottom: 20px;">🚫 DISQUALIFIED</h2>
+                    <p style="margin-bottom: 30px; font-size: 1.1rem; line-height: 1.5;">You have exited fullscreen mode twice. You are now disqualified from this hackathon.</p>
+                    <button id="exitHackathonBtn" style="
+                        background: var(--danger-color);
+                        border: none;
+                        color: white;
+                        padding: 15px 30px;
+                        font-size: 1.1rem;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-family: 'Orbitron', sans-serif;
+                        font-weight: 600;
+                    ">Exit Hackathon</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            document.getElementById('exitHackathonBtn').addEventListener('click', () => {
+                window.location.href = 'hackathon.html';
+            });
         }
         
         function handleVisibilityChange() {
@@ -1404,6 +1504,12 @@
         
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        // Monitor fullscreen changes
+        document.addEventListener('fullscreenchange', handleFullscreenExit);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenExit);
+        document.addEventListener('mozfullscreenchange', handleFullscreenExit);
+        document.addEventListener('msfullscreenchange', handleFullscreenExit);
         
 
         
@@ -1875,10 +1981,53 @@
             const participantId = localStorage.getItem('participantId') || 'participant_' + Date.now();
             localStorage.setItem('participantId', participantId);
             
-            // Enter fullscreen mode on page load
+            // Show fullscreen modal after page load
             setTimeout(() => {
-                enterFullscreen();
-            }, 1000);
+                showFullscreenModal();
+            }, 2000);
+            
+            function showFullscreenModal() {
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.95);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                    color: white;
+                    font-family: 'Orbitron', sans-serif;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 15px; border: 2px solid var(--accent-color); max-width: 500px;">
+                        <h2 style="color: var(--accent-color); margin-bottom: 20px;">🔒 Security Mode Required</h2>
+                        <p style="margin-bottom: 30px; font-size: 1.1rem; line-height: 1.5;">This hackathon requires fullscreen mode for security and fair play. Tab switching will be monitored.</p>
+                        <button id="enterFullscreenBtn" style="
+                            background: linear-gradient(90deg, var(--participant-color) 0%, var(--secondary-color) 100%);
+                            border: none;
+                            color: white;
+                            padding: 15px 30px;
+                            font-size: 1.1rem;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-family: 'Orbitron', sans-serif;
+                            font-weight: 600;
+                        ">Enter Fullscreen Mode</button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                document.getElementById('enterFullscreenBtn').addEventListener('click', () => {
+                    enterFullscreen();
+                    document.body.removeChild(modal);
+                });
+            }
             
             // Piston API configuration
             const PISTON_API = 'https://emkc.org/api/v2/piston/execute';
