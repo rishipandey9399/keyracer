@@ -1382,13 +1382,6 @@
         
         function handleFullscreenChange() {
             isFullscreenActive = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
-            
-            if (!isFullscreenActive) {
-                setTimeout(() => {
-                    alert('Fullscreen mode is required for security. Re-entering fullscreen mode automatically.');
-                    enterFullscreen();
-                }, 100);
-            }
         }
         
         function handleVisibilityChange() {
@@ -1426,22 +1419,7 @@
         document.addEventListener('msfullscreenchange', handleFullscreenChange);
         document.addEventListener('visibilitychange', handleVisibilityChange);
         
-        // Additional check when page becomes visible
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden && !isFullscreenActive) {
-                setTimeout(() => {
-                    enterFullscreen();
-                }, 500);
-            }
-        });
-        
-        // Check fullscreen status periodically
-        setInterval(() => {
-            const currentFullscreenState = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-            if (!currentFullscreenState && !document.hidden) {
-                enterFullscreen();
-            }
-        }, 3000);
+
         
         // Preloader animation
         document.addEventListener('DOMContentLoaded', function() {
