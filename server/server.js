@@ -8,6 +8,7 @@ console.log("EMAIL_FROM_NAME:", process.env.EMAIL_FROM_NAME);
 console.log("BREVO_SMTP_HOST:", process.env.BREVO_SMTP_HOST ? "Set" : "Not Set");
 console.log("BREVO_SMTP_USER:", process.env.BREVO_SMTP_USER ? "Set" : "Not Set");
 console.log("BREVO_SMTP_PASSWORD:", process.env.BREVO_SMTP_PASSWORD ? "Set (not displayed)" : "Not Set");
+console.log("GEMINI_API_KEY:", process.env.GEMINI_API_KEY ? "Set (not displayed)" : "Not Set");
 
 const express = require('express');
 const cors = require('cors');
