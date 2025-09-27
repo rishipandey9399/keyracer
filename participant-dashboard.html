@@ -1358,30 +1358,20 @@
         // Listen for problem updates
         window.addEventListener('problemsUpdated', loadAvailableProblems);
         
-        // Anti-cheating: Fullscreen and tab monitoring
+        // Anti-cheating: Tab monitoring and fullscreen
         let tabSwitchCount = 0;
-        let isFullscreenActive = false;
         
         function enterFullscreen() {
             const elem = document.documentElement;
             if (elem.requestFullscreen) {
-                elem.requestFullscreen().catch(err => {
-                    console.log('Fullscreen request failed:', err);
-                });
+                elem.requestFullscreen();
             } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen();
             } else if (elem.mozRequestFullScreen) {
                 elem.mozRequestFullScreen();
             } else if (elem.msRequestFullscreen) {
                 elem.msRequestFullscreen();
-            } else {
-                console.log('Fullscreen API not supported');
-                alert('Your browser does not support fullscreen mode. Please use a modern browser for security compliance.');
             }
-        }
-        
-        function handleFullscreenChange() {
-            isFullscreenActive = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
         }
         
         function handleVisibilityChange() {
@@ -1412,11 +1402,7 @@
             return false;
         });
         
-        // Monitor fullscreen and visibility changes
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
         document.addEventListener('visibilitychange', handleVisibilityChange);
         
 
@@ -1815,60 +1801,7 @@
             const timerInterval = setInterval(updateTimer, 1000);
             updateTimer(); // Initialize immediately
             
-            // Enter fullscreen mode automatically on page load
-            // First try immediate fullscreen
-            setTimeout(() => {
-                enterFullscreen();
-            }, 1000);
-            
-            // Backup: Show modal requiring user interaction for fullscreen
-            setTimeout(() => {
-                if (!isFullscreenActive) {
-                    const fullscreenModal = document.createElement('div');
-                    fullscreenModal.style.cssText = `
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(0, 0, 0, 0.9);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        z-index: 10000;
-                        color: white;
-                        font-family: 'Orbitron', sans-serif;
-                    `;
-                    
-                    fullscreenModal.innerHTML = `
-                        <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 15px; border: 2px solid var(--accent-color);">
-                            <h2 style="color: var(--accent-color); margin-bottom: 20px;">🔒 Security Mode Required</h2>
-                            <p style="margin-bottom: 30px; font-size: 1.1rem;">This hackathon requires fullscreen mode for security and fair play.</p>
-                            <button id="enterFullscreenBtn" style="
-                                background: linear-gradient(90deg, var(--participant-color) 0%, var(--secondary-color) 100%);
-                                border: none;
-                                color: white;
-                                padding: 15px 30px;
-                                font-size: 1.1rem;
-                                border-radius: 8px;
-                                cursor: pointer;
-                                font-family: 'Orbitron', sans-serif;
-                                font-weight: 600;
-                            ">Enter Fullscreen Mode</button>
-                        </div>
-                    `;
-                    
-                    document.body.appendChild(fullscreenModal);
-                    
-                    document.getElementById('enterFullscreenBtn').addEventListener('click', () => {
-                        enterFullscreen();
-                        document.body.removeChild(fullscreenModal);
-                        setTimeout(() => {
-                            alert('You are now in fullscreen mode. Tab switching and fullscreen exits will be monitored.');
-                        }, 500);
-                    });
-                }
-            }, 3000);
+
             
             // Set participant name from localStorage
             const participantName = localStorage.getItem('participantName');
@@ -1941,6 +1874,11 @@
             // Initialize participant ID early
             const participantId = localStorage.getItem('participantId') || 'participant_' + Date.now();
             localStorage.setItem('participantId', participantId);
+            
+            // Enter fullscreen mode on page load
+            setTimeout(() => {
+                enterFullscreen();
+            }, 1000);
             
             // Piston API configuration
             const PISTON_API = 'https://emkc.org/api/v2/piston/execute';
