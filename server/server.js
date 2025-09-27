@@ -33,9 +33,11 @@ const challengeRoutes = require('./routes/challengeRoutes');
 const leaderboardRoutes = require('./routes/leaderboardRoutes');
 const coderacerLeaderboardRoutes = require('./routes/coderacerLeaderboardRoutes');
 const aptitudeRoutes = require('./routes/aptitudeRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 // Import middleware
 const { authenticate } = require('./middleware/authMiddleware');
+const monitoringService = require('./utils/monitoring');
 
 // Create Express app
 const app = express();
@@ -49,11 +51,40 @@ connectDB().then(connected => {
   }
 });
 
-// Global request logger for diagnostics
+// Request logging and monitoring
 app.use((req, res, next) => {
-  console.log(`[GLOBAL LOG] ${req.method} ${req.originalUrl}`);
+  monitoringService.incrementRequests();
+  
+  if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REQUEST_LOGGING === 'true') {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} - ${req.ip}`);
+  }
+  
+  // Track errors
+  const originalSend = res.send;
+  res.send = function(data) {
+    if (res.statusCode >= 400) {
+      monitoringService.incrementErrors();
+    }
+    originalSend.call(this, data);
+  };
+  
   next();
 });
+
+// Security middleware for production
+if (process.env.NODE_ENV === 'production') {
+  // Trust proxy for accurate IP addresses
+  app.set('trust proxy', 1);
+  
+  // Additional security headers
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -61,9 +92,26 @@ app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN : true,
   credentials: true
 }));
-app.use(helmet({
-  contentSecurityPolicy: false // Disable for development, enable in production
-}));
+// Production security configuration
+if (process.env.NODE_ENV === 'production') {
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+        fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+        imgSrc: ["'self'", "data:", "https:"],
+        connectSrc: ["'self'"]
+      }
+    },
+    crossOriginEmbedderPolicy: false
+  }));
+} else {
+  app.use(helmet({
+    contentSecurityPolicy: false
+  }));
+}
 app.use(morgan('dev')); // Logging
 // Register CodeRacer leaderboard API routes under /api
 app.use('/api', coderacerLeaderboardRoutes);
@@ -205,19 +253,36 @@ app.use('/api/auth', authRoutes);
 app.use('/api', challengeRoutes);
 app.use('/api', leaderboardRoutes);
 app.use('/api', aptitudeRoutes);
-console.log('[SERVER] All API routes registered');
+app.use('/api', chatRoutes);
+console.log('[SERVER] All API routes registered including chat routes');
 
-// Add rate limiting for auth routes
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // limit each IP to 10 requests per windowMs
+// Global rate limiting
+const globalLimiter = rateLimit({
+  windowMs: parseInt(process.env.GLOBAL_RATE_LIMIT_WINDOW) || 900000, // 15 minutes
+  max: parseInt(process.env.GLOBAL_RATE_LIMIT_MAX) || 100,
   message: {
     success: false,
-    message: 'Too many requests from this IP, please try again after 15 minutes'
+    message: 'Too many requests from this IP, please try again later'
   },
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => process.env.NODE_ENV === 'development' && req.ip === '127.0.0.1'
 });
+
+// Auth rate limiting
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: process.env.NODE_ENV === 'production' ? 5 : 10,
+  message: {
+    success: false,
+    message: 'Too many authentication attempts, please try again later'
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Apply global rate limiting
+app.use(globalLimiter);
 
 // Apply rate limiting to auth routes
 app.use('/api/auth/login', authLimiter);
@@ -307,9 +372,41 @@ app.get('/auth/google/callback',
   }
 );
 
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// Health check routes
+app.get('/api/health', async (req, res) => {
+  try {
+    const health = monitoringService.isHealthy();
+    const chatMetrics = await monitoringService.getChatMetrics();
+    
+    res.status(health.healthy ? 200 : 503).json({
+      status: health.healthy ? 'healthy' : 'unhealthy',
+      timestamp: new Date().toISOString(),
+      system: health.metrics,
+      chat: chatMetrics,
+      issues: health.issues
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: 'error',
+      message: 'Health check failed',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Detailed monitoring endpoint (production only)
+app.get('/api/monitoring', (req, res) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return res.status(404).json({ error: 'Not found' });
+  }
+  
+  const health = monitoringService.getSystemHealth();
+  res.json({
+    ...health,
+    environment: process.env.NODE_ENV,
+    nodeVersion: process.version,
+    platform: process.platform
+  });
 });
 
 // Authentication check middleware for protected routes
@@ -335,8 +432,32 @@ app.get('*', (req, res) => {
   }
 });
 
+// Cleanup job for old sessions (run every hour in production)
+if (process.env.NODE_ENV === 'production') {
+  setInterval(async () => {
+    await monitoringService.cleanupOldSessions();
+  }, 60 * 60 * 1000); // 1 hour
+}
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
+  process.exit(0);
+});
+
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Visit http://localhost:${PORT} in your browser`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌐 Visit http://localhost:${PORT} in your browser`);
+  console.log(`🤖 AI Career Chat: http://localhost:${PORT}/career-guidance-demo.html`);
+  console.log(`📊 Health Check: http://localhost:${PORT}/api/health`);
+  
+  if (process.env.NODE_ENV === 'production') {
+    console.log('🔒 Running in production mode');
+  }
 }); 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Guidance Chat</title>
+    <link rel="stylesheet" href="styles/career-chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="gemini-container">
+        <!-- Header -->
+        <header class="gemini-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="assets/images/logo.png" alt="KeyRacer" class="logo-img">
+                    <h1>KeyRacer AI Career Guidance</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="reset-chat" class="action-btn" title="New Chat">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="action-btn" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="welcome-screen">
+                <div class="welcome-content">
+                    <div class="welcome-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h2>Welcome to AI Career Guidance</h2>
+                    <p>Get personalized career advice, roadmaps, and guidance powered by AI</p>
+                    <div class="quick-actions">
+                        <button class="quick-btn" data-prompt="Help me create a career roadmap">
+                            <i class="fas fa-map"></i>
+                            Career Roadmap
+                        </button>
+                        <button class="quick-btn" data-prompt="What skills should I learn for my career?">
+                            <i class="fas fa-graduation-cap"></i>
+                            Skill Development
+                        </button>
+                        <button class="quick-btn" data-prompt="Help me prepare for job interviews">
+                            <i class="fas fa-briefcase"></i>
+                            Interview Prep
+                        </button>
+                        <button class="quick-btn" data-prompt="Analyze my resume and suggest improvements">
+                            <i class="fas fa-file-alt"></i>
+                            Resume Review
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="chat-messages" style="display: none;">
+                <!-- Messages will be added here -->
+            </div>
+        </div>
+
+        <!-- Input Container -->
+        <div class="input-container">
+            <div class="input-wrapper">
+                <div class="input-field">
+                    <input 
+                        type="text" 
+                        id="chat-input" 
+                        placeholder="Ask me anything about your career..." 
+                        maxlength="1000"
+                        autocomplete="off"
+                    >
+                    <button id="send-button" class="send-btn">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span class="disclaimer">AI can make mistakes. Consider checking important information.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="typing-indicator" class="typing-indicator" style="display: none;">
+            <div class="typing-animation">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Widget Script -->
+    <script src="scripts/career-chat.js"></script>
+</body>
+</html>
