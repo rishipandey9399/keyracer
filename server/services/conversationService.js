@@ -193,10 +193,25 @@ class ConversationService {
         profile: session.profile
       };
     } catch (error) {
+      console.error('Roadmap generation failed:', error.message);
+      
+      // Provide fallback roadmap with error context
+      const fallbackRoadmap = geminiService.getFallbackRoadmap(session.profile);
+      session.roadmapGenerated = true;
+      session.roadmap = fallbackRoadmap;
+      
+      const responseMessage = `I'm experiencing some technical difficulties with the AI service, but here's a basic career roadmap for you:\n\n${fallbackRoadmap}`;
+      
+      await this.saveMessage(session, 'bot', responseMessage);
+      await this.updateSession(session);
+      
       return {
-        success: false,
-        message: 'I apologize, but I\'m having trouble generating your roadmap right now. Please try again in a moment.',
-        isComplete: false
+        success: true,
+        message: responseMessage,
+        isComplete: true,
+        roadmap: fallbackRoadmap,
+        profile: session.profile,
+        isFallback: true
       };
     }
   }
@@ -218,11 +233,13 @@ class ConversationService {
         isFollowUp: true
       };
     } catch (error) {
+      console.error('Follow-up question failed:', error.message);
       return {
-        success: false,
-        message: 'Sorry, I couldn\'t process your question right now. Please try rephrasing it.',
+        success: true,
+        message: 'I\'m currently experiencing technical difficulties with the AI service. Please try asking your question again later, or contact support if the issue persists.',
         isComplete: true,
-        isFollowUp: true
+        isFollowUp: true,
+        isFallback: true
       };
     }
   }

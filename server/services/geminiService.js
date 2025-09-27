@@ -87,14 +87,11 @@ Format: Clear, actionable, with specific timelines. Keep it encouraging and prac
 
       return await this.generateWithRetry(prompt);
     } catch (error) {
-      console.error('Error generating career roadmap:', error);
+      console.error('Error generating career roadmap:', error.message);
+      console.error('Full error:', error);
       
-      // Return fallback response for production
-      if (process.env.NODE_ENV === 'production') {
-        return this.getFallbackRoadmap(userProfile);
-      }
-      
-      throw new Error('Failed to generate career roadmap. Please try again.');
+      // Always throw error to let conversation service handle it
+      throw new Error(`AI service error: ${error.message}`);
     }
   }
 
@@ -119,13 +116,8 @@ Provide a helpful, specific, actionable response relevant to their career goals.
 
       return await this.generateWithRetry(prompt);
     } catch (error) {
-      console.error('Error generating follow-up response:', error);
-      
-      if (process.env.NODE_ENV === 'production') {
-        return "I apologize, but I'm having trouble processing your question right now. Please try rephrasing it or ask about specific aspects of your career roadmap like skills, timeline, or resources.";
-      }
-      
-      throw new Error('Failed to generate response. Please try again.');
+      console.error('Error generating follow-up response:', error.message);
+      throw new Error(`AI service error: ${error.message}`);
     }
   }
 
