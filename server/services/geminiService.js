@@ -1,22 +1,11 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-
 class GeminiService {
   constructor() {
     if (!process.env.GEMINI_API_KEY) {
       throw new Error('GEMINI_API_KEY is not configured in environment variables');
     }
     
-    this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    this.model = this.genAI.getGenerativeModel({ 
-      model: 'gemini-1.5-flash',
-      apiVersion: 'v1',
-      generationConfig: {
-        temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 2048,
-      }
-    });
+    this.apiKey = process.env.GEMINI_API_KEY;
+    this.baseUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
     this.maxRetries = 3;
     this.retryDelay = 1000;
   }
@@ -29,9 +18,30 @@ class GeminiService {
    */
   async generateWithRetry(prompt, retryCount = 0) {
     try {
-      const result = await this.model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const response = await fetch(this.baseUrl + `?key=${this.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: prompt }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 2048,
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
       
       if (!text || text.trim().length === 0) {
         throw new Error('Empty response from AI');
@@ -158,4 +168,5 @@ This is a general roadmap. For more personalized advice, please try again when o
   }
 }
 
+// @ts-ignore - Using CommonJS module system
 module.exports = new GeminiService();
