@@ -10,15 +10,9 @@ class GeminiService {
     this.retryDelay = 1000;
   }
 
-  /**
-   * Generate content with retry logic
-   * @param {string} prompt - The prompt to send
-   * @param {number} retryCount - Current retry attempt
-   * @returns {Promise<string>} Generated content
-   */
   async generateWithRetry(prompt, retryCount = 0) {
     try {
-      const response = await fetch(this.baseUrl + `?key=${this.apiKey}`, {
+      const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,19 +54,10 @@ class GeminiService {
     }
   }
 
-  /**
-   * Delay helper for retry logic
-   * @param {number} ms - Milliseconds to delay
-   */
   delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  /**
-   * Generate a personalized career roadmap based on user profile
-   * @param {Object} userProfile - User's career profile
-   * @returns {Promise<string>} Generated roadmap
-   */
   async generateCareerRoadmap(userProfile) {
     try {
       const { name, year, collegeTier, skills, careerGoal } = userProfile;
@@ -99,19 +84,10 @@ Format: Clear, actionable, with specific timelines. Keep it encouraging and prac
       return await this.generateWithRetry(prompt);
     } catch (error) {
       console.error('Error generating career roadmap:', error.message);
-      console.error('Full error:', error);
-      
-      // Always throw error to let conversation service handle it
       throw new Error(`AI service error: ${error.message}`);
     }
   }
 
-  /**
-   * Generate a follow-up response based on user question
-   * @param {string} question - User's follow-up question
-   * @param {Object} userProfile - User's career profile for context
-   * @returns {Promise<string>} Generated response
-   */
   async generateFollowUpResponse(question, userProfile) {
     try {
       const prompt = `Based on this profile:
@@ -132,11 +108,6 @@ Provide a helpful, specific, actionable response relevant to their career goals.
     }
   }
 
-  /**
-   * Fallback roadmap for when AI service fails
-   * @param {Object} userProfile - User's career profile
-   * @returns {string} Basic roadmap
-   */
   getFallbackRoadmap(userProfile) {
     return `Hi ${userProfile.name}! Here's a basic career roadmap for ${userProfile.careerGoal}:
 
@@ -168,5 +139,4 @@ This is a general roadmap. For more personalized advice, please try again when o
   }
 }
 
-// @ts-ignore - Using CommonJS module system
 module.exports = new GeminiService();
