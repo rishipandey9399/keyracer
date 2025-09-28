@@ -58,13 +58,13 @@ class CareerChatWidget {
         this.chatMessages.style.display = 'none';
     }
 
-    hidewelcomeScreen() {
+    hideWelcomeScreen() {
         this.welcomeScreen.style.display = 'none';
         this.chatMessages.style.display = 'block';
     }
 
     startChatWithPrompt(prompt) {
-        this.hidewelcomeScreen();
+        this.hideWelcomeScreen();
         this.chatInput.value = prompt;
         this.sendMessage();
     }
@@ -78,7 +78,7 @@ class CareerChatWidget {
 
         // Hide welcome screen if visible
         if (this.welcomeScreen.style.display !== 'none') {
-            this.hidewelcomeScreen();
+            this.hideWelcomeScreen();
         }
 
         // Add user message

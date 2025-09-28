@@ -1,13 +1,14 @@
 class GeminiService {
   constructor() {
-    if (!process.env.GEMINI_API_KEY) {
-      throw new Error('GEMINI_API_KEY is not configured in environment variables');
-    }
-    
     this.apiKey = process.env.GEMINI_API_KEY;
     this.baseUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
     this.maxRetries = 3;
     this.retryDelay = 1000;
+    this.isConfigured = !!this.apiKey;
+    
+    if (!this.isConfigured) {
+      console.warn('GEMINI_API_KEY is not configured. AI features will use fallback responses.');
+    }
   }
 
   async generateWithRetry(prompt, retryCount = 0) {
@@ -59,6 +60,10 @@ class GeminiService {
   }
 
   async generateCareerRoadmap(userProfile) {
+    if (!this.isConfigured) {
+      throw new Error('AI service not configured');
+    }
+    
     try {
       const { name, year, collegeTier, skills, careerGoal } = userProfile;
       
@@ -89,6 +94,10 @@ Format: Clear, actionable, with specific timelines. Keep it encouraging and prac
   }
 
   async generateFollowUpResponse(question, userProfile) {
+    if (!this.isConfigured) {
+      throw new Error('AI service not configured');
+    }
+    
     try {
       const prompt = `Based on this profile:
 - Name: ${userProfile.name}
