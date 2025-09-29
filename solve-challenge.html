@@ -61,15 +61,24 @@
             box-sizing: border-box;
         }
 
+        html {
+            background-color: #0C1222;
+            min-height: 100%;
+        }
+
         body {
+            background-color: #0C1222;
             background: 
                 radial-gradient(circle at 25% 25%, rgba(0, 194, 255, 0.03) 0%, transparent 50%),
                 radial-gradient(circle at 75% 75%, rgba(255, 64, 129, 0.02) 0%, transparent 50%),
                 linear-gradient(135deg, #0C1222 0%, #141b2d 50%, #0C1222 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
             color: var(--text-color);
             font-family: 'Rajdhani', sans-serif;
             margin: 0;
             padding: 0;
+            height: 100%;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -1456,10 +1465,6 @@
             <div class="code-editor-container">
                 <div class="editor-header">
                     <h2 class="editor-title">Code Editor</h2>
-                    <div class="language-indicator">
-                        <i class="fab fa-python"></i>
-                        Python
-                    </div>
                 </div>
                 
                 <div class="code-editor">
@@ -1467,7 +1472,7 @@
                     <textarea 
                         class="code-input" 
                         id="codeInput"
-                        placeholder="# Write your Python code here..."
+                        placeholder="Write your code here..."
                         spellcheck="false"
                         onpaste="return false"
                         oncontextmenu="return false"
@@ -1614,72 +1619,30 @@
 
         // Detect language from challenge ID or structure
         function detectLanguageFromChallenge(challenge) {
+            if (challenge.language) {
+                return challenge.language === 'cpp' ? 'cpp' : challenge.language;
+            }
+            
             const challengeId = challenge.id.toString();
             
-            if (challengeId.startsWith('java')) {
+            if (challengeId.startsWith('1')) {
                 return 'java';
-            } else if (challengeId.startsWith('py') || challengeId.startsWith('python')) {
+            } else if (challengeId.startsWith('2')) {
                 return 'python';
-            } else if (challengeId.startsWith('js') || challengeId.startsWith('javascript')) {
+            } else if (challengeId.startsWith('3')) {
                 return 'javascript';
-            } else if (challengeId.startsWith('cpp') || challengeId.startsWith('c++')) {
+            } else if (challengeId.startsWith('4')) {
+                return 'c';
+            } else if (challengeId.startsWith('5')) {
                 return 'cpp';
-            } else if (challengeId.startsWith('go')) {
-                return 'go';
             } else {
-                // Default to python for numeric IDs (original challenges)
                 return 'python';
             }
         }
 
         // Update code editor language settings
         function updateCodeEditorLanguage(language) {
-            const languageIndicator = document.querySelector('.language-indicator');
-            const codeInput = document.getElementById('codeInput');
-            
-            const languageConfig = {
-                java: {
-                    icon: 'fab fa-java',
-                    name: 'Java',
-                    placeholder: '// Write your Java code here...\n// For example:\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
-                    comment: '//'
-                },
-                python: {
-                    icon: 'fab fa-python',
-                    name: 'Python',
-                    placeholder: '# Write your Python code here...\n# For example:\nprint("Hello, World!")',
-                    comment: '#'
-                },
-                javascript: {
-                    icon: 'fab fa-js-square',
-                    name: 'JavaScript',
-                    placeholder: '// Write your JavaScript code here...\n// For example:\nconsole.log("Hello, World!");',
-                    comment: '//'
-                },
-                cpp: {
-                    icon: 'fas fa-code',
-                    name: 'C++',
-                    placeholder: '// Write your C++ code here...\n// For example:\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}',
-                    comment: '//'
-                },
-                go: {
-                    icon: 'fas fa-code',
-                    name: 'Go',
-                    placeholder: '// Write your Go code here...\n// For example:\npackage main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}',
-                    comment: '//'
-                }
-            };
-            
-            const config = languageConfig[language] || languageConfig.python;
-            
-            // Update language indicator
-            languageIndicator.innerHTML = `
-                <i class="${config.icon}"></i>
-                ${config.name}
-            `;
-            
-            // Update code input placeholder
-            codeInput.placeholder = config.placeholder;
+            // Language indicator removed - no updates needed
         }
 
         // Setup event listeners
@@ -1728,24 +1691,28 @@
 
         // Get language from current challenge
         function getLanguageFromChallenge() {
+            if (currentChallenge && currentChallenge.language) {
+                return currentChallenge.language === 'cpp' ? 'cpp' : currentChallenge.language;
+            }
+            
             const urlParams = new URLSearchParams(window.location.search);
             const challengeId = urlParams.get('challenge');
             
             if (!challengeId) return null;
             
-            if (challengeId.startsWith('java')) {
+            if (challengeId.startsWith('1')) {
                 return 'java';
-            } else if (challengeId.startsWith('py') || challengeId.startsWith('python')) {
+            } else if (challengeId.startsWith('2')) {
                 return 'python';
-            } else if (challengeId.startsWith('js') || challengeId.startsWith('javascript')) {
+            } else if (challengeId.startsWith('3')) {
                 return 'javascript';
-            } else if (challengeId.startsWith('cpp') || challengeId.startsWith('c++')) {
+            } else if (challengeId.startsWith('4')) {
+                return 'c';
+            } else if (challengeId.startsWith('5')) {
                 return 'cpp';
-            } else if (challengeId.startsWith('go')) {
-                return 'go';
             }
             
-            return 'python'; // Default fallback
+            return 'python';
         }
 
         // Navigate back to challenges with proper language tab

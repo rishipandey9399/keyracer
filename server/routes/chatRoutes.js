@@ -56,9 +56,10 @@ router.post('/chat', chatLimiter, sanitizeInput, async (req, res) => {
     // Process the message with client info
     const response = await conversationService.processMessage(sessionId, message, ipAddress, userAgent);
 
-    // Log for production monitoring
+    // Log for production monitoring with agent context
     if (process.env.NODE_ENV === 'production') {
-      console.log(`Chat: ${sessionId.substring(0, 8)}... - ${response.success ? 'Success' : 'Error'}`);
+      const logContext = response.isAgentCommand ? `Agent-${response.commandType}` : 'Chat';
+      console.log(`${logContext}: ${sessionId.substring(0, 8)}... - ${response.success ? 'Success' : 'Error'}`);
     }
 
     res.json(response);
@@ -66,7 +67,7 @@ router.post('/chat', chatLimiter, sanitizeInput, async (req, res) => {
     console.error('Error in chat endpoint:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error. Please try again.'
+      message: 'AI agent encountered an error. Please try again.'
     });
   }
 });
@@ -128,12 +129,68 @@ router.get('/chat/health', (req, res) => {
   const isProduction = process.env.NODE_ENV === 'production';
   res.json({
     success: true,
-    message: 'Chat service is running',
+    message: 'AI Career Agent is running',
     timestamp: new Date().toISOString(),
     geminiConfigured: !!process.env.GEMINI_API_KEY,
     environment: isProduction ? 'production' : 'development',
-    version: '1.0.0'
+    version: '2.0.0',
+    agentType: 'Career Guidance AI Agent'
   });
+});
+
+/**
+ * GET /api/chat/capabilities
+ * Get AI agent capabilities and commands
+ */
+router.get('/chat/capabilities', (req, res) => {
+  try {
+    const capabilities = conversationService.getAgentCapabilities();
+    res.json({
+      success: true,
+      ...capabilities
+    });
+  } catch (error) {
+    console.error('Error getting capabilities:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get agent capabilities.'
+    });
+  }
+});
+
+/**
+ * POST /api/chat/command
+ * Execute specific AI agent command
+ */
+router.post('/chat/command', chatLimiter, sanitizeInput, async (req, res) => {
+  try {
+    const { command, sessionId, parameters } = req.body;
+    
+    if (!command || !sessionId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Command and session ID are required.'
+      });
+    }
+    
+    const session = await conversationService.getUserSession(sessionId);
+    
+    if (!session.isComplete) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please complete your profile first before using agent commands.'
+      });
+    }
+    
+    const response = await conversationService.handleAgentCommand(command, session, parameters || '');
+    res.json(response);
+  } catch (error) {
+    console.error('Error executing agent command:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to execute agent command.'
+    });
+  }
 });
 
 module.exports = router;

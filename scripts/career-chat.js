@@ -6,6 +6,8 @@ class CareerChatWidget {
     constructor() {
         this.sessionId = this.generateSessionId();
         this.isLoading = false;
+        this.profileComplete = false;
+        this.agentCapabilities = null;
         
         this.initializeElements();
         this.attachEventListeners();
@@ -47,6 +49,9 @@ class CareerChatWidget {
                 this.startChatWithPrompt(prompt);
             });
         });
+        
+        // Load AI agent capabilities
+        this.loadAgentCapabilities();
     }
 
     generateSessionId() {
@@ -101,7 +106,13 @@ class CareerChatWidget {
             const data = await response.json();
             
             if (data.success) {
-                this.addMessage(data.message, 'bot');
+                const isAgentResponse = data.isAgentCommand || data.isComplete;
+                this.addMessage(data.message, 'bot', isAgentResponse);
+                
+                // Update profile completion status
+                if (data.isComplete) {
+                    this.profileComplete = true;
+                }
             } else {
                 this.addMessage(data.message || 'Sorry, something went wrong. Please try again.', 'bot');
             }
@@ -113,13 +124,24 @@ class CareerChatWidget {
         }
     }
 
-    addMessage(text, sender) {
+    addMessage(text, sender, isAgentResponse = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
         
+        if (isAgentResponse) {
+            messageDiv.classList.add('agent-response');
+        }
+        
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'message-avatar';
-        avatarDiv.innerHTML = sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+        
+        if (sender === 'bot') {
+            avatarDiv.innerHTML = isAgentResponse ? 
+                '<i class="fas fa-robot" title="AI Agent"></i>' : 
+                '<i class="fas fa-robot"></i>';
+        } else {
+            avatarDiv.innerHTML = '<i class="fas fa-user"></i>';
+        }
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
@@ -128,6 +150,13 @@ class CareerChatWidget {
         textP.innerHTML = this.formatMessage(text);
         
         contentDiv.appendChild(textP);
+        
+        // Add command suggestions for completed profiles
+        if (isAgentResponse && this.profileComplete) {
+            const suggestionsDiv = this.createCommandSuggestions();
+            contentDiv.appendChild(suggestionsDiv);
+        }
+        
         messageDiv.appendChild(avatarDiv);
         messageDiv.appendChild(contentDiv);
         
@@ -166,6 +195,7 @@ class CareerChatWidget {
         this.showWelcomeScreen();
         this.sessionId = this.generateSessionId();
         this.chatInput.value = '';
+        this.profileComplete = false;
         this.setLoading(false);
     }
 
@@ -173,6 +203,56 @@ class CareerChatWidget {
         setTimeout(() => {
             this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
         }, 100);
+    }
+    
+    async loadAgentCapabilities() {
+        try {
+            const response = await fetch('/api/chat/capabilities');
+            const data = await response.json();
+            
+            if (data.success) {
+                this.agentCapabilities = data;
+                console.log('AI Agent loaded:', data.name, 'v' + data.version);
+            }
+        } catch (error) {
+            console.error('Failed to load agent capabilities:', error);
+        }
+    }
+    
+    createCommandSuggestions() {
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'command-suggestions';
+        suggestionsDiv.innerHTML = `
+            <div class="suggestions-header">
+                <i class="fas fa-magic"></i>
+                <span>Try these AI commands:</span>
+            </div>
+            <div class="suggestion-buttons">
+                <button class="suggestion-btn" data-command="skill gap analysis">
+                    <i class="fas fa-chart-line"></i> Skill Gap Analysis
+                </button>
+                <button class="suggestion-btn" data-command="project ideas">
+                    <i class="fas fa-lightbulb"></i> Project Ideas
+                </button>
+                <button class="suggestion-btn" data-command="interview prep">
+                    <i class="fas fa-handshake"></i> Interview Prep
+                </button>
+                <button class="suggestion-btn" data-command="industry trends">
+                    <i class="fas fa-trending-up"></i> Industry Trends
+                </button>
+            </div>
+        `;
+        
+        // Add click handlers for suggestion buttons
+        suggestionsDiv.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const command = btn.getAttribute('data-command');
+                this.chatInput.value = command;
+                this.sendMessage();
+            });
+        });
+        
+        return suggestionsDiv;
     }
 }
 

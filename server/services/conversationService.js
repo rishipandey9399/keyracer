@@ -35,7 +35,7 @@ class ConversationService {
       },
       {
         key: 'careerGoal',
-        question: 'What\'s your career goal or dream job? 🎯 (e.g., Software Engineer, Data Scientist, Product Manager, etc.)',
+        question: 'What\'s your career goal or dream job? 🎯 (e.g., Software Engineer, Data Scientist, Product Manager, etc.)\n\n🤖 **AI Agent Ready!** Once we complete your profile, I can help with:\n• Skill gap analysis\n• Project recommendations\n• Interview preparation\n• Industry insights',
         validation: (input) => input.trim().length >= 5,
         errorMessage: 'Please describe your career goal in more detail.'
       }
@@ -224,6 +224,13 @@ class ConversationService {
    */
   async handleFollowUpQuestion(session, question) {
     try {
+      // Check for AI agent commands
+      const command = this.detectAgentCommand(question);
+      
+      if (command) {
+        return await this.handleAgentCommand(command, session, question);
+      }
+      
       const response = await geminiService.generateFollowUpResponse(question, session.profile);
       
       return {
@@ -240,6 +247,84 @@ class ConversationService {
         isComplete: true,
         isFollowUp: true,
         isFallback: true
+      };
+    }
+  }
+
+  /**
+   * Detect AI agent commands in user message
+   * @param {string} message - User message
+   * @returns {string|null} Detected command or null
+   */
+  detectAgentCommand(message) {
+    const commands = {
+      'skill-gap': ['skill gap', 'skill analysis', 'assess skills', 'missing skills'],
+      'projects': ['project ideas', 'project suggestions', 'build projects', 'portfolio projects'],
+      'interview': ['interview prep', 'interview help', 'job interview', 'interview questions'],
+      'trends': ['industry trends', 'market trends', 'career outlook', 'job market']
+    };
+    
+    const lowerMessage = message.toLowerCase();
+    
+    for (const [command, keywords] of Object.entries(commands)) {
+      if (keywords.some(keyword => lowerMessage.includes(keyword))) {
+        return command;
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Handle specialized AI agent commands
+   * @param {string} command - Command type
+   * @param {Object} session - User session
+   * @param {string} originalMessage - Original user message
+   * @returns {Promise<Object>} Response object
+   */
+  async handleAgentCommand(command, session, originalMessage) {
+    try {
+      let response;
+      
+      switch (command) {
+        case 'skill-gap':
+          response = await geminiService.assessSkillGap(session.profile);
+          break;
+        case 'projects':
+          response = await geminiService.generateProjectIdeas(session.profile);
+          break;
+        case 'interview':
+          response = await geminiService.prepareInterview(session.profile);
+          break;
+        case 'trends':
+          response = await geminiService.analyzeTrends(session.profile.careerGoal);
+          break;
+        default:
+          return await this.handleFollowUpQuestion(session, originalMessage);
+      }
+      
+      return {
+        success: true,
+        message: `🤖 **AI Agent Response**\n\n${response}\n\n💡 **More Commands Available:**\n• "skill gap analysis" - Assess your skills\n• "project ideas" - Get project recommendations\n• "interview prep" - Interview preparation\n• "industry trends" - Market insights`,
+        isComplete: true,
+        isFollowUp: true,
+        isAgentCommand: true,
+        commandType: command
+      };
+    } catch (error) {
+      console.error(`Agent command ${command} failed:`, error.message);
+      
+      // Provide fallback response for the command
+      const fallbackResponse = geminiService.getFallbackResponse(command, session.profile);
+      
+      return {
+        success: true,
+        message: `🤖 **AI Agent Response** (Fallback Mode)\n\n${fallbackResponse}\n\n⚠️ AI service temporarily unavailable. Basic guidance provided.`,
+        isComplete: true,
+        isFollowUp: true,
+        isAgentCommand: true,
+        isFallback: true,
+        commandType: command
       };
     }
   }
@@ -325,6 +410,39 @@ class ConversationService {
         this.userSessions.delete(sessionId);
       }
     }
+  }
+
+  /**
+   * Get AI agent capabilities and commands
+   * @returns {Object} Agent capabilities
+   */
+  getAgentCapabilities() {
+    return {
+      name: 'KeyRacer Career AI Agent',
+      version: '2.0.0',
+      capabilities: [
+        'Career roadmap generation',
+        'Skill gap analysis',
+        'Project recommendations',
+        'Interview preparation',
+        'Industry trend analysis',
+        'Personalized guidance',
+        'Real-time conversation'
+      ],
+      commands: [
+        { command: 'skill gap analysis', description: 'Analyze your current skills vs target role requirements' },
+        { command: 'project ideas', description: 'Get personalized project recommendations for your portfolio' },
+        { command: 'interview prep', description: 'Prepare for job interviews with questions and tips' },
+        { command: 'industry trends', description: 'Learn about current trends in your field' }
+      ],
+      features: [
+        'Natural language processing',
+        'Intent detection',
+        'Personalized responses',
+        'Fallback mechanisms',
+        'Session persistence'
+      ]
+    };
   }
 }
 

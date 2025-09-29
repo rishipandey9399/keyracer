@@ -8,15 +8,24 @@ class CodeExecutor {
         this.API_URL = 'https://emkc.org/api/v2/piston/';
         this.runtimeVersions = {
             'python': '3.10',
-            'java': '15.0.2'
+            'java': '15.0.2',
+            'javascript': '18.15.0',
+            'c': '10.2.0',
+            'cpp': '10.2.0'
         };
         this.fileExtensions = {
             'python': '.py',
-            'java': '.java'
+            'java': '.java',
+            'javascript': '.js',
+            'c': '.c',
+            'cpp': '.cpp'
         };
         this.mainFileNames = {
             'python': 'main.py',
-            'java': 'Main.java'
+            'java': 'Main.java',
+            'javascript': 'main.js',
+            'c': 'main.c',
+            'cpp': 'main.cpp'
         };
     }
 
@@ -38,6 +47,21 @@ class CodeExecutor {
                     // Add test code that calls the function with the input
                     return `${code}\n\n# Test code\nresult = ${functionName}(${input})\nprint(result)`;
                 }
+            }
+            return code;
+        } else if (language === 'javascript') {
+            // For JavaScript, just return the code as-is
+            return code;
+        } else if (language === 'c') {
+            // For C, wrap in main function if not already present
+            if (!code.includes('int main') && !code.includes('void main')) {
+                return `#include <stdio.h>\n\nint main() {\n    ${code}\n    return 0;\n}`;
+            }
+            return code;
+        } else if (language === 'cpp') {
+            // For C++, wrap in main function if not already present
+            if (!code.includes('int main') && !code.includes('void main')) {
+                return `#include <iostream>\nusing namespace std;\n\nint main() {\n    ${code}\n    return 0;\n}`;
             }
             return code;
         } else if (language === 'java') {

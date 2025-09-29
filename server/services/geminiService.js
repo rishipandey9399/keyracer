@@ -1,10 +1,18 @@
 class GeminiService {
   constructor() {
     this.apiKey = process.env.GEMINI_API_KEY;
-    this.baseUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
+    this.baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
     this.maxRetries = 3;
     this.retryDelay = 1000;
     this.isConfigured = !!this.apiKey;
+    
+    // AI Agent personality and context
+    this.agentPersonality = {
+      name: 'KeyRacer Career AI',
+      role: 'Intelligent Career Guidance Agent',
+      traits: ['helpful', 'encouraging', 'knowledgeable', 'practical', 'supportive'],
+      expertise: ['career planning', 'skill development', 'interview preparation', 'industry insights']
+    };
     
     if (!this.isConfigured) {
       console.warn('GEMINI_API_KEY is not configured. AI features will use fallback responses.');
@@ -67,24 +75,41 @@ class GeminiService {
     try {
       const { name, year, collegeTier, skills, careerGoal } = userProfile;
       
-      const prompt = `Create a personalized career roadmap for ${name}:
+      const prompt = `You are ${this.agentPersonality.name}, an ${this.agentPersonality.role} with expertise in ${this.agentPersonality.expertise.join(', ')}.
 
-Profile:
+Create a personalized career roadmap for ${name}:
+
+Profile Analysis:
 - Academic Year: ${year}
 - College Tier: ${collegeTier}
 - Current Skills: ${skills}
 - Career Goal: ${careerGoal}
 
-Provide a comprehensive roadmap with:
-1. Immediate next steps (next 3 months)
-2. Short-term goals (6-12 months)
-3. Long-term objectives (1-3 years)
-4. Skill development recommendations
-5. Project suggestions
-6. Learning resources
-7. Industry-specific advice
+As an intelligent career agent, provide:
 
-Format: Clear, actionable, with specific timelines. Keep it encouraging and practical. Limit to 1500 words.`;
+🎯 **IMMEDIATE ACTION PLAN** (Next 3 months):
+- Specific, actionable steps
+- Skill-building priorities
+- Portfolio development
+
+📈 **SHORT-TERM STRATEGY** (6-12 months):
+- Learning milestones
+- Project recommendations
+- Networking opportunities
+
+🚀 **LONG-TERM VISION** (1-3 years):
+- Career progression path
+- Leadership development
+- Specialization options
+
+💡 **AI AGENT RECOMMENDATIONS**:
+- Industry insights and trends
+- Personalized learning resources
+- Success metrics and tracking
+
+🤖 **Available Commands**: Mention that they can ask for "skill gap analysis", "project ideas", "interview prep", or "industry trends" for specialized help.
+
+Be encouraging, specific, and actionable. Use emojis and clear formatting. Limit to 1500 words.`;
 
       return await this.generateWithRetry(prompt);
     } catch (error) {
@@ -99,7 +124,10 @@ Format: Clear, actionable, with specific timelines. Keep it encouraging and prac
     }
     
     try {
-      const prompt = `Based on this profile:
+      const intent = this.detectIntent(question);
+      const prompt = `You are ${this.agentPersonality.name}, an ${this.agentPersonality.role}.
+
+User Profile:
 - Name: ${userProfile.name}
 - Year: ${userProfile.year}
 - College: ${userProfile.collegeTier}
@@ -107,12 +135,134 @@ Format: Clear, actionable, with specific timelines. Keep it encouraging and prac
 - Goal: ${userProfile.careerGoal}
 
 Question: "${question}"
+Detected Intent: ${intent}
 
-Provide a helpful, specific, actionable response relevant to their career goals. Keep it concise (under 300 words).`;
+As an intelligent career agent with ${this.agentPersonality.traits.join(', ')} personality:
+
+1. **Direct Answer**: Address their specific question
+2. **Smart Insights**: Provide AI-powered analysis
+3. **Action Steps**: Give 2-3 specific next steps
+4. **Resources**: Suggest relevant tools/platforms
+5. **Follow-up**: Offer related assistance
+
+Be conversational, use emojis appropriately, and maintain an encouraging tone. If they ask about specialized topics, mention available commands like "skill gap analysis", "project ideas", "interview prep", or "industry trends". Keep under 400 words.`;
 
       return await this.generateWithRetry(prompt);
     } catch (error) {
       console.error('Error generating follow-up response:', error.message);
+      throw new Error(`AI service error: ${error.message}`);
+    }
+  }
+
+  async assessSkillGap(userProfile, targetRole) {
+    if (!this.isConfigured) {
+      throw new Error('AI service not configured');
+    }
+    
+    try {
+      const prompt = `As an AI Career Agent, analyze the skill gap for:
+
+Current Profile:
+- Skills: ${userProfile.skills}
+- Year: ${userProfile.year}
+- Goal: ${targetRole || userProfile.careerGoal}
+
+Provide:
+1. **Current Strengths**: What skills they already have
+2. **Skill Gaps**: What's missing for their target role
+3. **Learning Priority**: Which skills to focus on first
+4. **Timeline**: Realistic learning schedule
+5. **Resources**: Specific courses, books, or platforms
+
+Format as a structured assessment. Keep it actionable and encouraging.`;
+
+      return await this.generateWithRetry(prompt);
+    } catch (error) {
+      console.error('Error assessing skill gap:', error.message);
+      throw new Error(`AI service error: ${error.message}`);
+    }
+  }
+
+  async generateProjectIdeas(userProfile, difficulty = 'intermediate') {
+    if (!this.isConfigured) {
+      throw new Error('AI service not configured');
+    }
+    
+    try {
+      const prompt = `As an AI Career Agent, suggest ${difficulty} level projects for:
+
+Profile:
+- Skills: ${userProfile.skills}
+- Goal: ${userProfile.careerGoal}
+- Level: ${userProfile.year}
+
+Provide 3-5 project ideas with:
+1. **Project Name & Description**
+2. **Technologies Used**
+3. **Key Learning Outcomes**
+4. **Estimated Timeline**
+5. **Portfolio Impact**
+
+Focus on projects that will strengthen their resume for ${userProfile.careerGoal}. Make them practical and achievable.`;
+
+      return await this.generateWithRetry(prompt);
+    } catch (error) {
+      console.error('Error generating project ideas:', error.message);
+      throw new Error(`AI service error: ${error.message}`);
+    }
+  }
+
+  async prepareInterview(userProfile, company = null) {
+    if (!this.isConfigured) {
+      throw new Error('AI service not configured');
+    }
+    
+    try {
+      const companyContext = company ? `for ${company}` : `for ${userProfile.careerGoal} roles`;
+      const prompt = `As an AI Career Agent, help prepare for interviews ${companyContext}:
+
+Profile:
+- Skills: ${userProfile.skills}
+- Goal: ${userProfile.careerGoal}
+- Experience Level: ${userProfile.year}
+
+Provide:
+1. **Common Interview Questions** (5-7 questions)
+2. **Technical Topics** to review
+3. **STAR Method Examples** using their background
+4. **Questions to Ask Interviewer**
+5. **Preparation Timeline** (1-2 weeks)
+
+Make it specific to their skill level and career goal. Include confidence-building tips.`;
+
+      return await this.generateWithRetry(prompt);
+    } catch (error) {
+      console.error('Error preparing interview guide:', error.message);
+      throw new Error(`AI service error: ${error.message}`);
+    }
+  }
+
+  async analyzeTrends(field) {
+    if (!this.isConfigured) {
+      throw new Error('AI service not configured');
+    }
+    
+    try {
+      const prompt = `As an AI Career Agent, analyze current trends in ${field}:
+
+Provide:
+1. **Emerging Technologies** in this field
+2. **In-Demand Skills** for 2024-2025
+3. **Market Outlook** and job prospects
+4. **Salary Trends** by experience level
+5. **Career Paths** and specializations
+6. **Learning Recommendations** to stay current
+
+Focus on actionable insights for someone entering or advancing in ${field}. Keep it current and practical.`;
+
+      return await this.generateWithRetry(prompt);
+    } catch (error) {
+      console.error('Error analyzing trends:', error.message);
       throw new Error(`AI service error: ${error.message}`);
     }
   }
@@ -144,8 +294,52 @@ Provide a helpful, specific, actionable response relevant to their career goals.
 • Stay updated with industry trends
 • Practice problem-solving regularly
 
+🤖 **AI Agent Commands Available:**
+Type these commands for specialized help:
+• "skill gap analysis" - Assess your skill gaps
+• "project ideas" - Get project recommendations
+• "interview prep" - Prepare for interviews
+• "industry trends" - Learn about market trends
+
 This is a general roadmap. For more personalized advice, please try again when our AI service is available!`;
+  }
+
+  getFallbackResponse(command, userProfile) {
+    const responses = {
+      'skill-gap': `Here's a basic skill gap analysis for ${userProfile.careerGoal}:\n\n**Your Strengths:** ${userProfile.skills}\n\n**Common Requirements:**\n• Technical skills specific to your field\n• Problem-solving abilities\n• Communication skills\n• Project management\n\n**Next Steps:**\n• Research job descriptions in your target field\n• Identify the most in-demand skills\n• Create a learning plan\n• Build projects to demonstrate skills`,
+      
+      'projects': `Project ideas for ${userProfile.careerGoal}:\n\n1. **Personal Portfolio Website**\n   - Showcase your skills and projects\n   - Learn web development basics\n\n2. **Skill-Specific Project**\n   - Build something related to ${userProfile.skills}\n   - Document your process\n\n3. **Open Source Contribution**\n   - Find projects on GitHub\n   - Start with documentation or small fixes\n\n4. **Problem-Solving Project**\n   - Identify a real-world problem\n   - Create a solution using your skills`,
+      
+      'interview': `Interview preparation for ${userProfile.careerGoal}:\n\n**Common Questions:**\n• Tell me about yourself\n• Why are you interested in this role?\n• Describe a challenging project\n• What are your strengths/weaknesses?\n\n**Technical Preparation:**\n• Review fundamentals in ${userProfile.skills}\n• Practice coding problems\n• Prepare project explanations\n\n**Questions to Ask:**\n• What does a typical day look like?\n• What are the growth opportunities?\n• What challenges is the team facing?`,
+      
+      'trends': `Current trends in ${userProfile.careerGoal}:\n\n**Growing Areas:**\n• AI and Machine Learning integration\n• Cloud computing and DevOps\n• Cybersecurity awareness\n• Remote work capabilities\n\n**In-Demand Skills:**\n• Problem-solving and critical thinking\n• Collaboration and communication\n• Adaptability to new technologies\n• Continuous learning mindset\n\n**Recommendations:**\n• Stay updated with industry news\n• Follow thought leaders in your field\n• Join professional communities\n• Attend webinars and conferences`
+    };
+    
+    return responses[command] || "I'm currently experiencing technical difficulties. Please try again later.";
+  }
+
+  detectIntent(message) {
+    const intents = {
+      'skill-gap': ['skill gap', 'skills needed', 'what skills', 'skill analysis', 'missing skills'],
+      'projects': ['project ideas', 'project suggestions', 'what projects', 'build projects', 'portfolio projects'],
+      'interview': ['interview prep', 'interview questions', 'interview help', 'job interview', 'interview tips'],
+      'trends': ['industry trends', 'market trends', 'future of', 'job market', 'career outlook'],
+      'salary': ['salary', 'compensation', 'pay scale', 'earnings', 'income'],
+      'learning': ['learn', 'courses', 'resources', 'study', 'education'],
+      'networking': ['networking', 'connections', 'professional network', 'meet people'],
+      'resume': ['resume', 'cv', 'curriculum vitae', 'resume help', 'resume tips']
+    };
+    
+    const lowerMessage = message.toLowerCase();
+    
+    for (const [intent, keywords] of Object.entries(intents)) {
+      if (keywords.some(keyword => lowerMessage.includes(keyword))) {
+        return intent;
+      }
+    }
+    
+    return 'general';
   }
 }
 
-module.exports = new GeminiService();
+export default new GeminiService();

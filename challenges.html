@@ -59,7 +59,10 @@
                 <button class="language-tab" data-language="java" style="background: #E41B17; color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem;">
                     <i class="fab fa-java"></i> <span>Java</span>
                 </button>
-                <button class="language-tab disabled" data-language="cpp" style="background: #161b22; color: #8b949e; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem; opacity: 0.5;">
+                <button class="language-tab" data-language="c" style="background: #A020F0; color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem;">
+                    <i class="fas fa-code"></i> <span>C</span>
+                </button>
+                <button class="language-tab" data-language="cpp" style="background: #00599C; color: #fff; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem;">
                     <i class="fas fa-code"></i> <span>C++</span>
                 </button>
                 <button class="language-tab disabled" data-language="go" style="background: #161b22; color: #8b949e; font-weight: 700; border-radius: 8px; padding: 10px 22px; border: none; font-size: 1.1rem; opacity: 0.5;">
@@ -112,7 +115,7 @@ class EnhancedChallengesManager {
     }
 
     async showDemoData(language = 'python') {
-        if (language === 'python' || language === 'java' || language === 'javascript') {
+        if (language === 'python' || language === 'java' || language === 'javascript' || language === 'c' || language === 'cpp') {
             try {
                 const response = await fetch('scripts/challenges.json');
                 const data = await response.json();
@@ -124,6 +127,10 @@ class EnhancedChallengesManager {
                         return ch.language === 'java';
                     } else if (language === 'javascript') {
                         return ch.language === 'javascript';
+                    } else if (language === 'c') {
+                        return ch.language === 'c';
+                    } else if (language === 'cpp') {
+                        return ch.language === 'cpp';
                     }
                     return false;
                 });
@@ -144,8 +151,8 @@ class EnhancedChallengesManager {
                 const selectedLang = button.getAttribute('data-language');
                 await this.showDemoData(selectedLang);
                 this.renderChallenges();
-                // If not python, java, or javascript, show 'coming soon' message
-                if (selectedLang !== 'python' && selectedLang !== 'java' && selectedLang !== 'javascript') {
+                // If not python, java, javascript, c, or cpp, show 'coming soon' message
+                if (selectedLang !== 'python' && selectedLang !== 'java' && selectedLang !== 'javascript' && selectedLang !== 'c' && selectedLang !== 'cpp') {
                     const container = document.getElementById('challenges-list');
                     if (container) {
                         Array.from(container.children).forEach(child => {

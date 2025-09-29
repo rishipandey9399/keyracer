@@ -30,6 +30,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .header-content {
@@ -54,6 +55,20 @@ body {
     font-size: 22px;
     font-weight: 400;
     color: #202124;
+    position: relative;
+}
+
+.gemini-header h1::after {
+    content: 'AI Agent v2.0';
+    position: absolute;
+    top: -8px;
+    right: -80px;
+    font-size: 10px;
+    background: linear-gradient(135deg, #4285f4, #34a853);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
 }
 
 .header-actions {
@@ -342,6 +357,131 @@ body {
     }
 }
 
+/* AI Agent Features */
+.agent-response {
+    position: relative;
+}
+
+.agent-response::before {
+    content: '🤖 AI Agent';
+    position: absolute;
+    top: -8px;
+    left: 44px;
+    font-size: 10px;
+    color: #4285f4;
+    font-weight: 500;
+    background: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 1px solid #e8eaed;
+}
+
+.command-suggestions {
+    margin-top: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e8eaed;
+}
+
+.suggestions-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #5f6368;
+}
+
+.suggestions-header i {
+    color: #4285f4;
+}
+
+.suggestion-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+.suggestion-btn {
+    background: white;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #202124;
+}
+
+.suggestion-btn:hover {
+    border-color: #4285f4;
+    background: #f8f9fa;
+    transform: translateY(-1px);
+}
+
+.suggestion-btn i {
+    color: #4285f4;
+    font-size: 14px;
+}
+
+/* Enhanced Message Styling */
+.message-content strong {
+    color: #1a73e8;
+    font-weight: 600;
+}
+
+.message-content em {
+    color: #5f6368;
+    font-style: italic;
+}
+
+.bot-message .message-content {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 1px solid #e8eaed;
+}
+
+.agent-response .message-content {
+    background: linear-gradient(135deg, #e8f0fe 0%, #f8f9fa 100%);
+    border: 1px solid #4285f4;
+}
+
+/* Agent Status Indicator */
+.agent-status {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4285f4;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+    z-index: 1000;
+}
+
+.agent-status.online::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #34a853;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .gemini-container {
@@ -370,6 +510,22 @@ body {
     
     .message-content {
         max-width: 85%;
+    }
+    
+    .suggestion-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .agent-response::before {
+        left: 36px;
+        font-size: 9px;
+    }
+    
+    .agent-status {
+        bottom: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 11px;
     }
 }
 
