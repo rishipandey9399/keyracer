@@ -230,11 +230,20 @@ body {
     border-radius: 18px;
     line-height: 1.5;
     color: #202124;
+    border: 1px solid #e8eaed;
 }
 
 .user-message .message-content {
     background: #1a73e8;
     color: white;
+    border: 1px solid #1557b0;
+}
+
+.bot-message .message-content {
+    background: #ffffff;
+    color: #202124;
+    border: 1px solid #dadce0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .message-content p {
@@ -379,9 +388,10 @@ body {
 .command-suggestions {
     margin-top: 16px;
     padding: 16px;
-    background: #f8f9fa;
+    background: #ffffff;
     border-radius: 12px;
-    border: 1px solid #e8eaed;
+    border: 1px solid #dadce0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .suggestions-header {
@@ -405,7 +415,7 @@ body {
 }
 
 .suggestion-btn {
-    background: white;
+    background: #ffffff;
     border: 1px solid #dadce0;
     border-radius: 8px;
     padding: 8px 12px;
@@ -416,13 +426,17 @@ body {
     align-items: center;
     gap: 6px;
     color: #202124;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .suggestion-btn:hover {
     border-color: #4285f4;
     background: #f8f9fa;
     transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+
 
 .suggestion-btn i {
     color: #4285f4;
@@ -440,14 +454,75 @@ body {
     font-style: italic;
 }
 
+.message-content p {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.message-content ul, .message-content ol {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.message-content li {
+    margin: 4px 0;
+    color: inherit;
+}
+
+.message-content h1, .message-content h2, .message-content h3 {
+    color: #1a73e8;
+    margin: 12px 0 8px 0;
+    font-weight: 600;
+}
+
+.message-content code {
+    background: #f1f3f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #d73a49;
+}
+
+.message-content pre {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border-left: 4px solid #4285f4;
+    margin: 8px 0;
+}
+
+.message-content blockquote {
+    border-left: 4px solid #4285f4;
+    padding-left: 16px;
+    margin: 8px 0;
+    color: #5f6368;
+    font-style: italic;
+}
+
 .bot-message .message-content {
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-    border: 1px solid #e8eaed;
+    background: #ffffff;
+    color: #202124;
+    border: 1px solid #dadce0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .agent-response .message-content {
-    background: linear-gradient(135deg, #e8f0fe 0%, #f8f9fa 100%);
+    background: linear-gradient(135deg, #e8f0fe 0%, #ffffff 100%);
+    color: #1a73e8;
     border: 1px solid #4285f4;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.15);
+}
+
+.agent-response .message-content strong {
+    color: #1557b0;
+    font-weight: 600;
+}
+
+.agent-response .message-content em {
+    color: #5f6368;
+    font-style: italic;
 }
 
 /* Agent Status Indicator */
@@ -567,15 +642,52 @@ body {
     .quick-btn {
         background: #303134;
         border-color: #3c4043;
+        color: #e8eaed;
     }
     
     .quick-btn:hover {
         border-color: #4285f4;
+        background: #3c4043;
     }
     
-    .message-content {
+    .bot-message .message-content {
         background: #303134;
         color: #e8eaed;
+        border-color: #3c4043;
+    }
+    
+    .agent-response .message-content {
+        background: linear-gradient(135deg, #1a2332 0%, #303134 100%);
+        color: #8ab4f8;
+        border-color: #4285f4;
+    }
+    
+    .agent-response .message-content strong {
+        color: #aecbfa;
+    }
+    
+    .agent-response .message-content em {
+        color: #9aa0a6;
+    }
+    
+    .command-suggestions {
+        background: #303134;
+        border-color: #3c4043;
+    }
+    
+    .suggestions-header {
+        color: #9aa0a6;
+    }
+    
+    .suggestion-btn {
+        background: #3c4043;
+        border-color: #5f6368;
+        color: #e8eaed;
+    }
+    
+    .suggestion-btn:hover {
+        border-color: #4285f4;
+        background: #4a5568;
     }
     
     .input-container {
@@ -592,7 +704,25 @@ body {
         color: #e8eaed;
     }
     
+    #chat-input::placeholder {
+        color: #9aa0a6;
+    }
+    
     .typing-indicator {
         background: #303134;
+    }
+    
+    .message-content code {
+        background: #3c4043;
+        color: #ff6b6b;
+    }
+    
+    .message-content pre {
+        background: #1e1e1e;
+        border-left-color: #4285f4;
+    }
+    
+    .message-content h1, .message-content h2, .message-content h3 {
+        color: #8ab4f8;
     }
 }

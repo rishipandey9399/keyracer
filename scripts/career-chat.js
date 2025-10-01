@@ -165,10 +165,25 @@ class CareerChatWidget {
     }
 
     formatMessage(text) {
-        // Basic markdown-like formatting
+        // Enhanced markdown-like formatting for better readability
         return text
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/`([^`]+)`/g, '<code>$1</code>')
+            .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+            .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+            .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+            .replace(/^\• (.*$)/gm, '<li>$1</li>')
+            .replace(/^- (.*$)/gm, '<li>$1</li>')
+            .replace(/^\d+\. (.*$)/gm, '<li>$1</li>')
+            .replace(/((<li>.*<\/li>\s*)+)/g, '<ul>$1</ul>')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/^(.*)$/gm, function(match) {
+                if (match.includes('<h') || match.includes('<li>') || match.includes('<ul>') || match.includes('</p>')) {
+                    return match;
+                }
+                return match;
+            })
             .replace(/\n/g, '<br>');
     }
 
