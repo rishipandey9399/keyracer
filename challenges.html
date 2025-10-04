@@ -99,7 +99,7 @@
                 <p style="margin-bottom: 25px;">🏆 <strong>Earn points</strong> by completing challenges and climb the leaderboard!</p>
             </div>
             <div style="text-align: center;">
-                <button onclick="closeTipsModal()" style="background: linear-gradient(135deg, #00C2FF, #FFC700); color: #000; border: none; padding: 12px 30px; border-radius: 25px; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: 'Rajdhani', sans-serif;">Got It!</button>
+                <button id="closeTipsBtn" style="background: linear-gradient(135deg, #00C2FF, #FFC700); color: #000; border: none; padding: 12px 30px; border-radius: 25px; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: 'Rajdhani', sans-serif;">Got It!</button>
             </div>
         </div>
     </div>
@@ -317,6 +317,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('tipsModal').style.display = 'flex';
         }, 1000);
     }
+    
+    // Add event listener for close tips button
+    document.getElementById('closeTipsBtn').addEventListener('click', closeTipsModal);
 });
 
 function closeTipsModal() {
