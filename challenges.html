@@ -133,9 +133,9 @@ class EnhancedChallengesManager {
     async showDemoData(language = 'python') {
         if (language === 'python' || language === 'java' || language === 'javascript' || language === 'c' || language === 'cpp') {
             try {
-                const response = await fetch('scripts/challenges.json');
+                const response = await fetch('./scripts/challenges.json');
+                if (!response.ok) throw new Error('Failed to load challenges');
                 const data = await response.json();
-                // Filter challenges by language
                 this.challenges = data.challenges.filter(ch => {
                     if (language === 'python') {
                         return !ch.language || ch.language === 'python';
@@ -151,11 +151,27 @@ class EnhancedChallengesManager {
                     return false;
                 });
             } catch (error) {
-                this.challenges = [];
+                this.challenges = this.getFallbackChallenges(language);
             }
         } else {
             this.challenges = [];
         }
+    }
+
+    getFallbackChallenges(language) {
+        const fallbackData = {
+            python: [
+                { id: 1, title: "Hello World", difficulty: "Beginner", points: 10, category: "Basic", description: "Print Hello World", status: "new" },
+                { id: 2, title: "Sum Two Numbers", difficulty: "Beginner", points: 10, category: "Math", description: "Add two numbers", status: "new" }
+            ],
+            javascript: [
+                { id: 3, title: "Variable Declaration", difficulty: "Beginner", points: 10, category: "Basic", description: "Declare variables", status: "new" }
+            ],
+            java: [
+                { id: 4, title: "Main Method", difficulty: "Beginner", points: 10, category: "Basic", description: "Create main method", status: "new" }
+            ]
+        };
+        return fallbackData[language] || [];
     }
 
     setupEventListeners() {
@@ -327,11 +343,30 @@ function closeTipsModal() {
     localStorage.setItem('challengesTipsShown', 'true');
 }
 
-// Initialize particles.js with error handling
+// Initialize particles.js with inline config to avoid 502 errors
 if (typeof particlesJS !== 'undefined') {
     try {
-        particlesJS.load('particles-js', 'particles.json', function() {
-            console.log('callback - particles.js config loaded');
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80 },
+                "color": { "value": "#00C2FF" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 3 },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#00C2FF",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": { "enable": true, "speed": 2 }
+            },
+            "interactivity": {
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" }
+                }
+            }
         });
     } catch (error) {
         console.log('Particles.js failed to load:', error);
