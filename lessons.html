@@ -345,14 +345,12 @@
     </style>
     <!-- Add no-js class to html, will be removed if JS is enabled -->
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
-     crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/lessons.css">
     <link rel="stylesheet" href="styles/keyboard-links.css">
     <link rel="stylesheet" href="styles/preloader.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Hackathon-style Particles.js Background -->
@@ -699,7 +697,6 @@
     <link rel="stylesheet" href="styles/lessons.css">
     <link rel="stylesheet" href="styles/preloader.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Load scripts at the end -->
     <script src="scripts/preloader.js"></script>
@@ -725,8 +722,10 @@
     </div>
 </body>
     <!-- Particles.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
+      try {
+      if (typeof particlesJS !== 'undefined') {
       particlesJS('particles-js', {
         "particles": {
           "number": { "value": 120, "density": { "enable": true, "value_area": 900 } },
@@ -744,6 +743,10 @@
         },
         "retina_detect": true
       });
+      }
+      } catch (error) {
+        console.log('Particles.js not available:', error);
+      }
       
       // Set current year for copyright
       document.getElementById('current-year').textContent = new Date().getFullYear();

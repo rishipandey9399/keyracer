@@ -109,7 +109,7 @@
     <title>KeyRacer - Choose Your Path | Typing, Coding, Professional Skills and Hackathon</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --primary-color: #00FFDD;
@@ -710,7 +710,7 @@
     <div id="particles-js"></div>
 
     <!-- Particles.js and other scripts -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
 
 
@@ -744,8 +744,10 @@
                     }, 500);
                 }
             }, 100);
-            // Hackathon-style particles.js config (updated to match hackathon.html)
-            particlesJS("particles-js", {
+            // Initialize particles.js with error handling
+            if (typeof particlesJS !== 'undefined') {
+                try {
+                    particlesJS("particles-js", {
               "particles": {
                 "number": {
                   "value": 120,
@@ -803,7 +805,13 @@
                 }
               },
               "retina_detect": true
-            });
+                    });
+                } catch (error) {
+                    console.log('Particles.js failed to load:', error);
+                }
+            } else {
+                console.log('Particles.js not available');
+            }
         });
         
         // Function to mark preferences complete with animation

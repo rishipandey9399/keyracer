@@ -83,12 +83,11 @@
 
     <title>CodeRacer Challenge Leaderboard - KeyRacer | Top Programming Challenge Rankings</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
-     crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/code-racer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
     
     <style>
         body {
@@ -398,9 +397,12 @@
 
     <!-- Removed leaderboard-container -->
         <div id="particles-js"></div>
-        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
         <script>
-            particlesJS("particles-js", {
+            // Initialize particles.js with error handling
+            if (typeof particlesJS !== 'undefined') {
+                try {
+                    particlesJS("particles-js", {
                 "particles": {
                     "number": {
                         "value": 80,
@@ -504,7 +506,13 @@
                     }
                 },
                 "retina_detect": true
-            });
+                    });
+                } catch (error) {
+                    console.log('Particles.js failed to load:', error);
+                }
+            } else {
+                console.log('Particles.js not available');
+            }
         </script>
                 <div class="container">
                     <div class="leaderboard-section">

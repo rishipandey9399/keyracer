@@ -82,12 +82,11 @@
     
     <title>Championship Leaderboard - KeyRacer | Top Typing Racers & Rankings</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9511160987539177"
-     crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/leaderboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <!-- Hackathon-style Particles.js Background -->
@@ -183,7 +182,7 @@
             </div>
         </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
         // Remove duplicate particles.js initialization to prevent animation override
         // Only initialize particles.js once
@@ -192,6 +191,7 @@
             document.getElementById('current-year').textContent = new Date().getFullYear();
             
             // Initialize particles.js if available
+            try {
             if (typeof particlesJS !== 'undefined') {
                 particlesJS('particles-js', {
                     "particles": {
@@ -252,6 +252,9 @@
                     },
                     "retina_detect": true
                 });
+            }
+            } catch (error) {
+                console.log('Particles.js not available:', error);
             }
             
             // Mobile navigation toggle
