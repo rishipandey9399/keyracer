@@ -54,16 +54,11 @@ body {
 }
 
 .corner-logo-img {
-    height: 80px;
+    height: 160px;
     width: auto;
     display: block;
     object-fit: contain;
-    filter: drop-shadow(0 0 15px rgba(0, 194, 255, 0.6));
     transition: all 0.3s ease;
-}
-
-.corner-logo-img:hover {
-    filter: drop-shadow(0 0 20px rgba(0, 194, 255, 0.9));
 }
 
 /* Authentication container */
