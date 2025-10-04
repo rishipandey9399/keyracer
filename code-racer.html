@@ -318,28 +318,37 @@
                 }
 
                 .languages-grid {
-                    display: flex;
-                    flex-wrap: wrap;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
                     gap: 32px;
-                    justify-content: center;
-                    min-height: 300px;
-                    margin-bottom: 40px;
+                    max-width: 1200px;
+                    margin: 0 auto 40px auto;
+                    padding: 0 20px;
+                }
+                
+                @media (max-width: 900px) {
+                    .languages-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                
+                @media (max-width: 600px) {
+                    .languages-grid {
+                        grid-template-columns: 1fr;
+                    }
                 }
 
                 .language-card {
                     background: #161b22;
                     border-radius: 18px;
-                    padding: 28px 24px 28px 24px;
-                    width: 260px;
-                    min-width: 260px;
+                    padding: 28px 24px;
                     box-shadow: 0 8px 32px rgba(0,194,255,0.10);
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     position: relative;
                     transition: all 0.3s;
-                    margin-bottom: 20px;
-                    flex-shrink: 0;
+                    height: 100%;
                 }
 
                 .language-icon {
@@ -578,7 +587,10 @@
         </div>
     </header>
 
-
+    <div style="text-align: center; padding: 60px 0 40px 0;">
+        <h1 style="font-size: 3.5rem; background: linear-gradient(135deg, #00C2FF 0%, #FFC700 50%, #00FFDD 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: 'Orbitron', sans-serif; margin: 0; text-shadow: 0 0 30px rgba(0,194,255,0.3); letter-spacing: 2px; font-weight: 700;">Learn Programming</h1>
+        <p style="font-size: 1.2rem; color: #E1E6F2; margin: 15px 0 0 0; font-family: 'Rajdhani', sans-serif;">Master coding skills with interactive challenges</p>
+    </div>
 
     <section id="languages" class="languages-grid">
         <div class="language-card">
