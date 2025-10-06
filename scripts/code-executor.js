@@ -30,6 +30,17 @@ class CodeExecutor {
     }
 
     /**
+     * Map internal language names to Piston API language names
+     */
+    _mapLanguageForPiston(language) {
+        const languageMap = {
+            'cpp': 'c++',
+            'javascript': 'node'
+        };
+        return languageMap[language] || language;
+    }
+
+    /**
      * Wrap code with test harness based on language
      * @param {string} code - The code to wrap
      * @param {string} language - The programming language
@@ -116,6 +127,9 @@ class CodeExecutor {
                 wrappedCode = this._wrapCodeWithTestHarness(code, language, '');
             }
 
+            // Map language for Piston API
+            const pistonLanguage = this._mapLanguageForPiston(language);
+
             // First, validate the language runtime
             const runtimeResponse = await fetch('https://emkc.org/api/v2/piston/runtimes');
             if (!runtimeResponse.ok) {
@@ -123,9 +137,9 @@ class CodeExecutor {
             }
 
             const runtimes = await runtimeResponse.json();
-            const languageRuntime = runtimes.find(r => r.language === language);
+            const languageRuntime = runtimes.find(r => r.language === pistonLanguage);
             if (!languageRuntime) {
-                throw new Error(`Language ${language} is not supported`);
+                throw new Error(`Language ${pistonLanguage} is not supported`);
             }
 
             // Get the appropriate filename based on language
@@ -139,7 +153,7 @@ class CodeExecutor {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    language: language,
+                    language: pistonLanguage,
                     version: this.runtimeVersions[language] || languageRuntime.version,
                     files: [{
                         name: fileName,
