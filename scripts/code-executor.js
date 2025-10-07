@@ -120,7 +120,8 @@ class CodeExecutor {
                 formattedInput = JSON.stringify(input);
                 wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
             } else if (input) {
-                formattedInput = input;
+                // Replace \n with actual newlines for stdin
+                formattedInput = input.replace(/\\n/g, '\n');
                 wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
             } else {
                 // For code without specific input, still wrap it properly

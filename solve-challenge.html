@@ -1857,8 +1857,14 @@
                     window.codeExecutor = new CodeExecutor();
                 }
                 
+                // Get input from test case if available
+                let input = '';
+                if (currentChallenge && currentChallenge.testCases && currentChallenge.testCases.length > 0) {
+                    input = currentChallenge.testCases[0].input;
+                }
+                
                 // Execute code using CodeExecutor
-                const result = await window.codeExecutor.execute(code, language);
+                const result = await window.codeExecutor.execute(code, language, input);
                 
                 if (result.error) {
                     outputContent.textContent = `Error: ${result.error}`;
@@ -1889,8 +1895,14 @@
                     window.codeExecutor = new CodeExecutor();
                 }
                 
+                // Get input from test case if available
+                let input = '';
+                if (currentChallenge && currentChallenge.testCases && currentChallenge.testCases.length > 0) {
+                    input = currentChallenge.testCases[0].input;
+                }
+                
                 // Run the code first using CodeExecutor
-                const executionResult = await window.codeExecutor.execute(code, language);
+                const executionResult = await window.codeExecutor.execute(code, language, input);
                 
                 if (executionResult.error) {
                     alert('❌ Error in your code: ' + executionResult.error);
