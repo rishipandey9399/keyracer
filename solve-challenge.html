@@ -1680,6 +1680,16 @@
         let startTime = null;
         let timer = null;
 
+        // Show protection notice
+        function showProtectionNotice(message = '🚫 Copy/Paste is disabled for fair coding practice!') {
+            const notice = document.getElementById('protectionNotice');
+            notice.textContent = message;
+            notice.style.display = 'block';
+            setTimeout(() => {
+                notice.style.display = 'none';
+            }, 2000);
+        }
+        
         // Initialize the page
         document.addEventListener('DOMContentLoaded', async function() {
             await loadChallenge();
@@ -1870,15 +1880,7 @@
                 }
             });
             
-            // Show protection notice
-            function showProtectionNotice(message = '🚫 Copy/Paste is disabled for fair coding practice!') {
-                const notice = document.getElementById('protectionNotice');
-                notice.textContent = message;
-                notice.style.display = 'block';
-                setTimeout(() => {
-                    notice.style.display = 'none';
-                }, 2000);
-            }
+
             
             // Comprehensive copy/paste prevention
             function preventCopyPaste(e) {
