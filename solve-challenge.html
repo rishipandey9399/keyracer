@@ -34,6 +34,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
     
     <style>
         :root {
@@ -1621,12 +1623,6 @@
                         id="codeInput"
                         placeholder="Write your code here..."
                         spellcheck="false"
-                        onpaste="return false"
-                        oncontextmenu="return false"
-                        oncopy="return false"
-                        oncut="return false"
-                        ondrop="return false"
-                        ondragover="return false"
                     ></textarea>
                 </div>
             </div>
@@ -1763,6 +1759,7 @@
             
             // Detect language from challenge ID
             const language = detectLanguageFromChallenge(challenge);
+            console.log('Challenge language detected:', language);
             updateCodeEditorLanguage(language);
             
             // Show example output if available
@@ -1789,12 +1786,15 @@
 
         // Detect language from challenge ID or structure
         function detectLanguageFromChallenge(challenge) {
+            // First check if challenge has explicit language property
             if (challenge.language) {
-                return challenge.language === 'cpp' ? 'cpp' : challenge.language;
+                const lang = challenge.language.toLowerCase();
+                return lang === 'cpp' ? 'cpp' : lang;
             }
             
             const challengeId = challenge.id.toString();
             
+            // Map challenge ID ranges to languages
             if (challengeId.startsWith('1')) {
                 return 'java';
             } else if (challengeId.startsWith('2')) {
@@ -1813,6 +1813,51 @@
         // Update code editor language settings
         function updateCodeEditorLanguage(language) {
             console.log('Editor language set to:', language);
+            if (window.codeEditor) {
+                const mode = getCodeMirrorMode(language);
+                window.codeEditor.setOption('mode', mode);
+                console.log('CodeMirror mode updated to:', mode);
+                // Refresh the editor to apply syntax highlighting
+                setTimeout(() => {
+                    window.codeEditor.refresh();
+                }, 100);
+            }
+            updateLanguageIndicator(language);
+        }
+        
+        // Update language indicator in the UI
+        function updateLanguageIndicator(language) {
+            const languageNames = {
+                'python': 'Python',
+                'java': 'Java',
+                'javascript': 'JavaScript', 
+                'c': 'C',
+                'cpp': 'C++'
+            };
+            
+            const languageIcons = {
+                'python': 'fab fa-python',
+                'java': 'fab fa-java',
+                'javascript': 'fab fa-js-square',
+                'c': 'fas fa-code',
+                'cpp': 'fas fa-code'
+            };
+            
+            // Find or create language indicator
+            let indicator = document.querySelector('.language-indicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.className = 'language-indicator';
+                const editorHeader = document.querySelector('.editor-header');
+                if (editorHeader) {
+                    editorHeader.appendChild(indicator);
+                }
+            }
+            
+            const languageName = languageNames[language] || language.toUpperCase();
+            const iconClass = languageIcons[language] || 'fas fa-code';
+            
+            indicator.innerHTML = `<i class="${iconClass}"></i> ${languageName}`;
         }
 
         // Setup event listeners
@@ -1829,6 +1874,8 @@
             const language = getLanguageFromChallenge();
             const mode = getCodeMirrorMode(language);
             
+            console.log('Initializing CodeMirror with language:', language, 'mode:', mode);
+            
             window.codeEditor = CodeMirror.fromTextArea(codeInput, {
                 lineNumbers: true,
                 mode: mode,
@@ -1839,52 +1886,17 @@
                 matchBrackets: true,
                 gutters: ['CodeMirror-linenumbers'],
                 extraKeys: {
-                    'Ctrl-C': false,
-                    'Ctrl-V': false,
-                    'Ctrl-X': false,
-                    'Ctrl-A': false,
-                    'Ctrl-Z': false,
-                    'Ctrl-Y': false,
-                    'Cmd-C': false,
-                    'Cmd-V': false,
-                    'Cmd-X': false,
-                    'Cmd-A': false,
-                    'Cmd-Z': false,
-                    'Cmd-Y': false
+                    'Enter': 'newlineAndIndent',
+                    'Return': 'newlineAndIndent'
                 }
             });
             
-            // Additional protection for CodeMirror
-            window.codeEditor.on('beforeChange', (cm, change) => {
-                // Prevent paste operations
-                if (change.origin === 'paste' || change.origin === '+input') {
-                    if (change.text && change.text.length > 1) {
-                        change.cancel();
-                        showProtectionNotice();
-                    }
-                }
-            });
+            // Update language indicator
+            updateLanguageIndicator(language);
             
-            // Prevent context menu on CodeMirror
-            window.codeEditor.on('contextmenu', (cm, e) => {
-                e.preventDefault();
-                showProtectionNotice('🚫 Right-click is disabled!');
-                return false;
-            });
-            
-            // Monitor for suspicious large text inputs
-            window.codeEditor.on('change', (cm, change) => {
-                if (change.text && change.text.join('').length > 100) {
-                    // Potential paste attempt
-                    showProtectionNotice('⚠️ Large text input detected!');
-                }
-            });
-            
-
-            
-            // Comprehensive copy/paste prevention
+            // Simple copy/paste prevention - only block copy/paste operations
             function preventCopyPaste(e) {
-                // Prevent Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+A, Ctrl+Z, Ctrl+Y
+                // Only prevent copy/paste/cut operations
                 if (e.ctrlKey || e.metaKey) {
                     if (['c', 'v', 'x'].includes(e.key.toLowerCase())) {
                         e.preventDefault();
@@ -1892,40 +1904,11 @@
                         showProtectionNotice();
                         return false;
                     }
-                    if (['a', 'z', 'y'].includes(e.key.toLowerCase())) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        showProtectionNotice('🚫 This action is disabled!');
-                        return false;
-                    }
-                }
-                // Prevent F12, Ctrl+Shift+I, Ctrl+U
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                    (e.ctrlKey && e.key === 'U')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    showProtectionNotice('🚫 Developer tools are disabled!');
-                    return false;
                 }
             }
             
-            // Apply to document and CodeMirror
+            // Apply copy/paste prevention to document
             document.addEventListener('keydown', preventCopyPaste);
-            document.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                showProtectionNotice('🚫 Right-click is disabled!');
-            });
-            
-            // Prevent drag and drop
-            document.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                showProtectionNotice('🚫 Drag & drop is disabled!');
-            });
-            document.addEventListener('drop', (e) => {
-                e.preventDefault();
-                showProtectionNotice('🚫 Drag & drop is disabled!');
-            });
             
             // Prevent paste events
             document.addEventListener('paste', (e) => {
@@ -1945,43 +1928,18 @@
                 showProtectionNotice();
             });
             
-            // Additional CodeMirror event handlers
-            if (window.codeEditor) {
-                window.codeEditor.on('keydown', (cm, e) => {
-                    preventCopyPaste(e);
-                });
-                
-                // Disable CodeMirror's built-in copy/paste
-                window.codeEditor.setOption('extraKeys', {
-                    'Ctrl-C': false,
-                    'Ctrl-V': false,
-                    'Ctrl-X': false,
-                    'Ctrl-A': false,
-                    'Ctrl-Z': false,
-                    'Ctrl-Y': false,
-                    'Cmd-C': false,
-                    'Cmd-V': false,
-                    'Cmd-X': false,
-                    'Cmd-A': false,
-                    'Cmd-Z': false,
-                    'Cmd-Y': false
-                });
-            }
-            
-            function getCodeMirrorMode(language) {
-                const modeMap = {
-                    'python': 'python',
-                    'java': 'text/x-java',
-                    'javascript': 'javascript',
-                    'c': 'text/x-csrc',
-                    'cpp': 'text/x-c++src'
-                };
-                return modeMap[language] || 'python';
-            }
-            
-
-            
             updateNavigationUrls();
+        }
+        
+        function getCodeMirrorMode(language) {
+            const modeMap = {
+                'python': 'python',
+                'java': 'text/x-java', 
+                'javascript': 'javascript',
+                'c': 'text/x-csrc',
+                'cpp': 'text/x-c++src'
+            };
+            return modeMap[language] || 'python';
         }
         
 
@@ -1997,14 +1955,14 @@
 
         // Get language from current challenge
         function getLanguageFromChallenge() {
-            if (currentChallenge && currentChallenge.language) {
-                return currentChallenge.language === 'cpp' ? 'cpp' : currentChallenge.language;
+            if (currentChallenge) {
+                return detectLanguageFromChallenge(currentChallenge);
             }
             
             const urlParams = new URLSearchParams(window.location.search);
             const challengeId = urlParams.get('challenge');
             
-            if (!challengeId) return null;
+            if (!challengeId) return 'python';
             
             if (challengeId.startsWith('1')) {
                 return 'java';
