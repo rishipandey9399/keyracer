@@ -809,6 +809,32 @@
             line-height: 1.5 !important;
             border-radius: 15px;
             background: transparent !important;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+        
+        /* Disable text selection for copy protection */
+        .CodeMirror-selected {
+            background: rgba(0, 194, 255, 0.2) !important;
+        }
+        
+        /* Additional protection styles */
+        .code-editor {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .code-editor .CodeMirror {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         
         .CodeMirror-gutters {
@@ -897,6 +923,55 @@
 
         .code-input:focus {
             caret-color: var(--accent-color);
+        }
+        
+        /* Copy protection styles */
+        .code-input {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        
+        /* Disable drag and drop visual feedback */
+        .code-editor *::-webkit-scrollbar {
+            -webkit-appearance: none;
+        }
+        
+        /* Protection message */
+        .protection-notice {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(255, 87, 34, 0.95), rgba(244, 67, 54, 0.95));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: bold;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            z-index: 10000;
+            display: none;
+            animation: slideInOut 2s ease-in-out;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes slideInOut {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -70%) scale(0.8);
+            }
+            20%, 80% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% { 
+                opacity: 0; 
+                transform: translate(-50%, -30%) scale(0.8);
+            }
         }
 
         /* Action Buttons */
@@ -1548,6 +1623,10 @@
                         spellcheck="false"
                         onpaste="return false"
                         oncontextmenu="return false"
+                        oncopy="return false"
+                        oncut="return false"
+                        ondrop="return false"
+                        ondragover="return false"
                     ></textarea>
                 </div>
             </div>
@@ -1589,6 +1668,11 @@
             </button>
         </div>
     </div>
+    
+    <!-- Protection Notice -->
+    <div class="protection-notice" id="protectionNotice">
+        🚫 Copy/Paste is disabled for fair coding practice!
+    </div>
 
     <script>
         // Global variables
@@ -1600,7 +1684,11 @@
         document.addEventListener('DOMContentLoaded', async function() {
             await loadChallenge();
             setupEventListeners();
-
+            
+            // Show initial protection notice
+            setTimeout(() => {
+                showProtectionNotice('ℹ️ Copy/Paste is disabled to ensure fair coding practice!');
+            }, 2000);
         });
 
         // Load challenge from URL parameter
@@ -1739,15 +1827,144 @@
                 lineWrapping: false,
                 autoCloseBrackets: true,
                 matchBrackets: true,
-                gutters: ['CodeMirror-linenumbers']
-            });
-            
-            // Prevent copy/paste
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'x')) {
-                    e.preventDefault();
+                gutters: ['CodeMirror-linenumbers'],
+                extraKeys: {
+                    'Ctrl-C': false,
+                    'Ctrl-V': false,
+                    'Ctrl-X': false,
+                    'Ctrl-A': false,
+                    'Ctrl-Z': false,
+                    'Ctrl-Y': false,
+                    'Cmd-C': false,
+                    'Cmd-V': false,
+                    'Cmd-X': false,
+                    'Cmd-A': false,
+                    'Cmd-Z': false,
+                    'Cmd-Y': false
                 }
             });
+            
+            // Additional protection for CodeMirror
+            window.codeEditor.on('beforeChange', (cm, change) => {
+                // Prevent paste operations
+                if (change.origin === 'paste' || change.origin === '+input') {
+                    if (change.text && change.text.length > 1) {
+                        change.cancel();
+                        showProtectionNotice();
+                    }
+                }
+            });
+            
+            // Prevent context menu on CodeMirror
+            window.codeEditor.on('contextmenu', (cm, e) => {
+                e.preventDefault();
+                showProtectionNotice('🚫 Right-click is disabled!');
+                return false;
+            });
+            
+            // Monitor for suspicious large text inputs
+            window.codeEditor.on('change', (cm, change) => {
+                if (change.text && change.text.join('').length > 100) {
+                    // Potential paste attempt
+                    showProtectionNotice('⚠️ Large text input detected!');
+                }
+            });
+            
+            // Show protection notice
+            function showProtectionNotice(message = '🚫 Copy/Paste is disabled for fair coding practice!') {
+                const notice = document.getElementById('protectionNotice');
+                notice.textContent = message;
+                notice.style.display = 'block';
+                setTimeout(() => {
+                    notice.style.display = 'none';
+                }, 2000);
+            }
+            
+            // Comprehensive copy/paste prevention
+            function preventCopyPaste(e) {
+                // Prevent Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+A, Ctrl+Z, Ctrl+Y
+                if (e.ctrlKey || e.metaKey) {
+                    if (['c', 'v', 'x'].includes(e.key.toLowerCase())) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        showProtectionNotice();
+                        return false;
+                    }
+                    if (['a', 'z', 'y'].includes(e.key.toLowerCase())) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        showProtectionNotice('🚫 This action is disabled!');
+                        return false;
+                    }
+                }
+                // Prevent F12, Ctrl+Shift+I, Ctrl+U
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showProtectionNotice('🚫 Developer tools are disabled!');
+                    return false;
+                }
+            }
+            
+            // Apply to document and CodeMirror
+            document.addEventListener('keydown', preventCopyPaste);
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                showProtectionNotice('🚫 Right-click is disabled!');
+            });
+            
+            // Prevent drag and drop
+            document.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                showProtectionNotice('🚫 Drag & drop is disabled!');
+            });
+            document.addEventListener('drop', (e) => {
+                e.preventDefault();
+                showProtectionNotice('🚫 Drag & drop is disabled!');
+            });
+            
+            // Prevent paste events
+            document.addEventListener('paste', (e) => {
+                e.preventDefault();
+                showProtectionNotice();
+            });
+            
+            // Prevent copy events
+            document.addEventListener('copy', (e) => {
+                e.preventDefault();
+                showProtectionNotice();
+            });
+            
+            // Prevent cut events
+            document.addEventListener('cut', (e) => {
+                e.preventDefault();
+                showProtectionNotice();
+            });
+            
+            // Additional CodeMirror event handlers
+            if (window.codeEditor) {
+                window.codeEditor.on('keydown', (cm, e) => {
+                    preventCopyPaste(e);
+                });
+                
+                // Disable CodeMirror's built-in copy/paste
+                window.codeEditor.setOption('extraKeys', {
+                    'Ctrl-C': false,
+                    'Ctrl-V': false,
+                    'Ctrl-X': false,
+                    'Ctrl-A': false,
+                    'Ctrl-Z': false,
+                    'Ctrl-Y': false,
+                    'Cmd-C': false,
+                    'Cmd-V': false,
+                    'Cmd-X': false,
+                    'Cmd-A': false,
+                    'Cmd-Z': false,
+                    'Cmd-Y': false
+                });
+            }
             
             function getCodeMirrorMode(language) {
                 const modeMap = {
