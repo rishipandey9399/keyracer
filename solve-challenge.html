@@ -2145,6 +2145,15 @@
                 const userEmail = localStorage.getItem('typingTestUserEmail');
                 const userData = JSON.parse(localStorage.getItem('typingTestUserData') || '{}');
                 
+                console.log('🔍 DEBUG: updateLeaderboard called with:', {
+                    challengeId,
+                    completionTime,
+                    currentUser,
+                    userType,
+                    language: getLanguageFromChallenge(),
+                    challenge: currentChallenge
+                });
+                
                 if (!currentUser) {
                     console.log('No user logged in, skipping coderacer-leaderboard update');
                     return;
@@ -2162,12 +2171,13 @@
                 const isFirstCompletion = !completedChallenges.includes(challengeId.toString());
                 const pointsEarned = isFirstCompletion ? getPointsForChallenge(currentChallenge) : 0;
                 
-                console.log(`Challenge ${challengeId}: First completion = ${isFirstCompletion}, Points = ${pointsEarned}`);
+                console.log(`🎯 Challenge ${challengeId} (${getLanguageFromChallenge()}): First completion = ${isFirstCompletion}, Points = ${pointsEarned}`);
                 
                 // Save completed challenge to localStorage
                 if (isFirstCompletion) {
                     completedChallenges.push(challengeId.toString());
                     localStorage.setItem('challengeStats', JSON.stringify({ completedChallenges }));
+                    console.log('✅ Saved to localStorage:', { completedChallenges });
                 }
                 
                 // Prepare submission data
@@ -2175,7 +2185,8 @@
                     pointsEarned,
                     attempts: 1,
                     completionTime,
-                    challengeId: challengeId.toString()
+                    challengeId: challengeId.toString(),
+                    language: getLanguageFromChallenge() // Add language info
                 };
                 
                 // Add user identification based on login type
@@ -2189,26 +2200,31 @@
                     submissionData.displayName = currentUser;
                 }
                 
-                console.log('Submitting to coderacer leaderboard:', submissionData);
+                console.log('📤 Submitting to coderacer leaderboard:', submissionData);
                 
                 const response = await fetch('/api/coderacer-leaderboard/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(submissionData)
+                }).catch(err => {
+                    console.error('🚫 Network error - server may not be running:', err);
+                    throw new Error('Server not accessible. Please start the server.');
                 });
                 
                 const result = await response.json();
                 
+                console.log('📥 Server response:', { status: response.status, result });
+                
                 if (response.ok) {
-                    console.log('Coderacer leaderboard updated successfully:', result);
+                    console.log('✅ Coderacer leaderboard updated successfully:', result);
                     if (result.pointsAwarded > 0) {
-                        console.log(`🎉 Awarded ${result.pointsAwarded} points!`);
+                        console.log(`🎉 Awarded ${result.pointsAwarded} points for ${getLanguageFromChallenge()} challenge!`);
                     }
                 } else {
-                    console.error('Failed to update coderacer leaderboard:', result);
+                    console.error('❌ Failed to update coderacer leaderboard:', result);
                 }
             } catch (error) {
-                console.error('Error updating coderacer leaderboard:', error);
+                console.error('💥 Error updating coderacer leaderboard:', error);
             }
         }
 
@@ -2226,6 +2242,64 @@
                 default: return 10;
             }
         }
+        
+        // Debug function to test leaderboard submission
+        window.testLeaderboardSubmission = async function() {
+            console.log('🧪 Testing leaderboard submission...');
+            
+            const testData = {
+                pointsEarned: 10,
+                attempts: 1,
+                completionTime: 120,
+                challengeId: '451', // C challenge
+                language: 'c',
+                email: 'test@guest.keyracer',
+                createGuestUser: true,
+                displayName: 'Test User'
+            };
+            
+            try {
+                const response = await fetch('/api/coderacer-leaderboard/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                const result = await response.json();
+                console.log('📥 Test submission result:', { status: response.status, result });
+                
+                if (response.ok) {
+                    console.log('✅ Test submission successful!');
+                } else {
+                    console.error('❌ Test submission failed:', result);
+                }
+            } catch (error) {
+                console.error('💥 Test submission error:', error);
+            }
+        };
+    </script>
+    
+    <!-- Debug Console Commands -->
+    <script>
+        // Add debug commands to window for testing
+        window.debugCodeRacer = {
+            testSubmission: window.testLeaderboardSubmission,
+            checkLocalStorage: () => {
+                console.log('LocalStorage data:');
+                console.log('- typingTestUser:', localStorage.getItem('typingTestUser'));
+                console.log('- typingTestUserType:', localStorage.getItem('typingTestUserType'));
+                console.log('- challengeStats:', localStorage.getItem('challengeStats'));
+            },
+            clearStats: () => {
+                localStorage.removeItem('challengeStats');
+                console.log('Challenge stats cleared');
+            }
+        };
+        
+        console.log('🔧 Debug commands available:');
+        console.log('- debugCodeRacer.testSubmission() - Test leaderboard submission');
+        console.log('- debugCodeRacer.checkLocalStorage() - Check stored data');
+        console.log('- debugCodeRacer.clearStats() - Clear challenge stats');
     </script>
 
     <!-- Legal Links Footer -->
