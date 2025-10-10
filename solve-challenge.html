@@ -1528,28 +1528,30 @@
 
         /* Button loading state */
         .action-btn.loading {
-            opacity: 0.7;
+            opacity: 0.8;
             cursor: not-allowed;
             pointer-events: none;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 50%, #374151 100%) !important;
         }
 
-        .action-btn.loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid transparent;
-            border-top: 2px solid currentColor;
-            border-radius: 50%;
+        .action-btn.loading .fa-spinner {
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Button success state */
+        .action-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+        
+        .action-btn:disabled:hover {
+            transform: none !important;
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4) !important;
         }
 
         /* Focus visible improvements */
@@ -2050,11 +2052,17 @@
         // Submit solution function
         async function submitSolution() {
             const code = window.codeEditor ? window.codeEditor.getValue().trim() : document.getElementById('codeInput').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
             
             if (!code) {
                 alert('Please enter your solution first.');
                 return;
             }
+            
+            // Change button to loading state
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
             
             try {
                 // Get the language for the current challenge
@@ -2076,6 +2084,8 @@
                 
                 if (executionResult.error) {
                     alert('❌ Error in your code: ' + executionResult.error);
+                    // Reset button state on error
+                    resetSubmitButton();
                     return;
                 }
                 
@@ -2086,6 +2096,10 @@
                 
                 if (isCorrect) {
                     const completionTime = stopTimer();
+                    
+                    // Change button to success state
+                    updateSubmitButtonSuccess();
+                    
                     showSuccessModal(completionTime);
                     
                     // Update leaderboard if user is logged in
@@ -2094,11 +2108,35 @@
                     alert('❌ Solution is not correct. Please check your code and try again.\n\nExpected: ' + 
                           (currentChallenge.examples?.output || 'See challenge description') + 
                           '\nYour output: ' + result);
+                    // Reset button state on incorrect solution
+                    resetSubmitButton();
                 }
                 
             } catch (error) {
                 alert('❌ Error in your code: ' + error.message);
+                // Reset button state on error
+                resetSubmitButton();
             }
+        }
+        
+        // Update submit button to success state
+        function updateSubmitButtonSuccess() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.remove('loading');
+            submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Completed!';
+            submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 25%, #15803d 50%, #166534 75%, #14532d 100%)';
+            submitBtn.style.color = '#fff';
+            submitBtn.disabled = true;
+        }
+        
+        // Reset submit button to original state
+        function resetSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.remove('loading');
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Submit Solution';
+            submitBtn.style.background = '';
+            submitBtn.style.color = '';
+            submitBtn.disabled = false;
         }
 
         // Check if solution is correct
