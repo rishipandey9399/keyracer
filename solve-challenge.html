@@ -2195,15 +2195,26 @@
             document.getElementById('completionTime').textContent = timeStr;
             document.getElementById('successModal').style.display = 'flex';
             
+            // Update challenge status in localStorage
+            const savedStats = localStorage.getItem('challengeStats');
+            let stats = savedStats ? JSON.parse(savedStats) : { completedChallenges: [] };
+            
+            if (!stats.completedChallenges.includes(currentChallenge.id.toString())) {
+                stats.completedChallenges.push(currentChallenge.id.toString());
+                localStorage.setItem('challengeStats', JSON.stringify(stats));
+            }
+            
             // Save completion data for challenges.html to pick up
             const completionData = {
                 challengeId: currentChallenge.id,
                 points: getPointsForChallenge(currentChallenge),
                 completionTime: completionTime,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                language: getLanguageFromChallenge()
             };
             
             localStorage.setItem('challengeCompleted', JSON.stringify(completionData));
+            localStorage.setItem('selectedLanguage', getLanguageFromChallenge());
             console.log('Challenge completion saved:', completionData);
         }
 
