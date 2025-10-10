@@ -2103,13 +2103,46 @@
 
         // Check if solution is correct
         function checkSolution(output, challenge) {
-            if (!challenge.testCases || challenge.testCases.length === 0) {
-                // Fallback to example output
-                return challenge.examples && 
-                       output.trim() === challenge.examples.output.trim();
+            const code = window.codeEditor ? window.codeEditor.getValue() : document.getElementById('codeInput').value;
+            
+            // Check if this is a basic "Hello World" type challenge where hardcoded output is expected
+            const isBasicPrintChallenge = challenge.title && (
+                challenge.title.toLowerCase().includes('hello world') ||
+                challenge.title.toLowerCase().includes('hello, world') ||
+                challenge.title.toLowerCase().includes('print hello') ||
+                (challenge.difficulty?.toLowerCase() === 'beginner' && challenge.category?.toLowerCase() === 'basic')
+            );
+            
+            // Skip anti-cheat checks for basic print challenges
+            if (!isBasicPrintChallenge) {
+                // Anti-cheat: Check if code contains hardcoded expected output
+                const expectedOutput = challenge.examples?.output || (challenge.testCases?.[0]?.expectedOutput);
+                if (expectedOutput && code.includes(expectedOutput)) {
+                    alert('❌ Hardcoded output detected! Please write actual logic instead of printing the expected result.');
+                    return false;
+                }
+                
+                // Anti-cheat: Check for suspicious print patterns
+                const suspiciousPatterns = [
+                    /print\s*\(\s*["'].*["']\s*\)/, // print("hardcoded")
+                    /console\.log\s*\(\s*["'].*["']\s*\)/, // console.log("hardcoded")
+                    /printf\s*\(\s*["'].*["']\s*\)/, // printf("hardcoded")
+                    /cout\s*<<\s*["'].*["']/ // cout << "hardcoded"
+                ];
+                
+                if (suspiciousPatterns.some(pattern => pattern.test(code))) {
+                    const outputLines = output.trim().split('\n');
+                    if (outputLines.length === 1 && outputLines[0] === expectedOutput) {
+                        alert('❌ Suspicious hardcoded output detected! Please implement the actual algorithm.');
+                        return false;
+                    }
+                }
             }
             
-            // Check against test cases
+            if (!challenge.testCases || challenge.testCases.length === 0) {
+                return challenge.examples && output.trim() === challenge.examples.output.trim();
+            }
+            
             return challenge.testCases.some(testCase => 
                 output.trim() === testCase.expectedOutput.trim()
             );
