@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P5RF6RD8J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4P5RF6RD8J');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -2011,13 +2020,24 @@
         async function runCode() {
             const code = window.codeEditor ? window.codeEditor.getValue().trim() : document.getElementById('codeInput').value.trim();
             const outputContent = document.getElementById('outputContent');
+            const runBtn = document.getElementById('runBtn');
             
             if (!code) {
                 outputContent.textContent = 'Please enter some code first.';
                 return;
             }
             
-            outputContent.textContent = 'Running code...';
+            // Update button state
+            runBtn.classList.add('loading');
+            runBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
+            runBtn.disabled = true;
+            
+            // Show queue status if needed
+            if (window.codeExecutor && window.codeExecutor.requestQueue.length > 0) {
+                outputContent.textContent = `Queued for execution... (${window.codeExecutor.requestQueue.length + 1} in queue)`;
+            } else {
+                outputContent.textContent = 'Running code...';
+            }
             
             try {
                 // Get the language for the current challenge
@@ -2046,6 +2066,11 @@
             } catch (error) {
                 console.error('Execution error:', error);
                 outputContent.textContent = `Error: ${error.message}`;
+            } finally {
+                // Reset button state
+                runBtn.classList.remove('loading');
+                runBtn.innerHTML = '<i class="fas fa-play"></i> Run Code';
+                runBtn.disabled = false;
             }
         }
 

@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (forgotLink) {
             forgotLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                window.location.href = 'forgot-password.html';
+                handleForgotPassword();
             });
         }
         
@@ -127,36 +127,43 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerHTML = 'Signing in... <i class="fas fa-spinner fa-spin"></i>';
             
             try {
-                // In a real app, you would validate with a server
-                // Since this is for a demonstration, we'll simulate a successful login
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
                 
-                // Extract username from email (before @)
-                const username = email.split('@')[0];
+                const data = await response.json();
                 
-                // Store user info
-                console.log('Login successful for:', username);
-                localStorage.setItem('typingTestUser', username);
-                localStorage.setItem('typingTestUserEmail', email);
-                localStorage.setItem('typingTestUserType', 'registered');
-            
-            // Show success message briefly before redirecting
-            showMessage('Login successful! Redirecting...', 'success');
-            
-                // Redirect after a short delay
-            setTimeout(() => {
-                redirectToApp(username);
-            }, 800);
+                if (response.ok) {
+                    // Store user info and token
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('typingTestUser', data.user.username);
+                    localStorage.setItem('typingTestUserEmail', data.user.email);
+                    localStorage.setItem('typingTestUserType', 'registered');
+                    
+                    showMessage('Login successful! Redirecting...', 'success');
+                    
+                    setTimeout(() => {
+                        redirectToApp(data.user.username);
+                    }, 800);
+                } else {
+                    showMessage(data.error || 'Login failed', 'error');
+                }
             } catch (error) {
-                console.error('Login validation error:', error);
-                showMessage('Login failed. Please check your credentials and try again.', 'error');
+                console.error('Login error:', error);
+                showMessage('Login failed. Please check your connection and try again.', 'error');
+            } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Sign In <i class="fas fa-sign-in-alt"></i>';
+                submitBtn.innerHTML = 'Login <i class="fas fa-sign-in-alt"></i>';
             }
         } catch (error) {
             console.error('Login error:', error);
             const submitBtn = loginForm.querySelector('.auth-btn');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Sign In <i class="fas fa-sign-in-alt"></i>';
+            submitBtn.innerHTML = 'Login <i class="fas fa-sign-in-alt"></i>';
             showMessage('Login failed. Please check your credentials and try again.', 'error');
         }
     }
@@ -202,24 +209,27 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerHTML = 'Creating account... <i class="fas fa-spinner fa-spin"></i>';
             
             try {
-                // In a real app, you would register with a server
-                // Since this is for a demonstration, we'll simulate a successful registration
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
                 
-                console.log('Registration successful for:', username);
-                localStorage.setItem('typingTestUser', username);
-                localStorage.setItem('typingTestUserEmail', email);
-                localStorage.setItem('typingTestUserType', 'registered');
+                const data = await response.json();
                 
-                // Show success message briefly before redirecting
-                showMessage('Account created successfully! Redirecting...', 'success');
-                
-                // Redirect after a short delay
-                    setTimeout(() => {
-                    redirectToApp(username);
-                }, 800);
+                if (response.ok) {
+                    showMessage('Registration successful! Please check your email to verify your account.', 'success');
+                    // Switch to login tab
+                    document.querySelector('[data-tab="login"]').click();
+                } else {
+                    showMessage(data.error || 'Registration failed', 'error');
+                }
             } catch (error) {
-                console.error('Registration validation error:', error);
-                showMessage('Registration failed. Please try again.', 'error');
+                console.error('Registration error:', error);
+                showMessage('Registration failed. Please check your connection and try again.', 'error');
+            } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Create Account <i class="fas fa-user-plus"></i>';
             }
@@ -396,6 +406,41 @@ document.addEventListener('DOMContentLoaded', () => {
         if (authTabs) {
             authTabs.style.display = 'none';
         }
+    }
+
+    // Forgot password function
+    function handleForgotPassword() {
+        const email = prompt('Enter your email address:');
+        if (!email) return;
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showMessage('Please enter a valid email address', 'error');
+            return;
+        }
+        
+        fetch('/api/auth/forgot-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            showMessage('If an account exists, a reset email has been sent.', 'success');
+        })
+        .catch(error => {
+            showMessage('Failed to send reset email. Please try again.', 'error');
+        });
+    }
+    
+    // Check URL parameters for verification status
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('verified') === 'true') {
+        showMessage('Email verified successfully! You can now log in.', 'success');
+    } else if (urlParams.get('error') === 'invalid_token') {
+        showMessage('Invalid verification link. Please try registering again.', 'error');
+    } else if (urlParams.get('error') === 'verification_failed') {
+        showMessage('Email verification failed. Please try again.', 'error');
     }
 
     // Set the current year in footer

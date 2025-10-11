@@ -6,6 +6,10 @@
 class CodeExecutor {
     constructor() {
         this.API_URL = 'https://emkc.org/api/v2/piston/';
+        this.requestQueue = [];
+        this.isProcessing = false;
+        this.maxConcurrent = 2; // Limit concurrent requests
+        this.activeRequests = 0;
         this.runtimeVersions = {
             'python': '3.10',
             'java': '15.0.2',
@@ -107,7 +111,44 @@ class CodeExecutor {
         return code;
     }
 
+    async executeWithQueue(code, language, input = '') {
+        return new Promise((resolve, reject) => {
+            this.requestQueue.push({ code, language, input, resolve, reject });
+            this.processQueue();
+        });
+    }
+    
+    async processQueue() {
+        if (this.isProcessing || this.activeRequests >= this.maxConcurrent || this.requestQueue.length === 0) {
+            return;
+        }
+        
+        this.isProcessing = true;
+        
+        while (this.requestQueue.length > 0 && this.activeRequests < this.maxConcurrent) {
+            const request = this.requestQueue.shift();
+            this.activeRequests++;
+            
+            this.executeInternal(request.code, request.language, request.input)
+                .then(request.resolve)
+                .catch(request.reject)
+                .finally(() => {
+                    this.activeRequests--;
+                    this.processQueue();
+                });
+        }
+        
+        this.isProcessing = false;
+    }
+
     async execute(code, language, input = '') {
+        return this.executeWithQueue(code, language, input);
+    }
+    
+    async executeInternal(code, language, input = '', retryCount = 0) {
+        const maxRetries = 3;
+        const baseDelay = 1000; // 1 second
+        
         try {
             // Format input based on type and wrap code if needed
             let formattedInput = '';
@@ -134,7 +175,7 @@ class CodeExecutor {
             try {
                 // Check connectivity with timeout
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
                 
                 const runtimeResponse = await fetch('https://emkc.org/api/v2/piston/runtimes', {
                     signal: controller.signal
@@ -156,7 +197,7 @@ class CodeExecutor {
 
                 // Execute the code with timeout
                 const execController = new AbortController();
-                const execTimeoutId = setTimeout(() => execController.abort(), 15000);
+                const execTimeoutId = setTimeout(() => execController.abort(), 30000);
                 
                 const response = await fetch(this.API_URL + 'execute', {
                     method: 'POST',
@@ -173,8 +214,8 @@ class CodeExecutor {
                         }],
                         stdin: formattedInput,
                         args: [],
-                        compile_timeout: 10000,
-                        run_timeout: 3000,
+                        compile_timeout: 15000,
+                        run_timeout: 8000,
                         compile_memory_limit: -1,
                         run_memory_limit: -1
                     }),
@@ -214,9 +255,17 @@ class CodeExecutor {
                 console.error('Network error:', networkError);
                 
                 if (networkError.name === 'AbortError') {
+                    // Retry with exponential backoff for timeouts
+                    if (retryCount < maxRetries) {
+                        const delay = baseDelay * Math.pow(2, retryCount) + Math.random() * 1000;
+                        console.log(`Retrying in ${delay}ms... (attempt ${retryCount + 1}/${maxRetries})`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        return this.executeInternal(code, language, input, retryCount + 1);
+                    }
+                    
                     return {
                         output: '',
-                        error: 'Request timed out. The code execution service may be busy. Please try again.'
+                        error: `Request timed out after ${maxRetries} attempts. The code execution service is busy. Please try again in a few moments.`
                     };
                 }
                 

@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P5RF6RD8J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4P5RF6RD8J');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -363,6 +372,7 @@
     
     <!-- Load scripts at the end -->
     <script src="scripts/database.js"></script>
+    <script src="scripts/auth-middleware.js"></script>
     <script src="scripts/preloader.js"></script>
     <script src="scripts/login.js"></script>
     <!-- Removed header-auth.js to prevent redirect loops on login page -->
