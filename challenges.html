@@ -134,10 +134,14 @@ class EnhancedChallengesManager {
         this.userStats = {};
         this.currentFilter = 'all';
         this.currentLanguage = this.getInitialLanguage();
-        this.showDemoData(this.currentLanguage);
-        this.updateChallengeStatusFromLocalStorage();
         this.setupEventListeners();
         this.setActiveLanguageTab(this.currentLanguage);
+        this.initializeWithLanguage();
+    }
+
+    async initializeWithLanguage() {
+        await this.showDemoData(this.currentLanguage);
+        this.updateChallengeStatusFromLocalStorage();
         this.renderChallenges();
     }
 
@@ -412,8 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener for close tips button
     document.getElementById('closeTipsBtn').addEventListener('click', closeTipsModal);
     
-    // Clear URL parameters after processing to keep URL clean
-    if (window.location.search) {
+    // Only clear URL parameters if they don't contain language info
+    if (window.location.search && !window.location.search.includes('lang=')) {
         const url = new URL(window.location);
         url.search = '';
         window.history.replaceState({}, document.title, url.toString());

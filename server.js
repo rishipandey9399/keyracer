@@ -13,6 +13,21 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Content Security Policy for Google Analytics
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', 
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; " +
+    "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://emkc.org https://cdnjs.cloudflare.com; " +
+    "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; " +
+    "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
+    "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; " +
+    "frame-src 'self';"
+  );
+  next();
+});
+
 app.use(express.static('.'));
 
 // MongoDB connection

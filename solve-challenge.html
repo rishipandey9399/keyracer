@@ -1580,7 +1580,7 @@
     <!-- Header -->
     <header class="challenge-header">
         <div class="header-content">
-            <a href="challenges.html" class="back-button" id="backButton">
+            <a href="#" class="back-button" id="backButton" onclick="navigateBackToChallenges(); return false;">
                 <i class="fas fa-arrow-left"></i>
                 Back to Challenges
             </a>
@@ -1747,6 +1747,7 @@
                 }
                 
                 displayChallenge(currentChallenge);
+                updateNavigationUrls();
                 startTimer();
                 
             } catch (error) {
@@ -1931,8 +1932,6 @@
                 e.preventDefault();
                 showProtectionNotice();
             });
-            
-            updateNavigationUrls();
         }
         
         function getCodeMirrorMode(language) {
