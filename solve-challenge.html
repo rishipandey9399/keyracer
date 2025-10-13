@@ -2181,8 +2181,17 @@
                 challenge.title.toLowerCase().includes('add two') ||
                 challenge.title.toLowerCase().includes('sum') ||
                 challenge.title.toLowerCase().includes('compare') ||
-                challenge.title.toLowerCase().includes('average')
-            );
+                challenge.title.toLowerCase().includes('average') ||
+                challenge.title.toLowerCase().includes('leap year') ||
+                challenge.title.toLowerCase().includes('temperature') ||
+                challenge.title.toLowerCase().includes('area') ||
+                challenge.title.toLowerCase().includes('interest')
+            ) || [
+                // Specific challenge IDs that use legitimate numeric outputs
+                150, 151, 152, 153, // Python input challenges
+                450, 451, 452, 453, 456, 457, 458, 459, // C input challenges  
+                530, 531, 532, 533, 536, 537, 538, 539  // C++ input challenges
+            ].includes(challenge.id);
             
             if (!isBasicPrintChallenge && !isInputOutputChallenge) {
                 // Anti-cheat: Check if code contains the complete hardcoded expected output

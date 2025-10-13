@@ -52,28 +52,71 @@ class CodeExecutor {
      * @returns {string} - The wrapped code
      */
     _wrapCodeWithTestHarness(code, language, input) {
+        // Don't wrap if code already contains main function or is complete
         if (language === 'python') {
+            // Check if code contains input() calls - if so, don't wrap with function calls
+            if (code.includes('input(')) {
+                // Remove prompts from input() calls to prevent stdin issues
+                let cleanedCode = code;
+                // Replace input("prompt") with input()
+                cleanedCode = cleanedCode.replace(/input\s*\(\s*["'][^"']*["']\s*\)/g, 'input()');
+                // Replace input('prompt') with input()
+                cleanedCode = cleanedCode.replace(/input\s*\(\s*["'][^"']*["']\s*\)/g, 'input()');
+                return cleanedCode; // Let the code handle input via stdin
+            }
+            
             // Check if the code contains a function definition
             if (code.includes('def ')) {
                 // Extract the function name from the code
                 const funcMatch = code.match(/def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/);
-                if (funcMatch) {
+                if (funcMatch && input && input.trim()) {
                     const functionName = funcMatch[1];
-                    // Add test code that calls the function with the input
-                    return `${code}\n\n# Test code\nresult = ${functionName}(${input})\nprint(result)`;
+                    // Parse input for function parameters
+                    const inputLines = input.split('\n').filter(line => line.trim());
+                    let testCall;
+                    
+                    if (inputLines.length === 1) {
+                        // Single input - could be number or string
+                        const inputValue = inputLines[0].trim();
+                        if (/^\d+$/.test(inputValue)) {
+                            testCall = `${functionName}(${inputValue})`;
+                        } else {
+                            testCall = `${functionName}("${inputValue}")`;
+                        }
+                    } else {
+                        // Multiple inputs
+                        const params = inputLines.map(line => {
+                            const val = line.trim();
+                            return /^\d+(\.\d+)?$/.test(val) ? val : `"${val}"`;
+                        }).join(', ');
+                        testCall = `${functionName}(${params})`;
+                    }
+                    
+                    return `${code}\n\n# Test code\nresult = ${testCall}\nprint(result)`;
                 }
             }
             return code;
         } else if (language === 'javascript') {
-            // For JavaScript, just return the code as-is
+            // For JavaScript, check if it needs input handling
+            if (code.includes('readline') || code.includes('prompt')) {
+                return code; // Let the code handle input
+            }
             return code;
         } else if (language === 'c') {
+            // Check if code uses scanf or other input functions
+            if (code.includes('scanf') || code.includes('getchar') || code.includes('fgets')) {
+                return code; // Let the code handle input as-is
+            }
             // For C, wrap in main function if not already present
             if (!code.includes('int main') && !code.includes('void main')) {
                 return `#include <stdio.h>\n\nint main() {\n    ${code}\n    return 0;\n}`;
             }
             return code;
         } else if (language === 'cpp') {
+            // Check if code uses cin or other input functions
+            if (code.includes('cin') || code.includes('getline') || code.includes('scanf')) {
+                return code; // Let the code handle input as-is
+            }
             // For C++, wrap in main function if not already present
             if (!code.includes('int main') && !code.includes('void main')) {
                 return `#include <iostream>\nusing namespace std;\n\nint main() {\n    ${code}\n    return 0;\n}`;
@@ -86,15 +129,32 @@ class CodeExecutor {
                 if (code.includes('public static')) {
                     // Extract the method name and parameters
                     const methodMatch = code.match(/public\s+static\s+\w+\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)/);
-                    if (methodMatch) {
+                    if (methodMatch && input && input.trim()) {
                         const methodName = methodMatch[1];
-                        // Wrap in a Main class and add test code
+                        // Parse input for method parameters
+                        const inputLines = input.split('\n').filter(line => line.trim());
+                        let testCall;
+                        
+                        if (inputLines.length === 1) {
+                            const inputValue = inputLines[0].trim();
+                            if (/^\d+$/.test(inputValue)) {
+                                testCall = `${methodName}(${inputValue})`;
+                            } else {
+                                testCall = `${methodName}("${inputValue}")`;
+                            }
+                        } else {
+                            const params = inputLines.map(line => {
+                                const val = line.trim();
+                                return /^\d+(\.\d+)?$/.test(val) ? val : `"${val}"`;
+                            }).join(', ');
+                            testCall = `${methodName}(${params})`;
+                        }
+                        
                         return `public class Main {
     ${code}
     
     public static void main(String[] args) {
-        // Test code
-        System.out.println(${methodName}(${input}));
+        System.out.println(${testCall});
     }
 }`;
                     }
@@ -155,19 +215,27 @@ class CodeExecutor {
             let wrappedCode = code;
             
             if (Array.isArray(input)) {
-                formattedInput = input.join(' ');
-                wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
+                formattedInput = input.join('\n'); // Use newlines for array input
+                wrappedCode = this._wrapCodeWithTestHarness(code, language, input.join(' '));
             } else if (typeof input === 'object' && input !== null) {
                 formattedInput = JSON.stringify(input);
                 wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
             } else if (input) {
                 // Replace \n with actual newlines for stdin
                 formattedInput = input.replace(/\\n/g, '\n');
-                wrappedCode = this._wrapCodeWithTestHarness(code, language, formattedInput);
+                wrappedCode = this._wrapCodeWithTestHarness(code, language, input);
             } else {
                 // For code without specific input, still wrap it properly
                 wrappedCode = this._wrapCodeWithTestHarness(code, language, '');
             }
+            
+            console.log('🔍 DEBUG: Code execution details:', {
+                language,
+                originalInput: input,
+                formattedInput,
+                originalCode: code.substring(0, 100) + '...',
+                wrappedCode: wrappedCode.substring(0, 200) + '...'
+            });
 
             // Map language for Piston API
             const pistonLanguage = this._mapLanguageForPiston(language);

@@ -315,7 +315,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Contributors**: Thank you to all our amazing contributors
 - **Open Source Libraries**: Built with love using open source technologies
 - **Community**: Special thanks to our user community for feedback and support
-- **Inspiration**: Inspired by typing.com and competitive programming platforms
+- **Inspiration**: Inspired by typing and competitive programming platforms
 
 ## 📊 Project Stats
 
