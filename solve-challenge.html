@@ -2175,29 +2175,34 @@
                 (challenge.difficulty?.toLowerCase() === 'beginner' && challenge.category?.toLowerCase() === 'basic')
             );
             
-            // Skip anti-cheat checks for basic print challenges
-            if (!isBasicPrintChallenge) {
-                // Anti-cheat: Check if code contains hardcoded expected output
+            // Skip anti-cheat checks for basic print challenges and input/output challenges
+            const isInputOutputChallenge = challenge.title && (
+                challenge.title.toLowerCase().includes('input') ||
+                challenge.title.toLowerCase().includes('add two') ||
+                challenge.title.toLowerCase().includes('sum') ||
+                challenge.title.toLowerCase().includes('compare') ||
+                challenge.title.toLowerCase().includes('average')
+            );
+            
+            if (!isBasicPrintChallenge && !isInputOutputChallenge) {
+                // Anti-cheat: Check if code contains the complete hardcoded expected output
                 const expectedOutput = challenge.examples?.output || (challenge.testCases?.[0]?.expectedOutput);
-                if (expectedOutput && code.includes(expectedOutput)) {
+                if (expectedOutput && code.includes(`"${expectedOutput}"`) || code.includes(`'${expectedOutput}'`)) {
                     alert('❌ Hardcoded output detected! Please write actual logic instead of printing the expected result.');
                     return false;
                 }
                 
-                // Anti-cheat: Check for suspicious print patterns
+                // Anti-cheat: Check for suspicious complete hardcoded patterns only
                 const suspiciousPatterns = [
-                    /print\s*\(\s*["'].*["']\s*\)/, // print("hardcoded")
-                    /console\.log\s*\(\s*["'].*["']\s*\)/, // console.log("hardcoded")
-                    /printf\s*\(\s*["'].*["']\s*\)/, // printf("hardcoded")
-                    /cout\s*<<\s*["'].*["']/ // cout << "hardcoded"
+                    new RegExp(`print\\s*\\(\\s*["']${expectedOutput.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']\\s*\\)`), // print("exact_output")
+                    new RegExp(`console\\.log\\s*\\(\\s*["']${expectedOutput.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']\\s*\\)`), // console.log("exact_output")
+                    new RegExp(`printf\\s*\\(\\s*["']${expectedOutput.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']\\s*\\)`), // printf("exact_output")
+                    new RegExp(`cout\\s*<<\\s*["']${expectedOutput.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']`) // cout << "exact_output"
                 ];
                 
                 if (suspiciousPatterns.some(pattern => pattern.test(code))) {
-                    const outputLines = output.trim().split('\n');
-                    if (outputLines.length === 1 && outputLines[0] === expectedOutput) {
-                        alert('❌ Suspicious hardcoded output detected! Please implement the actual algorithm.');
-                        return false;
-                    }
+                    alert('❌ Suspicious hardcoded output detected! Please implement the actual algorithm.');
+                    return false;
                 }
             }
             
