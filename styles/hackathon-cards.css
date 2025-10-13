@@ -1,0 +1,245 @@
+.role-cards {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeIn 1s ease-out 0.3s both;
+    margin-bottom: 40px;
+}
+
+.role-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,255,221,0.15);
+    width: 340px;
+    max-width: 90vw;
+    padding: 36px 28px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    animation: glowPulse 3s infinite;
+}
+
+.role-card:nth-child(1) { 
+    animation: slideUp 0.6s ease-out 0.4s both; 
+    border: 2px solid var(--conductor-color);
+}
+
+.role-card:nth-child(2) { 
+    animation: slideUp 0.6s ease-out 0.6s both; 
+    border: 2px solid var(--participant-color);
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.6s ease-out;
+    z-index: -1;
+}
+
+.role-card:nth-child(1)::before {
+    background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, rgba(255,107,107,0) 70%);
+}
+
+.role-card:nth-child(2)::before {
+    background: radial-gradient(circle, rgba(78,205,196,0.1) 0%, rgba(78,205,196,0) 70%);
+}
+
+.role-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 48px rgba(0,255,221,0.15);
+}
+
+.role-card:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.role-card:hover .icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.role-card:nth-child(1):hover .icon {
+    color: var(--conductor-color);
+    text-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
+}
+
+.role-card:nth-child(2):hover .icon {
+    color: var(--participant-color);
+    text-shadow: 0 0 25px rgba(78, 205, 196, 0.5);
+}
+
+.role-card .icon {
+    font-size: 3.5rem;
+    margin-bottom: 18px;
+    text-shadow: 0 0 16px rgba(0, 255, 221, 0.3);
+    transition: all 0.4s ease;
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+}
+
+.role-card:nth-child(1) .icon {
+    color: var(--conductor-color);
+}
+
+.role-card:nth-child(2) .icon {
+    color: var(--participant-color);
+}
+
+.role-card .icon::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    z-index: -1;
+    transform: scale(0);
+    transition: transform 0.4s ease;
+}
+
+.role-card:nth-child(1) .icon::after {
+    background: radial-gradient(circle, rgba(255,107,107,0.2) 0%, rgba(255,107,107,0) 70%);
+}
+
+.role-card:nth-child(2) .icon::after {
+    background: radial-gradient(circle, rgba(78,205,196,0.2) 0%, rgba(78,205,196,0) 70%);
+}
+
+.role-card:hover .icon::after {
+    transform: scale(1.5);
+}
+
+.role-card .card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.role-card:nth-child(1):hover .card-title {
+    color: var(--conductor-color);
+    transform: scale(1.05);
+    letter-spacing: 1.5px;
+}
+
+.role-card:nth-child(2):hover .card-title {
+    color: var(--participant-color);
+    transform: scale(1.05);
+    letter-spacing: 1.5px;
+}
+
+.role-card .card-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    transition: width 0.4s ease;
+}
+
+.role-card:nth-child(1) .card-title::after {
+    background: linear-gradient(90deg, var(--conductor-color), var(--danger-color));
+}
+
+.role-card:nth-child(2) .card-title::after {
+    background: linear-gradient(90deg, var(--participant-color), var(--secondary-color));
+}
+
+.role-card:hover .card-title::after {
+    width: 100%;
+}
+
+.role-card .card-desc {
+    color: #b8eaff;
+    font-size: 1.05rem;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+}
+
+.role-card:hover .card-desc {
+    color: #ffffff;
+}
+
+.role-card .card-btn {
+    color: #111827;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+    z-index: 1;
+}
+
+.role-card:nth-child(1) .card-btn {
+    background: linear-gradient(90deg, var(--conductor-color) 0%, var(--danger-color) 100%);
+}
+
+.role-card:nth-child(2) .card-btn {
+    background: linear-gradient(90deg, var(--participant-color) 0%, var(--secondary-color) 100%);
+}
+
+.role-card .card-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    z-index: -1;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.6s ease-out;
+}
+
+.role-card .card-btn:hover {
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    letter-spacing: 1.5px;
+}
+
+.role-card .card-btn:hover::after {
+    transform: translate(-50%, -50%) scale(50);
+    opacity: 0;
+}
+
+.role-card .card-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.role-card .card-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,108 @@
+// Enhanced particles.js configuration
+document.addEventListener('DOMContentLoaded', function() {
+    particlesJS("particles-js", {
+        "particles": {
+            "number": {
+                "value": 120,
+                "density": {
+                    "enable": true,
+                    "value_area": 900
+                }
+            },
+            "color": {
+                "value": ["#00FFDD", "#00C2FF", "#0077FF", "#FFC700", "#FF6B6B"]
+            },
+            "shape": {
+                "type": ["circle", "triangle", "edge"],
+                "stroke": {
+                    "width": 0,
+                    "color": "#000000"
+                },
+                "polygon": {
+                    "nb_sides": 5
+                }
+            },
+            "opacity": {
+                "value": 0.6,
+                "random": true,
+                "anim": {
+                    "enable": true,
+                    "speed": 1.2,
+                    "opacity_min": 0.2,
+                    "sync": false
+                }
+            },
+            "size": {
+                "value": 5,
+                "random": true,
+                "anim": {
+                    "enable": true,
+                    "speed": 2,
+                    "size_min": 0.1,
+                    "sync": false
+                }
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 180,
+                "color": "#00C2FF",
+                "opacity": 0.5,
+                "width": 1.5
+            },
+            "move": {
+                "enable": true,
+                "speed": 2,
+                "direction": "none",
+                "random": true,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": {
+                    "enable": true,
+                    "rotateX": 600,
+                    "rotateY": 1200
+                }
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": {
+                    "enable": true,
+                    "mode": "grab"
+                },
+                "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                },
+                "resize": true
+            },
+            "modes": {
+                "grab": {
+                    "distance": 180,
+                    "line_linked": {
+                        "opacity": 0.8
+                    }
+                },
+                "bubble": {
+                    "distance": 400,
+                    "size": 40,
+                    "duration": 2,
+                    "opacity": 8,
+                    "speed": 3
+                },
+                "repulse": {
+                    "distance": 200,
+                    "duration": 0.4
+                },
+                "push": {
+                    "particles_nb": 6
+                },
+                "remove": {
+                    "particles_nb": 2
+                }
+            }
+        },
+        "retina_detect": true
+    });
+});

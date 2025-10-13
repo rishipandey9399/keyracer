@@ -1,0 +1,193 @@
+/* Code Racer Main Styles */
+body {
+    background: #070B18 !important;
+}
+
+.hero-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(180deg, rgba(0,255,221,0.05) 0%, rgba(0,255,221,0) 100%);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 4rem;
+}
+
+.hero-title {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(90deg, var(--accent-color) 0%, #00C2FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #b3b8d0;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 1px;
+}
+
+.languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+}
+
+.language-card {
+    background: rgba(20, 27, 45, 0.7);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.language-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(0,255,221,0.1), transparent);
+    transform: translateX(-100%);
+    transition: 0.6s;
+}
+
+.language-card:hover::before {
+    transform: translateX(100%);
+}
+
+.language-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 255, 221, 0.15);
+    border-color: rgba(0, 255, 221, 0.3);
+}
+
+.language-icon {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px rgba(0, 255, 221, 0.3);
+}
+
+.language-name {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    font-family: 'Orbitron', sans-serif;
+}
+
+.language-description {
+    color: #b3b8d0;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.start-learning-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(90deg, var(--accent-color) 0%, #00C2FF 100%);
+    color: var(--main-bg-color);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.start-learning-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 255, 221, 0.4);
+}
+
+.start-learning-btn.disabled {
+    background: linear-gradient(90deg, #2a3246 0%, #1e2433 100%);
+    color: #6c7693;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.start-learning-btn.disabled:hover {
+    transform: none;
+}
+
+.features-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--accent-color);
+    font-family: 'Orbitron', sans-serif;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: rgba(10, 14, 23, 0.8);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 255, 221, 0.2);
+    border-color: rgba(0, 255, 221, 0.3);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.feature-title {
+    font-size: 1.25rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.feature-description {
+    color: #b3b8d0;
+    line-height: 1.6;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(0, 255, 221, 0.2),
+                    0 0 20px rgba(0, 255, 221, 0.2),
+                    0 0 30px rgba(0, 255, 221, 0.2);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(0, 255, 221, 0.4),
+                    0 0 40px rgba(0, 255, 221, 0.4),
+                    0 0 60px rgba(0, 255, 221, 0.4);
+    }
+}

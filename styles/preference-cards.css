@@ -1,0 +1,298 @@
+/* Preference Cards Styles */
+.preference-card {
+    background: var(--card-bg) !important;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    border: 2px solid var(--accent-color);
+    width: 100%;
+    min-height: 320px;
+    padding: 36px 28px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+}
+
+.preference-card:nth-child(1) { animation: slideUp 0.6s ease-out 0.4s both; }
+.preference-card:nth-child(2) { animation: slideUp 0.6s ease-out 0.5s both; }
+.preference-card:nth-child(3) { animation: slideUp 0.6s ease-out 0.6s both; }
+.preference-card:nth-child(4) { animation: slideUp 0.6s ease-out 0.7s both; }
+.preference-card:nth-child(5) { animation: slideUp 0.6s ease-out 0.8s both; }
+.preference-card:nth-child(6) { animation: slideUp 0.6s ease-out 0.9s both; }
+
+.preference-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0,255,221,0.1) 0%, rgba(0,194,255,0) 70%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.6s ease-out;
+    z-index: -1;
+}
+
+.preference-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 48px rgba(0,255,221,0.15);
+    border-color: var(--highlight-color);
+    background: var(--card-bg) !important;
+}
+
+.preference-card:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.preference-card:hover .icon {
+    transform: scale(1.1) rotate(5deg);
+    color: var(--highlight-color);
+    text-shadow: 0 0 25px rgba(255, 199, 0, 0.5);
+}
+
+.preference-card:hover .card-title {
+    color: var(--highlight-color);
+    transform: scale(1.05);
+    letter-spacing: 1.5px;
+}
+
+.preference-card:hover .card-desc {
+    color: #ffffff;
+}
+
+@keyframes slideUp {
+    0% { 
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.preference-card .icon {
+    font-size: 3.5rem;
+    margin-bottom: 18px;
+    color: var(--accent-color);
+    text-shadow: 0 0 16px rgba(0, 255, 221, 0.3);
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+/* Type Racer - Green theme */
+.preference-card:nth-child(1) .icon {
+    color: #4ade80;
+    text-shadow: 0 0 16px rgba(74, 222, 128, 0.4);
+}
+
+.preference-card:nth-child(1):hover .icon {
+    color: #22c55e;
+    text-shadow: 0 0 25px rgba(34, 197, 94, 0.6);
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Code Racer - Orange theme */
+.preference-card:nth-child(2) .icon {
+    color: #f97316;
+    text-shadow: 0 0 16px rgba(249, 115, 22, 0.4);
+}
+
+.preference-card:nth-child(2):hover .icon {
+    color: #ea580c;
+    text-shadow: 0 0 25px rgba(234, 88, 12, 0.6);
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Professional Skills - Blue theme */
+.preference-card:nth-child(3) .icon {
+    color: #3b82f6;
+    text-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+}
+
+.preference-card:nth-child(3):hover .icon {
+    color: #2563eb;
+    text-shadow: 0 0 25px rgba(37, 99, 235, 0.6);
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Hackathon - Gold theme */
+.preference-card:nth-child(4) .icon {
+    color: #fbbf24;
+    text-shadow: 0 0 16px rgba(251, 191, 36, 0.4);
+}
+
+.preference-card:nth-child(4):hover .icon {
+    color: #f59e0b;
+    text-shadow: 0 0 25px rgba(245, 158, 11, 0.6);
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Aptitude & Reasoning - Skin tone theme */
+.preference-card:nth-child(5) .icon {
+    color: #d4a574;
+    text-shadow: 0 0 16px rgba(212, 165, 116, 0.4);
+}
+
+.preference-card:nth-child(5):hover .icon {
+    color: #c19660;
+    text-shadow: 0 0 25px rgba(193, 150, 96, 0.6);
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* AI Career Guidance - Black theme */
+.preference-card:nth-child(6) .icon {
+    color: #000000;
+    text-shadow: 0 0 16px rgba(0, 0, 0, 0.4);
+}
+
+.preference-card:nth-child(6):hover .icon {
+    color: #333333;
+    text-shadow: 0 0 25px rgba(51, 51, 51, 0.6);
+    transform: scale(1.1) rotate(5deg);
+}
+
+.preference-card .icon::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(circle, rgba(0,255,221,0.2) 0%, rgba(0,255,221,0) 70%);
+    border-radius: 50%;
+    z-index: -1;
+    transform: scale(0);
+    transition: transform 0.4s ease;
+}
+
+.preference-card:hover .icon::after {
+    transform: scale(1.5);
+    background: radial-gradient(circle, rgba(255,199,0,0.2) 0%, rgba(255,199,0,0) 70%);
+}
+
+.preference-card .card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.preference-card:hover .card-title {
+    color: var(--highlight-color);
+    transform: scale(1.05);
+    letter-spacing: 1.5px;
+}
+
+.preference-card .card-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--highlight-color), var(--danger-color));
+    transition: width 0.4s ease;
+}
+
+.preference-card:hover .card-title::after {
+    width: 100%;
+}
+
+.preference-card .card-desc {
+    color: #b8eaff;
+    font-size: 1.05rem;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+}
+
+.preference-card:hover .card-desc {
+    color: #ffffff;
+}
+
+.preference-card .card-btn {
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: #111827;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 16px rgba(0, 255, 221, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+    z-index: 1;
+}
+
+.preference-card .card-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--highlight-color) 0%, var(--danger-color) 100%);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+.preference-card .card-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    z-index: -1;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.6s ease-out;
+}
+
+.preference-card .card-btn:hover {
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 199, 0, 0.25);
+    letter-spacing: 1.5px;
+}
+
+.preference-card .card-btn:hover::before {
+    opacity: 1;
+}
+
+.preference-card .card-btn:hover::after {
+    transform: translate(-50%, -50%) scale(50);
+    opacity: 0;
+}
+
+.preference-card .card-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 5px 15px rgba(255, 199, 0, 0.2);
+}
+
+.preference-card .card-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 199, 0, 0.3);
+}

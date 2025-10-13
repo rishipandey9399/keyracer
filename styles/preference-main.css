@@ -1,0 +1,157 @@
+/* Preference Page Main Styles */
+:root {
+    --primary-color: #00FFDD;
+    --secondary-color: #00C2FF;
+    --accent-color: #00FFDD;
+    --highlight-color: #FFC700;
+    --danger-color: #FF4A4A;
+    --dark-bg: #070b18;
+    --card-bg: rgba(14, 30, 56, 0.95);
+}
+
+body {
+    background: #070B18 !important;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+}
+
+#particles-js {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.preference-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 1.2s ease-out;
+}
+
+.corner-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.logo-link {
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.logo-link:hover {
+    transform: scale(1.05);
+}
+
+.corner-logo-img {
+    height: 160px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+.corner-logo-img:hover {
+    transform: scale(1.05);
+}
+
+.preference-title {
+    color: var(--accent-color);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 50px;
+    letter-spacing: 3px;
+    position: relative;
+    animation: slideDown 0.8s ease-out, title-glow 3s infinite alternate;
+    text-shadow: 
+        0 0 20px rgba(0, 255, 221, 0.6),
+        0 0 40px rgba(0, 255, 221, 0.4),
+        0 0 60px rgba(0, 255, 221, 0.2);
+    background: linear-gradient(135deg, #00FFDD 0%, #00C2FF 50%, #FFC700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+}
+
+.preference-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    animation: expandLine 1.5s ease-out forwards 0.8s, line-pulse 2s infinite 1.5s;
+    border-radius: 3px;
+}
+
+@keyframes title-glow {
+    0% { text-shadow: 0 0 15px rgba(0, 255, 221, 0.5); }
+    100% { text-shadow: 0 0 25px rgba(0, 255, 221, 0.8); }
+}
+
+@keyframes line-pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+@keyframes expandLine {
+    0% { width: 0; }
+    100% { width: 180px; }
+}
+
+@keyframes slideDown {
+    0% { 
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.preference-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    animation: fadeIn 1s ease-out 0.3s both;
+}
+
+@media (min-width: 768px) {
+    .preference-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .preference-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}

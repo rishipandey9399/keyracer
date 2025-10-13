@@ -631,7 +631,7 @@ int main() {
 }
 ```
 
-**529 - C++ Add Two Numbers**
+**529 - C++ Add Two Numbers**// resolve
 ```cpp
 #include <iostream>
 using namespace std;

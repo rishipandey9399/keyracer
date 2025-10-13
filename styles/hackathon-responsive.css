@@ -1,0 +1,50 @@
+@media (max-width: 768px) {
+    .hackathon-title {
+        font-size: 2rem;
+    }
+    
+    .hackathon-subtitle {
+        font-size: 1rem;
+    }
+    
+    .role-cards {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .corner-logo-img {
+        height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hackathon-title { font-size: 1.8rem; }
+    .hackathon-subtitle { font-size: 0.9rem; max-width: 90%; }
+    .role-cards { gap: 20px; }
+    .role-card { width: 300px; padding: 24px 20px 20px 20px; }
+    .role-card .icon { font-size: 3rem; margin-bottom: 15px; }
+    .role-card .card-title { font-size: 1.3rem; }
+    .role-card .card-desc { font-size: 1rem; }
+    .role-card .card-btn { padding: 12px 24px; font-size: 1rem; }
+    .features-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .corner-logo-img { height: 50px; }
+}
+
+@media (max-width: 360px) {
+    .hackathon-title { font-size: 1.6rem; }
+    .hackathon-subtitle { font-size: 0.85rem; }
+    .role-card { width: 280px; padding: 20px 16px 16px 16px; }
+    .role-card .icon { font-size: 2.5rem; }
+    .role-card .card-title { font-size: 1.2rem; }
+    .role-card .card-desc { font-size: 0.95rem; }
+    .role-card .card-btn { padding: 10px 20px; font-size: 0.95rem; }
+    .corner-logo-img { height: 40px; }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .hackathon-page { padding: 10px; }
+    .hackathon-title { font-size: 1.8rem; margin-bottom: 10px; }
+    .hackathon-subtitle { margin-bottom: 20px; }
+    .role-cards { flex-direction: row; gap: 20px; }
+    .role-card { width: 280px; padding: 20px 16px; }
+}

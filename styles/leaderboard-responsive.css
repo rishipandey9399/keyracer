@@ -1,0 +1,100 @@
+/* Leaderboard Responsive Styles */
+.container {
+    max-width: 1000px;
+    margin: 1.5rem auto 0 auto;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.leaderboard-section {
+    width: 100%;
+}
+
+.table-container {
+    margin: 0 auto;
+    background: rgba(14, 30, 56, 0.85);
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 194, 255, 0.10);
+    border: 1.5px solid rgba(0, 194, 255, 0.18);
+    padding: 24px 10px 18px 10px;
+    max-height: 540px;
+    overflow-y: auto;
+    min-width: 320px;
+}
+
+.rankings-table th, .rankings-table td {
+    color: #eaf6fb;
+    padding: 1.1rem 1.2rem;
+    text-align: center;
+    min-width: 110px;
+}
+
+.rankings-table th {
+    color: #00C2FF;
+}
+
+.rankings-table th:nth-child(2), .rankings-table td:nth-child(2) {
+    text-align: left;
+}
+
+.rankings-table th:nth-child(4), .rankings-table td:nth-child(4) {
+    min-width: 80px;
+}
+
+@media (max-width: 900px) {
+    .leaderboard-table {
+        padding: 0.5rem;
+    }
+    .table-header,
+    .leaderboard-row {
+        grid-template-columns: 60px 2fr 1fr;
+        font-size: 0.95rem;
+        column-gap: 0.3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .leaderboard-table {
+        padding: 0.2rem;
+    }
+    .table-header,
+    .leaderboard-row {
+        grid-template-columns: 50px 2fr 1fr;
+        font-size: 0.85rem;
+        column-gap: 0.2rem;
+    }
+    .table-container {
+        max-height: 350px;
+        padding: 10px 2px 10px 2px;
+    }
+    .rankings-table th, .rankings-table td {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title { font-size: 2.2rem; }
+    .hero-subtitle { font-size: 1rem; }
+    .language-tabs { flex-wrap: wrap; gap: 5px; }
+    .language-tab { padding: 8px 16px; font-size: 1rem; }
+    .user-stats-panel { flex-direction: column; gap: 16px; }
+    .stat-item { padding: 12px 20px; }
+    .difficulty-filter-bar { padding: 12px 0; }
+    .filter-container { flex-wrap: wrap; gap: 10px; }
+    .difficulty-filter { padding: 8px 16px; font-size: 0.9rem; }
+}
+
+@media (max-width: 360px) {
+    .hero-title { font-size: 2rem; }
+    .hero-subtitle { font-size: 0.9rem; }
+    .language-tab { padding: 6px 12px; font-size: 0.9rem; }
+    .stat-item { padding: 10px 16px; }
+    .stat-value { font-size: 1.1rem; }
+    .difficulty-filter { padding: 6px 12px; font-size: 0.85rem; }
+    .leaderboard-table { padding: 0.1rem; }
+    .table-header, .leaderboard-row { font-size: 0.8rem; }
+}
