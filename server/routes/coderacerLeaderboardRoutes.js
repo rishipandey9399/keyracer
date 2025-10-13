@@ -1,4 +1,3 @@
-
 const express = require('express');
 console.log('[DIAGNOSTIC] coderacerLeaderboardRoutes.js loaded');
 const router = express.Router();

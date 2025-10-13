@@ -2270,26 +2270,10 @@
                     return;
                 }
                 
-                // Check if challenge was already completed before
-                const savedStats = localStorage.getItem('challengeStats');
-                let completedChallenges = [];
-                if (savedStats) {
-                    const stats = JSON.parse(savedStats);
-                    completedChallenges = stats.completedChallenges || [];
-                }
+                // Always send the correct points - let server handle duplicate checking
+                const pointsEarned = getPointsForChallenge(currentChallenge);
                 
-                // Only award points if this is the first completion
-                const isFirstCompletion = !completedChallenges.includes(challengeId.toString());
-                const pointsEarned = isFirstCompletion ? getPointsForChallenge(currentChallenge) : 0;
-                
-                console.log(`🎯 Challenge ${challengeId} (${getLanguageFromChallenge()}): First completion = ${isFirstCompletion}, Points = ${pointsEarned}`);
-                
-                // Save completed challenge to localStorage
-                if (isFirstCompletion) {
-                    completedChallenges.push(challengeId.toString());
-                    localStorage.setItem('challengeStats', JSON.stringify({ completedChallenges }));
-                    console.log('✅ Saved to localStorage:', { completedChallenges });
-                }
+                console.log(`🎯 Challenge ${challengeId} (${getLanguageFromChallenge()}): Points = ${pointsEarned}`);
                 
                 // Prepare submission data
                 let submissionData = {
