@@ -47,23 +47,33 @@ class EnhancedChallengesManager {
     }
 
     async showDemoData(language = 'python') {
-        const supportedLanguages = ['python', 'java', 'javascript', 'c', 'cpp'];
-        if (supportedLanguages.includes(language)) {
+        if (language === 'python' || language === 'java' || language === 'javascript' || language === 'c' || language === 'cpp') {
             try {
                 const response = await fetch('./scripts/challenges.json');
                 if (!response.ok) throw new Error('Failed to load challenges');
                 const data = await response.json();
-                this.challenges = data.challenges.filter(ch => 
-                    language === 'python' ? (!ch.language || ch.language === 'python') : ch.language === language
-                );
+                this.challenges = data.challenges.filter(ch => {
+                    if (language === 'python') {
+                        return !ch.language || ch.language === 'python';
+                    } else if (language === 'java') {
+                        return ch.language === 'java';
+                    } else if (language === 'javascript') {
+                        return ch.language === 'javascript';
+                    } else if (language === 'c') {
+                        return ch.language === 'c';
+                    } else if (language === 'cpp') {
+                        return ch.language === 'cpp';
+                    }
+                    return false;
+                });
             } catch (error) {
-                console.error('Failed to load challenges:', error.message);
                 this.challenges = this.getFallbackChallenges(language);
             }
         } else {
             this.challenges = [];
         }
         
+        // Update challenge status after loading
         this.updateChallengeStatusFromLocalStorage();
     }
 
@@ -84,167 +94,119 @@ class EnhancedChallengesManager {
     }
 
     setupEventListeners() {
-        const languageTabs = document.querySelectorAll('.language-tab');
-        const difficultyFilters = document.querySelectorAll('.difficulty-filter');
-        const supportedLanguages = ['python', 'java', 'javascript', 'c', 'cpp'];
-        
-        languageTabs.forEach(button => {
+        document.querySelectorAll('.language-tab').forEach(button => {
             button.addEventListener('click', async (e) => {
                 if (button.classList.contains('disabled')) return;
                 const selectedLang = button.getAttribute('data-language');
                 
+                // Update current language and save to localStorage
                 this.currentLanguage = selectedLang;
                 localStorage.setItem('selectedLanguage', selectedLang);
                 
-                languageTabs.forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.language-tab').forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 
                 await this.showDemoData(selectedLang);
                 this.renderChallenges();
                 
-                if (!supportedLanguages.includes(selectedLang)) {
-                    this.showComingSoonMessage(selectedLang);
+                // If not python, java, javascript, c, or cpp, show 'coming soon' message
+                if (selectedLang !== 'python' && selectedLang !== 'java' && selectedLang !== 'javascript' && selectedLang !== 'c' && selectedLang !== 'cpp') {
+                    const container = document.getElementById('challenges-list');
+                    if (container) {
+                        Array.from(container.children).forEach(child => {
+                            if (!child.classList.contains('loading-container')) {
+                                container.removeChild(child);
+                            }
+                        });
+                        const comingDiv = document.createElement('div');
+                        comingDiv.className = 'loading-container';
+                        comingDiv.innerHTML = `<p style="font-size:1.2rem;color:#FFC700;">${selectedLang.charAt(0).toUpperCase()+selectedLang.slice(1)} challenges coming soon!</p>`;
+                        container.appendChild(comingDiv);
+                    }
                 }
             });
         });
-        
-        difficultyFilters.forEach(button => {
+        document.querySelectorAll('.difficulty-filter').forEach(button => {
             button.addEventListener('click', (e) => {
-                difficultyFilters.forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 this.currentFilter = button.getAttribute('data-difficulty');
                 this.renderChallenges();
             });
         });
     }
-    
-    showComingSoonMessage(language) {
-        const container = document.getElementById('challenges-list');
-        if (!container) return;
-        
-        Array.from(container.children).forEach(child => {
-            if (!child.classList.contains('loading-container')) {
-                container.removeChild(child);
-            }
-        });
-        
-        const comingDiv = document.createElement('div');
-        comingDiv.className = 'loading-container';
-        const p = document.createElement('p');
-        p.style.cssText = 'font-size:1.2rem;color:#FFC700;';
-        p.textContent = `${language.charAt(0).toUpperCase()+language.slice(1)} challenges coming soon!`;
-        comingDiv.appendChild(p);
-        container.appendChild(comingDiv);
-    }
 
     renderChallenges() {
         const container = document.getElementById('challenges-list');
         if (!container) return;
-        
+        // Hide loading spinner
         const loadingContainer = document.getElementById('loadingContainer');
         if (loadingContainer) loadingContainer.style.display = 'none';
-        
-        const filteredChallenges = this.getFilteredChallenges();
-        this.clearChallengeCards(container);
-        
-        if (filteredChallenges.length === 0) return;
-        
-        filteredChallenges.forEach(challenge => {
-            const card = this.createChallengeCard(challenge);
-            container.appendChild(card);
-            this.attachCardEventListeners(card, challenge.id);
-        });
-    }
-    
-    getFilteredChallenges() {
-        const difficultyMap = {
-            easy: 'beginner',
-            medium: 'intermediate', 
-            hard: 'advanced',
-            expert: 'expert'
-        };
-        
-        if (this.currentFilter === 'all') return this.challenges;
-        
-        const targetDifficulty = difficultyMap[this.currentFilter];
-        return this.challenges.filter(challenge => 
-            challenge.difficulty.toLowerCase() === targetDifficulty
-        );
-    }
-    
-    clearChallengeCards(container) {
+        let filteredChallenges = this.challenges;
+        const filter = this.currentFilter;
+        if (filter && filter !== 'all') {
+            filteredChallenges = this.challenges.filter(challenge => {
+                if (filter === 'easy') return challenge.difficulty.toLowerCase() === 'beginner';
+                if (filter === 'medium') return challenge.difficulty.toLowerCase() === 'intermediate';
+                if (filter === 'hard') return challenge.difficulty.toLowerCase() === 'advanced';
+                if (filter === 'expert') return challenge.difficulty.toLowerCase() === 'expert';
+                return true;
+            });
+        }
+        // Remove all previous challenge cards
         Array.from(container.children).forEach(child => {
             if (!child.classList.contains('loading-container')) {
                 container.removeChild(child);
             }
         });
-    }
-    
-    attachCardEventListeners(card, challengeId) {
-        const button = card.querySelector('.challenge-btn-primary');
-        if (!button) return;
-        
-        button.addEventListener('click', () => this.startChallenge(challengeId));
-        button.addEventListener('mouseover', () => {
-            button.style.background = 'linear-gradient(135deg, #FFC700, #E41B17)';
-        });
-        button.addEventListener('mouseout', () => {
-            button.style.background = 'linear-gradient(135deg, #00C2FF, #0E1E38)';
+        if (filteredChallenges.length === 0) {
+            // Do not show 'No challenges found' message
+            return;
+        }
+        filteredChallenges.forEach(challenge => {
+            const card = this.createChallengeCard(challenge);
+            container.appendChild(card);
+            
+            // Add event listeners for the challenge button
+            const button = card.querySelector('.challenge-btn-primary');
+            if (button) {
+                button.addEventListener('click', () => {
+                    this.startChallenge(challenge.id);
+                });
+                
+                button.addEventListener('mouseover', () => {
+                    button.style.background = 'linear-gradient(135deg, #FFC700, #E41B17)';
+                });
+                
+                button.addEventListener('mouseout', () => {
+                    button.style.background = 'linear-gradient(135deg, #00C2FF, #0E1E38)';
+                });
+            }
         });
     }
 
     createChallengeCard(challenge) {
         const card = document.createElement('div');
         card.className = 'challenge-card';
-        
-        const statusDiv = document.createElement('div');
-        statusDiv.className = `challenge-status ${this.getStatusClass(challenge.status)}`;
-        
-        const headerDiv = document.createElement('div');
-        headerDiv.className = 'challenge-header';
-        const titleSpan = document.createElement('span');
-        titleSpan.className = 'challenge-title';
-        titleSpan.textContent = challenge.title;
-        const badgeSpan = document.createElement('span');
-        badgeSpan.className = `difficulty-badge difficulty-${challenge.difficulty.toLowerCase()}`;
-        badgeSpan.textContent = `${challenge.difficulty} (${challenge.points}pts)`;
-        headerDiv.appendChild(titleSpan);
-        headerDiv.appendChild(document.createElement('br'));
-        headerDiv.appendChild(badgeSpan);
-        
-        const descP = document.createElement('p');
-        descP.className = 'challenge-description';
-        descP.textContent = challenge.description;
-        
-        const statsDiv = document.createElement('div');
-        statsDiv.className = 'challenge-stats';
-        const statDiv = document.createElement('div');
-        statDiv.className = 'challenge-stat';
-        const labelSpan = document.createElement('span');
-        labelSpan.className = 'challenge-stat-label';
-        labelSpan.textContent = 'Category';
-        const valueSpan = document.createElement('span');
-        valueSpan.className = 'challenge-stat-value';
-        valueSpan.textContent = challenge.category;
-        statDiv.appendChild(labelSpan);
-        statDiv.appendChild(valueSpan);
-        statsDiv.appendChild(statDiv);
-        
-        const actionsDiv = document.createElement('div');
-        actionsDiv.className = 'challenge-actions';
-        const button = document.createElement('button');
-        button.className = 'challenge-btn challenge-btn-primary';
-        button.setAttribute('data-challenge-id', challenge.id);
-        button.style.background = `linear-gradient(135deg, ${challenge.status === 'completed' ? '#FFC700, #E41B17' : '#00C2FF, #0E1E38'})`;
-        button.textContent = challenge.status === 'completed' ? 'Retry Challenge' : 'Solve Challenge';
-        actionsDiv.appendChild(button);
-        
-        card.appendChild(statusDiv);
-        card.appendChild(headerDiv);
-        card.appendChild(descP);
-        card.appendChild(statsDiv);
-        card.appendChild(actionsDiv);
-        
+        const statusClass = this.getStatusClass(challenge.status);
+        const difficultyClass = `difficulty-${challenge.difficulty.toLowerCase()}`;
+        card.innerHTML = `
+            <div class="challenge-status ${statusClass}"></div>
+            <div class="challenge-header">
+                <span class="challenge-title">${challenge.title}</span><br>
+                <span class="difficulty-badge ${difficultyClass}">${challenge.difficulty} (${challenge.points}pts)</span>
+            </div>
+            <p class="challenge-description">${challenge.description}</p>
+            <div class="challenge-stats">
+                <div class="challenge-stat">
+                    <span class="challenge-stat-label">Category</span>
+                    <span class="challenge-stat-value">${challenge.category}</span>
+                </div>
+            </div>
+            <div class="challenge-actions">
+                <button class="challenge-btn challenge-btn-primary" data-challenge-id="${challenge.id}" style="background: linear-gradient(135deg, ${challenge.status === 'completed' ? '#FFC700, #E41B17' : '#00C2FF, #0E1E38'});">${challenge.status === 'completed' ? 'Retry Challenge' : 'Solve Challenge'}</button>
+            </div>
+        `;
         return card;
     }
 
@@ -257,19 +219,16 @@ class EnhancedChallengesManager {
     }
 
     updateChallengeStatusFromLocalStorage() {
-        try {
-            const savedStats = localStorage.getItem('challengeStats');
-            if (savedStats) {
-                const stats = JSON.parse(savedStats);
-                if (stats.completedChallenges && Array.isArray(stats.completedChallenges)) {
-                    stats.completedChallenges.forEach(id => {
-                        const challenge = this.challenges.find(c => c.id.toString() === id.toString());
-                        if (challenge) challenge.status = 'completed';
-                    });
-                }
+        // Get completed challenges from localStorage
+        const savedStats = localStorage.getItem('challengeStats');
+        if (savedStats) {
+            const stats = JSON.parse(savedStats);
+            if (stats.completedChallenges && Array.isArray(stats.completedChallenges)) {
+                stats.completedChallenges.forEach(id => {
+                    const challenge = this.challenges.find(c => c.id.toString() === id.toString());
+                    if (challenge) challenge.status = 'completed';
+                });
             }
-        } catch (error) {
-            console.error('Failed to parse challenge stats:', error.message);
         }
     }
 
@@ -304,7 +263,7 @@ class EnhancedChallengesManager {
                 }
             }
         } catch (error) {
-            console.error('Failed to load user stats:', error.message);
+                      console.error('Failed to load user stats:', error.message);
         }
     }
 
