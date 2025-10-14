@@ -114,11 +114,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         userInfoDiv.appendChild(profilePic);
         
-        // Insert before login button
-        if (headerActions && loginBtn && headerActions.contains(loginBtn)) {
-            headerActions.insertBefore(userInfoDiv, loginBtn);
-        } else if (headerActions) {
-            headerActions.appendChild(userInfoDiv);
+        // Insert before login button with error handling
+        try {
+            if (headerActions && loginBtn && headerActions.contains(loginBtn)) {
+                headerActions.insertBefore(userInfoDiv, loginBtn);
+            } else if (headerActions) {
+                headerActions.appendChild(userInfoDiv);
+            }
+        } catch (error) {
+            console.log('DOM insertion error, skipping user info display');
         }
         
         return userInfoDiv;

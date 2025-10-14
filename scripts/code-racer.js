@@ -141,7 +141,10 @@ class CodeRacer {
         this.startTime = null;
         
         // Initialize DOM elements
-        this.initializeDOM();
+        if (!this.initializeDOM()) {
+            return; // Skip initialization if required elements not found
+        }
+        
         // Set up event listeners
         this.setupEventListeners();
         // Initialize the first challenge
@@ -160,6 +163,12 @@ class CodeRacer {
             challengeDescription: document.querySelector('.challenge-description')
         };
 
+        // Check if required elements exist, if not, skip initialization
+        if (!this.elements.codeInput || !this.elements.codeSnippetArea) {
+            console.log('Code racer elements not found, skipping initialization');
+            return false;
+        }
+
         // Set initial language from select if it exists
         if (this.elements.languageSelect) {
             this.currentLang = this.elements.languageSelect.value;
@@ -169,6 +178,8 @@ class CodeRacer {
         if (this.elements.difficultySelect) {
             this.currentDifficulty = this.elements.difficultySelect.value;
         }
+        
+        return true;
     }
 
     setupEventListeners() {

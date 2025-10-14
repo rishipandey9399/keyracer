@@ -64,5 +64,15 @@ function initializeKeyboardNavigation() {
     });
 }
 
-// Initialize keyboard navigation when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeKeyboardNavigation);
+// Initialize keyboard navigation and preference handlers when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeKeyboardNavigation();
+    
+    // Add event listeners for preference buttons
+    document.querySelectorAll('.card-btn[data-preference]').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const preference = this.getAttribute('data-preference');
+            markPreferencesComplete(preference);
+        });
+    });
+});
