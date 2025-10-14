@@ -103,7 +103,7 @@ if (process.env.NODE_ENV === 'production') {
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
         fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
         imgSrc: ["'self'", "data:", "https:"],
-        connectSrc: ["'self'", "https://emkc.org", "https://cdnjs.cloudflare.com"]
+        connectSrc: ["'self'", "https://emkc.org", "https://cdnjs.cloudflare.com", "https://www.google-analytics.com", "https://analytics.google.com"]
       }
     },
     crossOriginEmbedderPolicy: false
