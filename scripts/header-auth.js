@@ -115,8 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
         userInfoDiv.appendChild(profilePic);
         
         // Insert before login button
-        if (headerActions && loginBtn) {
+        if (headerActions && loginBtn && headerActions.contains(loginBtn)) {
             headerActions.insertBefore(userInfoDiv, loginBtn);
+        } else if (headerActions) {
+            headerActions.appendChild(userInfoDiv);
         }
         
         return userInfoDiv;

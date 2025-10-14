@@ -250,7 +250,9 @@ class CodeRacer {
         // Update code display with syntax highlighting
         if (this.elements.codeSnippetArea) {
             this.elements.codeSnippetArea.textContent = challenge.code;
+            if (this.elements.codeSnippetArea) {
             this.elements.codeSnippetArea.className = 'language-' + (prismLangMap[this.currentLang] || this.currentLang);
+        }
             
             if (window.Prism) {
                 Prism.highlightElement(this.elements.codeSnippetArea);
@@ -258,8 +260,10 @@ class CodeRacer {
         }
         
         // Reset input and stats
-        this.elements.codeInput.value = '';
-        this.elements.codeInput.disabled = false;
+        if (this.elements.codeInput) {
+            this.elements.codeInput.value = '';
+            this.elements.codeInput.disabled = false;
+        }
         this.isRacing = false;
         this.startTime = null;
         if (this.timer) {
