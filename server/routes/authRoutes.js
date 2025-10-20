@@ -294,116 +294,46 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
-/**
- * Send verification email
- * POST /auth/send-verification
- */
-router.post('/send-verification', validateEmail, async (req, res) => {
-  try {
-    const { email } = req.body;
-    
-    if (!email) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Email is required' 
-      });
-    }
-    
-    // Find the user
-    const user = await User.findOne({ email });
-    
-    if (!user) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'User not found' 
-      });
-    }
-    
-    if (user.isVerified) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Email is already verified' 
-      });
-    }
-    
-    // Generate a 6-digit verification code
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    // Set expiration to 1 hour from now
-    const verificationCodeExpires = Date.now() + 3600000;
-    
-    // Update user with new verification code
-    user.verificationCode = verificationCode;
-    user.verificationCodeExpires = verificationCodeExpires;
-    
-    // Save the user
-    await user.save();
-    
-    // Send verification email
-    const emailData = {
-      to: user.email,
-      subject: 'Verify Your Email - Key Racer',
-      html: `
-        <h1>Email Verification</h1>
-        <p>Thank you for registering with Key Racer!</p>
-        <p>Your verification code is: <strong>${verificationCode}</strong></p>
-        <p>This code will expire in 1 hour.</p>
-      `
-    };
-    
-    await sendEmail(emailData);
-    
-    res.json({ 
-      success: true, 
-      message: 'Verification code sent successfully',
-      expiresIn: 3600 // 1 hour in seconds
-    });
-  } catch (error) {
-    console.error('Error sending verification code:', error);
-    res.status(500).json({ 
-      success: false,
-      message: 'An error occurred while sending verification code' 
-    });
-  }
-});
+
+
+
 
 /**
- * Verify email with verification code
- * POST /auth/verify-email
+ * Verify email with token (for email link verification)
+ * POST /auth/verify-email-token
  */
-router.post('/verify-email', async (req, res) => {
+router.post('/verify-email-token', async (req, res) => {
   try {
-    const { email, code } = req.body;
-    
-    if (!email || !code) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Email and verification code are required' 
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Verification token is required'
       });
     }
-    
-    // Find the user
-    const user = await User.findOne({ 
-      email,
-      verificationCode: code,
-      verificationCodeExpires: { $gt: Date.now() }
+
+    // Find the user with this verification token
+    const user = await User.findOne({
+      verificationToken: token,
+      verificationTokenExpires: { $gt: Date.now() }
     });
-    
+
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid or expired verification code' 
+        message: 'Invalid or expired verification token'
       });
     }
-    
+
     // Mark the user as verified
     user.isVerified = true;
-    user.verificationCode = undefined;
-    user.verificationCodeExpires = undefined;
-    
+    user.verificationToken = undefined;
+    user.verificationTokenExpires = undefined;
+
     // Save the user
     await user.save();
-    
+
     // Send confirmation email
     const emailData = {
       to: user.email,
@@ -414,11 +344,11 @@ router.post('/verify-email', async (req, res) => {
         <p>You can now enjoy all the features of Key Racer!</p>
       `
     };
-    
+
     await sendEmail(emailData);
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       message: 'Email has been verified successfully',
       user: {
         id: user._id,
@@ -428,10 +358,10 @@ router.post('/verify-email', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error verifying email:', error);
-    res.status(500).json({ 
+    console.error('Error verifying email with token:', error);
+    res.status(500).json({
       success: false,
-      message: 'An error occurred while verifying your email' 
+      message: 'An error occurred while verifying your email'
     });
   }
 });
@@ -520,82 +450,7 @@ router.get('/verification-status', (req, res) => {
   });
 });
 
-/**
- * Send verification code
- * POST /api/send-verification-code
- */
-router.post('/send-verification-code', validateEmail, async (req, res) => {
-  try {
-    const { email } = req.body;
-    
-    // Generate and store verification code
-    const { code, expiryMinutes } = tokenManager.storeVerificationCode(email);
-    
-    // Send verification email
-    const emailResult = await emailService.sendVerificationEmail(email, code, expiryMinutes);
-    
-    if (!emailResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: 'Failed to send verification email'
-      });
-    }
-    
-    return res.json({
-      success: true,
-      message: `Verification code sent to ${email}`,
-      expiresInMinutes: expiryMinutes
-    });
-  } catch (error) {
-    console.error('Error sending verification code:', error);
-    
-    return res.status(400).json({
-      success: false,
-      message: error.message || 'An error occurred while sending verification code'
-    });
-  }
-});
 
-/**
- * Verify code
- * POST /api/verify-code
- */
-router.post('/verify-code', async (req, res) => {
-  try {
-    const { email, code } = req.body;
-    
-    if (!email || !code) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email and verification code are required'
-      });
-    }
-    
-    // Verify the code
-    const isValid = tokenManager.verifyCode(email, code);
-    
-    if (!isValid) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid or expired verification code'
-      });
-    }
-    
-    // At this point, you would mark the user as verified in your database
-    
-    return res.json({
-      success: true,
-      message: 'Email successfully verified'
-    });
-  } catch (error) {
-    console.error('Error verifying code:', error);
-    
-    return res.status(400).json({
-      success: false,
-      message: error.message || 'An error occurred while verifying code'
-    });
-  }
-});
 
 /**
  * Send forgot password email

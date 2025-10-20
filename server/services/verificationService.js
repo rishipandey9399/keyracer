@@ -23,17 +23,17 @@ class VerificationService {
   async sendVerificationEmail(email, baseUrl) {
     try {
       const normalizedEmail = email.toLowerCase().trim();
-      
+
       // Find user by email
       const user = await User.findOne({ email: normalizedEmail });
-      
+
       if (!user) {
         return {
           success: false,
           message: 'User not found with this email address'
         };
       }
-      
+
       // Check if user is already verified
       if (user.isVerified) {
         return {
@@ -41,20 +41,27 @@ class VerificationService {
           message: 'Email is already verified'
         };
       }
-      
+
       // Generate verification token
-      const token = await emailService.generateVerificationToken(user._id);
-      
+      const token = crypto.randomBytes(32).toString('hex');
+
+      // Set token and expiry on user
+      user.verificationToken = token;
+      user.verificationTokenExpires = Date.now() + (this.tokenExpiryHours * 60 * 60 * 1000); // Convert hours to milliseconds
+
+      // Save the user
+      await user.save();
+
       // Create verification link
       const verificationLink = `${baseUrl}/verify-email.html?token=${token}`;
-      
+
       // Send verification email
       const result = await emailService.sendVerificationEmail(normalizedEmail, verificationLink);
-      
+
       if (!result.success) {
         return result;
       }
-      
+
       return {
         success: true,
         message: `Verification email sent to ${normalizedEmail}`,

@@ -54,8 +54,8 @@ const userSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   // Email verification fields
-  verificationCode: String,
-  verificationCodeExpires: Date
+  verificationToken: String,
+  verificationTokenExpires: Date
 });
 
 // Pre-save hook to hash password
