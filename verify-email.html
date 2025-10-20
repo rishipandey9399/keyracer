@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Verification - Key Racer</title>
-    <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/auth.css">
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-    <script src="scripts/auth.js"></script>
 </head>
 <body>
     <div class="auth-container">
@@ -39,7 +37,9 @@
 
         if (!token) {
             showVerificationResult(false, 'Invalid verification link. No token provided.');
-            return;
+        } else {
+            // Verify email with token
+            verifyEmail();
         }
 
         // Verify email with token
@@ -83,9 +83,6 @@
                 </div>
             `;
         }
-
-        // Start verification when page loads
-        document.addEventListener('DOMContentLoaded', verifyEmail);
     </script>
 
     <style>
