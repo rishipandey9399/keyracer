@@ -1,11 +1,9 @@
 /**
  * Email Service
- * Provides functionality for sending emails using Nodemailer with Brevo SMTP
+ * Provides functionality for sending emails using Brevo API
  */
 
-// In a production environment, you'd want to use a proper email sending library
-// This is a simplified implementation for demonstration purposes
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 require('dotenv').config();
 const User = require('../models/User');
 const Token = require('../models/Token');
@@ -15,25 +13,27 @@ class EmailService {
   constructor() {
     this.fromEmail = process.env.EMAIL_FROM || 'noreply@keyracer.in';
     this.fromName = process.env.EMAIL_FROM_NAME || 'Key Racer';
-    
-    // Will create transporter when needed to allow for test accounts in development
-    this.transporter = null;
-    this.testAccount = null;
+    this.brevoApiKey = process.env.BREVO_API_KEY;
+    this.brevoApiUrl = 'https://api.brevo.com/v3/smtp/email';
   }
-  
+
   /**
-   * Get or create a transporter
-   * @returns {Promise<Object>} - Nodemailer transporter
+   * Send email via Brevo API
+   * @param {Object} emailData - Email data
+   * @returns {Promise<Object>} - Response from Brevo API
    */
-  async getTransporter() {
-    return nodemailer.createTransport({
-      host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.BREVO_SMTP_USER,
-        pass: process.env.BREVO_SMTP_PASSWORD,
-      },
+  async sendBrevoEmail({ to, subject, html }) {
+    return axios.post(this.brevoApiUrl, {
+      sender: { name: this.fromName, email: this.fromEmail },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html
+    }, {
+      headers: {
+        'api-key': this.brevoApiKey,
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      }
     });
   }
   
@@ -43,15 +43,17 @@ class EmailService {
    */
   async checkApiConfiguration() {
     try {
-      // Initialize transporter if not already done
-      if (!this.transporter) {
-        await this.getTransporter();
+      // Check if Brevo API key is available
+      if (!this.brevoApiKey) {
+        console.error('BREVO_API_KEY not configured');
+        return false;
       }
-      
-      await this.transporter.verify();
-      return true;
+
+      // For now, just check if the key exists and is not empty
+      // In production, you might want to test with a simple API call
+      return this.brevoApiKey.length > 0;
     } catch (error) {
-      console.error('Email configuration error:', error);
+      console.error('Email configuration error:', error.message);
       return false;
     }
   }
@@ -118,33 +120,23 @@ class EmailService {
    */
   async sendVerificationEmail(email, verificationLink) {
     try {
-      // Initialize transporter before using it
-      await this.getTransporter();
-      
       if (process.env.NODE_ENV !== 'production') {
         console.log(`[DEV MODE] Verification link for ${email}: ${verificationLink}`);
-        // Only return early if we're in development and the transporter verification fails
+        // Only return early if we're in development and the API configuration fails
         if (!(await this.checkApiConfiguration())) {
           return { success: true, message: 'Verification email would be sent in production' };
         }
       }
-      
+
       const html = this.generateVerificationEmailContent(email, verificationLink);
-      
-      const info = await this.transporter.sendMail({
-        from: `"${this.fromName}" <${this.fromEmail}>`,
+
+      await this.sendBrevoEmail({
         to: email,
         subject: 'Verify your Key Racer account',
-        html: html,
-        text: html.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim()
+        html: html
       });
-      
-      console.log('Verification email sent successfully, ID:', info.messageId);
-      // For ethereal test accounts, log the URL where the email can be viewed
-      if (this.testAccount) {
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      }
-      
+
+      console.log('Verification email sent successfully');
       return { success: true, message: 'Verification email sent successfully' };
     } catch (error) {
       console.error('Error sending verification email:', error);
@@ -160,33 +152,23 @@ class EmailService {
    */
   async sendPasswordResetEmail(email, resetLink) {
     try {
-      // Initialize transporter before using it
-      await this.getTransporter();
-      
       if (process.env.NODE_ENV !== 'production') {
         console.log(`[DEV MODE] Password reset link for ${email}: ${resetLink}`);
-        // Only return early if we're in development and the transporter verification fails
+        // Only return early if we're in development and the API configuration fails
         if (!(await this.checkApiConfiguration())) {
           return { success: true, message: 'Password reset email would be sent in production' };
         }
       }
-      
+
       const html = this.generatePasswordResetEmailContent(email, resetLink);
-      
-      const info = await this.transporter.sendMail({
-        from: `"${this.fromName}" <${this.fromEmail}>`,
+
+      await this.sendBrevoEmail({
         to: email,
         subject: 'Reset your Key Racer password',
-        html: html,
-        text: html.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim()
+        html: html
       });
-      
-      console.log('Password reset email sent successfully, ID:', info.messageId);
-      // For ethereal test accounts, log the URL where the email can be viewed
-      if (this.testAccount) {
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      }
-      
+
+      console.log('Password reset email sent successfully');
       return { success: true, message: 'Password reset email sent successfully' };
     } catch (error) {
       console.error('Error sending password reset email:', error);
