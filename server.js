@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const cors = require('cors');
 const path = require('path');
+const axios = require('axios'); // Add axios for Brevo API
 require('dotenv').config();
 
 const app = express();
@@ -47,16 +48,25 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Email transporter
-const transporter = nodemailer.createTransporter({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  }
-});
+// Brevo (Sendinblue) API key
+const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
+
+// Helper to send email via Brevo
+async function sendBrevoEmail({ to, subject, html }) {
+  return axios.post(BREVO_API_URL, {
+    sender: { name: 'KeyRacer', email: 'noreply@keyracer.in' }, // updated sender
+    to: [{ email: to }],
+    subject,
+    htmlContent: html
+  }, {
+    headers: {
+      'api-key': BREVO_API_KEY,
+      'Content-Type': 'application/json',
+      'accept': 'application/json'
+    }
+  });
+}
 
 // Register endpoint
 app.post('/api/auth/register', async (req, res) => {
@@ -85,11 +95,9 @@ app.post('/api/auth/register', async (req, res) => {
 
     await user.save();
 
-    // Send verification email
+    // Send verification email via Brevo
     const verificationUrl = `${req.protocol}://${req.get('host')}/api/auth/verify/${verificationToken}`;
-    
-    await transporter.sendMail({
-      from: 'KeyRacer <info@keyracer.in>',
+    await sendBrevoEmail({
       to: email,
       subject: 'Verify Your KeyRacer Account',
       html: `
@@ -180,9 +188,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     await user.save();
 
     const resetUrl = `${req.protocol}://${req.get('host')}/reset-password.html?token=${resetToken}`;
-    
-    await transporter.sendMail({
-      from: 'KeyRacer <info@keyracer.in>',
+    await sendBrevoEmail({
       to: email,
       subject: 'Reset Your KeyRacer Password',
       html: `

@@ -12,6 +12,9 @@ class CareerChatWidget {
         this.initializeElements();
         this.attachEventListeners();
         this.showWelcomeScreen();
+
+        // Call renderHistoryList on init
+        this.renderHistoryList();
     }
 
     initializeElements() {
@@ -22,6 +25,7 @@ class CareerChatWidget {
         this.resetButton = document.getElementById('reset-chat');
         this.typingIndicator = document.getElementById('typing-indicator');
         this.quickButtons = document.querySelectorAll('.quick-btn');
+        this.chatHistoryList = document.getElementById('chat-history-list');
     }
 
     attachEventListeners() {
@@ -52,6 +56,14 @@ class CareerChatWidget {
         
         // Load AI agent capabilities
         this.loadAgentCapabilities();
+
+        // History item click
+        this.chatHistoryList.addEventListener('click', (e) => {
+            const item = e.target.closest('li');
+            if (item) {
+                this.loadHistory(item.dataset.sessionId);
+            }
+        });
     }
 
     generateSessionId() {
@@ -124,6 +136,39 @@ class CareerChatWidget {
         }
     }
 
+    // Store chat history in localStorage
+    saveHistory(sessionId, messages) {
+        let history = JSON.parse(localStorage.getItem('careerChatHistory') || '{}');
+        history[sessionId] = messages;
+        localStorage.setItem('careerChatHistory', JSON.stringify(history));
+        this.renderHistoryList();
+    }
+
+    // Load chat history list
+    renderHistoryList() {
+        let history = JSON.parse(localStorage.getItem('careerChatHistory') || '{}');
+        this.chatHistoryList.innerHTML = '';
+        Object.keys(history).reverse().forEach(sessionId => {
+            const item = document.createElement('li');
+            item.textContent = `Chat ${sessionId.split('_')[1]}`;
+            item.dataset.sessionId = sessionId;
+            if (sessionId === this.sessionId) item.classList.add('active');
+            this.chatHistoryList.appendChild(item);
+        });
+    }
+
+    // Load selected chat history
+    loadHistory(sessionId) {
+        let history = JSON.parse(localStorage.getItem('careerChatHistory') || '{}');
+        if (!history[sessionId]) return;
+        this.sessionId = sessionId;
+        this.chatMessages.innerHTML = '';
+        history[sessionId].forEach(msg => {
+            this.addMessage(msg.text, msg.sender, msg.isAgentResponse);
+        });
+        this.renderHistoryList();
+    }
+
     addMessage(text, sender, isAgentResponse = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
@@ -162,6 +207,12 @@ class CareerChatWidget {
         
         this.chatMessages.appendChild(messageDiv);
         this.scrollToBottom();
+
+        // Save message to history
+        let history = JSON.parse(localStorage.getItem('careerChatHistory') || '{}');
+        if (!history[this.sessionId]) history[this.sessionId] = [];
+        history[this.sessionId].push({ text, sender, isAgentResponse });
+        localStorage.setItem('careerChatHistory', JSON.stringify(history));
     }
 
     formatMessage(text) {
@@ -212,6 +263,7 @@ class CareerChatWidget {
         this.chatInput.value = '';
         this.profileComplete = false;
         this.setLoading(false);
+        this.renderHistoryList();
     }
 
     scrollToBottom() {

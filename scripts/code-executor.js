@@ -360,23 +360,33 @@ class CodeExecutor {
      * @param {Array} testCases - Array of test cases
      * @returns {Promise<{passed: boolean, output: string}>}
      */
-    async runTests(code, language, testCases) {
+    async runTests(code, language, testCases, challengeId = null) {
         let allPassed = true;
         let output = '';
 
         for (const test of testCases) {
             const result = await this.execute(code, language, test.input);
-            
-            if (result.error) {
-                return {
-                    passed: false,
-                    output: `Test failed:\nError: ${result.error}`
-                };
+            let actualOutput = result.output.trim();
+            let expectedOutput = test.expectedOutput.trim();
+
+            // Post-processing for Python beginner challenges with list/tuple output
+            const listTupleChallenges = [142, 146, 147]; // Add more IDs as needed
+            if (language === 'python' && listTupleChallenges.includes(challengeId)) {
+                // If output looks like a Python list or tuple, convert to space-separated string
+                if (/^\[.*\]$/.test(actualOutput) || /^\(.*\)$/.test(actualOutput)) {
+                    try {
+                        // Replace single quotes with double for JSON parsing
+                        const arr = JSON.parse(actualOutput.replace(/'/g, '"').replace(/\(|\)/g, match => match === '(' ? '[' : ']'));
+                        if (Array.isArray(arr)) {
+                            actualOutput = arr.join(' ');
+                        }
+                    } catch (e) { /* ignore parse errors */ }
+                }
             }
 
-            if (result.output.trim() !== test.expectedOutput.trim()) {
+            if (actualOutput !== expectedOutput) {
                 allPassed = false;
-                output += `Test failed:\nInput: ${test.input}\nExpected: ${test.expectedOutput}\nGot: ${result.output}\n\n`;
+                output += `Test failed:\nInput: ${test.input}\nExpected: ${expectedOutput}\nGot: ${actualOutput}\n\n`;
             }
         }
 

@@ -22,6 +22,57 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
+.main-content {
+    display: flex;
+    flex: 1;
+    height: 100%;
+}
+
+.chat-history-sidebar {
+    width: 280px;
+    background: #f8f9fa;
+    border-right: 1px solid #e8eaed;
+    padding: 24px 0 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.history-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #4285f4;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chat-history-list li {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 15px;
+    color: #333;
+    border: 1px solid #e8eaed;
+}
+
+.chat-history-list li:hover, .chat-history-list li.active {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
 /* Header */
 .gemini-header {
     background: white;

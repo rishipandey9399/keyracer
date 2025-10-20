@@ -37,40 +37,50 @@
             </div>
         </header>
 
-        <!-- Chat Container -->
-        <div class="chat-container">
-            <!-- Welcome Screen -->
-            <div id="welcome-screen" class="welcome-screen">
-                <div class="welcome-content">
-                    <div class="welcome-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h2>Welcome to KeyRacer AI Career Agent</h2>
-                    <p>Get personalized career advice, roadmaps, and intelligent guidance powered by advanced AI</p>
-                    <div class="quick-actions">
-                        <button class="quick-btn" data-prompt="Help me create a personalized career roadmap">
-                            <i class="fas fa-map"></i>
-                            <span>AI Career Roadmap</span>
-                        </button>
-                        <button class="quick-btn" data-prompt="What skills should I learn for my career goals?">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Smart Skill Analysis</span>
-                        </button>
-                        <button class="quick-btn" data-prompt="Help me prepare for job interviews with AI guidance">
-                            <i class="fas fa-briefcase"></i>
-                            <span>Interview AI Coach</span>
-                        </button>
-                        <button class="quick-btn" data-prompt="Show me current industry trends and opportunities">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Market Intelligence</span>
-                        </button>
+        <div class="main-content">
+            <!-- History Sidebar -->
+            <aside class="chat-history-sidebar">
+                <h2 class="history-title"><i class="fas fa-history"></i> Chat History</h2>
+                <ul id="chat-history-list" class="chat-history-list">
+                    <!-- Chat history items will be added here -->
+                </ul>
+            </aside>
+
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <!-- Welcome Screen -->
+                <div id="welcome-screen" class="welcome-screen">
+                    <div class="welcome-content">
+                        <div class="welcome-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h2>Welcome to KeyRacer AI Career Agent</h2>
+                        <p>Get personalized career advice, roadmaps, and intelligent guidance powered by advanced AI</p>
+                        <div class="quick-actions">
+                            <button class="quick-btn" data-prompt="Help me create a personalized career roadmap">
+                                <i class="fas fa-map"></i>
+                                <span>AI Career Roadmap</span>
+                            </button>
+                            <button class="quick-btn" data-prompt="What skills should I learn for my career goals?">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Smart Skill Analysis</span>
+                            </button>
+                            <button class="quick-btn" data-prompt="Help me prepare for job interviews with AI guidance">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Interview AI Coach</span>
+                            </button>
+                            <button class="quick-btn" data-prompt="Show me current industry trends and opportunities">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Market Intelligence</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Chat Messages -->
-            <div id="chat-messages" class="chat-messages" style="display: none;">
-                <!-- Messages will be added here -->
+                <!-- Chat Messages -->
+                <div id="chat-messages" class="chat-messages" style="display: none;">
+                    <!-- Messages will be added here -->
+                </div>
             </div>
         </div>
 
