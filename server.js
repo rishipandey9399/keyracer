@@ -17,9 +17,10 @@ app.use(express.json());
 
 // Content Security Policy for Google Analytics
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', 
+  res.setHeader('Content-Security-Policy',
     "default-src 'self'; " +
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; " +
+    "script-src-attr 'unsafe-inline'; " +
     "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://emkc.org https://cdnjs.cloudflare.com; " +
     "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; " +
     "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +

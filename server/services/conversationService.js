@@ -226,13 +226,13 @@ class ConversationService {
     try {
       // Check for AI agent commands
       const command = this.detectAgentCommand(question);
-      
+
       if (command) {
         return await this.handleAgentCommand(command, session, question);
       }
-      
+
       const response = await geminiService.generateFollowUpResponse(question, session.profile);
-      
+
       return {
         success: true,
         message: response,
@@ -241,9 +241,13 @@ class ConversationService {
       };
     } catch (error) {
       console.error('Follow-up question failed:', error.message);
+
+      // Provide fallback response for follow-up questions
+      const fallbackResponse = geminiService.getFallbackFollowUpResponse(question, session.profile);
+
       return {
         success: true,
-        message: 'I\'m currently experiencing technical difficulties with the AI service. Please try asking your question again later, or contact support if the issue persists.',
+        message: fallbackResponse,
         isComplete: true,
         isFollowUp: true,
         isFallback: true
